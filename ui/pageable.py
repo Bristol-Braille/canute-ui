@@ -176,8 +176,8 @@ class Menu(Pageable):
     def option(self, number):
         '''this is called by the UI to action a menu item'''
         menu_num = number + self.page * self.rows
-        # call the correct action
         try:
+            # call the correct action
             self.menu[menu_num]['action']()
         except IndexError:
             self.ui.driver.send_error_sound()

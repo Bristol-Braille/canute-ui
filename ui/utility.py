@@ -14,8 +14,8 @@ def find_firmware(directory):
                     return(os.path.join(root, filename))
 
 def find_books(directory):
+    '''return pef and canute format books'''
     return find_files(directory, ('.pef', '.canute'))
-
 
 def find_files(directory, extensions):
     '''recursively look for files that end in the extensions tuple'''
