@@ -1,0 +1,5 @@
+[files]
+# relative path to where log is kept
+log_file = canute.log
+# full path to book dir
+library_dir = /home/mattvenn/books/
