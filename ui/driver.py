@@ -34,6 +34,10 @@ class Driver():
         '''make the hardware make an error sound'''
         self.hardware.send_data(CMD_SEND_ERROR)
 
+    def send_ok_sound(self):
+        '''make the hardware make an ok sound'''
+        self.hardware.send_data(CMD_SEND_OK)
+
     def get_status(self):
         '''return current status of canute hardware
         0 is OK, any other number should be looked up with :func:`get_error_codes`
