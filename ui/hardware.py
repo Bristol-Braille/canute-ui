@@ -10,6 +10,9 @@ try:
     import RPi.GPIO as GPIO
     from threading import Timer
     from status_led import LedThread
+    long_press = 1000.0 #ms
+    double_click = 500.0 #ms
+    debounce = 100 #ms
 except ImportError:
     pass
 
@@ -48,7 +51,7 @@ class Hardware():
             self.pi_but_clicks = [0] * 8
             for pin in self.pi_buts:
                 GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                GPIO.add_event_detect(pin, GPIO.BOTH, callback=self.button_int, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.BOTH, callback=self.button_int, bouncetime=debounce)
             log.info("setup buttons for pi")
 
     def determine_button_type(self, index):
@@ -58,7 +61,8 @@ class Hardware():
             self.buttons[index] = 'double'
         elif self.pi_but_clicks[index] == 1:
             # differentiate between long and single
-            if self.pi_but_time_press[index] - self.pi_but_time_release[index] > 2.0:
+            log.debug(self.pi_but_time_release[index] - self.pi_but_time_press[index])
+            if self.pi_but_time_release[index] - self.pi_but_time_press[index] > (long_press / 1000):
                 self.buttons[index] = 'long'
             else:
                 self.buttons[index] = 'single'
@@ -76,15 +80,14 @@ class Hardware():
         log.debug("button %d is %s" % (channel, state))
         index = self.pi_buts.index(channel)
 
-        # set a timer to decide what type of button it was
-        t = Timer(0.5, self.determine_button_type, [index])
-        t.start()
-
         # make a note of num clicks, press and release times
         if state == 0:  # pressed
             self.pi_but_time_press[index] = time.time()
             self.pi_but_clicks[index] += 1
         else:  # released
+            # set a timer to decide what type of button it was
+            t = Timer(double_click/1000, self.determine_button_type, [index])
+            t.start()
             self.pi_but_time_release[index] = time.time()
 
     def setup_serial(self, port):
@@ -166,7 +169,7 @@ class Hardware():
         return self
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     log = logging.getLogger(__name__)
 
     with Hardware(port=None, using_pi=True) as hardware:
