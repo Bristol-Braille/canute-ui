@@ -121,11 +121,11 @@ class Pageable(object):
 
     def home(self):
         '''return to beginning'''
-        self.page = 0
-
-    def end(self):
-        '''go to end'''
-        self.page = self.get_num_pages() - 1
+        if self.page != 0:
+            self.page = 0
+        else:
+            log.info("at home already")
+            self.ui.driver.send_error_sound()
 
     def prev(self):
         '''go to previous page'''
@@ -133,6 +133,14 @@ class Pageable(object):
             self.page -= 1
         else:
             log.info("at home already")
+            self.ui.driver.send_error_sound()
+
+    def end(self):
+        '''go to end'''
+        if self.page != self.get_num_pages() - 1:
+            self.page = self.get_num_pages() - 1
+        else:
+            log.info("at end already")
             self.ui.driver.send_error_sound()
 
     def next(self):
@@ -169,7 +177,10 @@ class Menu(Pageable):
         '''this is called by the UI to action a menu item'''
         menu_num = number + self.page * self.rows
         # call the correct action
-        self.menu[menu_num]['action']()
+        try:
+            self.menu[menu_num]['action']()
+        except IndexError:
+            self.ui.driver.send_error_sound()
 
     def shutdown(self):
         '''shutdown the Pi'''
