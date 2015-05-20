@@ -54,7 +54,10 @@ class Pageable(object):
     
     def remove_state(self):
         log.info("removing state file %s" % self.get_state_file())
-        os.remove(self.get_state_file())
+        try:
+            os.remove(self.get_state_file())
+        except OSError:
+            pass
         
     def save_state(self):
         state = {
@@ -179,6 +182,8 @@ class Menu(Pageable):
         log.info("refresh library")
         # ask library to refresh
         self.ui.library.refresh()
+        # send sound
+        self.ui.driver.send_ok_sound()
 
     def get_state_file(self):
         '''return the name of the state file'''
@@ -202,6 +207,9 @@ class Library(Pageable):
 
         book_titles = [item["title"] for item in self.book_defs]
         book_titles_brl = map(alphas_to_pin_nums, book_titles)
+
+        for book_title, number in zip(book_titles, range(len(book_titles))):
+            log.debug("%03d - %s" % (number, book_title))
 
         super(Library, self).__init__(book_titles_brl, dimensions, ui)
 
@@ -273,10 +281,14 @@ class Library(Pageable):
         log.info("adding new book [%s] to library" % (book_def["title"]))
         self.book_defs.append(book_def)
 
+        # ensure they're in order by title
+        self.book_defs = sorted(self.book_defs, key=lambda book: book['title'])
+
         # and save the definitions
         self.save_book_defs()
 
         # add the new title to our content, converting to pin numbers first
+        # add_new_item sorts by alpha
         self.add_new_item(alphas_to_pin_nums(name))
 
     def convert_pef(self, pef_file, native_file):
@@ -323,7 +335,6 @@ class Library(Pageable):
         try:
             with open(self.book_defs_file) as fh:
                 self.book_defs = pickle.load(fh)
-                log.debug(self.book_defs)
         except IOError:
             self.book_defs = []
 
@@ -345,6 +356,7 @@ class Library(Pageable):
         except IndexError as e:
             raise IndexError("no book at slot %d" % book_num)
 
+        log.debug("loading book %d [%s]" % (book_num, self.book_defs[book_num]["title"]))
         book = Book(self.book_defs[book_num], self.dimensions, self.config, self.ui)
         return book
 
@@ -365,7 +377,7 @@ class Book(Pageable):
             raise PageableError("unknown book type %s" % book_def["type"])
 
         super(Book, self).__init__(content, dimensions, ui)
-        log.info("book open at %d of %d pages" % (self.page, self.get_num_pages()))
+        log.info("book [%s] open at %d of %d pages" % (book_def["title"], self.page, self.get_num_pages()))
 
     def get_state_file(self):
         return self.book_dir + self.book_def['title'] + '.pkl'
