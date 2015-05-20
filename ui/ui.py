@@ -102,29 +102,32 @@ class UI():
                     self.book.next_chapter()
                     self.show()
             elif buts[4] == 'single':
-                log.info("menu 1")
                 if isinstance(self.screen, Library):
                     self.load_book(0)
-                if isinstance(self.screen, Menu):
+                elif isinstance(self.screen, Menu):
                     self.menu.option(0)
             elif buts[5] == 'single':
-                log.info("menu 2")
                 if isinstance(self.screen, Library):
                     self.load_book(1)
-                if isinstance(self.screen, Menu):
+                elif isinstance(self.screen, Menu):
                     self.menu.option(1)
+                elif isinstance(self.screen, Book):
+                    self.screen.prev()
+                    self.show()
             elif buts[6] == 'single':
-                log.info("menu 3")
                 if isinstance(self.screen, Library):
                     self.load_book(2)
-                if isinstance(self.screen, Menu):
+                elif isinstance(self.screen, Menu):
                     self.menu.option(2)
+                elif isinstance(self.screen, Book):
+                    self.screen.next()
+                    self.show()
             elif buts[7] == 'single':
-                log.info("menu 4")
                 if isinstance(self.screen, Library):
                     self.load_book(3)
-                if isinstance(self.screen, Menu):
+                elif isinstance(self.screen, Menu):
                     self.menu.option(3)
+                    
 
             time.sleep(0.1)
         else:
