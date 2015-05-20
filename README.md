@@ -12,10 +12,6 @@ Documentation is available at
 
 Install python 2.x (will probably work with 3.x with little modification)
 
-Install the [requirements](ui/requirements.txt). On Linux:
-
-    pip install -r requirements
-
 On Windows follow these
 [instructions](http://pillow.readthedocs.org/en/latest/installation.html) to
 install Pillow.
