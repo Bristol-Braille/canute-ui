@@ -13,8 +13,8 @@ def find_firmware(directory):
                 if filename == firmware_file:
                     return(os.path.join(root, filename))
 
-def find_pef(directory):
-    return find_files(directory, ('.pef'))
+def find_books(directory):
+    return find_files(directory, ('.pef', '.canute'))
 
 
 def find_files(directory, extensions):

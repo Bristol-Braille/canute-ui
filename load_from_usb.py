@@ -10,7 +10,7 @@ import grp
 import subprocess
 import shutil
 import ui
-from ui.utility import find_pef, find_firmware
+from ui.utility import find_books, find_firmware
 from ConfigParser import ConfigParser, NoSectionError
 
 log = logging.getLogger(__name__)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         mount_device(args.dev, args.mount_point)
 
         # get the books
-        books = find_pef(args.mount_point)
+        books = find_books(args.mount_point)
 
         # copy to library dir
         for filename in books:
