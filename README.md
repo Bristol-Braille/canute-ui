@@ -20,11 +20,6 @@ On Windows follow these
 [instructions](http://pillow.readthedocs.org/en/latest/installation.html) to
 install Pillow.
 
-Generate the Braille character pics:
-
-    cd ui/braille_pic_gen
-    python ./gen.py
-
 Run the UI (with emulated hardware delay of 1000ms):
 
     cd ui/
