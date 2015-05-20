@@ -66,11 +66,17 @@ def unicode_to_pin_num(uni_char):
 def alpha_to_unicode(alpha):
     return unichr(alpha_to_pin_num(alpha)+10240)
 
-
+def pin_num_to_unicode(pin_num):
+    return unichr(pin_num+10240)
+    
 def alphas_to_pin_nums(alphas):
     '''convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`'''
     return map(alpha_to_pin_num, alphas)
 
+
+def pin_num_to_alpha(pin_num):
+    mapping = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="
+    return mapping[pin_num].lower()
 
 def alpha_to_pin_num(alpha):
     '''
