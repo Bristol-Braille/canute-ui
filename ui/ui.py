@@ -204,18 +204,22 @@ if __name__ == '__main__':
 
     log = setup_logs()
 
-    if args.emulated:
-        log.info("running with emulated hardware")
+    try:
+        if args.emulated:
+            log.info("running with emulated hardware")
 
-        from hardware_emulator import HardwareEmulator
-        with HardwareEmulator(delay=args.delay) as hardware:
-            driver = Driver(hardware)
-            ui = UI(driver, config)
-            ui.start()
-    else:
-        log.info("running with stepstix hardware on port %s" % args.tty)
-        from hardware import Hardware
-        with Hardware(port=args.tty, using_pi=args.using_pi) as hardware:
-            driver = Driver(hardware)
-            ui = UI(driver, config)
-            ui.start()
+            from hardware_emulator import HardwareEmulator
+            with HardwareEmulator(delay=args.delay) as hardware:
+                driver = Driver(hardware)
+                ui = UI(driver, config)
+                ui.start()
+        else:
+            log.info("running with stepstix hardware on port %s" % args.tty)
+            from hardware import Hardware
+            with Hardware(port=args.tty, using_pi=args.using_pi) as hardware:
+                driver = Driver(hardware)
+                ui = UI(driver, config)
+                ui.start()
+    except Exception as e:
+        log.exception(e)
+        exit(1)
