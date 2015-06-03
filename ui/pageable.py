@@ -191,12 +191,15 @@ class Menu(Pageable):
     def get_ip_address(self):
         '''return the Pi's ip address'''
         import socket
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("gmail.com",80))
-        ip = (s.getsockname()[0])
-        s.close()
-        log.debug("ip: %s" % ip)
-        return ip
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("gmail.com",80))
+            ip = (s.getsockname()[0])
+            s.close()
+            log.debug("ip: %s" % ip)
+            return ip
+        except socket.gaierror:
+            return ''
 
     def shutdown(self):
         '''shutdown the Pi'''
