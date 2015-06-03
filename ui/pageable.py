@@ -5,6 +5,7 @@ import pickle
 import os.path
 import time
 import struct
+from bookfile_list import BookFile_List
 from xml.dom.minidom import parse
 from utility import unicode_to_pin_num, alphas_to_pin_nums, find_files
 
@@ -76,7 +77,7 @@ class Pageable(object):
         except IOError:
             log.debug("no state file")
 
-    def fit_content(self):
+    def fit_content(self, content):
         '''
         used for making ascii text ready for showing as a line of braille:
 
@@ -84,13 +85,19 @@ class Pageable(object):
         * pad to correct length if necessary
         '''
         return_text = []
-        for line in self.content:
+        for line in content:
             while len(line) < self.cells:
                 line.append(0)
             else:
                 line = line[0:self.cells]
             return_text.append(line)
+
+        # pad if necessary
+        missing_rows = self.rows - len(return_text)
+        log.debug("padding %d missing rows with %d spaces" % (missing_rows, self.cells * missing_rows))
+        return_text += [0] * self.cells * missing_rows
         return return_text
+
 
     def show(self):
         '''
@@ -102,20 +109,17 @@ class Pageable(object):
         if end_line > len(self.content) - 1:
             end_line = len(self.content) - 1
 
-        output = []
-
-        # get everything the correct width
-        content = self.fit_content()
-
-        # join the rows together
-        for line in content[start_line:end_line+1]:
-            output += line
         log.info("showing page %d of %d (lines %d -> %d)" % (self.page, self.get_num_pages(), start_line, end_line+1))
 
-        # pad if necessary
-        missing_rows = self.rows - (end_line + 1 - start_line)
-        log.debug("padding missing rows %d with %d spaces" % (missing_rows, self.cells * missing_rows))
-        output += [0] * self.cells * missing_rows
+        output = []
+        #get the right content
+        output = self.content[start_line:end_line+1]
+
+        # get everything the correct width & height
+        output = self.fit_content(output)
+
+        #join the lines
+        output = [cell for line in output for cell in line]
 
         # save the current page
         self.save_state()
@@ -407,7 +411,7 @@ class Book(Pageable):
         self.book_dir = self.config.get('files', 'library_dir') 
 
         if book_def["type"] == 'native':
-            content = self.load_native(book_def["filename"])
+            content = BookFile_List(book_def["filename"], dimensions)
         else:
             raise PageableError("unknown book type %s" % book_def["type"])
 
