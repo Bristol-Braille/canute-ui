@@ -125,6 +125,11 @@ class UI():
                     self.show()
                 else:
                     self.driver.send_error_sound()
+            elif buts[5] == 'long':
+                if isinstance(self.screen, Book):
+                    log.info("home")
+                    self.screen.home()
+                    self.show()
             elif buts[6] == 'single':
                 if isinstance(self.screen, Library):
                     self.load_book(2)
@@ -135,6 +140,11 @@ class UI():
                     self.show()
                 else:
                     self.driver.send_error_sound()
+            elif buts[6] == 'long':
+                if isinstance(self.screen, Book):
+                    log.info("end")
+                    self.screen.end()
+                    self.show()
             elif buts[7] == 'single':
                 if isinstance(self.screen, Library):
                     self.load_book(3)
