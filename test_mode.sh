@@ -7,5 +7,5 @@ then
 fi
 
 echo starting screen, press ctrl+A then \ to quit
-sleep 1
+sleep 3
 screen /dev/ttyACM0 115200
