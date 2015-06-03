@@ -419,6 +419,8 @@ class Book(Pageable):
         '''load a native format book and convert to correct data structure'''
         log.info("loading [%s]" % filename)
 
+        import time
+        start = time.time()
         pages = []
         with open(filename) as fh:
             for line in fh.readlines():
@@ -426,6 +428,6 @@ class Book(Pageable):
                 page = [int(x) for x in line.split(',')]
                 pages.append(page)
 
-        log.info("text loaded with %d lines" % len(pages))
+        log.info("text loaded with %d lines in %s seconds" % (len(pages), round(time.time() - start,2)))
         return pages
 
