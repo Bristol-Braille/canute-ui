@@ -41,7 +41,7 @@ class Pageable(object):
         return int(math.ceil(len(self.content) / float(self.rows)))
 
     def add_new_item(self, item):
-        '''add a new item to the content.
+        '''add a new item to the content, sort by alpha
 
         :param item: a list of pin numbers
         '''
