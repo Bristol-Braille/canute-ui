@@ -131,7 +131,6 @@ class Pageable(object):
             self.page = 0
         else:
             log.info("at home already")
-            self.ui.driver.send_error_sound()
 
     def prev(self):
         '''go to previous page'''
@@ -139,7 +138,6 @@ class Pageable(object):
             self.page -= 1
         else:
             log.info("at home already")
-            self.ui.driver.send_error_sound()
 
     def end(self):
         '''go to end'''
@@ -147,7 +145,6 @@ class Pageable(object):
             self.page = self.get_num_pages() - 1
         else:
             log.info("at end already")
-            self.ui.driver.send_error_sound()
 
     def next(self):
         '''go to next page'''
@@ -155,7 +152,6 @@ class Pageable(object):
             self.page += 1
         else:
             log.info("at end already")
-            self.ui.driver.send_error_sound()
 
 class Menu(Pageable):
     '''

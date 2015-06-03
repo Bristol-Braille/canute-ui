@@ -92,6 +92,8 @@ class UI():
                 if isinstance(self.screen, Book):
                     self.book.prev_chapter()
                     self.show()
+                else:
+                    self.driver.send_error_sound()
             elif buts[2] == 'single':
                 log.info("next")
                 self.screen.next()
@@ -104,11 +106,15 @@ class UI():
                 if isinstance(self.screen, Book):
                     self.book.next_chapter()
                     self.show()
+                else:
+                    self.driver.send_error_sound()
             elif buts[4] == 'single':
                 if isinstance(self.screen, Library):
                     self.load_book(0)
                 elif isinstance(self.screen, Menu):
                     self.menu.option(0)
+                else:
+                    self.driver.send_error_sound()
             elif buts[5] == 'single':
                 if isinstance(self.screen, Library):
                     self.load_book(1)
@@ -117,6 +123,8 @@ class UI():
                 elif isinstance(self.screen, Book):
                     self.screen.prev()
                     self.show()
+                else:
+                    self.driver.send_error_sound()
             elif buts[6] == 'single':
                 if isinstance(self.screen, Library):
                     self.load_book(2)
@@ -125,12 +133,15 @@ class UI():
                 elif isinstance(self.screen, Book):
                     self.screen.next()
                     self.show()
+                else:
+                    self.driver.send_error_sound()
             elif buts[7] == 'single':
                 if isinstance(self.screen, Library):
                     self.load_book(3)
                 elif isinstance(self.screen, Menu):
                     self.menu.option(3)
-                    
+                else:
+                    self.driver.send_error_sound()
 
             time.sleep(0.1)
         else:
@@ -157,6 +168,7 @@ class UI():
 
         if data == self.last_data:
             log.info("not updating display with identical data")
+            self.driver.send_error_sound()
             return
 
         self.driver.set_braille(data)
