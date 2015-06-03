@@ -144,6 +144,7 @@ class UI():
             self.state['book_num'] = number
             self.state['mode'] = 'book'
             self.show()
+            log.debug("sent book");
         except IndexError as e:
             log.warning("no book at slot %d" % number)
             self.driver.send_error_sound()
