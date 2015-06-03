@@ -3,6 +3,9 @@ import math
 import shutil
 import pickle
 import os.path
+import time
+import struct
+from bookfile_list import BookFile_List
 from xml.dom.minidom import parse
 from utility import unicode_to_pin_num, alphas_to_pin_nums, find_files
 
@@ -74,7 +77,7 @@ class Pageable(object):
         except IOError:
             log.debug("no state file")
 
-    def fit_content(self):
+    def fit_content(self, content):
         '''
         used for making ascii text ready for showing as a line of braille:
 
@@ -82,13 +85,19 @@ class Pageable(object):
         * pad to correct length if necessary
         '''
         return_text = []
-        for line in self.content:
+        for line in content:
             while len(line) < self.cells:
                 line.append(0)
             else:
                 line = line[0:self.cells]
             return_text.append(line)
+
+        # pad if necessary
+        missing_rows = self.rows - len(return_text)
+        log.debug("padding %d missing rows with %d spaces" % (missing_rows, self.cells * missing_rows))
+        return_text.append([0] * self.cells * missing_rows)
         return return_text
+
 
     def show(self):
         '''
@@ -100,20 +109,17 @@ class Pageable(object):
         if end_line > len(self.content) - 1:
             end_line = len(self.content) - 1
 
-        output = []
-
-        # get everything the correct width
-        content = self.fit_content()
-
-        # join the rows together
-        for line in content[start_line:end_line+1]:
-            output += line
         log.info("showing page %d of %d (lines %d -> %d)" % (self.page, self.get_num_pages(), start_line, end_line+1))
 
-        # pad if necessary
-        missing_rows = self.rows - (end_line + 1 - start_line)
-        log.debug("padding missing rows %d with %d spaces" % (missing_rows, self.cells * missing_rows))
-        output += [0] * self.cells * missing_rows
+        output = []
+        #get the right content
+        output = self.content[start_line:end_line+1]
+
+        # get everything the correct width & height
+        output = self.fit_content(output)
+
+        # flatten lists
+        output = [cell for line in output for cell in line]
 
         # save the current page
         self.save_state()
@@ -330,9 +336,9 @@ class Library(Pageable):
 
         rows = xml_doc.getElementsByTagName('row')
         log.debug("got %d rows" % len(rows))
-        pages = []
+        lines = []
 
-        # do the conversion from unicode to pin number pics
+        # do the conversion from unicode to pin numbers
         for row in rows:
             try:
                 data = row.childNodes[0].data
@@ -342,15 +348,21 @@ class Library(Pageable):
                     line.append(pin_num)
             except IndexError as e:
                 # empty row element
-                line = [0]
-            pages.append(line)
+                line = [0] * self.cells
 
-        log.info("pef loaded with %d lines" % len(pages))
+            # ensure right length
+            missing_cells = self.cells - len(line)
+            line.extend([0] * missing_cells)
+
+            lines.append(line)
+
+        log.info("pef loaded with %d lines" % len(lines))
         log.info("writing to [%s]" % native_file)
         with open(native_file, 'w') as fh:
-            for page in pages:
-                line = ','.join([str(x) for x in page])
-                fh.write(line + "\n")
+            for line in lines:
+                if len(line) != self.cells:
+                    raise Exception("conversion problem - expected %d chars got %d" % (self.cells, len(line)))
+                fh.write(bytearray(line))
 
         log.info("removing old pef file")
         os.remove(pef_file)
@@ -382,6 +394,7 @@ class Library(Pageable):
             raise IndexError("no book at slot %d" % book_num)
 
         log.debug("loading book %d [%s]" % (book_num, self.book_defs[book_num]["title"]))
+        self.ui.driver.send_ok_sound()
         book = Book(self.book_defs[book_num], self.dimensions, self.config, self.ui)
         return book
 
@@ -394,10 +407,11 @@ class Book(Pageable):
     def __init__(self, book_def, dimensions, config, ui):
         self.book_def = book_def
         self.config = config
+        self.cells = dimensions[0] # need this before we can load a book, and can't call super till we have content
         self.book_dir = self.config.get('files', 'library_dir') 
 
         if book_def["type"] == 'native':
-            content = self.load_native(book_def["filename"])
+            content = BookFile_List(book_def["filename"], dimensions)
         else:
             raise PageableError("unknown book type %s" % book_def["type"])
 
@@ -414,18 +428,3 @@ class Book(Pageable):
     def prev_chapter(self):
         '''prev chapter'''
         log.info("prev chapter")
-
-    def load_native(self, filename):
-        '''load a native format book and convert to correct data structure'''
-        log.info("loading [%s]" % filename)
-
-        pages = []
-        with open(filename) as fh:
-            for line in fh.readlines():
-                # convert comma separated vals to a list of ints
-                page = [int(x) for x in line.split(',')]
-                pages.append(page)
-
-        log.info("text loaded with %d lines" % len(pages))
-        return pages
-
