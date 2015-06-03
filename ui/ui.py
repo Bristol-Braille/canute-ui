@@ -67,6 +67,9 @@ class UI():
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
             buts = self.driver.get_button_status()
+            # let user know we got a button press
+            if buts != [False for i in range(8)]:
+                self.driver.send_ok_sound()
             if buts[0] == 'single':
                 log.info("library mode")
                 self.state['mode'] = 'library'

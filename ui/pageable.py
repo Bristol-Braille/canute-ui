@@ -394,7 +394,6 @@ class Library(Pageable):
             raise IndexError("no book at slot %d" % book_num)
 
         log.debug("loading book %d [%s]" % (book_num, self.book_defs[book_num]["title"]))
-        self.ui.driver.send_ok_sound()
         book = Book(self.book_defs[book_num], self.dimensions, self.config, self.ui)
         return book
 

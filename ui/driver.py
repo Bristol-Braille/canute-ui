@@ -32,10 +32,12 @@ class Driver():
 
     def send_error_sound(self):
         '''make the hardware make an error sound'''
+        log.debug("error sound")
         self.hardware.send_data(CMD_SEND_ERROR)
 
     def send_ok_sound(self):
         '''make the hardware make an ok sound'''
+        log.debug("ok sound")
         self.hardware.send_data(CMD_SEND_OK)
 
     def get_status(self):
