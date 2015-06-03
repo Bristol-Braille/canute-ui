@@ -223,8 +223,7 @@ if __name__ == '__main__':
                 driver = Driver(hardware)
                 ui = UI(driver, config)
                 ui.start()
-        remove_pid_file()
     except Exception as e:
         log.exception(e)
+    finally:
         remove_pid_file()
-        exit(1)
