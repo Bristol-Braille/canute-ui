@@ -1,13 +1,16 @@
 from utility import test_book
 from pageable import Library
+from ConfigParser import ConfigParser, NoSectionError
 
 dimensions = (28,4) #canute
+config = ConfigParser()
+config.read('config.rc')
 
 pages = test_book(dimensions)
-native_file = Library.book_dir + 'test' + Library.native_ext
+book_dir = config.get('files', 'library_dir') 
+native_file = book_dir + 'test' + Library.native_ext
 
 with open(native_file, 'w') as fh:
     for page in pages:
-        line = ','.join([str(x) for x in page])
-        fh.write(line + "\n")
+        fh.write(bytearray(page))
 
