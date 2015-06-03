@@ -7,7 +7,7 @@ import time
 import random
 from driver import Driver
 from pageable import Menu, Book, Library
-from utility import test_book
+from utility import test_book, write_pid_file, remove_pid_file
 from ConfigParser import ConfigParser, NoSectionError
 
 
@@ -204,6 +204,9 @@ if __name__ == '__main__':
 
     log = setup_logs()
 
+    # write pid file
+    write_pid_file()
+
     try:
         if args.emulated:
             log.info("running with emulated hardware")
@@ -220,6 +223,8 @@ if __name__ == '__main__':
                 driver = Driver(hardware)
                 ui = UI(driver, config)
                 ui.start()
+        remove_pid_file()
     except Exception as e:
         log.exception(e)
+        remove_pid_file()
         exit(1)
