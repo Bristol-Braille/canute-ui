@@ -3,6 +3,7 @@ import time
 error_codes = []
 log = logging.getLogger(__name__)
 from comms_codes import *
+import threading
 
 
 class DriverError(Exception):
@@ -119,6 +120,19 @@ class Driver():
 
         :param data: a list of cells. The length of data will be cells * rows as returned by :func:`get_dimensions`
         '''
+
+        
+        try:
+            log.debug("waiting to join send thread")
+            self.send_thread.join()
+            log.debug("joined")
+        except AttributeError:
+            pass
+        self.send_thread = threading.Thread(target=self.threaded_send, args=(data,))
+        self.send_thread.start()
+        log.debug("data sent using thread")
+
+    def threaded_send(self, data):
         if len(data) != self.page_length:
             raise DriverError("data incorrect length %d, should be %d" % (len(data), self.page_length))
         self.hardware.send_data(CMD_SEND_DATA, data)
