@@ -11,13 +11,12 @@ class BookFile_List(list):
         self.filename = filename
         statinfo = os.stat(filename)
         self.num_pages = statinfo.st_size / self.cells
-        self.content = [[8] * self.cells] * self.num_pages
 
     def __len__(self):
         return self.num_pages
 
     def __getslice__(self, i, j):
-        log.info("requested lines %d to %d" % (i, j))
+        log.debug("requested lines %d to %d" % (i, j))
         with open(self.filename) as fh:
             pages = []
             for pos in range(i,j):

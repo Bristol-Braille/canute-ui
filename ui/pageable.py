@@ -428,20 +428,3 @@ class Book(Pageable):
     def prev_chapter(self):
         '''prev chapter'''
         log.info("prev chapter")
-
-    def load_native(self, filename):
-        '''load a native format book and convert to correct data structure'''
-        log.info("loading [%s]" % filename)
-
-        start = time.time()
-        pages = []
-        with open(filename) as fh:
-            data = fh.read(self.cells)
-            while data != "":
-                page = struct.unpack("%db" % self.cells, data)
-                pages.append(page)
-                data = fh.read(self.cells)
-
-        log.info("text loaded with %d lines in %s seconds" % (len(pages), round(time.time() - start,3)))
-        return pages
-
