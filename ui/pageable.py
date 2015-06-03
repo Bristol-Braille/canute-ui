@@ -95,7 +95,7 @@ class Pageable(object):
         # pad if necessary
         missing_rows = self.rows - len(return_text)
         log.debug("padding %d missing rows with %d spaces" % (missing_rows, self.cells * missing_rows))
-        return_text += [0] * self.cells * missing_rows
+        return_text.append([0] * self.cells * missing_rows)
         return return_text
 
 
@@ -118,7 +118,7 @@ class Pageable(object):
         # get everything the correct width & height
         output = self.fit_content(output)
 
-        #join the lines
+        # flatten lists
         output = [cell for line in output for cell in line]
 
         # save the current page
