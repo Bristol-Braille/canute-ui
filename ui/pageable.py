@@ -390,6 +390,7 @@ class Library(Pageable):
             raise IndexError("no book at slot %d" % book_num)
 
         log.debug("loading book %d [%s]" % (book_num, self.book_defs[book_num]["title"]))
+        self.ui.driver.send_ok_sound()
         book = Book(self.book_defs[book_num], self.dimensions, self.config, self.ui)
         return book
 
@@ -437,6 +438,6 @@ class Book(Pageable):
                 pages.append(page)
                 data = fh.read(self.cells)
 
-        log.info("text loaded with %d lines in %s seconds" % (len(pages), round(time.time() - start,2)))
+        log.info("text loaded with %d lines in %s seconds" % (len(pages), round(time.time() - start,3)))
         return pages
 
