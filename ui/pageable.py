@@ -3,6 +3,8 @@ import math
 import shutil
 import pickle
 import os.path
+import time
+import struct
 from xml.dom.minidom import parse
 from utility import unicode_to_pin_num, alphas_to_pin_nums, find_files
 
@@ -330,9 +332,9 @@ class Library(Pageable):
 
         rows = xml_doc.getElementsByTagName('row')
         log.debug("got %d rows" % len(rows))
-        pages = []
+        lines = []
 
-        # do the conversion from unicode to pin number pics
+        # do the conversion from unicode to pin numbers
         for row in rows:
             try:
                 data = row.childNodes[0].data
@@ -342,15 +344,21 @@ class Library(Pageable):
                     line.append(pin_num)
             except IndexError as e:
                 # empty row element
-                line = [0]
-            pages.append(line)
+                line = [0] * self.cells
 
-        log.info("pef loaded with %d lines" % len(pages))
+            # ensure right length
+            missing_cells = self.cells - len(line)
+            line.extend([0] * missing_cells)
+
+            lines.append(line)
+
+        log.info("pef loaded with %d lines" % len(lines))
         log.info("writing to [%s]" % native_file)
         with open(native_file, 'w') as fh:
-            for page in pages:
-                line = ','.join([str(x) for x in page])
-                fh.write(line + "\n")
+            for line in lines:
+                if len(line) != self.cells:
+                    raise Exception("conversion problem - expected %d chars got %d" % (self.cells, len(line)))
+                fh.write(bytearray(line))
 
         log.info("removing old pef file")
         os.remove(pef_file)
@@ -394,6 +402,7 @@ class Book(Pageable):
     def __init__(self, book_def, dimensions, config, ui):
         self.book_def = book_def
         self.config = config
+        self.cells = dimensions[0] # need this before we can load a book, and can't call super till we have content
         self.book_dir = self.config.get('files', 'library_dir') 
 
         if book_def["type"] == 'native':
@@ -419,14 +428,14 @@ class Book(Pageable):
         '''load a native format book and convert to correct data structure'''
         log.info("loading [%s]" % filename)
 
-        import time
         start = time.time()
         pages = []
         with open(filename) as fh:
-            for line in fh.readlines():
-                # convert comma separated vals to a list of ints
-                page = [int(x) for x in line.split(',')]
+            data = fh.read(self.cells)
+            while data != "":
+                page = struct.unpack("%db" % self.cells, data)
                 pages.append(page)
+                data = fh.read(self.cells)
 
         log.info("text loaded with %d lines in %s seconds" % (len(pages), round(time.time() - start,2)))
         return pages
