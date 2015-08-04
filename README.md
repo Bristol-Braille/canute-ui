@@ -16,6 +16,8 @@ On Windows follow these
 [instructions](http://pillow.readthedocs.org/en/latest/installation.html) to
 install Pillow.
 
+Set the absolute location of your books directory (eg: /home/me/canute-ui/books) in the ui/config.rc	
+
 Run the UI (with emulated hardware delay of 1000ms):
 
     cd ui/
