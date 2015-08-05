@@ -10,6 +10,7 @@ from driver import Driver
 from pageable import Menu, Book, Library
 from utility import test_book, write_pid_file, remove_pid_file
 from ConfigParser import ConfigParser, NoSectionError, NoOptionError
+import buttons_config 
 
 
 class UI():
@@ -24,11 +25,10 @@ class UI():
 
     state_file = 'ui.pkl'
 
-    def __init__(self, driver, config, button_config):
+    def __init__(self, driver, config):
         self.driver = driver
         self.dimensions = self.driver.get_dimensions()
         self.last_data = []
-        self.button_config = button_config
 
         # load the books into the library
         self.library = Library(self.dimensions, config, self)
@@ -70,39 +70,46 @@ class UI():
         for button_num in range(8):
             if buttons[button_num] != False:
                 button_type = buttons[button_num]
-                mtype = self.screen.__class__.__name__.lower()
-                config = self.button_config[mtype][button_num][button_type]
-                if not config.has_key('object'):
-                    config = self.button_config['default'][button_num][button_type]
-                if not config.has_key('object'):
-                    log.debug("nothing defined for that button")
-                    return False
-
+                # we're using a hash to store config, so convert number to a str
+                button_num = str(button_num)
+                # fetch the config for the button
+                try:
+                    config = buttons_config.conf[self.state['mode']][button_type][button_num]
+                except KeyError:
+                    # try get the default
+                    try:
+                        config = buttons_config.conf['default'][button_type][button_num]
+                    except KeyError:
+                        # otherwise return False
+                        log.debug("nothing defined for that button")
+                        return False
+            
+                # log it
                 log.debug(config)
-                if config['object'] == 'ui':
+
+                # to call the method we need the object
+                if config['obj'] == 'ui':
                     obj = self
-                elif config['object'] == 'screen':
+                elif config['obj'] == 'screen':
                     obj = self.screen
-                else:
-                    log.warning("no config for object type %s" % config['object'])
-                    return False
-                #get the method
+
+                # get the method
                 try:
                     method = getattr(obj, config['method'])
                 except AttributeError:
                     log.warning("object %s has no method %s to call" % (obj, config['method']))
                     return False
                     
-                #call it
-                log.debug("calling %s->%s(%s)" % (config['object'], config['method'], config['args']))
-
-                #we're going to do something, so make an OK sound
+                # we're going to do something, so make an OK sound
                 self.driver.send_ok_sound()
-                if config['args'] is None:
-                    method()
-                else:
+                # call it, maybe with args
+                if config.has_key('args'):
+                    log.info("despatching %s->%s(%s)" % (config['obj'], config['method'], config['args']))
                     method(config['args'])
-                #update the screen
+                else:
+                    log.info("despatching %s->%s()" % (config['obj'], config['method']))
+                    method()
+                # update the screen
                 self.show()
                 return True
 
@@ -199,27 +206,9 @@ if __name__ == '__main__':
     config.read('config.rc')
     log = setup_logs()
 
-    #setup buttons
-
-    from collections import defaultdict
-    l=lambda:defaultdict(l)
-    button_config=l()
-    for mtype in ['default','library','book','menu']:
-        for b in range(8):
-            
-            for btype in ['long','single','double']:
-                try:
-                    conf = config.get('button-%s' % mtype, 'b%s_%s' % (b,btype))
-                    try:
-                        obj,method,m_args = conf.split(',')
-                        m_args = int(m_args)
-                    except ValueError:
-                        obj,method = conf.split(',')
-                        m_args = None
-                    button_config[mtype][b][btype] = { 'method' : method, 'args' : m_args, 'object' : obj }
-                    log.debug("%s->%s->%s = %s->%s(%s)" % (mtype, b, btype, obj,method, m_args)) 
-                except NoOptionError:
-                    pass
+    if not buttons_config.test_config():
+        log.exception("bad button config")
+        exit(1)
 
 
     # write pid file
@@ -232,14 +221,14 @@ if __name__ == '__main__':
             from hardware_emulator import HardwareEmulator
             with HardwareEmulator(delay=args.delay) as hardware:
                 driver = Driver(hardware)
-                ui = UI(driver, config, button_config)
+                ui = UI(driver, config)
                 ui.start()
         else:
             log.info("running with stepstix hardware on port %s" % args.tty)
             from hardware import Hardware
             with Hardware(port=args.tty, using_pi=args.using_pi) as hardware:
                 driver = Driver(hardware)
-                ui = UI(driver, config, button_config)
+                ui = UI(driver, config)
                 ui.start()
     except Exception as e:
         log.exception(e)

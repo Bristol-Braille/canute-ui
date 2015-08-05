@@ -4,32 +4,3 @@ log_file = canute.log
 # full path to book dir
 library_dir = /home/mattvenn/books/
 
-[button-default]
-b0_single = ui,library_mode
-b1_single = screen,prev
-b2_single = screen,next
-b3_single = ui,menu_mode
-b1_long = screen,home
-b2_long = screen,end
-
-[button-library]
-b4_single = ui,load_book,0
-b5_single = ui,load_book,1
-b6_single = ui,load_book,2
-b7_single = ui,load_book,3
-
-[button-book]
-b5_single = screen,prev
-b6_single = screen,next
-b5_long = screen,home
-b6_long = screen,end
-b5_double = screen,prev_chapter
-b6_double = screen,next_chapter
-
-[button-menu]
-b4_single = screen,option,0 
-b5_single = screen,option,1 
-b6_single = screen,option,2 
-b7_single = screen,option,3 
-
-
