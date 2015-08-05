@@ -12,14 +12,10 @@ Documentation is available at
 
 Install python 2.x (will probably work with 3.x with little modification)
 
-On Windows follow these
-[instructions](http://pillow.readthedocs.org/en/latest/installation.html) to
-install Pillow.
-
-Run the UI (with emulated hardware delay of 1000ms):
+Run the UI (with emulated hardware delay of 100ms):
 
     cd ui/
-    python ./ui.py --emulated --delay 1000
+    python ./ui.py --emulated --delay 100
 
 ## Specification
 
