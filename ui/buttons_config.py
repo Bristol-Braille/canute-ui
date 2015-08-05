@@ -1,3 +1,31 @@
+"""
+Button definitions for the 3 modes
+
+Top level keys are:
+
+* default: what should happen if a button isn't defined elsewhere
+* library: when in library mode  
+* book: when in book mode
+* menu: when in menu mode
+
+Each key is assigned a hash of button types:
+
+* single click
+* double click
+* long click
+
+And within each button type are final config hashes for the button numbers from 0 to 7. 
+
+Each button's config hash must have an obj key and a method key, with an optional args key.
+
+The obj key can be either 'ui' for calling methods on the main ui object, or 'screen' for calling methods on the currently displayed screen.
+
+The method key is the name of the method to be called.
+
+The args key provides arguments to pass to the method.
+
+When this file is run, it tests the config and prints error messages.
+"""
 import logging
 log = logging.getLogger(__name__)
 conf = {
@@ -58,6 +86,7 @@ def test_config():
     except ValueError as e:
         log.error(e)
         return False
+    log.info("config OK")
     return True
 
 if __name__ == '__main__':
