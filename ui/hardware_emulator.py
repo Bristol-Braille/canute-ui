@@ -89,6 +89,8 @@ class HardwareEmulator():
             self.udp_send.put(data)
         if cmd == CMD_SEND_ERROR:
             log.error("making error sound!")
+        if cmd == CMD_SEND_OK:
+            log.error("making OK sound!")
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware - we're faking this so the driver doesn't complain

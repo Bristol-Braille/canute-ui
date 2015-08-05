@@ -109,7 +109,7 @@ class Pageable(object):
         if end_line > len(self.content) - 1:
             end_line = len(self.content) - 1
 
-        log.info("showing page %d of %d (lines %d -> %d)" % (self.page, self.get_num_pages(), start_line, end_line+1))
+        log.info("showing page %d of %d (lines %d -> %d)" % (self.page + 1, self.get_num_pages(), start_line, end_line+1))
 
         output = []
         #get the right content
