@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import ipdb
 import argparse
 import pickle
 import os
@@ -8,7 +9,7 @@ import random
 from driver import Driver
 from pageable import Menu, Book, Library
 from utility import test_book, write_pid_file, remove_pid_file
-from ConfigParser import ConfigParser, NoSectionError
+from ConfigParser import ConfigParser, NoSectionError, NoOptionError
 
 
 class UI():
@@ -23,10 +24,11 @@ class UI():
 
     state_file = 'ui.pkl'
 
-    def __init__(self, driver, config):
+    def __init__(self, driver, config, button_config):
         self.driver = driver
         self.dimensions = self.driver.get_dimensions()
         self.last_data = []
+        self.button_config = button_config
 
         # load the books into the library
         self.library = Library(self.dimensions, config, self)
@@ -48,6 +50,8 @@ class UI():
             self.screen = self.menu
             self.show()
 
+
+                        
     def save_state(self):
         with open(UI.state_file, 'w') as fh:
             pickle.dump(self.state, fh)
@@ -62,100 +66,68 @@ class UI():
             self.state['mode'] = 'library'
             self.state['book_num'] = 0
 
+    def despatch(self,buttons):
+        for button_num in range(8):
+            if buttons[button_num] != False:
+                button_type = buttons[button_num]
+                mtype = self.screen.__class__.__name__.lower()
+                config = self.button_config[mtype][button_num][button_type]
+                if not config.has_key('object'):
+                    config = self.button_config['default'][button_num][button_type]
+                if not config.has_key('object'):
+                    log.debug("nothing defined for that button")
+                    return False
+
+                log.debug(config)
+                if config['object'] == 'ui':
+                    obj = self
+                elif config['object'] == 'screen':
+                    obj = self.screen
+                else:
+                    log.warning("no config for object type %s" % config['object'])
+                    return False
+                #get the method
+                try:
+                    method = getattr(obj, config['method'])
+                except AttributeError:
+                    log.warning("object %s has no method %s to call" % (obj, config['method']))
+                    return False
+                    
+                #call it
+                log.debug("calling %s->%s(%s)" % (config['object'], config['method'], config['args']))
+
+                #we're going to do something, so make an OK sound
+                self.driver.send_ok_sound()
+                if config['args'] is None:
+                    method()
+                else:
+                    method(config['args'])
+                #update the screen
+                self.show()
+                return True
+
     def start(self):
         '''start the UI running, runs the UI until the driver returns an error'''
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
             buts = self.driver.get_button_status()
-            # let user know we got a button press
-            if buts != [False for i in range(8)]:
-                self.driver.send_ok_sound()
-            if buts[0] == 'single':
-                log.info("library mode")
-                self.state['mode'] = 'library'
-                self.screen = self.library
-                self.library.check_for_new_books()
-                self.show()
-            elif buts[3] == 'single':
-                log.info("menu mode")
-                self.state['mode'] = 'menu'
-                self.screen = self.menu
-                self.show()
-            elif buts[1] == 'single':
-                self.screen.prev()
-                self.show()
-            elif buts[1] == 'long':
-                log.info("home")
-                self.screen.home()
-                self.show()
-            elif buts[1] == 'double':
-                if isinstance(self.screen, Book):
-                    self.book.prev_chapter()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[2] == 'single':
-                log.info("next")
-                self.screen.next()
-                self.show()
-            elif buts[2] == 'long':
-                log.info("end")
-                self.screen.end()
-                self.show()
-            elif buts[2] == 'double':
-                if isinstance(self.screen, Book):
-                    self.book.next_chapter()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[4] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(0)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(0)
-                else:
-                    self.driver.send_error_sound()
-            elif buts[5] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(1)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(1)
-                elif isinstance(self.screen, Book):
-                    self.screen.prev()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[5] == 'long':
-                if isinstance(self.screen, Book):
-                    log.info("home")
-                    self.screen.home()
-                    self.show()
-            elif buts[6] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(2)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(2)
-                elif isinstance(self.screen, Book):
-                    self.screen.next()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[6] == 'long':
-                if isinstance(self.screen, Book):
-                    log.info("end")
-                    self.screen.end()
-                    self.show()
-            elif buts[7] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(3)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(3)
-                else:
-                    self.driver.send_error_sound()
-
+            result = self.despatch(buts)
+            if result is False:
+                self.driver.send_error_sound()
             time.sleep(0.1)
         else:
             log.info("UI main loop ending")
+
+    def library_mode(self):
+        log.info("library mode")
+        self.state['mode'] = 'library'
+        self.screen = self.library
+        self.library.check_for_new_books()
+
+    def menu_mode(self):
+        log.info("menu mode")
+        self.state['mode'] = 'menu'
+        self.screen = self.menu
 
     def load_book(self, number):
         '''
@@ -167,7 +139,6 @@ class UI():
             self.screen = self.book
             self.state['book_num'] = number
             self.state['mode'] = 'book'
-            self.show()
         except IndexError as e:
             log.warning("no book at slot %d" % number)
             self.driver.send_error_sound()
@@ -226,8 +197,30 @@ if __name__ == '__main__':
     # config
     config = ConfigParser()
     config.read('config.rc')
-
     log = setup_logs()
+
+    #setup buttons
+
+    from collections import defaultdict
+    l=lambda:defaultdict(l)
+    button_config=l()
+    for mtype in ['default','library','book','menu']:
+        for b in range(8):
+            
+            for btype in ['long','single','double']:
+                try:
+                    conf = config.get('button-%s' % mtype, 'b%s_%s' % (b,btype))
+                    try:
+                        obj,method,m_args = conf.split(',')
+                        m_args = int(m_args)
+                    except ValueError:
+                        obj,method = conf.split(',')
+                        m_args = None
+                    button_config[mtype][b][btype] = { 'method' : method, 'args' : m_args, 'object' : obj }
+                    log.debug("%s->%s->%s = %s->%s(%s)" % (mtype, b, btype, obj,method, m_args)) 
+                except NoOptionError:
+                    pass
+
 
     # write pid file
     write_pid_file()
@@ -239,14 +232,14 @@ if __name__ == '__main__':
             from hardware_emulator import HardwareEmulator
             with HardwareEmulator(delay=args.delay) as hardware:
                 driver = Driver(hardware)
-                ui = UI(driver, config)
+                ui = UI(driver, config, button_config)
                 ui.start()
         else:
             log.info("running with stepstix hardware on port %s" % args.tty)
             from hardware import Hardware
             with Hardware(port=args.tty, using_pi=args.using_pi) as hardware:
                 driver = Driver(hardware)
-                ui = UI(driver, config)
+                ui = UI(driver, config, button_config)
                 ui.start()
     except Exception as e:
         log.exception(e)
