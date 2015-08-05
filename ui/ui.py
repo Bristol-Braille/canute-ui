@@ -66,61 +66,61 @@ class UI():
             self.state['mode'] = 'library'
             self.state['book_num'] = 0
 
-    def despatch(self,buttons):
-        for button_num in range(8):
-            if buttons[button_num] != False:
-                button_type = buttons[button_num]
-                # we're using a hash to store config, so convert number to a str
-                button_num = str(button_num)
-                # fetch the config for the button
-                try:
-                    config = buttons_config.conf[self.state['mode']][button_type][button_num]
-                except KeyError:
-                    # try get the default
-                    try:
-                        config = buttons_config.conf['default'][button_type][button_num]
-                    except KeyError:
-                        # otherwise return False
-                        log.debug("nothing defined for that button")
-                        return False
+    def despatch(self,button_type, button_num):
+        # we're using a hash to store config, so convert number to a str
+        button_num = str(button_num)
+        # fetch the config for the button
+        try:
+            config = buttons_config.conf[self.state['mode']][button_type][button_num]
+        except KeyError:
+            # try get the default
+            try:
+                config = buttons_config.conf['default'][button_type][button_num]
+            except KeyError:
+                # otherwise return False
+                log.debug("nothing defined for that button")
+                return False
+    
+        # to call the method we need the object
+        if config['obj'] == 'ui':
+            obj = self
+        elif config['obj'] == 'screen':
+            obj = self.screen
+
+        # get the method
+        try:
+            method = getattr(obj, config['method'])
+        except AttributeError:
+            log.warning("object %s has no method %s to call" % (obj, config['method']))
+            return False
             
-                # log it
-                log.debug(config)
+        # we're going to do something, so make an OK sound
+        self.driver.send_ok_sound()
 
-                # to call the method we need the object
-                if config['obj'] == 'ui':
-                    obj = self
-                elif config['obj'] == 'screen':
-                    obj = self.screen
+        # call method, maybe with args
+        if config.has_key('args'):
+            log.info("despatching %s->%s(%s)" % (config['obj'], config['method'], config['args']))
+            method(config['args'])
+        else:
+            log.info("despatching %s->%s()" % (config['obj'], config['method']))
+            method()
 
-                # get the method
-                try:
-                    method = getattr(obj, config['method'])
-                except AttributeError:
-                    log.warning("object %s has no method %s to call" % (obj, config['method']))
-                    return False
-                    
-                # we're going to do something, so make an OK sound
-                self.driver.send_ok_sound()
-                # call it, maybe with args
-                if config.has_key('args'):
-                    log.info("despatching %s->%s(%s)" % (config['obj'], config['method'], config['args']))
-                    method(config['args'])
-                else:
-                    log.info("despatching %s->%s()" % (config['obj'], config['method']))
-                    method()
-                # update the screen
-                self.show()
-                return True
+        # update the screen
+        self.show()
+        return True
 
     def start(self):
         '''start the UI running, runs the UI until the driver returns an error'''
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
             buts = self.driver.get_button_status()
-            result = self.despatch(buts)
-            if result is False:
-                self.driver.send_error_sound()
+            for button_num in range(8):
+                if buts[button_num] != False:
+                    button_type = buts[button_num]
+                    # if a button is pressed, deal with it
+                    result = self.despatch(button_type, button_num)
+                    if result is False:
+                        self.driver.send_error_sound()
             time.sleep(0.1)
         else:
             log.info("UI main loop ending")
