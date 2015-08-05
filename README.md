@@ -12,6 +12,8 @@ Documentation is available at
 
 Install python 2.x (will probably work with 3.x with little modification)
 
+Set the absolute location of your books directory (eg: /home/me/canute-ui/books) in the ui/config.rc	
+
 Run the UI (with emulated hardware delay of 100ms):
 
     cd ui/
