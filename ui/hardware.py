@@ -10,9 +10,9 @@ try:
     import RPi.GPIO as GPIO
     from threading import Timer
     from status_led import LedThread
-    long_press = 1000.0 #ms
-    double_click = 500.0 #ms
-    debounce = 100 #ms
+    long_press = 500.0 #ms
+    double_click = 200.0 #ms
+    debounce = 10 #ms
 except ImportError:
     pass
 
