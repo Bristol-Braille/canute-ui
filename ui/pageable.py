@@ -340,7 +340,7 @@ class Library(Pageable):
         # do the conversion from unicode to pin numbers
         for row in rows:
             try:
-                data = row.childNodes[0].data
+                data = row.childNodes[0].data.rstrip()
                 line = []
                 for uni_char in data:
                     pin_num = unicode_to_pin_num(uni_char)
