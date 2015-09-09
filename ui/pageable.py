@@ -1,10 +1,7 @@
 import logging
 import math
-import shutil
 import pickle
 import os.path
-import time
-import struct
 from bookfile_list import BookFile_List
 from xml.dom.minidom import parse
 from utility import unicode_to_pin_num, alphas_to_pin_nums, find_files
@@ -54,14 +51,14 @@ class Pageable(object):
     def get_state_file(self):
         '''return the name of the state file'''
         raise PageableError("get_state_file needs to be defined by child class")
-    
+
     def remove_state(self):
         log.info("removing state file %s" % self.get_state_file())
         try:
             os.remove(self.get_state_file())
         except OSError:
             pass
-        
+
     def save_state(self):
         state = {
             'page': self.page,
@@ -230,7 +227,7 @@ class Library(Pageable):
 
     def __init__(self, dimensions, config, ui):
         self.config = config
-        self.book_dir = self.config.get('files', 'library_dir') 
+        self.book_dir = self.config.get('files', 'library_dir')
         self.book_defs_file = self.book_dir + 'book_defs.pkl'
 
         self.load_book_defs()
@@ -406,7 +403,7 @@ class Book(Pageable):
         self.book_def = book_def
         self.config = config
         self.cells = dimensions[0] # need this before we can load a book, and can't call super till we have content
-        self.book_dir = self.config.get('files', 'library_dir') 
+        self.book_dir = self.config.get('files', 'library_dir')
 
         if book_def["type"] == 'native':
             content = BookFile_List(book_def["filename"], dimensions)

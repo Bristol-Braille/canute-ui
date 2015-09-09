@@ -1,4 +1,3 @@
-import string
 import time
 import serial
 import logging
@@ -45,7 +44,7 @@ class Hardware():
             self.led_thread=LedThread(21,0.5)
             self.led_thread.start()
             self.pi_buts = [16, 19, 15, 18, 26, 22, 23, 24]
-            # need to store some details to work out what kind of click it was 
+            # need to store some details to work out what kind of click it was
             self.pi_but_time_press = [0] * 8
             self.pi_but_time_release = [0] * 8
             self.pi_but_clicks = [0] * 8

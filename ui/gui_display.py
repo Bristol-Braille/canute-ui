@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 import time
-import os
 import logging
 import Tkinter
 from Tkinter import StringVar
 from udp_utility import udp_send, udp_recv
 from comms_codes import *
-from utility import pin_num_to_unicode, pin_num_to_alpha
+from utility import pin_num_to_unicode
 
 log = logging.getLogger(__name__)
 

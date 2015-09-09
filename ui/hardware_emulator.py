@@ -1,6 +1,5 @@
 import time
 import logging
-import Tkinter
 from udp_utility import udp_send, udp_recv
 from comms_codes import *
 import subprocess

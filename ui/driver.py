@@ -1,5 +1,4 @@
 import logging
-import time
 error_codes = []
 log = logging.getLogger(__name__)
 from comms_codes import *

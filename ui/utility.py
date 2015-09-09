@@ -1,10 +1,7 @@
-import fnmatch
 import os
-import sys
 import logging
 log = logging.getLogger(__name__)
 
-from ConfigParser import ConfigParser, NoSectionError
 
 def get_pid_file():
     return os.path.dirname(os.path.realpath(__file__)) + "/ui.pid"
@@ -82,7 +79,7 @@ def alpha_to_unicode(alpha):
 
 def pin_num_to_unicode(pin_num):
     return unichr(pin_num+10240)
-    
+
 def alphas_to_pin_nums(alphas):
     '''convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`'''
     return map(alpha_to_pin_num, alphas)

@@ -4,7 +4,6 @@ simple thread for flashing an led on a specified pin at a defined rate
 import threading
 import time
 import RPi.GPIO as GPIO
-import signal
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 

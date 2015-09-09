@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 import argparse
 import pickle
-import os
 import logging
 import time
-import random
 from driver import Driver
 from pageable import Menu, Book, Library
-from utility import test_book, write_pid_file, remove_pid_file
-from ConfigParser import ConfigParser, NoSectionError
+from utility import write_pid_file, remove_pid_file
+from ConfigParser import ConfigParser
 
 
 class UI():
