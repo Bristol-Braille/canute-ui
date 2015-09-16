@@ -1,5 +1,5 @@
 import abc
-from driver import Driver
+from driver import Driver, DriverError
 import time
 import serial
 import logging
@@ -34,6 +34,8 @@ class Pi(Driver):
             log.info("hardware detected on port %s" % port)
         else:
             self.port = None
+
+        super(Pi, self).__init__()
 
         self.pi_buttons = pi_buttons
         self.buttons = [False] * 8
@@ -158,10 +160,10 @@ class Pi(Driver):
         message = self.port.read(2)
         log.debug("rx [%s]" % binascii.hexlify(message))
         if len(message) != 2:
-            raise HardwareError("unexpected rx data length %d" % len(message))
+            raise DriverError("unexpected rx data length %d" % len(message))
         data = struct.unpack('2b', message)
         if data[0] != expected_cmd:
-            raise HardwareError("unexpected rx command %d" % expected_cmd)
+            raise DriverError("unexpected rx command %d" % expected_cmd)
         return data[1]
 
     def __exit__(self, ex_type, ex_value, traceback):

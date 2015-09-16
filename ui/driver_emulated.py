@@ -1,5 +1,5 @@
 import abc
-from driver import Driver
+from driver import Driver, DriverError
 import time
 import logging
 from udp_utility import udp_send, udp_recv
@@ -52,7 +52,6 @@ class Emulated(Driver):
 
     def send_ok_sound(self):
         log.info("ok sound!");
-
 
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the threads properly'''
