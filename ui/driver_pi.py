@@ -15,7 +15,7 @@ try:
     from status_led import LedThread
     long_press = 500.0 #ms
     double_click = 200.0 #ms
-    debounce = 10 #ms
+    debounce = 20 #ms
 except ImportError:
     pass
 
@@ -77,6 +77,7 @@ class Pi(Driver):
         sets a timer for 0.5 seconds from when button was pressed to call a determine_button_type that then decides what type
         of button click it was.
         '''
+        time.sleep(0.01)
         state = GPIO.input(channel)
         log.debug("button %d is %s" % (channel, state))
         index = self.pi_buts.index(channel)
