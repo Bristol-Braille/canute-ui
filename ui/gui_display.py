@@ -25,6 +25,8 @@ class Display():
     MSG_INTERVAL = 10
     DISPLAY_GIF = 'display.gif'
 
+    but_after_id = None
+
     def __init__(self):
         '''create the display object'''
         self.counter = 0
