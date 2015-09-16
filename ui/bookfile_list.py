@@ -28,6 +28,6 @@ class BookFile_List(list):
         return pages
 
 if __name__ == '__main__':
-    book = Book_List('./book_list.py', [28,4])
+    book = BookFile_List('./bookfile_list.py', [28,4])
     print book[2:8]
 
