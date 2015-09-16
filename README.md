@@ -1,4 +1,4 @@
-# Canute UI
+# Canute UI [![unittest status](https://api.travis-ci.org/Bristol-Braille/canute-ui.svg)](https://travis-ci.org/Bristol-Braille/canute-ui)
 
 This is the repository for UI (user interface) development for the [Canute
 electronic Braille reader](http://bristolbraille.co.uk/#canute).
