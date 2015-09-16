@@ -5,7 +5,7 @@ import Tkinter
 from Tkinter import StringVar
 from udp_utility import udp_send, udp_recv
 from comms_codes import *
-from utility import pin_num_to_unicode
+from utility import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
 
@@ -101,6 +101,7 @@ class Display():
         data_str = ''
         for row in range(ROWS):
             row_braille = data[row*CHARS:row*CHARS+CHARS]
+            #label_text = ''.join(map(pin_num_to_alpha, row_braille))  # useful for debugging, show pin number not the braille
             label_text = ''.join(map(pin_num_to_unicode, row_braille))
             self.label_rows[row].set(label_text)
 
