@@ -19,7 +19,7 @@ except ImportError:
     pass
 
 
-class Pi():
+class Pi(Driver):
     """driver class for use with the Raspberry Pi
 
     connects to the display via serial and knows how to send and receive data to it
@@ -128,6 +128,16 @@ class Pi():
             return buttons
         else:
             return [False] * 8
+
+    def send_error_sound(self):
+        '''make the hardware make an error sound'''
+        log.debug("error sound")
+        self.hardware.send_data(CMD_SEND_ERROR)
+
+    def send_ok_sound(self):
+        '''make the hardware make an ok sound'''
+        log.debug("ok sound")
+        self.send_data(CMD_SEND_OK)
 
     def send_data(self, cmd, data=[]):
         '''send data to the hardware
