@@ -1,8 +1,11 @@
+import abc
+from driver import Driver
 import time
 import serial
 import logging
 import struct
 import binascii
+
 log = logging.getLogger(__name__)
 
 try:
@@ -16,19 +19,15 @@ except ImportError:
     pass
 
 
-class HardwareError(Exception):
-    pass
-
-
-class Hardware():
-    """class that represents the hardware
+class Pi():
+    """driver class for use with the Raspberry Pi
 
     connects to the display via serial and knows how to send and receive data to it
 
     :param port: the serial port the display is plugged into
-    :param using_pi: whether to use the Pi for button presses
+    :param pi_buttons: whether to use the Pi for button presses
     """
-    def __init__(self, port='/dev/ttyACM0', using_pi=False):
+    def __init__(self, port='/dev/ttyACM0', pi_buttons=False):
         # get serial connection
         if port:
             self.port = self.setup_serial(port)
@@ -36,9 +35,9 @@ class Hardware():
         else:
             self.port = None
 
-        self.using_pi = using_pi
+        self.pi_buttons = pi_buttons
         self.buttons = [False] * 8
-        if using_pi:
+        if pi_buttons:
             GPIO.setmode(GPIO.BOARD)
             GPIO.setwarnings(False)
             self.led_thread=LedThread(21,0.5)
@@ -111,6 +110,10 @@ class Hardware():
         try:
             self.port.getCD()
             return True
+        # no port
+        except AttributeError:
+            return False
+        # problem with the port
         except IOError:
             return False
 
@@ -119,7 +122,7 @@ class Hardware():
 
         :rtype: list of 8 elements either set to False (unpressed) or one of single, double, long
         '''
-        if self.using_pi is True:
+        if self.pi_buttons is True:
             buttons = self.buttons
             self.buttons = [False] * 8
             return buttons
@@ -158,7 +161,7 @@ class Hardware():
         if self.port:
             log.error("closing serial port")
             self.port.close()
-        if self.using_pi:
+        if self.pi_buttons:
             self.led_thread.stop()
             self.led_thread.join()
             GPIO.cleanup()
@@ -167,11 +170,13 @@ class Hardware():
         '''method required for using the `with` statement'''
         return self
 
+Driver.register(Pi)
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     log = logging.getLogger(__name__)
 
-    with Hardware(port=None, using_pi=True) as hardware:
-        while True:
-            log.info(hardware.get_buttons())
+    with Pi(port='/dev/ttyACM0', pi_buttons=True) as driver:
+        while driver.is_ok():
+            log.info(driver.get_buttons())
             time.sleep(1)

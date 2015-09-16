@@ -1,3 +1,5 @@
+import abc
+from driver import Driver
 import time
 import logging
 from udp_utility import udp_send, udp_recv
@@ -12,8 +14,8 @@ CHARS = 28
 ROWS = 4
 
 
-class HardwareEmulator():
-    """class that emulates the hardware
+class Emulated(Driver):
+    """driver class that emulates the machine with a GUI
 
     we fake the :func:`send_data` and :func:`get_data` functions
 
@@ -23,7 +25,7 @@ class HardwareEmulator():
     """
 
     def __init__(self, delay=0):
-        '''create the hardware object'''
+        super(Emulated, self).__init__()
         self.data = 0
         self.delay = delay
         self.buttons = [False] * BUTTONS
@@ -44,6 +46,13 @@ class HardwareEmulator():
             return True
         else:
             return False
+
+    def send_error_sound(self):
+        log.info("error sound!");
+
+    def send_ok_sound(self):
+        log.info("ok sound!");
+
 
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the threads properly'''
@@ -99,15 +108,17 @@ class HardwareEmulator():
         '''
         return self.data
 
+Driver.register(Emulated)
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     log = logging.getLogger(__name__)
     log.info("showing all braille pin pics")
     count = 0
 
-    with HardwareEmulator() as hardware:
-        while hardware.is_ok():
-            log.info(hardware.get_buttons())
-            hardware.send_data(CMD_SEND_DATA, [count % 64]*ROWS*CHARS)
+    with Emulated() as driver:
+        while driver.is_ok():
+            log.info(driver.get_buttons())
+            driver.send_data(CMD_SEND_DATA, [count % 64]*ROWS*CHARS)
             count += 1
             time.sleep(1)

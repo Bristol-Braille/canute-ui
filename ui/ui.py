@@ -16,7 +16,7 @@ class UI():
 
     This implements the spec in [README.md](README.md)
 
-    The UI can be configured to either use the :class:`.Hardware` or :class:`.HardwareEmulator` class.
+    The UI can be configured to either use the :class:`.Pi` or :class:`.Emulated` driver class.
 
     :param driver: the :class:`driver` object that abstracts the hardware
     """
@@ -111,7 +111,7 @@ class UI():
         '''start the UI running, runs the UI until the driver returns an error'''
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
-            buts = self.driver.get_button_status()
+            buts = self.driver.get_buttons()
             for button_num in range(8):
                 if buts[button_num] != False:
                     button_type = buts[button_num]
@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Canute UI")
 
-    parser.add_argument('--using-pi', action='store_const', dest='using_pi', const=True, default=False, help="use the Pi to handle button presses")
+    parser.add_argument('--pi-buttons', action='store_const', dest='pi_buttons', const=True, default=False, help="use the Pi to handle button presses")
     parser.add_argument('--debug', action='store_const', dest='loglevel', const=logging.DEBUG, default=logging.INFO, help="debugging content")
     parser.add_argument('--tty', action='store', dest='tty', help="serial port for Canute stepstix board", default='/dev/ttyACM0')
     parser.add_argument('--delay', action='store', dest='delay', help="simulate mechanical delay in milliseconds", default=8000, type=int)
@@ -215,17 +215,14 @@ if __name__ == '__main__':
     try:
         if args.emulated:
             log.info("running with emulated hardware")
-
-            from hardware_emulator import HardwareEmulator
-            with HardwareEmulator(delay=args.delay) as hardware:
-                driver = Driver(hardware)
+            from driver_emulated import Emulated
+            with Emulated(delay=args.delay) as driver:
                 ui = UI(driver, config)
                 ui.start()
         else:
             log.info("running with stepstix hardware on port %s" % args.tty)
-            from hardware import Hardware
-            with Hardware(port=args.tty, using_pi=args.using_pi) as hardware:
-                driver = Driver(hardware)
+            from driver_pi import Pi
+            with Pi(port=args.tty, pi_buttons=args.pi_buttons) as driver:
                 ui = UI(driver, config)
                 ui.start()
     except Exception as e:
