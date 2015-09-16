@@ -27,7 +27,7 @@ if __name__ == '__main__':
     else:
         log.info("running with stepstix hardware on port %s" % args.tty)
         from hardware import Hardware
-        with Hardware(port=args.tty, using_pi=False) as hardware:
+        with Hardware(port=args.tty, pi_buttons=False) as hardware:
             driver = Driver(hardware)
             pattern = test_pattern(driver.get_dimensions())
             driver.set_braille(pattern)

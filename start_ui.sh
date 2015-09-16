@@ -6,5 +6,5 @@ then
     exit
 else
     cd ui
-    sudo python ui.py --using-pi &
+    sudo python ui.py --pi-buttons &
 fi
