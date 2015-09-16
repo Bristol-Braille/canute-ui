@@ -4,7 +4,7 @@ import pickle
 import os.path
 from bookfile_list import BookFile_List
 from xml.dom.minidom import parse
-from utility import unicode_to_pin_num, alphas_to_pin_nums, find_files
+from utility import pin_nums_to_alphas, unicode_to_pin_num, alphas_to_pin_nums, find_files
 
 log = logging.getLogger(__name__)
 
@@ -46,7 +46,8 @@ class Pageable(object):
         :param item: a list of pin numbers
         '''
         self.content.append(item)
-        self.content.sort()
+        # sort by alpha, have to convert pin nums back to alphas to make the comparison
+        self.content = sorted(self.content, key = pin_nums_to_alphas)
 
     def get_state_file(self):
         '''return the name of the state file'''
@@ -231,7 +232,6 @@ class Library(Pageable):
         self.book_defs_file = self.book_dir + 'book_defs.pkl'
 
         self.load_book_defs()
-
         book_titles = [item["title"] for item in self.book_defs]
         book_titles_brl = map(alphas_to_pin_nums, book_titles)
 
