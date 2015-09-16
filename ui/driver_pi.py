@@ -136,7 +136,7 @@ class Pi(Driver):
     def send_error_sound(self):
         '''make the hardware make an error sound'''
         log.debug("error sound")
-        self.hardware.send_data(CMD_SEND_ERROR)
+        self.send_data(CMD_SEND_ERROR)
 
     def send_ok_sound(self):
         '''make the hardware make an ok sound'''
