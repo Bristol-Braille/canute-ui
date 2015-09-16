@@ -2,4 +2,4 @@
 # relative path to where log is kept
 log_file = canute.log
 # full path to book dir
-library_dir = /home/pi/books/
+library_dir = /home/mattvenn/books/

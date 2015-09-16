@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import ipdb
 import argparse
 import pickle
 import logging
@@ -7,6 +8,7 @@ from driver import Driver
 from pageable import Menu, Book, Library
 from utility import write_pid_file, remove_pid_file
 from ConfigParser import ConfigParser
+import buttons_config 
 
 
 class UI():
@@ -46,6 +48,8 @@ class UI():
             self.screen = self.menu
             self.show()
 
+
+                        
     def save_state(self):
         with open(UI.state_file, 'w') as fh:
             pickle.dump(self.state, fh)
@@ -60,100 +64,75 @@ class UI():
             self.state['mode'] = 'library'
             self.state['book_num'] = 0
 
+    def despatch(self,button_type, button_num):
+        # we're using a hash to store config, so convert number to a str
+        button_num = str(button_num)
+        # fetch the config for the button
+        try:
+            config = buttons_config.conf[self.state['mode']][button_type][button_num]
+        except KeyError:
+            # try get the default
+            try:
+                config = buttons_config.conf['default'][button_type][button_num]
+            except KeyError:
+                # otherwise return False
+                log.debug("nothing defined for that button")
+                return False
+    
+        # to call the method we need the object
+        if config['obj'] == 'ui':
+            obj = self
+        elif config['obj'] == 'screen':
+            obj = self.screen
+
+        # get the method
+        try:
+            method = getattr(obj, config['method'])
+        except AttributeError:
+            log.warning("object %s has no method %s to call" % (obj, config['method']))
+            return False
+            
+        # we're going to do something, so make an OK sound
+        self.driver.send_ok_sound()
+
+        # call method, maybe with args
+        if config.has_key('args'):
+            log.info("despatching %s->%s(%s)" % (config['obj'], config['method'], config['args']))
+            method(config['args'])
+        else:
+            log.info("despatching %s->%s()" % (config['obj'], config['method']))
+            method()
+
+        # update the screen
+        self.show()
+        return True
+
     def start(self):
         '''start the UI running, runs the UI until the driver returns an error'''
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
             buts = self.driver.get_button_status()
-            # let user know we got a button press
-            if buts != [False for i in range(8)]:
-                self.driver.send_ok_sound()
-            if buts[0] == 'single':
-                log.info("library mode")
-                self.state['mode'] = 'library'
-                self.screen = self.library
-                self.library.check_for_new_books()
-                self.show()
-            elif buts[3] == 'single':
-                log.info("menu mode")
-                self.state['mode'] = 'menu'
-                self.screen = self.menu
-                self.show()
-            elif buts[1] == 'single':
-                self.screen.prev()
-                self.show()
-            elif buts[1] == 'long':
-                log.info("home")
-                self.screen.home()
-                self.show()
-            elif buts[1] == 'double':
-                if isinstance(self.screen, Book):
-                    self.book.prev_chapter()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[2] == 'single':
-                log.info("next")
-                self.screen.next()
-                self.show()
-            elif buts[2] == 'long':
-                log.info("end")
-                self.screen.end()
-                self.show()
-            elif buts[2] == 'double':
-                if isinstance(self.screen, Book):
-                    self.book.next_chapter()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[4] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(0)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(0)
-                else:
-                    self.driver.send_error_sound()
-            elif buts[5] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(1)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(1)
-                elif isinstance(self.screen, Book):
-                    self.screen.prev()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[5] == 'long':
-                if isinstance(self.screen, Book):
-                    log.info("home")
-                    self.screen.home()
-                    self.show()
-            elif buts[6] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(2)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(2)
-                elif isinstance(self.screen, Book):
-                    self.screen.next()
-                    self.show()
-                else:
-                    self.driver.send_error_sound()
-            elif buts[6] == 'long':
-                if isinstance(self.screen, Book):
-                    log.info("end")
-                    self.screen.end()
-                    self.show()
-            elif buts[7] == 'single':
-                if isinstance(self.screen, Library):
-                    self.load_book(3)
-                elif isinstance(self.screen, Menu):
-                    self.menu.option(3)
-                else:
-                    self.driver.send_error_sound()
-
+            for button_num in range(8):
+                if buts[button_num] != False:
+                    button_type = buts[button_num]
+                    # if a button is pressed, deal with it
+                    result = self.despatch(button_type, button_num)
+                    if result is False:
+                        self.driver.send_error_sound()
             time.sleep(0.1)
         else:
             log.info("UI main loop ending")
+
+    def library_mode(self):
+        log.info("library mode")
+        self.state['mode'] = 'library'
+        self.screen = self.library
+        self.library.check_for_new_books()
+
+    def menu_mode(self):
+        log.info("menu mode")
+        self.state['mode'] = 'menu'
+        self.screen = self.menu
 
     def load_book(self, number):
         '''
@@ -165,7 +144,6 @@ class UI():
             self.screen = self.book
             self.state['book_num'] = number
             self.state['mode'] = 'book'
-            self.show()
         except IndexError as e:
             log.warning("no book at slot %d" % number)
             self.driver.send_error_sound()
@@ -224,8 +202,12 @@ if __name__ == '__main__':
     # config
     config = ConfigParser()
     config.read('config.rc')
-
     log = setup_logs()
+
+    if not buttons_config.test_config():
+        log.exception("bad button config")
+        exit(1)
+
 
     # write pid file
     write_pid_file()
