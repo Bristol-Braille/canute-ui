@@ -41,6 +41,7 @@ def find_files(directory, extensions):
 def unicode_to_pin_num(uni_char):
     '''
     converts a unicode braille character to a decimal number that can then be used to load a picture to display the character
+    used to convert PEF format to CANUTE format
     http://en.wikipedia.org/wiki/Braille_Patterns
     '''
     int_code = ord(uni_char) - 10240
@@ -73,22 +74,21 @@ def unicode_to_pin_num(uni_char):
 
     return pin_num
 
-
-def alpha_to_unicode(alpha):
-    return unichr(alpha_to_pin_num(alpha)+10240)
-
+'''
+used by the gui to display braille
+'''
 def pin_num_to_unicode(pin_num):
     return unichr(pin_num+10240)
 
-def alphas_to_pin_nums(alphas):
-    '''convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`'''
-    return map(alpha_to_pin_num, alphas)
-
-
-def pin_num_to_alpha(pin_num):
+''' for sorting & debugging '''
+def pin_num_to_alpha(numeric):
     mapping = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="
-    return mapping[pin_num].lower()
+    return mapping[numeric] 
 
+def pin_nums_to_alphas(numerics):
+    return map(pin_num_to_alpha, numerics)
+
+''' used to convert plain text to pin pattern numbers '''
 def alpha_to_pin_num(alpha):
     '''
     convert a single alpha, digit or some punctuation to 6 pin braille
@@ -102,6 +102,9 @@ def alpha_to_pin_num(alpha):
         log.warning("problem converting [%s] to braille pic" % alpha)
         return 0
 
+def alphas_to_pin_nums(alphas):
+    '''convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`'''
+    return map(alpha_to_pin_num, alphas)
 
 def test_book(dimensions):
     '''
