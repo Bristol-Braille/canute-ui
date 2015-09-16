@@ -131,6 +131,7 @@ class Driver():
 
 if __name__ == "__main__":
 
+    from hardware_emulator import HardwareEmulator
     logging.basicConfig(level=logging.DEBUG)
     log = logging.getLogger(__name__)
 
