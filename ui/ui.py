@@ -164,7 +164,7 @@ class UI():
 
 def setup_logs():
     log_file = config.get('files', 'log_file')
-    log_format = logging.Formatter('%(asctime)s - %(name)-12s - %(levelname)-8s - %(message)s')
+    log_format = logging.Formatter('%(asctime)s - %(name)-16s - %(levelname)-8s - %(message)s')
     # configure the client logging
     log = logging.getLogger('')
     # has to be set to debug as is the root logger
