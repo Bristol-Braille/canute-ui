@@ -1,3 +1,4 @@
+import abc
 import logging
 import math
 import pickle
@@ -14,6 +15,7 @@ class PageableError(Exception):
 
 
 class Pageable(object):
+    __metaclass__ = abc.ABCMeta
     '''
     provides a common base class for the library and book objects
     content is provided as a list of pin numbers. Numbers are those used in unicode braille patterns: http://en.wikipedia.org/wiki/Braille_Patterns
@@ -49,9 +51,10 @@ class Pageable(object):
         # sort by alpha, have to convert pin nums back to alphas to make the comparison
         self.content = sorted(self.content, key = pin_nums_to_alphas)
 
+    @abc.abstractmethod
     def get_state_file(self):
         '''return the name of the state file'''
-        raise PageableError("get_state_file needs to be defined by child class")
+        return
 
     def remove_state(self):
         log.info("removing state file %s" % self.get_state_file())
@@ -151,6 +154,7 @@ class Pageable(object):
         else:
             log.info("at end already")
 
+
 class Menu(Pageable):
     '''
     inherits from :class:`.Pageable`
@@ -216,6 +220,8 @@ class Menu(Pageable):
     def get_state_file(self):
         '''return the name of the state file'''
         return 'menu.pkl'
+
+Pageable.register(Menu)
 
 class Library(Pageable):
     '''
@@ -393,6 +399,7 @@ class Library(Pageable):
         book = Book(self.book_defs[book_num], self.dimensions, self.config, self.ui)
         return book
 
+Pageable.register(Library)
 
 class Book(Pageable):
     '''
@@ -423,3 +430,5 @@ class Book(Pageable):
     def prev_chapter(self):
         '''prev chapter'''
         log.info("prev chapter")
+
+Pageable.register(Book)
