@@ -1,10 +1,12 @@
 import unittest
+import comms_codes as comms
 from pageable import Menu, Book, Library
 from utility import *
 from driver_emulated import Emulated
 from ConfigParser import ConfigParser
 from bookfile_list import BookFile_List
 import os
+from driver_emulated import Emulated
 
 class TestUtility(unittest.TestCase):
 
@@ -67,9 +69,36 @@ class TestPageable(unittest.TestCase):
         dimensions = [20,4]
         cls.menu = Menu(dimensions, config, ui)
 
-
     def test_num_pages(self):
         self.assertEqual(self.menu.get_num_pages(), 1)
+
+class TestDriverEmulated(unittest.TestCase):
+
+
+    @classmethod
+    def setUpClass(cls):
+        cls._driver = Emulated()
+
+    def test_rxtx_data(self):
+        self._driver.send_data(comms.CMD_GET_CHARS)
+        self.assertEqual(self._driver.get_data(None), Emulated.CHARS)
+
+        self._driver.send_data(comms.CMD_GET_ROWS)
+        self.assertEqual(self._driver.get_data(None), Emulated.ROWS)
+
+        test_data = 0
+        self._driver.send_data(comms.CMD_SEND_DATA, test_data)
+        self.assertEqual(self._driver.get_data(None), test_data)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._driver.__exit__(None, None, None)
+
+class TestDriverPi(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
