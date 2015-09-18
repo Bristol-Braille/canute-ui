@@ -5,7 +5,7 @@ log = logging.getLogger(__name__)
 
 
 class BookFile_List(list):
-    '''represents a file as a Python list.
+    '''represents a file as a Python list. Only supports len and slices
 
     :param filename: the file to open
     :param dimensions: display dimensions tuple
