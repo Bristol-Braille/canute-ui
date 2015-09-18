@@ -74,9 +74,10 @@ class TestPageable(unittest.TestCase):
 
 class TestDriverEmulated(unittest.TestCase):
 
-
     @classmethod
     def setUpClass(cls):
+        if "TRAVIS" in os.environ:
+            raise unittest.SkipTest("Skip Tkinter tests on TRAVIS")
         cls._driver = Emulated()
 
     def test_rxtx_data(self):
