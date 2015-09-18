@@ -3,7 +3,13 @@ import os
 import struct
 log = logging.getLogger(__name__)
 
+
 class BookFile_List(list):
+    '''represents a file as a Python list.
+
+    :param filename: the file to open
+    :param dimensions: display dimensions tuple
+    '''
     def __init__(self, filename, dimensions):
         list.__init__(self)
         self.cells = dimensions[0]
@@ -19,7 +25,7 @@ class BookFile_List(list):
         log.debug("requested lines %d to %d" % (i, j))
         with open(self.filename) as fh:
             pages = []
-            for pos in range(i,j):
+            for pos in range(i, j):
                 fh.seek(pos * self.cells)
                 data = fh.read(self.cells)
                 page = struct.unpack("%db" % self.cells, data)
@@ -28,6 +34,5 @@ class BookFile_List(list):
         return pages
 
 if __name__ == '__main__':
-    book = BookFile_List('./bookfile_list.py', [28,4])
-    print book[2:8]
-
+    book = BookFile_List('./bookfile_list.py', [28, 4])
+    print(book[2:8])
