@@ -8,13 +8,15 @@ import subprocess
 
 log = logging.getLogger(__name__)
 
-# hardware defs
-BUTTONS = 8
-CHARS = 28
-ROWS = 4
 
 
 class Emulated(Driver):
+
+    # hardware defs
+    BUTTONS = 8
+    CHARS = 28
+    ROWS = 4
+
     """driver class that emulates the machine with a GUI
 
     we fake the :func:`send_data` and :func:`get_data` functions
@@ -28,7 +30,7 @@ class Emulated(Driver):
         super(Emulated, self).__init__()
         self.data = 0
         self.delay = delay
-        self.buttons = [False] * BUTTONS
+        self.buttons = [False] * Emulated.BUTTONS
 
         # message passing queues: pass messages to display on parent, fetch messages on chlid
         self.udp_send = udp_send(port=5000)
@@ -57,6 +59,9 @@ class Emulated(Driver):
         '''__exit__ method allows us to shut down the threads properly'''
         if ex_type is not None:
             log.error("%s : %s" % (ex_type.__name__, ex_value))
+        if self.process.poll() is None:
+            log.info("killing GUI subprocess")
+            self.process.kill()
         log.info("done")
 
     def __enter__(self):
@@ -74,7 +79,7 @@ class Emulated(Driver):
             self.buttons[msg['num']] = msg['type']
         ret = self.buttons
         # reset
-        self.buttons = [False] * BUTTONS
+        self.buttons = [False] * Emulated.BUTTONS
         return ret
 
     def send_data(self, cmd, data=[]):
@@ -85,9 +90,9 @@ class Emulated(Driver):
         :param data: list of bytes
         '''
         if cmd == CMD_GET_CHARS:
-            self.data = CHARS
+            self.data = Emulated.CHARS
         if cmd == CMD_GET_ROWS:
-            self.data = ROWS
+            self.data = Emulated.ROWS
         if cmd == CMD_SEND_DATA:
             self.data = 0
             log.debug("received data for emulator %s" % data)
@@ -118,6 +123,6 @@ if __name__ == '__main__':
     with Emulated() as driver:
         while driver.is_ok():
             log.info(driver.get_buttons())
-            driver.send_data(CMD_SEND_DATA, [count % 64]*ROWS*CHARS)
+            driver.send_data(CMD_SEND_DATA, [count % 64]*Emulated.ROWS*Emulated.CHARS)
             count += 1
             time.sleep(1)
