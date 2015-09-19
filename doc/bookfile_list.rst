@@ -1,7 +1,7 @@
 load_book script
 ================
 
-.. automodule:: load_book
+.. automodule:: bookfile_list
     :members:
     :undoc-members:
     :show-inheritance:
