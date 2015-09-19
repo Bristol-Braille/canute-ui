@@ -1,3 +1,10 @@
+"""
+Utility
+=======
+
+contains various utility methods used by many of the modules
+"""
+
 import os
 import logging
 log = logging.getLogger(__name__)

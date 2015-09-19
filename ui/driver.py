@@ -8,10 +8,10 @@ class DriverError(Exception):
 
 
 class Driver(object):
+    '''Abstract base class of the braille device's capabilities.
+    '''
+
     __metaclass__ = abc.ABCMeta
-    '''
-    abstract base class of the braille device's capabilities.
-    '''
 
     def __init__(self):
         self.status = 0

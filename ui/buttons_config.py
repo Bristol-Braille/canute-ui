@@ -1,4 +1,7 @@
 """
+Button Config
+=============
+
 Button definitions for the 3 modes
 
 Top level keys are:
