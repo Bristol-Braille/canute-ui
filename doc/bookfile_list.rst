@@ -1,4 +1,4 @@
-load_book script
+bookfile list
 ================
 
 .. automodule:: bookfile_list

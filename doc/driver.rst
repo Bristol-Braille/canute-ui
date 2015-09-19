@@ -1,4 +1,4 @@
-driver module
+driver modules
 =============
 
 .. automodule:: driver
