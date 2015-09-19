@@ -16,7 +16,7 @@ Contents:
    pageable
    utility
    bookfile_list
-   button_config
+   buttons_config
 
 
 

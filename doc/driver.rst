@@ -1,5 +1,5 @@
 driver modules
-=============
+==============
 
 .. automodule:: driver
     :members:
