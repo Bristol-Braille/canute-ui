@@ -142,7 +142,9 @@ class Pageable(object):
 
     def end(self):
         '''go to end'''
-        if self.page != self.get_num_pages() - 1:
+        if self.get_num_pages() == 0:
+            log.info("no content")
+        elif self.page != self.get_num_pages() - 1:
             self.page = self.get_num_pages() - 1
         else:
             log.info("at end already")
