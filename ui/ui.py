@@ -192,8 +192,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--pi-buttons', action='store_const', dest='pi_buttons', const=True, default=False, help="use the Pi to handle button presses")
     parser.add_argument('--debug', action='store_const', dest='loglevel', const=logging.DEBUG, default=logging.INFO, help="debugging content")
+    parser.add_argument('--text', action='store_const', dest='text', const=True, help="show text instead of braille")
     parser.add_argument('--tty', action='store', dest='tty', help="serial port for Canute stepstix board", default='/dev/ttyACM0')
-    parser.add_argument('--delay', action='store', dest='delay', help="simulate mechanical delay in milliseconds", default=8000, type=int)
+    parser.add_argument('--delay', action='store', dest='delay', help="simulate mechanical delay in milliseconds", default=0, type=int)
     parser.add_argument('--emulated', action='store_const', dest='emulated', const=True, default=False, help="emulate the hardware (use GUI)")
 
     args = parser.parse_args()
@@ -207,7 +208,6 @@ if __name__ == '__main__':
         log.exception("bad button config")
         exit(1)
 
-
     # write pid file
     write_pid_file()
 
@@ -215,7 +215,7 @@ if __name__ == '__main__':
         if args.emulated:
             log.info("running with emulated hardware")
             from driver_emulated import Emulated
-            with Emulated(delay=args.delay) as driver:
+            with Emulated(delay=args.delay, display_text=args.text) as driver:
                 ui = UI(driver, config)
                 ui.start()
         else:

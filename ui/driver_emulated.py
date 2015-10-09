@@ -26,7 +26,7 @@ class Emulated(Driver):
     message passing is done with queues
     """
 
-    def __init__(self, delay=0):
+    def __init__(self, delay=0, display_text=False):
         super(Emulated, self).__init__()
         self.data = 0
         self.delay = delay
@@ -37,7 +37,11 @@ class Emulated(Driver):
         self.udp_recv = udp_recv(port=5001)
 
         # start the gui program as a separated process as tkinter & threads don't play well
-        self.process = subprocess.Popen(["./gui_display.py"])
+        process = ["./gui_display.py" ]
+        if display_text:
+            process.append("--text")
+        self.process = subprocess.Popen(process)
+
         # wait for it to start up or it will miss the first communication
         time.sleep(0.5)
         log.info("started gui_display.py with process id %d" % self.process.pid)

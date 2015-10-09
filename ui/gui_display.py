@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import time
+import argparse
 import logging
 import Tkinter
 from Tkinter import StringVar
@@ -27,9 +28,10 @@ class Display():
 
     but_after_id = None
 
-    def __init__(self):
+    def __init__(self, display_text=False):
         '''create the display object'''
         self.counter = 0
+        self.display_text = display_text
         self.tk = Tkinter.Tk()
 
         self.udp_send = udp_send(port=5001)
@@ -101,8 +103,11 @@ class Display():
         data_str = ''
         for row in range(ROWS):
             row_braille = data[row*CHARS:row*CHARS+CHARS]
-            #label_text = ''.join(map(pin_num_to_alpha, row_braille))  # useful for debugging, show pin number not the braille
-            label_text = ''.join(map(pin_num_to_unicode, row_braille))
+            # useful for debugging, show pin number not the braille
+            if self.display_text:
+                label_text = ''.join(map(pin_num_to_alpha, row_braille))  
+            else: 
+                label_text = ''.join(map(pin_num_to_unicode, row_braille))
             self.label_rows[row].set(label_text)
 
     def check_msg(self):
@@ -119,5 +124,9 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     log = logging.getLogger(__name__)
     log.info("display GUI")
-    display = Display()
 
+    parser = argparse.ArgumentParser(description="Canute Emulator")
+    parser.add_argument('--text', action='store_const', dest='text', const=True, help="show text instead of braille")
+    args = parser.parse_args()
+
+    display = Display(display_text=args.text)
