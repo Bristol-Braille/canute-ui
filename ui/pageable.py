@@ -17,8 +17,9 @@ class PageableError(Exception):
 class Pageable(object):
     __metaclass__ = abc.ABCMeta
     '''
-    provides a common base class for the library and book objects
-    content is provided as a list of pin numbers. Numbers are those used in unicode braille patterns: http://en.wikipedia.org/wiki/Braille_Patterns
+    provides a common base class for the library and book objects content is
+    provided as a list of pin numbers. Numbers are those used in unicode
+    braille patterns: http://en.wikipedia.org/wiki/Braille_Patterns
 
     :param content: a list of pin numbers for the page to display
     :param dimensions: dimensions of the display

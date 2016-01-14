@@ -3,6 +3,7 @@ import argparse
 import pickle
 import logging
 import time
+import os.path
 from driver import Driver
 from pageable import Menu, Book, Library
 from utility import write_pid_file, remove_pid_file
@@ -199,9 +200,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # config
     config = ConfigParser()
     config.read('config.rc')
+    library_dir = config.get('files', 'library_dir')
+    config.set('files', 'library_dir', os.path.expanduser(library_dir))
+
     log = setup_logs()
 
     if not buttons_config.test_config():
