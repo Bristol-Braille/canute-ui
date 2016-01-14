@@ -5,12 +5,12 @@ from pageable import Menu, Book, Library
 from utility import *
 from driver_emulated import Emulated
 from driver_pi import Pi
-from ConfigParser import ConfigParser
 from bookfile_list import BookFile_List
 import os
 from driver_emulated import Emulated
 import pty
 import struct
+import config_loader
 
 class TestUtility(unittest.TestCase):
 
@@ -62,8 +62,7 @@ class TestMenu(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        config = ConfigParser()
-        config.read('config.rc')
+        config = config_loader.load()
 
         ui = None
         dimensions = [20,4]
@@ -76,8 +75,7 @@ class TestBook(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        config = ConfigParser()
-        config.read('config.rc')
+        config = config_loader.load()
         cls._bookfile = 'book'
 
         # create a test file
@@ -151,8 +149,7 @@ class TestLibrary(unittest.TestCase):
     def setUpClass(cls):
         cls._bookfiles = []
         cls._dimensions = (28,4) #canute
-        config = ConfigParser()
-        config.read('config.rc')
+        config = config_loader.load()
 
         ui = None
         cls._lib = Library(cls._dimensions, config, ui)

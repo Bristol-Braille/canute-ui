@@ -1,10 +1,9 @@
 from utility import test_book, alpha_to_pin_num
 from pageable import Library
-from ConfigParser import ConfigParser
+import config_loader
 
 dimensions = (28,4) #canute
-config = ConfigParser()
-config.read('config.rc')
+config = config_loader.load()
 
 pages = test_book(dimensions)
 book_dir = config.get('files', 'library_dir')

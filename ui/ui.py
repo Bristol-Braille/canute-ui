@@ -7,8 +7,7 @@ import os.path
 from driver import Driver
 from pageable import Menu, Book, Library
 from utility import write_pid_file, remove_pid_file
-from ConfigParser import ConfigParser
-import buttons_config 
+import buttons_config
 
 
 class UI():
@@ -49,7 +48,7 @@ class UI():
             self.show()
 
 
-                        
+
     def save_state(self):
         with open(UI.state_file, 'w') as fh:
             pickle.dump(self.state, fh)
@@ -78,7 +77,7 @@ class UI():
                 # otherwise return False
                 log.debug("nothing defined for that button")
                 return False
-    
+
         # to call the method we need the object
         if config['obj'] == 'ui':
             obj = self
@@ -91,7 +90,7 @@ class UI():
         except AttributeError:
             log.warning("object %s has no method %s to call" % (obj, config['method']))
             return False
-            
+
         # we're going to do something, so make an OK sound
         self.driver.send_ok_sound()
 
@@ -200,7 +199,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    config = ConfigParser()
+    config = config_loader.load()
     config.read('config.rc')
     library_dir = config.get('files', 'library_dir')
     config.set('files', 'library_dir', os.path.expanduser(library_dir))
