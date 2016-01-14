@@ -9,4 +9,4 @@ install: "pip install -r ui/pi-requirements"
 script:
   - mkdir ~/books
   - cd ui
-  - python ./test.py
+  - python ./test.py --verbose
