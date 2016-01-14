@@ -6,7 +6,7 @@ python:
 install: "pip install -r ui/pi-requirements"
 
 # command to run tests
-script:
-  - mkdir ~/books
+script: 
+  - mkdir books
   - cd ui
   - python ./test.py
