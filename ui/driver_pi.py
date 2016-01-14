@@ -200,7 +200,6 @@ Driver.register(Pi)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    log = logging.getLogger(__name__)
 
     with Pi(port='/dev/ttyACM0', pi_buttons=True) as driver:
         while driver.is_ok():
