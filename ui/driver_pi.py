@@ -23,7 +23,8 @@ except ImportError:
 class Pi(Driver):
     """driver class for use with the Raspberry Pi
 
-    connects to the display via serial and knows how to send and receive data to it
+    connects to the display via serial and knows how to send and receive data
+    to it
 
     :param port: the serial port the display is plugged into
     :param pi_buttons: whether to use the Pi for button presses
@@ -73,8 +74,13 @@ class Pi(Driver):
 
     def button_int(self, channel):
         '''interrupt routine for all the buttons.
-        makes a note of how many times a button's been pressed, and when it was pressed and released
-        sets a timer for 0.5 seconds from when button was pressed to call a determine_button_type that then decides what type
+
+        makes a note of how many times a button's been pressed, and when it
+        was pressed and released
+
+        sets a timer for 0.5 seconds from when button was pressed to call a
+        determine_button_type that then decides what type
+
         of button click it was.
         '''
         time.sleep(0.01)
@@ -94,7 +100,8 @@ class Pi(Driver):
 
     def setup_serial(self, port):
         '''sets up the serial port with a timeout and flushes it.
-        Timeout is set to 60s, as this is well beyond a full page refresh of the hardware
+        Timeout is set to 60s, as this is well beyond a full page refresh of
+        the hardware
 
         :param port: the serial port the display is plugged into
         '''
@@ -110,7 +117,8 @@ class Pi(Driver):
             exit(1)
 
     def is_ok(self):
-        '''checks the serial connection. There doesn't seem to be a specific method in pyserial so we're using getCD()'''
+        '''checks the serial connection. There doesn't seem to be a specific
+        method in pyserial so we're using getCD()'''
         try:
             self.port.getCD()
             return True
@@ -122,9 +130,11 @@ class Pi(Driver):
             return False
 
     def get_buttons(self):
-        '''get button states - will be done by the Pi for now but will be done on the micro later
+        '''get button states - will be done by the Pi for now but will be done
+        on the micro later
 
-        :rtype: list of 8 elements either set to False (unpressed) or one of single, double, long
+        :rtype: list of 8 elements either set to False (unpressed) or one of
+        single, double, long
         '''
         if self.pi_buttons is True:
             buttons = self.buttons
@@ -156,7 +166,9 @@ class Pi(Driver):
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
 
-        :param expected_cmd: what command we're expecting (error raised otherwise)
+        :param expected_cmd: what command we're expecting (error raised
+        otherwise)
+
         :rtype: an integer return value
         '''
         message = self.port.read(2)

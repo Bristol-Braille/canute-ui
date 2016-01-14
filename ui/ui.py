@@ -11,11 +11,13 @@ import buttons_config
 
 
 class UI():
-    """This is the UI class which is a framework to build a UI for the braille machine
+    """This is the UI class which is a framework to build a UI for the braille
+    machine
 
     This implements the spec in [README.md](README.md)
 
-    The UI can be configured to either use the :class:`.Pi` or :class:`.Emulated` driver class.
+    The UI can be configured to either use the :class:`.Pi` or
+    :class:`.Emulated` driver class.
 
     :param driver: the :class:`driver` object that abstracts the hardware
     """

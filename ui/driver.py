@@ -48,7 +48,8 @@ class Driver(object):
         '''
         returns dimensions of the display
 
-        :rtype: a tuple containing 2 integers: number of cells and number of rows
+        :rtype: a tuple containing 2 integers: number of cells and number of
+        rows
         '''
         self.send_data(CMD_GET_CHARS)
         chars = self.get_data(CMD_GET_CHARS)
@@ -73,7 +74,8 @@ class Driver(object):
         '''
         returns a list of the 8 button states
 
-        :rtype: list of 8 elements either set to 'single', 'long' or 'double' (pressed) or False (unpressed)
+        :rtype: list of 8 elements either set to 'single', 'long' or 'double'
+        (pressed) or False (unpressed)
         '''
         return
 
@@ -109,7 +111,9 @@ class Driver(object):
            63 =  2 o o 5
                  3 o o 6
 
-        :param data: a list of cells. The length of data will be cells * rows as returned by :func:`get_dimensions`
+        :param data: a list of cells. The length of data will be cells * rows
+        as returned by :func:`get_dimensions`
+
         '''
         if len(data) != self.page_length:
             raise DriverError("data incorrect length %d, should be %d" % (len(data), self.page_length))
