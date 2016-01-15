@@ -25,8 +25,7 @@ Run the UI (with emulated hardware delay of 100ms):
 
 ## Design
 
-The top level [ui](ui/ui.py) relies on either the real hardware or an
-emulated version (using the --emulated argument).
+The top level [ui](ui/ui.py) uses a graphical display to emulate the hardware by default.
 
 The emulated hardware has the same interface as the real hardware, but also runs
 a graphical program called [gui_display.py](ui/gui_display.py). This shows

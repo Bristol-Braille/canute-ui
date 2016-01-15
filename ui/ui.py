@@ -198,7 +198,7 @@ if __name__ == '__main__':
     parser.add_argument('--text', action='store_const', dest='text', const=True, help="show text instead of braille")
     parser.add_argument('--tty', action='store', dest='tty', help="serial port for Canute stepstix board", default='/dev/ttyACM0')
     parser.add_argument('--delay', action='store', dest='delay', help="simulate mechanical delay in milliseconds", default=0, type=int)
-    parser.add_argument('--emulated', action='store_const', dest='emulated', const=True, default=False, help="emulate the hardware (use GUI)")
+    parser.add_argument('--disable-emulator', action='store_const', dest='emulated', const=False, default=True, help="do not show the graphical emulator")
 
     args = parser.parse_args()
 
