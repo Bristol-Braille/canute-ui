@@ -27,7 +27,7 @@ class UI():
 
     def __init__(self, driver, config):
         self.driver = driver
-        self.dimensions = self.driver.get_dimensions()
+        self.dimensions = (self.driver.rows, self.driver.chars)
         self.last_data = []
 
         # load the books into the library
