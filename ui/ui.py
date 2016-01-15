@@ -199,6 +199,7 @@ if __name__ == '__main__':
     parser.add_argument('--tty', action='store', dest='tty', help="serial port for Canute stepstix board", default='/dev/ttyACM0')
     parser.add_argument('--delay', action='store', dest='delay', help="simulate mechanical delay in milliseconds", default=0, type=int)
     parser.add_argument('--disable-emulator', action='store_const', dest='emulated', const=False, default=True, help="do not show the graphical emulator")
+    parser.add_argument('--both', action='store_const', dest='both', const=True, default=False, help="run both the emulator and the real hardware at the same time")
 
     args = parser.parse_args()
 
@@ -217,14 +218,20 @@ if __name__ == '__main__':
     write_pid_file()
 
     try:
-        if args.emulated:
+        if args.emulated and not args.both:
             log.info("running with emulated hardware")
             from driver_emulated import Emulated
             with Emulated(delay=args.delay, display_text=args.text) as driver:
                 ui = UI(driver, config)
                 ui.start()
+        elif args.emulated and args.both:
+            log.info("running with both emulated and real hardware on port %s" % args.tty)
+            from driver_both import DriverBoth
+            with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons, delay=args.delay, display_text=args.text) as driver:
+                ui = UI(driver, config)
+                ui.start()
         else:
-            log.info("running with stepstix hardware on port %s" % args.tty)
+            log.info("running with real hardware on port %s" % args.tty)
             from driver_pi import Pi
             with Pi(port=args.tty, pi_buttons=args.pi_buttons) as driver:
                 ui = UI(driver, config)
