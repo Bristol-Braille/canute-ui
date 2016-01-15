@@ -41,7 +41,8 @@ class Display():
         col = 0
         for button_num in range(BUTTONS):
             button = Tkinter.Button(self.tk, text="%d" % button_num)
-            button.bind('<Button-1>', lambda button_num=button_num: self.register_button(button_num))
+            button.bind('<Button-1>',
+                    lambda bn=button_num: self.register_button(bn))
             button.bind('<Double-Button-1>', self.register_dub_button)
             button.bind('<ButtonRelease-1>', self.register_rel_button)
             row = button_num % (BUTTONS / 2)
@@ -54,7 +55,8 @@ class Display():
         for row in range(ROWS):
             str_var = StringVar()
             self.label_rows.append(str_var)
-            label = Tkinter.Label(textvariable=str_var, font=("Helvetica", 20) )
+            label = Tkinter.Label(textvariable=str_var,
+                    font=("Helvetica", 20))
             label.grid(row=row, column=1,)
 
 
@@ -89,13 +91,15 @@ class Display():
 
     def send_button_msg(self):
         '''send the button number to the parent via the queue'''
-        log.debug("sending %s button = %d" % (self.button_type, self.button_num))
+        log.debug("sending %s button = %d" % (self.button_type,
+            self.button_num))
         self.udp_send.put({'num': self.button_num, 'type': self.button_type})
 
     def print_braille(self, data):
         '''print braille to the display
 
-        :param data: a list of characters to display.  Assumed to be the right length and filled with numbers from 1 to 64
+        :param data: a list of characters to display.  Assumed to be the right
+        length and filled with numbers from 1 to 64
         '''
         log.debug("printing data: %s" % data)
 
@@ -105,13 +109,14 @@ class Display():
             row_braille = data[row*CHARS:row*CHARS+CHARS]
             # useful for debugging, show pin number not the braille
             if self.display_text:
-                label_text = ''.join(map(pin_num_to_alpha, row_braille))  
-            else: 
+                label_text = ''.join(map(pin_num_to_alpha, row_braille))
+            else:
                 label_text = ''.join(map(pin_num_to_unicode, row_braille))
             self.label_rows[row].set(label_text)
 
     def check_msg(self):
-        '''check for a message in the queue, if so display it as braille using :func:`print_braille`
+        '''check for a message in the queue, if so display it as braille using
+        :func:`print_braille`
         '''
         msg = self.udp_recv.get()
         if msg is not None:
@@ -126,7 +131,8 @@ if __name__ == '__main__':
     log.info("display GUI")
 
     parser = argparse.ArgumentParser(description="Canute Emulator")
-    parser.add_argument('--text', action='store_const', dest='text', const=True, help="show text instead of braille")
+    parser.add_argument('--text', action='store_const', dest='text',
+            const=True, help="show text instead of braille")
     args = parser.parse_args()
 
     display = Display(display_text=args.text)
