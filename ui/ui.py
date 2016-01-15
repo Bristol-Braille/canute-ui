@@ -8,6 +8,7 @@ from driver import Driver
 from pageable import Menu, Book, Library
 from utility import write_pid_file, remove_pid_file
 import buttons_config
+import config_loader
 
 
 class UI():
