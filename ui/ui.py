@@ -112,10 +112,10 @@ class UI():
         '''start the UI running, runs the UI until the driver returns an error'''
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
-            buts = self.driver.get_buttons()
+            buttons = self.driver.get_buttons()
             for button_num in range(8):
-                if buts[button_num] != False:
-                    button_type = buts[button_num]
+                if buttons[button_num] != False:
+                    button_type = buttons[button_num]
                     # if a button is pressed, deal with it
                     result = self.despatch(button_type, button_num)
                     if result is False:

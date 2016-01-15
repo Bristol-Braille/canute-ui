@@ -46,12 +46,12 @@ class Pi(Driver):
             GPIO.setwarnings(False)
             self.led_thread=LedThread(21,0.5)
             self.led_thread.start()
-            self.pi_buts = [16, 19, 15, 18, 26, 22, 23, 24]
+            self.pi_buttons = [16, 19, 15, 18, 26, 22, 23, 24]
             # need to store some details to work out what kind of click it was
-            self.pi_but_time_press = [0] * 8
-            self.pi_but_time_release = [0] * 8
-            self.pi_but_clicks = [0] * 8
-            for pin in self.pi_buts:
+            self.pi_button_time_press = [0] * 8
+            self.pi_button_time_release = [0] * 8
+            self.pi_button_clicks = [0] * 8
+            for pin in self.pi_buttons:
                 GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
                 GPIO.add_event_detect(pin, GPIO.BOTH, callback=self.button_int, bouncetime=debounce)
             log.info("setup buttons for pi")
@@ -59,18 +59,18 @@ class Pi(Driver):
     def determine_button_type(self, index):
         '''determines button type by how many clicks and timings
         '''
-        if self.pi_but_clicks[index] == 2:
+        if self.pi_button_clicks[index] == 2:
             self.buttons[index] = 'double'
-        elif self.pi_but_clicks[index] == 1:
+        elif self.pi_button_clicks[index] == 1:
             # differentiate between long and single
-            log.debug(self.pi_but_time_release[index] - self.pi_but_time_press[index])
-            if self.pi_but_time_release[index] - self.pi_but_time_press[index] > (long_press / 1000):
+            log.debug(self.pi_button_time_release[index] - self.pi_button_time_press[index])
+            if self.pi_button_time_release[index] - self.pi_button_time_press[index] > (long_press / 1000):
                 self.buttons[index] = 'long'
             else:
                 self.buttons[index] = 'single'
 
         # reset button presses
-        self.pi_but_clicks[index] = 0
+        self.pi_button_clicks[index] = 0
 
     def button_int(self, channel):
         '''interrupt routine for all the buttons.
@@ -86,17 +86,17 @@ class Pi(Driver):
         time.sleep(0.01)
         state = GPIO.input(channel)
         log.debug("button %d is %s" % (channel, state))
-        index = self.pi_buts.index(channel)
+        index = self.pi_buttons.index(channel)
 
         # make a note of num clicks, press and release times
         if state == 0:  # pressed
-            self.pi_but_time_press[index] = time.time()
-            self.pi_but_clicks[index] += 1
+            self.pi_button_time_press[index] = time.time()
+            self.pi_button_clicks[index] += 1
         else:  # released
             # set a timer to decide what type of button it was
             t = Timer(double_click/1000, self.determine_button_type, [index])
             t.start()
-            self.pi_but_time_release[index] = time.time()
+            self.pi_button_time_release[index] = time.time()
 
     def setup_serial(self, port):
         '''sets up the serial port with a timeout and flushes it.
