@@ -27,10 +27,10 @@ for method_name in get_methods(Driver):
     if method_name not in defined_methods:
         def make_method (method_name):
             def method(self, *args, **kwargs):
-                pi_method = self.pi.__getattribute__(method_name)
                 emulated_method = self.emulated.__getattribute__(method_name)
-                log.debug(method_name)
+                pi_method = self.pi.__getattribute__(method_name)
+                ret = emulated_method(*args, **kwargs)
                 pi_method(*args, **kwargs)
-                return emulated_method(*args, **kwargs)
+                return ret
             return method
         setattr(DriverBoth, method_name, make_method(method_name))
