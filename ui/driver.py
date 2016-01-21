@@ -116,7 +116,8 @@ class Driver(object):
 
         '''
         if len(data) != self.page_length:
-            raise DriverError("data incorrect length %d, should be %d" % (len(data), self.page_length))
+            log.warning("data incorrect length %d, truncating to %d" % (len(data), self.page_length))
+            data = data[0:self.page_length]
         self.send_data(CMD_SEND_DATA, data)
 
         # get status

@@ -171,6 +171,7 @@ class Pi(Driver):
 
         :rtype: an integer return value
         '''
+        log.debug('trying to read 2 bytes')
         message = self.port.read(2)
         log.debug("rx [%s]" % binascii.hexlify(message))
         if len(message) != 2:
