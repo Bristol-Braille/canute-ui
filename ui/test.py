@@ -241,8 +241,6 @@ class TestDriverPi(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if "TRAVIS" in os.environ:
-            raise unittest.SkipTest("Skip DriverPi test on TRAVIS")
         master, slave = pty.openpty()
         s_name = os.ttyname(slave)
         cls._master = master
