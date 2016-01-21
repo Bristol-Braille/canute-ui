@@ -2,6 +2,7 @@ import logging
 log = logging.getLogger(__name__)
 from comms_codes import *
 import abc
+import utility
 
 class DriverError(Exception):
     pass
@@ -15,7 +16,7 @@ class Driver(object):
 
     def __init__(self):
         self.status = 0
-        (self.rows, self.chars) = self.get_dimensions()
+        (self.chars, self.rows) = self.get_dimensions()
         self.page_length = self.rows * self.chars
         log.info("device ready with %d x %d characters" % (self.chars, self.rows))
 
@@ -118,6 +119,12 @@ class Driver(object):
         if len(data) != self.page_length:
             log.warning("data incorrect length %d, truncating to %d" % (len(data), self.page_length))
             data = data[0:self.page_length]
+
+        log.debug("setting braille:")
+        for row in range(self.rows):
+            row_braille = data[row*self.chars:row*self.chars+self.chars]
+            log.debug("row %i: |%s|" % (row, '|'.join(map(utility.pin_num_to_unicode, row_braille))))
+
         self.send_data(CMD_SEND_DATA, data)
 
         # get status
