@@ -49,8 +49,6 @@ class UI():
             self.screen = self.menu
             self.show()
 
-
-
     def save_state(self):
         with open(UI.state_file, 'w') as fh:
             pickle.dump(self.state, fh)
@@ -90,7 +88,8 @@ class UI():
         try:
             method = getattr(obj, config['method'])
         except AttributeError:
-            log.warning("object %s has no method %s to call" % (obj, config['method']))
+            log.warning("object %s has no method %s to call"
+                    % (obj, config['method']))
             return False
 
         # we're going to do something, so make an OK sound
@@ -98,10 +97,12 @@ class UI():
 
         # call method, maybe with args
         if config.has_key('args'):
-            log.info("despatching %s->%s(%s)" % (config['obj'], config['method'], config['args']))
+            log.info("despatching %s->%s(%s)"
+                    % (config['obj'], config['method'], config['args']))
             method(config['args'])
         else:
-            log.info("despatching %s->%s()" % (config['obj'], config['method']))
+            log.info("despatching %s->%s()"
+                    % (config['obj'], config['method']))
             method()
 
         # update the screen
@@ -109,7 +110,9 @@ class UI():
         return True
 
     def start(self):
-        '''start the UI running, runs the UI until the driver returns an error'''
+        '''
+        start the UI running, runs the UI until the driver returns an error
+        '''
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
             buttons = self.driver.get_buttons()
@@ -150,7 +153,10 @@ class UI():
             self.driver.send_error_sound()
 
     def show(self):
-        '''shows the current screen object's braille, but only if it's changed from last time'''
+        '''
+        shows the current screen object's braille, but only if it's changed
+        from last time
+        '''
         data = self.screen.show()
 
         if data == self.last_data:
@@ -165,7 +171,8 @@ class UI():
 
 def setup_logs():
     log_file = config.get('files', 'log_file')
-    log_format = logging.Formatter('%(asctime)s - %(name)-16s - %(levelname)-8s - %(message)s')
+    log_format = logging.Formatter(
+            '%(asctime)s - %(name)-16s - %(levelname)-8s - %(message)s')
     # configure the client logging
     log = logging.getLogger('')
     # has to be set to debug as is the root logger
@@ -192,13 +199,57 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Canute UI")
 
-    parser.add_argument('--pi-buttons', action='store_const', dest='pi_buttons', const=True, default=False, help="use the Pi to handle button presses")
-    parser.add_argument('--debug', action='store_const', dest='loglevel', const=logging.DEBUG, default=logging.INFO, help="debugging content")
-    parser.add_argument('--text', action='store_const', dest='text', const=True, help="show text instead of braille")
-    parser.add_argument('--tty', action='store', dest='tty', help="serial port for Canute stepstix board", default='/dev/ttyACM0')
-    parser.add_argument('--delay', action='store', dest='delay', help="simulate mechanical delay in milliseconds", default=0, type=int)
-    parser.add_argument('--disable-emulator', action='store_const', dest='emulated', const=False, default=True, help="do not show the graphical emulator")
-    parser.add_argument('--both', action='store_const', dest='both', const=True, default=False, help="run both the emulator and the real hardware at the same time")
+    parser.add_argument(
+        '--pi-buttons',
+        action='store_const',
+        dest='pi_buttons',
+        const=True,
+        default=False,
+        help="use the Pi to handle button presses"
+    )
+    parser.add_argument(
+        '--debug',
+        action='store_const',
+        dest='loglevel',
+        const=logging.DEBUG,
+        default=logging.INFO,
+        help="debugging content"
+    )
+    parser.add_argument(
+        '--text',
+        action='store_const',
+        dest='text',
+        const=True,
+        help="show text instead of braille"
+    )
+    parser.add_argument(
+        '--tty',
+        action='store',
+        dest='tty',
+        help="serial port for Canute stepstix board",
+        default='/dev/ttyACM0'
+    )
+    parser.add_argument('--delay',
+            action='store',
+            dest='delay',
+            help="simulate mechanical delay in milliseconds",
+            default=0,
+            type=int
+    )
+    parser.add_argument('--disable-emulator',
+            action='store_const',
+            dest='emulated',
+            const=False,
+            default=True,
+            help="do not show the graphical emulator"
+    )
+    parser.add_argument('--both',
+            action='store_const',
+            dest='both',
+            const=True,
+            default=False,
+            help="run both the emulator and the real hardware at the same time"
+    )
 
     args = parser.parse_args()
 
@@ -224,9 +275,10 @@ if __name__ == '__main__':
                 ui = UI(driver, config)
                 ui.start()
         elif args.emulated and args.both:
-            log.info("running with both emulated and real hardware on port %s" % args.tty)
+            log.info("running with both emulated and real hardware on port %s"                  % args.tty)
             from driver_both import DriverBoth
-            with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons, delay=args.delay, display_text=args.text) as driver:
+            with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
+                    delay=args.delay, display_text=args.text) as driver:
                 ui = UI(driver, config)
                 ui.start()
         else:
