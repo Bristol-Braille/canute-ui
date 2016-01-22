@@ -351,7 +351,7 @@ class Library(Pageable):
                 for uni_char in data:
                     pin_num = unicode_to_pin_num(uni_char)
                     line.append(pin_num)
-            except IndexError as e:
+            except IndexError:
                 # empty row element
                 line = [0] * self.cells
 
@@ -389,13 +389,14 @@ class Library(Pageable):
         '''
         creates and returns a :class:`.Book`
 
-        :param book_num: integer representing the number of the book on the current page to load
+        :param book_num: integer representing the number of the book on the
+        current page to load
         '''
         book_num = book_num + self.page * self.rows
         try:
-            book_name = self.book_defs[book_num]["title"]
-            book_type = self.book_defs[book_num]["type"]
-        except IndexError as e:
+            self.book_defs[book_num]["title"]
+            self.book_defs[book_num]["type"]
+        except IndexError:
             raise IndexError("no book at slot %d" % book_num)
 
         log.debug("loading book %d [%s]" % (book_num, self.book_defs[book_num]["title"]))

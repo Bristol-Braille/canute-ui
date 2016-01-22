@@ -103,8 +103,6 @@ class Display():
         '''
         log.debug("printing data: %s" % data)
 
-        char_num = 0
-        data_str = ''
         for row in range(ROWS):
             row_braille = data[row*CHARS:row*CHARS+CHARS]
             # useful for debugging, show pin number not the braille

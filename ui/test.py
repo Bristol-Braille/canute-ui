@@ -7,7 +7,6 @@ from driver_emulated import Emulated
 from driver_pi import Pi
 from bookfile_list import BookFile_List
 import os
-from driver_emulated import Emulated
 import pty
 import struct
 import config_loader
@@ -181,7 +180,6 @@ class TestLibrary(unittest.TestCase):
 
     def add_book_and_test(self, name, exp_pos, exp_len):
         w = self._dimensions[0]
-        h = self._dimensions[1]
         book_name = name + '.canute'
         self.create_book(book_name)
         self._lib.add_book(book_name)

@@ -1,5 +1,4 @@
-import abc
-from driver import Driver, DriverError
+from driver import Driver
 import time
 import logging
 from udp_utility import udp_send, udp_recv

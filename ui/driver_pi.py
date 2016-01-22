@@ -1,4 +1,3 @@
-import abc
 from driver import Driver, DriverError
 from comms_codes import *
 import time

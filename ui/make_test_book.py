@@ -1,4 +1,4 @@
-from utility import test_book, alpha_to_pin_num
+from utility import test_book
 from pageable import Library
 import config_loader
 

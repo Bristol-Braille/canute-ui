@@ -90,7 +90,7 @@ def pin_num_to_unicode(pin_num):
 ''' for sorting & debugging '''
 def pin_num_to_alpha(numeric):
     mapping = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="
-    return mapping[numeric] 
+    return mapping[numeric]
 
 def pin_nums_to_alphas(numerics):
     return map(pin_num_to_alpha, numerics)
@@ -105,7 +105,7 @@ def alpha_to_pin_num(alpha):
     alpha = alpha.upper()
     try:
         return mapping.index(alpha)
-    except ValueError as e:
+    except ValueError:
         log.warning("problem converting [%s] to braille pic" % alpha)
         return 0
 

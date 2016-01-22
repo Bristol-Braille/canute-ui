@@ -4,8 +4,7 @@ import pickle
 import logging
 import time
 import os.path
-from driver import Driver
-from pageable import Menu, Book, Library
+from pageable import Menu, Library
 from utility import write_pid_file, remove_pid_file
 import buttons_config
 import config_loader
@@ -146,7 +145,7 @@ class UI():
             self.screen = self.book
             self.state['book_num'] = number
             self.state['mode'] = 'book'
-        except IndexError as e:
+        except IndexError:
             log.warning("no book at slot %d" % number)
             self.driver.send_error_sound()
 
