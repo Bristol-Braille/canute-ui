@@ -227,9 +227,8 @@ class TestDriverEmulated(unittest.TestCase):
         self._driver.send_data(comms.CMD_GET_ROWS)
         self.assertEqual(self._driver.get_data(None), Emulated.ROWS)
 
-        test_data = 0
-        self._driver.send_data(comms.CMD_SEND_DATA, test_data)
-        self.assertEqual(self._driver.get_data(None), test_data)
+        self._driver.send_data(comms.CMD_SEND_DATA)
+        self.assertEqual(self._driver.get_data(None), 0)
 
     @classmethod
     def tearDownClass(cls):
@@ -251,7 +250,7 @@ class TestDriverPi(unittest.TestCase):
         data = struct.unpack('1b', message)
         return data
 
-    def send_message(self,data,cmd):
+    def send_message(self, data, cmd):
         message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
         os.write(self._master, message)
 
