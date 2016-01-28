@@ -232,7 +232,7 @@ if __name__ == '__main__':
     parser.add_argument('--delay',
             action='store',
             dest='delay',
-            help="simulate mechanical delay in milliseconds",
+            help="simulate mechanical delay in milliseconds in the emulator",
             default=0,
             type=int
     )
@@ -241,7 +241,7 @@ if __name__ == '__main__':
             dest='emulated',
             const=False,
             default=True,
-            help="do not show the graphical emulator"
+            help="do not run the graphical emulator, run with real hardware"
     )
     parser.add_argument('--both',
             action='store_const',
