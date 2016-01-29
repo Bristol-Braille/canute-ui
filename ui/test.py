@@ -230,6 +230,10 @@ class TestDriverEmulated(unittest.TestCase):
         self._driver.send_data(comms.CMD_SEND_DATA)
         self.assertEqual(self._driver.get_data(None), 0)
 
+    def test_rxtx_row(self):
+        self._driver.send_data(comms.CMD_SEND_ROW)
+        self.assertEqual(self._driver.get_data(None), 0)
+
     @classmethod
     def tearDownClass(cls):
         cls._driver.__exit__(None, None, None)

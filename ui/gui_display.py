@@ -24,7 +24,6 @@ class Display():
     """shows an emulation of the braille machine"""
 
     MSG_INTERVAL = 10
-    DISPLAY_GIF = 'display.gif'
 
     button_after_id = None
 
@@ -95,6 +94,15 @@ class Display():
             self.button_num))
         self.udp_send.put({'num': self.button_num, 'type': self.button_type})
 
+    def print_braille_row(self, row, row_braille):
+        # useful for debugging, show pin number not the braille
+        if self.display_text:
+            label_text = ''.join(map(pin_num_to_alpha, row_braille))
+        else:
+            label_text = ''.join(map(pin_num_to_unicode, row_braille))
+        self.label_rows[row].set(label_text)
+
+
     def print_braille(self, data):
         '''print braille to the display
 
@@ -105,12 +113,7 @@ class Display():
 
         for row in range(ROWS):
             row_braille = data[row*CHARS:row*CHARS+CHARS]
-            # useful for debugging, show pin number not the braille
-            if self.display_text:
-                label_text = ''.join(map(pin_num_to_alpha, row_braille))
-            else:
-                label_text = ''.join(map(pin_num_to_unicode, row_braille))
-            self.label_rows[row].set(label_text)
+            self.print_braille_row(row, row_braille)
 
     def check_msg(self):
         '''check for a message in the queue, if so display it as braille using
@@ -118,7 +121,12 @@ class Display():
         '''
         msg = self.udp_recv.get()
         if msg is not None:
-            self.print_braille(msg)
+            msgType = msg[0]
+            msg = msg[1:]
+            if msgType == CMD_SEND_DATA:
+                self.print_braille(msg)
+            elif msgType == CMD_SEND_ROW:
+                self.print_braille_row(msg[0], msg[1:])
         # reschedule the message check
         self.tk.after(Display.MSG_INTERVAL, self.check_msg)
 

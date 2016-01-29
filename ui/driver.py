@@ -116,11 +116,11 @@ class Driver(object):
         as returned by :func:`get_dimensions`
 
         '''
-        if len(data) != self.page_length:
-            log.warning("data incorrect length %d, truncating to %d" % (len(data), self.page_length))
+        if len(data) > self.page_length:
+            log.warning("page data too long, length %d, truncating to %d" % (len(data), self.page_length))
             data = data[0:self.page_length]
 
-        log.debug("setting braille:")
+        log.debug("setting page of braille:")
         for row in range(self.rows):
             row_braille = data[row*self.chars:row*self.chars+self.chars]
             log.debug("row %i: |%s|" % (row, '|'.join(map(utility.pin_num_to_unicode, row_braille))))
@@ -129,5 +129,20 @@ class Driver(object):
 
         # get status
         self.status = self.get_data(CMD_SEND_DATA)
+        if self.status != 0:
+            raise DriverError("got an error after setting braille: %d" % self.status)
+
+    def set_braille_row(self, row, data):
+        if len(data) > self.chars:
+            log.warning("row data too long, length %d, truncating to %d" % (len(data), self.chars))
+            data = data[0:self.chars]
+
+        log.debug("setting row of braille:")
+        log.debug("row %i: |%s|" % (row, '|'.join(map(utility.pin_num_to_unicode, data))))
+
+        self.send_data(CMD_SEND_LINE, [row] + data)
+
+        # get status
+        self.status = self.get_data(CMD_SEND_LINE)
         if self.status != 0:
             raise DriverError("got an error after setting braille: %d" % self.status)

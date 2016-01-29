@@ -94,18 +94,24 @@ class Emulated(Driver):
         '''
         if cmd == CMD_GET_CHARS:
             self.data = Emulated.CHARS
-        if cmd == CMD_GET_ROWS:
+        elif cmd == CMD_GET_ROWS:
             self.data = Emulated.ROWS
-        if cmd == CMD_SEND_DATA:
+        elif cmd == CMD_SEND_DATA:
             self.data = 0
             log.debug("received data for emulator %s" % data)
             log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
             time.sleep(self.delay / 1000.0)
-            self.udp_send.put(data)
-        if cmd == CMD_SEND_ERROR:
+            self.udp_send.put([CMD_SEND_DATA] + data)
+        elif cmd == CMD_SEND_ERROR:
             log.error("making error sound!")
-        if cmd == CMD_SEND_OK:
+        elif cmd == CMD_SEND_OK:
             log.error("making OK sound!")
+        elif cmd == CMD_SEND_ROW:
+            self.data = 0
+            log.debug("received row data for emulator %s" % data)
+            log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
+            time.sleep(self.delay / 1000.0)
+            self.udp_send.put([CMD_SEND_ROW] + data)
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware - we're faking this so the driver doesn't complain
