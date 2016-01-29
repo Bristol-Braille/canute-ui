@@ -96,22 +96,22 @@ class Emulated(Driver):
             self.data = Emulated.CHARS
         elif cmd == CMD_GET_ROWS:
             self.data = Emulated.ROWS
-        elif cmd == CMD_SEND_DATA:
+        elif cmd == CMD_SEND_PAGE:
             self.data = 0
             log.debug("received data for emulator %s" % data)
             log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
             time.sleep(self.delay / 1000.0)
-            self.udp_send.put([CMD_SEND_DATA] + data)
+            self.udp_send.put([CMD_SEND_PAGE] + data)
         elif cmd == CMD_SEND_ERROR:
             log.error("making error sound!")
         elif cmd == CMD_SEND_OK:
             log.error("making OK sound!")
-        elif cmd == CMD_SEND_ROW:
+        elif cmd == CMD_SEND_LINE:
             self.data = 0
             log.debug("received row data for emulator %s" % data)
             log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
             time.sleep(self.delay / 1000.0)
-            self.udp_send.put([CMD_SEND_ROW] + data)
+            self.udp_send.put([CMD_SEND_LINE] + data)
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware - we're faking this so the driver doesn't complain
@@ -132,6 +132,6 @@ if __name__ == '__main__':
     with Emulated() as driver:
         while driver.is_ok():
             log.info(driver.get_buttons())
-            driver.send_data(CMD_SEND_DATA, [count % 64]*Emulated.ROWS*Emulated.CHARS)
+            driver.send_data(CMD_SEND_PAGE, [count % 64]*Emulated.ROWS*Emulated.CHARS)
             count += 1
             time.sleep(1)

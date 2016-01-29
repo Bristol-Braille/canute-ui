@@ -123,9 +123,9 @@ class Display():
         if msg is not None:
             msgType = msg[0]
             msg = msg[1:]
-            if msgType == CMD_SEND_DATA:
+            if msgType == CMD_SEND_PAGE:
                 self.print_braille(msg)
-            elif msgType == CMD_SEND_ROW:
+            elif msgType == CMD_SEND_LINE:
                 self.print_braille_row(msg[0], msg[1:])
         # reschedule the message check
         self.tk.after(Display.MSG_INTERVAL, self.check_msg)
