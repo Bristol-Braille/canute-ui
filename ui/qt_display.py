@@ -35,11 +35,13 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         super(Display, self).__init__()
         self.setupUi(self)
         self.show()
+        self.label_0.setText('hi');
+
 
 
 def main():
     app = QtGui.QApplication(sys.argv)
-    ex = Display()
+    display = Display()
     sys.exit(app.exec_())
 
 

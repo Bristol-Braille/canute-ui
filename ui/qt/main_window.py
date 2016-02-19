@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created: Fri Feb 19 12:37:44 2016
+# Created: Fri Feb 19 13:30:53 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,10 +28,10 @@ class Ui_MainWindow(object):
         self.button_0.setMaximumSize(QtCore.QSize(48, 48))
         self.button_0.setObjectName("button_0")
         self.horizontalLayout_2.addWidget(self.button_0)
-        self.label = QtGui.QLabel(self.centralwidget)
-        self.label.setText("")
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label)
+        self.label_0 = QtGui.QLabel(self.centralwidget)
+        self.label_0.setText("")
+        self.label_0.setObjectName("label_0")
+        self.horizontalLayout_2.addWidget(self.label_0)
         self.button_4 = QtGui.QPushButton(self.centralwidget)
         self.button_4.setMaximumSize(QtCore.QSize(48, 48))
         self.button_4.setObjectName("button_4")
@@ -43,10 +43,10 @@ class Ui_MainWindow(object):
         self.button_1.setMaximumSize(QtCore.QSize(48, 48))
         self.button_1.setObjectName("button_1")
         self.horizontalLayout_3.addWidget(self.button_1)
-        self.label_2 = QtGui.QLabel(self.centralwidget)
-        self.label_2.setText("")
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_3.addWidget(self.label_2)
+        self.label_1 = QtGui.QLabel(self.centralwidget)
+        self.label_1.setText("")
+        self.label_1.setObjectName("label_1")
+        self.horizontalLayout_3.addWidget(self.label_1)
         self.button_5 = QtGui.QPushButton(self.centralwidget)
         self.button_5.setMaximumSize(QtCore.QSize(48, 48))
         self.button_5.setObjectName("button_5")
@@ -58,10 +58,10 @@ class Ui_MainWindow(object):
         self.button_2.setMaximumSize(QtCore.QSize(48, 48))
         self.button_2.setObjectName("button_2")
         self.horizontalLayout_5.addWidget(self.button_2)
-        self.label_4 = QtGui.QLabel(self.centralwidget)
-        self.label_4.setText("")
-        self.label_4.setObjectName("label_4")
-        self.horizontalLayout_5.addWidget(self.label_4)
+        self.label_2 = QtGui.QLabel(self.centralwidget)
+        self.label_2.setText("")
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_5.addWidget(self.label_2)
         self.button_6 = QtGui.QPushButton(self.centralwidget)
         self.button_6.setMaximumSize(QtCore.QSize(48, 48))
         self.button_6.setObjectName("button_6")
@@ -73,10 +73,10 @@ class Ui_MainWindow(object):
         self.button_3.setMaximumSize(QtCore.QSize(48, 48))
         self.button_3.setObjectName("button_3")
         self.horizontalLayout_6.addWidget(self.button_3)
-        self.label_5 = QtGui.QLabel(self.centralwidget)
-        self.label_5.setText("")
-        self.label_5.setObjectName("label_5")
-        self.horizontalLayout_6.addWidget(self.label_5)
+        self.label_3 = QtGui.QLabel(self.centralwidget)
+        self.label_3.setText("")
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_6.addWidget(self.label_3)
         self.button_7 = QtGui.QPushButton(self.centralwidget)
         self.button_7.setMaximumSize(QtCore.QSize(48, 48))
         self.button_7.setObjectName("button_7")
