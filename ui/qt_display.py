@@ -66,7 +66,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
     def send_button_msg(self, button_num, button_type):
         '''send the button number to the parent via the queue'''
-        log.info("sending %s button = %d" % (button_type, button_num))
+        log.debug("sending %s button = %d" % (button_type, button_num))
         self.udp_send.put({'num': button_num, 'type': button_type})
 
     def print_braille(self, data):
@@ -101,6 +101,9 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
                 self.print_braille(msg)
             elif msgType == CMD_SEND_LINE:
                 self.print_braille_row(msg[0], msg[1:])
+
+        self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
+        self.timer.start()
 
 
 
