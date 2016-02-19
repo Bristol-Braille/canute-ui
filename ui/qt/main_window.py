@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created: Fri Feb 19 13:30:53 2016
+# Created: Fri Feb 19 16:29:52 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,6 +29,9 @@ class Ui_MainWindow(object):
         self.button_0.setObjectName("button_0")
         self.horizontalLayout_2.addWidget(self.button_0)
         self.label_0 = QtGui.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.label_0.setFont(font)
         self.label_0.setText("")
         self.label_0.setObjectName("label_0")
         self.horizontalLayout_2.addWidget(self.label_0)
@@ -44,6 +47,9 @@ class Ui_MainWindow(object):
         self.button_1.setObjectName("button_1")
         self.horizontalLayout_3.addWidget(self.button_1)
         self.label_1 = QtGui.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.label_1.setFont(font)
         self.label_1.setText("")
         self.label_1.setObjectName("label_1")
         self.horizontalLayout_3.addWidget(self.label_1)
@@ -59,6 +65,9 @@ class Ui_MainWindow(object):
         self.button_2.setObjectName("button_2")
         self.horizontalLayout_5.addWidget(self.button_2)
         self.label_2 = QtGui.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.label_2.setFont(font)
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_5.addWidget(self.label_2)
@@ -74,6 +83,9 @@ class Ui_MainWindow(object):
         self.button_3.setObjectName("button_3")
         self.horizontalLayout_6.addWidget(self.button_3)
         self.label_3 = QtGui.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.label_3.setFont(font)
         self.label_3.setText("")
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_6.addWidget(self.label_3)

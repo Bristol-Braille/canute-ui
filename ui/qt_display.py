@@ -7,6 +7,7 @@ from udp_utility import udp_send, udp_recv
 from comms_codes import *
 from utility import pin_num_to_unicode, pin_num_to_alpha
 
+from threading import Timer
 
 import sys
 from PySide import QtGui
@@ -18,6 +19,8 @@ log = logging.getLogger(__name__)
 BUTTONS = 8
 CHARS = 28
 ROWS = 4
+
+MSG_INTERVAL_S = 0.01
 
 
 class HardwareError(Exception):
@@ -50,6 +53,9 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
         self.udp_send = udp_send(port=5001)
         self.udp_recv = udp_recv(port=5000)
+
+        self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
+        self.timer.start()
 
         self.show()
 
@@ -95,8 +101,6 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
                 self.print_braille(msg)
             elif msgType == CMD_SEND_LINE:
                 self.print_braille_row(msg[0], msg[1:])
-        # reschedule the message check
-        self.tk.after(MSG_INTERVAL, self.check_msg)
 
 
 

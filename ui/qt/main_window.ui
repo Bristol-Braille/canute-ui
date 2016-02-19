@@ -38,6 +38,11 @@
       </item>
       <item>
        <widget class="QLabel" name="label_0">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -75,6 +80,11 @@
       </item>
       <item>
        <widget class="QLabel" name="label_1">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -112,6 +122,11 @@
       </item>
       <item>
        <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -149,6 +164,11 @@
       </item>
       <item>
        <widget class="QLabel" name="label_3">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string/>
         </property>
