@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 # hardware defs
 BUTTONS = 8
 CHARS = 28
-ROWS = 4
+ROWS = 16
 
 MSG_INTERVAL_S = 0.01
 
@@ -41,15 +41,15 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
         button_widgets = get_all(QtGui.QPushButton, self)
 
-        self.buttons = [None] * len(button_widgets)
+        self.buttons = {}
         for button in button_widgets:
-            num = int(button.text())
-            button.clicked.connect(self.make_slot(num))
-            self.buttons[num] = button
+            button_id = button.text()
+            button.clicked.connect(self.make_slot(button_id))
+            self.buttons[button_id] = button
 
         self.label_rows = []
         for n in range(ROWS):
-            self.label_rows.append(self.__getattribute__('label_%i' % n))
+            self.label_rows.append(self.__getattribute__('row_label_%i' % n))
 
         self.udp_send = udp_send(port=5001)
         self.udp_recv = udp_recv(port=5000)
@@ -59,15 +59,15 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
         self.show()
 
-    def make_slot(self, button_num):
+    def make_slot(self, button_id):
         def slot():
-            self.send_button_msg(button_num, 'single')
+            self.send_button_msg(button_id, 'single')
         return slot
 
-    def send_button_msg(self, button_num, button_type):
+    def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''
-        log.debug("sending %s button = %d" % (button_type, button_num))
-        self.udp_send.put({'num': button_num, 'type': button_type})
+        log.info("sending %s button = %s" % (button_type, button_id))
+        self.udp_send.put({'id': button_id, 'type': button_type})
 
     def print_braille(self, data):
         '''print braille to the display

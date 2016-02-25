@@ -22,9 +22,9 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="row_0">
       <item>
-       <widget class="QPushButton" name="button_0">
+       <widget class="QPushButton" name="row_button_0">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -37,7 +37,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_0">
+       <widget class="QLabel" name="row_label_0">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -51,9 +51,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="row_1">
       <item>
-       <widget class="QPushButton" name="button_1">
+       <widget class="QPushButton" name="row_button_1">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -66,7 +66,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_1">
+       <widget class="QLabel" name="row_label_1">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -80,9 +80,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_13">
+     <layout class="QHBoxLayout" name="row_2">
       <item>
-       <widget class="QPushButton" name="button_10">
+       <widget class="QPushButton" name="row_button_2">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -95,7 +95,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_10">
+       <widget class="QLabel" name="row_label_2">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -109,9 +109,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_11">
+     <layout class="QHBoxLayout" name="row_3">
       <item>
-       <widget class="QPushButton" name="button_8">
+       <widget class="QPushButton" name="row_button_3">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -124,7 +124,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_8">
+       <widget class="QLabel" name="row_label_3">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -138,9 +138,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_10">
+     <layout class="QHBoxLayout" name="row_4">
       <item>
-       <widget class="QPushButton" name="button_7">
+       <widget class="QPushButton" name="row_button_4">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -153,7 +153,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="row_label_4">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -167,9 +167,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_16">
+     <layout class="QHBoxLayout" name="row_5">
       <item>
-       <widget class="QPushButton" name="button_13">
+       <widget class="QPushButton" name="row_button_5">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -182,7 +182,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="row_label_5">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -196,9 +196,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_15">
+     <layout class="QHBoxLayout" name="row_6">
       <item>
-       <widget class="QPushButton" name="button_12">
+       <widget class="QPushButton" name="row_button_6">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -211,7 +211,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_12">
+       <widget class="QLabel" name="row_label_6">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -225,9 +225,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <layout class="QHBoxLayout" name="row_7">
       <item>
-       <widget class="QPushButton" name="button_11">
+       <widget class="QPushButton" name="row_button_7">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -240,7 +240,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_11">
+       <widget class="QLabel" name="row_label_7">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -254,9 +254,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_12">
+     <layout class="QHBoxLayout" name="row_8">
       <item>
-       <widget class="QPushButton" name="button_9">
+       <widget class="QPushButton" name="row_button_8">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -269,7 +269,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_9">
+       <widget class="QLabel" name="row_label_8">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -283,9 +283,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <layout class="QHBoxLayout" name="row_9">
       <item>
-       <widget class="QPushButton" name="button_6">
+       <widget class="QPushButton" name="row_button_9">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -298,7 +298,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="row_label_9">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -312,9 +312,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <layout class="QHBoxLayout" name="row_10">
       <item>
-       <widget class="QPushButton" name="button_3">
+       <widget class="QPushButton" name="row_button_10">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -327,7 +327,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="row_label_10">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -341,9 +341,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <layout class="QHBoxLayout" name="row_11">
       <item>
-       <widget class="QPushButton" name="button_5">
+       <widget class="QPushButton" name="row_button_11">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -356,7 +356,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="row_label_11">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -370,9 +370,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_18">
+     <layout class="QHBoxLayout" name="row_12">
       <item>
-       <widget class="QPushButton" name="button_15">
+       <widget class="QPushButton" name="row_button_12">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -385,7 +385,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_15">
+       <widget class="QLabel" name="row_label_12">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -399,9 +399,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <layout class="QHBoxLayout" name="row_13">
       <item>
-       <widget class="QPushButton" name="button_4">
+       <widget class="QPushButton" name="row_button_13">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -414,7 +414,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="row_label_13">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -428,9 +428,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_19">
+     <layout class="QHBoxLayout" name="row_14">
       <item>
-       <widget class="QPushButton" name="button_16">
+       <widget class="QPushButton" name="row_button_14">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -443,7 +443,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_16">
+       <widget class="QLabel" name="row_label_14">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -457,9 +457,9 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_17">
+     <layout class="QHBoxLayout" name="row_15">
       <item>
-       <widget class="QPushButton" name="button_14">
+       <widget class="QPushButton" name="row_button_15">
         <property name="maximumSize">
          <size>
           <width>48</width>
@@ -472,7 +472,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_14">
+       <widget class="QLabel" name="row_label_15">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
