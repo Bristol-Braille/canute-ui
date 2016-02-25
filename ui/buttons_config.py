@@ -7,7 +7,7 @@ Button definitions for the 3 modes
 Top level keys are:
 
 * default: what should happen if a button isn't defined elsewhere
-* library: when in library mode  
+* library: when in library mode
 * book: when in book mode
 * menu: when in menu mode
 
@@ -17,7 +17,7 @@ Each key is assigned a hash of button types:
 * double click
 * long click
 
-And within each button type are final config hashes for the button numbers from 0 to 7. 
+And within each button type are final config hashes for the button numbers from 0 to 7.
 
 Each button's config hash must have an obj key and a method key, with an optional args key.
 
@@ -33,45 +33,42 @@ import logging
 log = logging.getLogger(__name__)
 conf = {
     'default': {
-        'single': { 
-            '0': { 'obj': 'ui',       'method': 'library_mode' },
-            '1': { 'obj': 'screen',   'method': 'prev' },
-            '2': { 'obj': 'screen',   'method': 'next' },
-            '3': { 'obj': 'ui',       'method': 'menu_mode' },
-            },
-        'long': { 
-            '1': { 'obj': 'screen',   'method': 'home' },
-            '2': { 'obj': 'screen',   'method': 'end' },
-            },
-        },
+        'single': {
+            '>': {'obj': 'ui', 'method':'next'},
+            '<': {'obj': 'ui', 'method':'prev'},
+            'L': {'obj': 'ui', 'method':'library_mode'},
+        }
+    },
     'library': {
         'single': {
-            '4': { 'obj': 'ui',       'method': 'load_book', 'args': 0 },
-            '5': { 'obj': 'ui',       'method': 'load_book', 'args': 1 },
-            '6': { 'obj': 'ui',       'method': 'load_book', 'args': 2 },
-            '7': { 'obj': 'ui',       'method': 'load_book', 'args': 3 },
-            },
+            '0 ': {'obj': 'ui', 'method': 'load_book', 'args':0 },
+            '1 ': {'obj': 'ui', 'method': 'load_book', 'args':1 },
+            '2 ': {'obj': 'ui', 'method': 'load_book', 'args':2 },
+            '3 ': {'obj': 'ui', 'method': 'load_book', 'args':3 },
+            '4 ': {'obj': 'ui', 'method': 'load_book', 'args':4 },
+            '5 ': {'obj': 'ui', 'method': 'load_book', 'args':5 },
+            '6 ': {'obj': 'ui', 'method': 'load_book', 'args':6 },
+            '7 ': {'obj': 'ui', 'method': 'load_book', 'args':7 },
+            '8 ': {'obj': 'ui', 'method': 'load_book', 'args':8 },
+            '9 ': {'obj': 'ui', 'method': 'load_book', 'args':9 },
+            '10': {'obj': 'ui', 'method': 'load_book', 'args':10},
+            '11': {'obj': 'ui', 'method': 'load_book', 'args':11},
+            '12': {'obj': 'ui', 'method': 'load_book', 'args':12},
+            '13': {'obj': 'ui', 'method': 'load_book', 'args':13},
+            '14': {'obj': 'ui', 'method': 'load_book', 'args':14},
+            '15': {'obj': 'ui', 'method': 'load_book', 'args':15},
         },
+    },
     'book': {
         'single': {
-            '5': { 'obj': 'screen',   'method': 'prev' },
-            '6': { 'obj': 'screen',   'method': 'next' },
-            },
-        'long': {
-            '5': { 'obj': 'screen',   'method': 'home' },
-            '6': { 'obj': 'screen',   'method': 'end' },
-            },
-        'double': {
-            '5': { 'obj': 'screen',   'method': 'prev_chapter' },
-            '6': { 'obj': 'screen',   'method': 'next_chapter' },
-            },
         },
+    },
     'menu': {
         'single': {
-            '4': { 'obj': 'screen',       'method': 'option', 'args': 0 },
-            '5': { 'obj': 'screen',       'method': 'option', 'args': 1 },
-            '6': { 'obj': 'screen',       'method': 'option', 'args': 2 },
-            '7': { 'obj': 'screen',       'method': 'option', 'args': 3 },
+            '0': {'obj': 'screen', 'method': 'option', 'args': 0},
+            '1': {'obj': 'screen', 'method': 'option', 'args': 1},
+            '2': {'obj': 'screen', 'method': 'option', 'args': 2},
+            '3': {'obj': 'screen', 'method': 'option', 'args': 3},
             },
         },
     }
