@@ -64,6 +64,8 @@ class UI():
             self.state['book_num'] = 0
 
     def despatch(self, button_type, button_id):
+        log.debug(buttons_config.conf[self.state['mode']][button_type])
+        log.debug(button_type)
         # fetch the config for the button
         try:
             config = buttons_config.conf[self.state['mode']][button_type][button_id]
