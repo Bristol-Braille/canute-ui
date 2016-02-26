@@ -2,7 +2,7 @@ from utility import test_book
 from pageable import Library
 import config_loader
 
-dimensions = (28,4) #canute
+dimensions = (32,16) #canute
 config = config_loader.load()
 
 pages = test_book(dimensions)

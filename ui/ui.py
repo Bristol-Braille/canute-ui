@@ -63,21 +63,22 @@ class UI():
             self.state['mode'] = 'library'
             self.state['book_num'] = 0
 
-    def despatch(self,button_type, button_num):
-        # we're using a hash to store config, so convert number to a str
-        button_num = str(button_num)
+    def despatch(self, button_type, button_id):
+        log.debug(buttons_config.conf[self.state['mode']][button_type])
+        log.debug(button_type)
         # fetch the config for the button
         try:
-            config = buttons_config.conf[self.state['mode']][button_type][button_num]
+            config = buttons_config.conf[self.state['mode']][button_type][button_id]
         except KeyError:
             # try get the default
             try:
-                config = buttons_config.conf['default'][button_type][button_num]
+                config = buttons_config.conf['default'][button_type][button_id]
             except KeyError:
                 # otherwise return False
                 log.debug("nothing defined for that button")
                 return False
 
+        log.debug(config)
         # to call the method we need the object
         if config['obj'] == 'ui':
             obj = self
@@ -116,11 +117,11 @@ class UI():
         while self.driver.is_ok():
             # fetch all buttons (a fetch resets button register)
             buttons = self.driver.get_buttons()
-            for button_num in range(8):
-                if buttons[button_num] != False:
-                    button_type = buttons[button_num]
+            for button_id in buttons:
+                if buttons[button_id] != False:
+                    button_type = buttons[button_id]
                     # if a button is pressed, deal with it
-                    result = self.despatch(button_type, button_num)
+                    result = self.despatch(button_type, button_id)
                     if result is False:
                         self.driver.send_error_sound()
             time.sleep(0.1)

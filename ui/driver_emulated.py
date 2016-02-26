@@ -13,8 +13,8 @@ class Emulated(Driver):
 
     # hardware defs
     BUTTONS = 8
-    CHARS = 28
-    ROWS = 4
+    CHARS = 32
+    ROWS = 16
 
     """driver class that emulates the machine with a GUI
 
@@ -29,7 +29,7 @@ class Emulated(Driver):
         super(Emulated, self).__init__()
         self.data = 0
         self.delay = delay
-        self.buttons = [False] * Emulated.BUTTONS
+        self.buttons = {}
 
         # message passing queues: pass messages to display on parent, fetch messages on chlid
         self.udp_send = udp_send(port=5000)
@@ -79,10 +79,10 @@ class Emulated(Driver):
         msg = self.udp_recv.get()
         if msg is not None:
             log.debug("got button msg %s" % msg)
-            self.buttons[msg['num']] = msg['type']
+            self.buttons[msg['id']] = msg['type']
         ret = self.buttons
         # reset
-        self.buttons = [False] * Emulated.BUTTONS
+        self.buttons = {}
         return ret
 
     def send_data(self, cmd, data=[]):
