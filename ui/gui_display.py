@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 # hardware defs
 BUTTONS = 8
-CHARS = 28
+CHARS = 32
 ROWS = 4
 
 

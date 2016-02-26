@@ -31,7 +31,7 @@ class TestBookFile_List(unittest.TestCase):
     def setUpClass(cls):
         cls._book = 'book'
         # create a test file
-        cls._dimensions = (28,4) #canute
+        cls._dimensions = (32,16) #canute
         pages = test_book(cls._dimensions)
 
         with open(cls._book, 'w') as fh:
@@ -79,7 +79,7 @@ class TestBook(unittest.TestCase):
         cls._bookfile = 'book'
 
         # create a test file
-        cls._dimensions = (28,4) #canute
+        cls._dimensions = (32,16) #canute
         pages = test_book(cls._dimensions)
 
         with open(cls._bookfile, 'w') as fh:
@@ -148,7 +148,7 @@ class TestLibrary(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._bookfiles = []
-        cls._dimensions = (28,4) #canute
+        cls._dimensions = (32,4) #canute
         config = config_loader.load()
 
         ui = None

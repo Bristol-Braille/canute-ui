@@ -13,8 +13,8 @@ class Emulated(Driver):
 
     # hardware defs
     BUTTONS = 8
-    CHARS = 28
-    ROWS = 4
+    CHARS = 32
+    ROWS = 16
 
     """driver class that emulates the machine with a GUI
 
