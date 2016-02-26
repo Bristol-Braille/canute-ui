@@ -57,6 +57,7 @@ conf = {
             '13': {'obj': 'ui', 'method': 'load_book', 'args':13},
             '14': {'obj': 'ui', 'method': 'load_book', 'args':14},
             '15': {'obj': 'ui', 'method': 'load_book', 'args':15},
+            'L':  {'obj': 'ui', 'method':'menu_mode'},
         },
     },
     'book': {
