@@ -39,7 +39,7 @@ class Pi(Driver):
         super(Pi, self).__init__()
 
         self.pi_buttons = pi_buttons
-        self.buttons = [False] * 8
+        self.buttons = {}
         if pi_buttons:
             GPIO.setmode(GPIO.BOARD)
             GPIO.setwarnings(False)
@@ -55,21 +55,21 @@ class Pi(Driver):
                 GPIO.add_event_detect(pin, GPIO.BOTH, callback=self.button_int, bouncetime=debounce)
             log.info("setup buttons for pi")
 
-    def determine_button_type(self, index):
+    def determine_button_type(self, button_id):
         '''determines button type by how many clicks and timings
         '''
-        if self.pi_button_clicks[index] == 2:
-            self.buttons[index] = 'double'
-        elif self.pi_button_clicks[index] == 1:
+        if self.pi_button_clicks[button_id] == 2:
+            self.buttons[button_id] = 'double'
+        elif self.pi_button_clicks[button_id] == 1:
             # differentiate between long and single
-            log.debug(self.pi_button_time_release[index] - self.pi_button_time_press[index])
-            if self.pi_button_time_release[index] - self.pi_button_time_press[index] > (long_press / 1000):
-                self.buttons[index] = 'long'
+            log.debug(self.pi_button_time_release[button_id] - self.pi_button_time_press[button_id])
+            if self.pi_button_time_release[button_id] - self.pi_button_time_press[button_id] > (long_press / 1000):
+                self.buttons[button_id] = 'long'
             else:
-                self.buttons[index] = 'single'
+                self.buttons[button_id] = 'single'
 
         # reset button presses
-        self.pi_button_clicks[index] = 0
+        self.pi_button_clicks[button_id] = 0
 
     def button_int(self, channel):
         '''interrupt routine for all the buttons.
@@ -137,10 +137,10 @@ class Pi(Driver):
         '''
         if self.pi_buttons is True:
             buttons = self.buttons
-            self.buttons = [False] * 8
+            self.buttons = {}
             return buttons
         else:
-            return [False] * 8
+            return {}
 
     def send_error_sound(self):
         '''make the hardware make an error sound'''

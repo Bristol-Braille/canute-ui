@@ -34,8 +34,8 @@ log = logging.getLogger(__name__)
 conf = {
     'default': {
         'single': {
-            '>': {'obj': 'ui', 'method':'next'},
-            '<': {'obj': 'ui', 'method':'prev'},
+            '>': {'obj': 'screen', 'method':'next'},
+            '<': {'obj': 'screen', 'method':'prev'},
             'L': {'obj': 'ui', 'method':'library_mode'},
         }
     },

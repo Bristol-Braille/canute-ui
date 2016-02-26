@@ -22,6 +22,19 @@ ROWS = 16
 
 MSG_INTERVAL_S = 0.01
 
+def main():
+    logging.basicConfig(level=logging.INFO)
+    log = logging.getLogger(__name__)
+    log.info("display GUI")
+
+    parser = argparse.ArgumentParser(description="Canute Emulator")
+    parser.add_argument('--text', action='store_const', dest='text',
+            const=True, help="show text instead of braille")
+    args = parser.parse_args()
+
+    app = QtGui.QApplication(sys.argv)
+    display = Display(display_text=args.text)
+    sys.exit(app.exec_())
 
 class HardwareError(Exception):
     pass
@@ -93,33 +106,24 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         '''check for a message in the queue, if so display it as braille using
         :func:`print_braille`
         '''
-        msg = self.udp_recv.get()
-        if msg is not None:
-            msgType = msg[0]
-            msg = msg[1:]
-            if msgType == CMD_SEND_PAGE:
-                self.print_braille(msg)
-            elif msgType == CMD_SEND_LINE:
-                self.print_braille_row(msg[0], msg[1:])
+        try:
+            msg = self.udp_recv.get()
+            if msg is not None:
+                msgType = msg[0]
+                msg = msg[1:]
+                if msgType == CMD_SEND_PAGE:
+                    self.print_braille(msg)
+                elif msgType == CMD_SEND_LINE:
+                    self.print_braille_row(msg[0], msg[1:])
+        except:
+            print('check_msg ERROR')
+
 
         self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
         self.timer.start()
 
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-    log = logging.getLogger(__name__)
-    log.info("display GUI")
-
-    parser = argparse.ArgumentParser(description="Canute Emulator")
-    parser.add_argument('--text', action='store_const', dest='text',
-            const=True, help="show text instead of braille")
-    args = parser.parse_args()
-
-    app = QtGui.QApplication(sys.argv)
-    display = Display(display_text=args.text)
-    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
