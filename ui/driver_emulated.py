@@ -36,14 +36,14 @@ class Emulated(Driver):
         self.udp_recv = udp_recv(port=5001)
 
         # start the gui program as a separated process as tkinter & threads don't play well
-        process = ["./gui_display.py" ]
+        process = ["./qt_display.py" ]
         if display_text:
             process.append("--text")
         self.process = subprocess.Popen(process)
 
         # wait for it to start up or it will miss the first communication
         time.sleep(0.5)
-        log.info("started gui_display.py with process id %d" % self.process.pid)
+        log.info("started qt_display.py with process id %d" % self.process.pid)
 
     def is_ok(self):
         '''The UI needs to know when to quit, so the GUI can tell it using this method'''
