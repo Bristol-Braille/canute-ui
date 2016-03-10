@@ -17,7 +17,7 @@ Each key is assigned a hash of button types:
 * double click
 * long click
 
-And within each button type are final config hashes for the button numbers from 0 to 7.
+And within each button type are final config hashes for the button.
 
 Each button's config hash must have an obj key and a method key, with an optional args key.
 
