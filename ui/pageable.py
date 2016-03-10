@@ -337,7 +337,12 @@ class Library(Pageable):
         :param native_file: filename of the destination file
         '''
         log.info("converting pef %s" % pef_file)
-        xml_doc = parse(pef_file)
+        try:
+            xml_doc = parse(pef_file)
+        except:
+            log.error("could not convert %s" % pef_file)
+            return
+
 
         rows = xml_doc.getElementsByTagName('row')
         log.debug("got %d rows" % len(rows))
