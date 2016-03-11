@@ -340,6 +340,7 @@ class Library(Pageable):
         try:
             xml_doc = parse(pef_file)
         except:
+            os.remove(pef_file)
             log.error("could not convert %s" % pef_file)
             return
 
