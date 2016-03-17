@@ -171,13 +171,15 @@ class Pi(Driver):
         :rtype: an integer return value
         '''
         log.debug('trying to read 2 bytes')
+        self.port.flush()
         message = self.port.read(2)
         log.debug("rx [%s]" % binascii.hexlify(message))
         if len(message) != 2:
             raise DriverError("unexpected rx data length %d" % len(message))
         data = struct.unpack('2b', message)
         if data[0] != expected_cmd:
-            raise DriverError("unexpected rx command %d" % expected_cmd)
+            log.error("unexpected rx command %d, expecting %d" % (data[0], expected_cmd))
+            log.error(data)
         return data[1]
 
     def __exit__(self, ex_type, ex_value, traceback):
