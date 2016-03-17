@@ -1,0 +1,83 @@
+* Download a HTML ebook from Gutenberg Project, eg. http://www.gutenberg.org/ebooks/244
+
+* Load into a text editor or some kind of script
+
+* Remove all text before but not including "<!DOCTYPE"
+
+* Replace all instances of "@" with " at " (Note the spaces)
+
+* Remove all instances of text within and including "<!--"  and "-->"
+
+* Remove all text inbetween the only instance of "<head" and "</head>" (Note incomplete opening head tag as some have extra attributes)
+
+* Remove all text inbetween the FIRST instances of "<pre" and "</pre>" (Note incomplete opening pre tag as some have extra attributes) (Do not remove other pre elements)
+
+* Remove all text after the "<body>" tag up to and including the line beginning "*** START OF THIS PROJECT" (if such a line exists)
+
+* Consider removing prefaces, tables of content and other flummery that gets in the way of the main text
+
+* Save the file
+
+(MARKER 1)
+
+* Load into a copy of LibreOffice with the odt2braille plugin
+
+* Go to "File" > "Export to Braille"
+
+* Set "File type:" to "PEF", "Number of cells per line:" to "28", "Number of lines per page:" to "4"
+
+* Go to "Braille Settings"
+
+* EITHER
+	Set "Language:" to "Unified English Braille", "Contraction level:" to "Grade 1" (for learners)
+		OR
+	Set "Language:" to "Unified English Braille", "Contraction level:" to "Grade 2"
+
+* Go to "Paragraphs"
+
+* Set tick box before "Inherit from parent style:" to unticked
+
+* Set "Alignments & Intents" > "First line margin:" to "2"
+
+* Go to "Headings"
+
+* Set "Level 1" >
+	"Spacing" > "Below" to "1"
+	"Alignments & Intents" > "First line margin:" to "8"
+	
+* Set "Level 2" >
+	"Spacing" > "Below" to "1"
+	"Alignments & Intents" > "First line margin:" to "6"
+	
+* Set "Level 3" to "Level 10" >
+	"Spacing" > "Below" to "1"
+	"Alignments & Intents" > "First line margin:" to "4"
+
+* Go to "Save"
+
+* Go to "Export"
+
+* Wait for operations to complete
+
+* Go to "Continue"
+
+* Save file with name less than 26 characters, starting with either "uc " or "g2 ", for uncontracted ("Grade 1") and "Grade 2" files respectively
+
+* Load the PEF file into a text editor or some kind of script
+
+* Replace all instances of "<page>" with "\n\n<page>\n", or by some other method separate out pages (for readability) ($ sed -i "s/<page>/\n\n<page>\n/g" [FILENAME.PEF])
+
+* Replace all instances of "</row>" with "</row>\n", or by some other method break into lines ($ sed -i "s/<\/row>/<\/row>\n/g" [FILENAME.PEF])
+
+* Replace all instances of "<row/>" with "<row/>\n", or by some other method break into lines ($ sed -i "s/<row\/>/<row\/>\n/g" [FILENAME.PEF])
+
+* Save file
+
+* GO BACK TO 'MARKER 1' in instructions and repeat for Grade 1/2
+
+* Save both copies of PEF files onto a memory stick at the top level directory
+
+* Insert memory stick into Canute whilst turned off
+
+* Turn Canute on
+
