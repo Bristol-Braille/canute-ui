@@ -12,7 +12,7 @@ class DriverBoth():
         self.emulated = Emulated(delay, display_text)
         self.pi = Pi(port, pi_buttons)
         self.chars = 32
-        self.rows = 16
+        self.rows = 8
     def __exit__ (self, ex_type, ex_value, traceback):
         pass
     def __enter__(self):

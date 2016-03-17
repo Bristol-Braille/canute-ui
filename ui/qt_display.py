@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 # hardware defs
 BUTTONS = 8
 CHARS = 32
-ROWS = 16
+ROWS = 8
 
 MSG_INTERVAL_S = 0.01
 
