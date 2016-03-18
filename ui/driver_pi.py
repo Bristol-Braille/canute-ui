@@ -158,9 +158,20 @@ class Pi(Driver):
         :param cmd: command byte
         :param data: list of bytes
         '''
-        message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        log.debug("tx [%s]" % binascii.hexlify(message))
+        message = struct.pack('%sb' % 1, cmd)
         self.port.write(message)
+        log.debug("tx cmd [%s]" % binascii.hexlify(message))
+        if len(data) > 0:
+            #64 bytes is the default arduino serial buffer size
+            for i in range(len(data) // 64):
+                data_chunk = data[i*64:(i+1)*64]
+                message = struct.pack('%sb' % 64, *data_chunk)
+                log.debug("tx data_chunk %i [%s]" % (i, binascii.hexlify(message)))
+                self.port.write(message)
+                # wait to receive an acknowledge byte
+                # added to protocol as otherwise serial comms doesnt work for data length >= 256
+                ack = self.port.read(1)
+                log.debug("rx ack: %s" % binascii.hexlify(ack))
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
@@ -171,15 +182,13 @@ class Pi(Driver):
         :rtype: an integer return value
         '''
         log.debug('trying to read 2 bytes')
-        self.port.flush()
         message = self.port.read(2)
         log.debug("rx [%s]" % binascii.hexlify(message))
         if len(message) != 2:
             raise DriverError("unexpected rx data length %d" % len(message))
         data = struct.unpack('2b', message)
         if data[0] != expected_cmd:
-            log.error("unexpected rx command %d, expecting %d" % (data[0], expected_cmd))
-            log.error(data)
+            raise DriverError("unexpected rx command %d, expecting %d" % (data[0], expected_cmd))
         return data[1]
 
     def __exit__(self, ex_type, ex_value, traceback):
