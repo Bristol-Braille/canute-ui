@@ -10,7 +10,7 @@ from utility import pin_num_to_unicode, pin_num_to_alpha
 from threading import Timer
 
 import sys
-from PySide import QtGui
+from PySide import QtGui, QtCore
 from qt.main_window import Ui_MainWindow
 
 log = logging.getLogger(__name__)
@@ -52,10 +52,13 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         super(Display, self).__init__()
         self.setupUi(self)
 
+        self.setFocusPolicy(QtCore.Qt.StrongFocus)
+
         button_widgets = get_all(QtGui.QPushButton, self)
 
         self.buttons = {}
         for button in button_widgets:
+            button.setFocusPolicy(QtCore.Qt.NoFocus)
             button_id = button.text()
             button.clicked.connect(self.make_slot(button_id))
             self.buttons[button_id] = button
@@ -76,6 +79,16 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         def slot():
             self.send_button_msg(button_id, 'single')
         return slot
+
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Left:
+            self.send_button_msg('<', 'single')
+        elif e.key() == QtCore.Qt.Key_Right:
+            self.send_button_msg('>', 'single')
+        elif e.key() == QtCore.Qt.Key_Down:
+            self.send_button_msg('L', 'single')
+        elif (e.key() >= 49 and e.key() <= 56):
+            self.send_button_msg("%i" % (e.key() - 49,), 'single')
 
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''
