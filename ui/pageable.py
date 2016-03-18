@@ -370,10 +370,10 @@ class Library(Pageable):
         log.info("pef loaded with %d lines" % len(lines))
         log.info("writing to [%s]" % native_file)
         with open(native_file, 'w') as fh:
-            for line in lines:
-                if len(line) != self.cells:
-                    raise Exception("conversion problem - expected %d chars got %d" % (self.cells, len(line)))
-                fh.write(bytearray(line))
+            for index,line in enumerate(lines):
+                if len(line) > self.cells:
+                    log.warning("length of row %d is %d which is greater than %d, truncating" % (index, len(line), self.cells))
+                fh.write(bytearray(line[:self.cells]))
 
         log.info("removing old pef file")
         os.remove(pef_file)
