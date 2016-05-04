@@ -5,8 +5,13 @@ import serial
 import logging
 import struct
 import binascii
+import itertools
 
 log = logging.getLogger(__name__)
+
+long_press   = 500.0 #ms
+double_click = 200.0 #ms
+debounce     = 20 #ms
 
 try:
     import evdev
@@ -21,76 +26,25 @@ class Pi(Driver):
     to it
 
     :param port: the serial port the display is plugged into
-    :param pi_buttons: whether to use the Pi for button presses
+    :param pi_buttons: whether to use the evdev input for button presses
     """
     def __init__(self, port='/dev/ttyACM0', pi_buttons=False):
-        # get serial connection
-        if port:
-            self.port = self.setup_serial(port)
-            log.info("hardware detected on port %s" % port)
-        else:
-            self.port = None
-
-        super(Pi, self).__init__()
-
-        self.pi_buttons = pi_buttons
-        self.buttons = {}
         if pi_buttons:
-            GPIO.setmode(GPIO.BOARD)
-            GPIO.setwarnings(False)
-            self.led_thread=LedThread(21,0.5)
-            self.led_thread.start()
-            self.pi_buttons = [16, 19, 15, 18, 26, 22, 23, 24]
-            # need to store some details to work out what kind of click it was
-            self.pi_button_time_press = [0] * 8
-            self.pi_button_time_release = [0] * 8
-            self.pi_button_clicks = [0] * 8
-            for pin in self.pi_buttons:
-                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                GPIO.add_event_detect(pin, GPIO.BOTH, callback=self.button_int, bouncetime=debounce)
-            log.info("setup buttons for pi")
+            devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+            for device in devices:
+                if device.name == 'Arduino LLC Arduino Leonardo':
+                    self.button_read_loop = device.read_loop()
+                    break
 
-    def determine_button_type(self, button_id):
-        '''determines button type by how many clicks and timings
-        '''
-        if self.pi_button_clicks[button_id] == 2:
-            self.buttons[button_id] = 'double'
-        elif self.pi_button_clicks[button_id] == 1:
-            # differentiate between long and single
-            log.debug(self.pi_button_time_release[button_id] - self.pi_button_time_press[button_id])
-            if self.pi_button_time_release[button_id] - self.pi_button_time_press[button_id] > (long_press / 1000):
-                self.buttons[button_id] = 'long'
-            else:
-                self.buttons[button_id] = 'single'
+        # get serial connection
+        #if port:
+        #    self.port = self.setup_serial(port)
+        #    log.info("hardware detected on port %s" % port)
+        #else:
+        #    self.port = None
 
-        # reset button presses
-        self.pi_button_clicks[button_id] = 0
+        #super(Pi, self).__init__()
 
-    def button_int(self, channel):
-        '''interrupt routine for all the buttons.
-
-        makes a note of how many times a button's been pressed, and when it
-        was pressed and released
-
-        sets a timer for 0.5 seconds from when button was pressed to call a
-        determine_button_type that then decides what type
-
-        of button click it was.
-        '''
-        time.sleep(0.01)
-        state = GPIO.input(channel)
-        log.debug("button %d is %s" % (channel, state))
-        index = self.pi_buttons.index(channel)
-
-        # make a note of num clicks, press and release times
-        if state == 0:  # pressed
-            self.pi_button_time_press[index] = time.time()
-            self.pi_button_clicks[index] += 1
-        else:  # released
-            # set a timer to decide what type of button it was
-            t = Timer(double_click/1000, self.determine_button_type, [index])
-            t.start()
-            self.pi_button_time_release[index] = time.time()
 
     def setup_serial(self, port):
         '''sets up the serial port with a timeout and flushes it.
@@ -130,10 +84,9 @@ class Pi(Driver):
         :rtype: list of 8 elements either set to False (unpressed) or one of
         single, double, long
         '''
-        if self.pi_buttons is True:
-            buttons = self.buttons
-            self.buttons = {}
-            return buttons
+        if hasattr(self, 'button_read_loop'):
+
+            pass
         else:
             return {}
 
@@ -208,5 +161,35 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
     for device in devices:
-        print(device.fn, device.name, device.phys)
+        if device.name == 'Arduino LLC Arduino Leonardo':
+            d = device
+            break
+    button_read_loop = d.read_loop()
+    buttons = {}
+    for event in itertools.islice(button_read_loop, 0, 5):
+        if (event is not None) and (event.type == evdev.ecodes.EV_KEY) and (event.value == evdev.KeyEvent.key_down):
+            e = evdev.ecodes
+            if (event.code == e.KEY_1):
+                buttons['1'] = 'single'
+            elif (event.code == e.KEY_2):
+                buttons['2'] = 'single'
+            elif (event.code == e.KEY_3):
+                buttons['3'] = 'single'
+            elif (event.code == e.KEY_4):
+                buttons['4'] = 'single'
+            elif (event.code == e.KEY_5):
+                buttons['5'] = 'single'
+            elif (event.code == e.KEY_6):
+                buttons['6'] = 'single'
+            elif (event.code == e.KEY_7):
+                buttons['7'] = 'single'
+            elif (event.code == e.KEY_8):
+                buttons['8'] = 'single'
+            elif (event.code == e.KEY_LEFT):
+                buttons['<'] = 'single'
+            elif (event.code == e.KEY_RIGHT):
+                buttons['>'] = 'single'
+            elif (event.code == e.KEY_DOWN):
+                buttons['L'] = 'single'
+    print(buttons)
 
