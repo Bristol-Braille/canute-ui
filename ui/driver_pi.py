@@ -9,14 +9,9 @@ import binascii
 log = logging.getLogger(__name__)
 
 try:
-    import RPi.GPIO as GPIO
-    from threading import Timer
-    from status_led import LedThread
-    long_press = 500.0 #ms
-    double_click = 200.0 #ms
-    debounce = 20 #ms
+    import evdev
 except ImportError:
-    pass
+    log.warning('Could not import evdev')
 
 
 class Pi(Driver):
@@ -211,8 +206,7 @@ Driver.register(Pi)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
+    devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+    for device in devices:
+        print(device.fn, device.name, device.phys)
 
-    with Pi(port='/dev/ttyACM0', pi_buttons=True) as driver:
-        while driver.is_ok():
-            log.info(driver.get_buttons())
-            time.sleep(1)
