@@ -6,6 +6,8 @@ import logging
 import struct
 import binascii
 import itertools
+import Queue
+import threading
 
 log = logging.getLogger(__name__)
 
@@ -29,22 +31,34 @@ class Pi(Driver):
     :param pi_buttons: whether to use the evdev input for button presses
     """
     def __init__(self, port='/dev/ttyACM0', pi_buttons=False):
-        if pi_buttons:
-            devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-            for device in devices:
-                if device.name == 'Arduino LLC Arduino Leonardo':
-                    self.button_read_loop = device.read_loop()
-                    break
-
         # get serial connection
-        #if port:
-        #    self.port = self.setup_serial(port)
-        #    log.info("hardware detected on port %s" % port)
-        #else:
-        #    self.port = None
+        if port:
+            self.port = self.setup_serial(port)
+            log.info("hardware detected on port %s" % port)
+        else:
+            self.port = None
 
-        #super(Pi, self).__init__()
+        super(Pi, self).__init__()
 
+        if pi_buttons:
+            self.button_queue = Queue.Queue()
+            self.button_thread = threading.Thread(target = self.button_loop)
+            self.button_thread.daemon = True
+            self.button_thread.start()
+
+
+    def button_loop(self):
+        devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+        device = None
+        for d in devices:
+            if d.name == 'Arduino LLC Arduino Leonardo':
+                device = d
+                break
+        if device == None:
+            log.error('Arduino not found')
+            return
+        for event in device.read_loop():
+            self.button_queue.put(event)
 
     def setup_serial(self, port):
         '''sets up the serial port with a timeout and flushes it.
@@ -78,17 +92,43 @@ class Pi(Driver):
             return False
 
     def get_buttons(self):
-        '''get button states - will be done by the Pi for now but will be done
-        on the micro later
+        '''get button states
 
         :rtype: list of 8 elements either set to False (unpressed) or one of
         single, double, long
         '''
-        if hasattr(self, 'button_read_loop'):
-
-            pass
-        else:
-            return {}
+        buttons = {}
+        if hasattr(self, 'button_queue'):
+            for _ in range(100):
+                try:
+                    event = self.button_queue.get_nowait()
+                except Queue.Empty:
+                    event = None
+                if event is not None and (event.type == evdev.ecodes.EV_KEY) and (event.value == evdev.KeyEvent.key_down):
+                    e = evdev.ecodes
+                    if (event.code == e.KEY_1):
+                        buttons['1'] = 'single'
+                    elif (event.code == e.KEY_2):
+                        buttons['2'] = 'single'
+                    elif (event.code == e.KEY_3):
+                        buttons['3'] = 'single'
+                    elif (event.code == e.KEY_4):
+                        buttons['4'] = 'single'
+                    elif (event.code == e.KEY_5):
+                        buttons['5'] = 'single'
+                    elif (event.code == e.KEY_6):
+                        buttons['6'] = 'single'
+                    elif (event.code == e.KEY_7):
+                        buttons['7'] = 'single'
+                    elif (event.code == e.KEY_8):
+                        buttons['8'] = 'single'
+                    elif (event.code == e.KEY_LEFT):
+                        buttons['<'] = 'single'
+                    elif (event.code == e.KEY_RIGHT):
+                        buttons['>'] = 'single'
+                    elif (event.code == e.KEY_DOWN):
+                        buttons['L'] = 'single'
+        return buttons
 
     def send_error_sound(self):
         '''make the hardware make an error sound'''
@@ -116,8 +156,8 @@ class Pi(Driver):
                 message = struct.pack('%sb' % 64, *data_chunk)
                 log.debug("tx data_chunk %i [%s]" % (i, binascii.hexlify(message)))
                 self.port.write(message)
-                # wait to receive an acknowledge byte
-                # added to protocol as otherwise serial comms doesnt work for data length >= 256
+                # wait to receive an acknowledge byte added to protocol as
+                # otherwise serial comms doesnt work for data length >= 256
                 ack = self.port.read(1)
                 log.debug("rx ack: %s" % binascii.hexlify(ack))
 
@@ -146,10 +186,8 @@ class Pi(Driver):
         if self.port:
             log.error("closing serial port")
             self.port.close()
-        if self.pi_buttons:
-            self.led_thread.stop()
-            self.led_thread.join()
-            GPIO.cleanup()
+        if hasattr(self, 'button_thread'):
+            self.button_thread.join()
 
     def __enter__(self):
         '''method required for using the `with` statement'''
@@ -159,37 +197,9 @@ Driver.register(Pi)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-    for device in devices:
-        if device.name == 'Arduino LLC Arduino Leonardo':
-            d = device
-            break
-    button_read_loop = d.read_loop()
-    buttons = {}
-    for event in itertools.islice(button_read_loop, 0, 5):
-        if (event is not None) and (event.type == evdev.ecodes.EV_KEY) and (event.value == evdev.KeyEvent.key_down):
-            e = evdev.ecodes
-            if (event.code == e.KEY_1):
-                buttons['1'] = 'single'
-            elif (event.code == e.KEY_2):
-                buttons['2'] = 'single'
-            elif (event.code == e.KEY_3):
-                buttons['3'] = 'single'
-            elif (event.code == e.KEY_4):
-                buttons['4'] = 'single'
-            elif (event.code == e.KEY_5):
-                buttons['5'] = 'single'
-            elif (event.code == e.KEY_6):
-                buttons['6'] = 'single'
-            elif (event.code == e.KEY_7):
-                buttons['7'] = 'single'
-            elif (event.code == e.KEY_8):
-                buttons['8'] = 'single'
-            elif (event.code == e.KEY_LEFT):
-                buttons['<'] = 'single'
-            elif (event.code == e.KEY_RIGHT):
-                buttons['>'] = 'single'
-            elif (event.code == e.KEY_DOWN):
-                buttons['L'] = 'single'
-    print(buttons)
 
+    pi = Pi(pi_buttons=True)
+    while 1:
+        buttons = pi.get_buttons()
+        log.info('buttons: %s' % buttons)
+        time.sleep(1)
