@@ -60,6 +60,10 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         for button in button_widgets:
             button.setFocusPolicy(QtCore.Qt.NoFocus)
             button_id = button.text()
+            if button_id == 'Library':
+                button_id = 'L'
+            elif button_id == 'Reset':
+                button_id = 'R'
             button.clicked.connect(self.make_slot(button_id))
             self.buttons[button_id] = button
 
@@ -88,7 +92,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         elif e.key() == QtCore.Qt.Key_Down:
             self.send_button_msg('L', 'single')
         elif (e.key() >= 49 and e.key() <= 56):
-            self.send_button_msg("%i" % (e.key() - 49,), 'single')
+            self.send_button_msg("%i" % (e.key() - 48,), 'single')
 
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''

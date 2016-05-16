@@ -112,6 +112,8 @@ class Emulated(Driver):
             log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
             time.sleep(self.delay / 1000.0)
             self.udp_send.put([CMD_SEND_LINE] + data)
+        elif cmd == CMD_RESET:
+            self.data = 0
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware - we're faking this so the driver doesn't complain

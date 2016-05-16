@@ -45,6 +45,10 @@ class Driver(object):
     def send_data(self, cmd, data=[]):
         return
 
+    def reset_display(self):
+        self.send_data(CMD_RESET)
+        return self.get_data(CMD_RESET)
+
     def get_dimensions(self):
         '''
         returns dimensions of the display

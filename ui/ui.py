@@ -128,6 +128,11 @@ class UI():
         else:
             log.info("UI main loop ending")
 
+    def reset_display(self):
+        self.driver.reset_display()
+        self.driver.set_braille(self.last_data)
+        log.info("display reset & updated")
+
     def library_mode(self):
         log.info("library mode")
         self.state['mode'] = 'library'
