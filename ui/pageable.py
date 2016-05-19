@@ -210,7 +210,7 @@ class Menu(Pageable):
         '''shutdown the Pi'''
         log.warning("shutdown")
         self.ui.driver.clear_page()
-        os.system("shutdown -h now")
+        os.system("sudo shutdown -h now")
 
     def refresh(self):
         '''wipe out the library state files and reload'''
