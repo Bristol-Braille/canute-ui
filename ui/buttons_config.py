@@ -67,10 +67,10 @@ conf = {
     },
     'menu': {
         'single': {
-            '0': {'obj': 'screen', 'method': 'option', 'args': 0},
-            '1': {'obj': 'screen', 'method': 'option', 'args': 1},
-            '2': {'obj': 'screen', 'method': 'option', 'args': 2},
-            '3': {'obj': 'screen', 'method': 'option', 'args': 3},
+            '1': {'obj': 'screen', 'method': 'option', 'args': 0},
+            '2': {'obj': 'screen', 'method': 'option', 'args': 1},
+            '3': {'obj': 'screen', 'method': 'option', 'args': 2},
+            '4': {'obj': 'screen', 'method': 'option', 'args': 3},
             },
         },
     }
