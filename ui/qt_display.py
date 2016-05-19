@@ -91,6 +91,8 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
             self.send_button_msg('>', 'single')
         elif e.key() == QtCore.Qt.Key_Down:
             self.send_button_msg('L', 'single')
+        elif e.key() == QtCore.Qt.Key_R:
+            self.send_button_msg('R', 'single')
         elif (e.key() >= 49 and e.key() <= 56):
             self.send_button_msg("%i" % (e.key() - 48,), 'single')
 
