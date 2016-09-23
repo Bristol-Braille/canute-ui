@@ -49,6 +49,14 @@ class UI():
             self.screen = self.menu
             self.show()
 
+    def finish(self):
+        self.is_running = False
+        # next time we start, start in book mode
+        self.state['mode'] = 'book'
+        self.save_state()
+        self.driver.clear_page()
+        os.system("sudo shutdown -h now")
+
     def save_state(self):
         with open(UI.state_file, 'w') as fh:
             pickle.dump(self.state, fh)
@@ -112,9 +120,10 @@ class UI():
 
     def start(self):
         '''
-        start the UI running, runs the UI until the driver returns an error
+        start the UI running, runs the UI until the driver returns an error or something sets is_running to False
         '''
-        while self.driver.is_ok():
+        self.is_running = True
+        while self.driver.is_ok() and self.is_running:
             # fetch all buttons (a fetch resets button register)
             buttons = self.driver.get_buttons()
             for button_id in buttons:
