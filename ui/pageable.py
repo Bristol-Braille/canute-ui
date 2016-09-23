@@ -283,7 +283,7 @@ class Library(Pageable):
             log.info("found new book file %s in %s" % (path, self.book_dir))
             self.add_book(path)
 
-    def add_book(self, book_file, name=None):
+    def add_book(self, book_file, name=None, remove=True):
         '''add a new book to the library.
         If not in native format; convert and remove the old file.
         Conversion is done by file extension.
@@ -300,6 +300,11 @@ class Library(Pageable):
             log.info("converting pef to canute")
             native_file = self.book_dir + basename + Library.native_ext
             self.convert_pef(book_file, native_file)
+            book_file = native_file
+        elif ext == '.brf':
+            log.info("converting brf to canute")
+            native_file = self.book_dir + basename + Library.native_ext
+            self.convert_brf(book_file, native_file, remove)
             book_file = native_file
         elif ext == Library.native_ext:
             log.info("book is already native format")
@@ -326,6 +331,40 @@ class Library(Pageable):
         # add the new title to our content, converting to pin numbers first
         # add_new_item sorts by alpha
         self.add_new_item(alphas_to_pin_nums(name))
+
+
+    def convert_brf(self, brf_file, native_file, remove=True):
+        '''
+        converts a brf format braille book to native.
+
+        :param brf: filename of the pef file
+        :param native_file: filename of the destination file
+        '''
+        log.info("converting brf %s" % brf_file)
+
+        # do the conversion from brf to pin numbers
+        lines = []
+        with open(brf_file) as fh:
+            for in_line in fh.readlines():
+                line = alphas_to_pin_nums(in_line)
+
+                # ensure right length
+                missing_cells = self.cells - len(line)
+                line.extend([0] * missing_cells)
+
+                lines.append(line)
+
+        log.info("brf loaded with %d lines" % len(lines))
+        log.info("writing to [%s]" % native_file)
+        with open(native_file, 'w') as fh:
+            for index,line in enumerate(lines):
+                if len(line) > self.cells:
+                    log.warning("length of row %d is %d which is greater than %d, truncating" % (index, len(line), self.cells))
+                fh.write(bytearray(line[:self.cells]))
+
+        if remove:
+            log.info("removing old brf file")
+            os.remove(brf_file)
 
     def convert_pef(self, pef_file, native_file):
         '''

@@ -148,7 +148,7 @@ class TestLibrary(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._bookfiles = []
-        cls._dimensions = (32,4) #canute
+        cls._dimensions = (40,4) #canute
         config = config_loader.load()
 
         ui = None
@@ -172,6 +172,50 @@ class TestLibrary(unittest.TestCase):
     def test_add_new_pef_book(self):
         return
 
+    def test_add_new_brf_book(self):
+        w = self._dimensions[0]
+        h = self._dimensions[1]
+        exp_pos = 0
+        self._lib.delete_content()
+        self._lib.remove_state()
+        book_name = 'brf_test'
+        book_ext = '.brf'
+        book_path = '../books/'
+        self._lib.add_book(book_path + book_name + book_ext, name=None, remove=False)
+        self.assertEqual(self._lib.get_num_pages(), 1)
+
+        self._lib.home()
+        data = self._lib.show()
+        # test the name is in the library
+        self.assertEqual(data[w*exp_pos:w*exp_pos+len(book_name)], alphas_to_pin_nums(book_name))
+
+        # test the content
+        book = self._lib.get_book(0)
+        book.home()
+        # get first page
+        content = book.show()
+        alphas = pin_nums_to_alphas(content)
+
+        with open(book_path + book_name + book_ext) as fh:
+            lines = fh.readlines()
+
+        # just test first 4 lines
+        brf_content = ''
+        for line in lines[0:4]:
+            # pad the line to be the same as width
+            line = line.strip()
+            line += ' ' * (w - len(line))
+            brf_content += line
+
+        # join list and make lower case
+        alphas = ''.join(alphas).lower()
+        self.assertEqual(alphas, brf_content)
+
+        # test book is right length
+        book.end()
+        self.assertEqual(book.page, len(lines) / h)
+            
+        
     def test_add_new_canute_book(self):
         self._lib.delete_content()
         book_name = 'aaa.canute'
@@ -277,4 +321,7 @@ class TestDriverPi(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    import logging
+    log = logging.getLogger('')
+    log.setLevel(logging.DEBUG)
     unittest.main()
