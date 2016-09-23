@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   load_from_usb
    ui
    driver
    pageable

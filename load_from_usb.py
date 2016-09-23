@@ -13,14 +13,16 @@ import ui
 from ui.utility import find_books, find_firmware
 from ConfigParser import ConfigParser, NoSectionError
 
-log = logging.getLogger(__name__)
+"""
+load book from USB
+==================
 
-src_dir = 'ui'
-
-'''
-load_book: load new PEF books into the library when a usb disk is plugged in.
+load new PEF books into the library when a usb disk is plugged in.
 
 Works in conjuction with a udev rule.
+
+install
+=======
 
 Create a file at /etc/udev/rules.d/81-canute.rules with this content:
 KERNEL=="sd?1", SUBSYSTEMS=="usb", RUN+="/path/to/load_from_usb.py --dev /dev/$kernel"
@@ -30,7 +32,12 @@ Where /path/to/load_book.py is this script.
 Then: sudo /etc/init.d/udev restart
 
 The default mount point is /mnt/books, which can be overridden with the --mount-point argument
-'''
+"""
+
+log = logging.getLogger(__name__)
+
+src_dir = 'ui'
+
 
 def mount_device(dev, mount_point):
     '''mount a device'''
