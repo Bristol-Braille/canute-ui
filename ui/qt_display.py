@@ -7,8 +7,6 @@ from udp_utility import udp_send, udp_recv
 from comms_codes import *
 from utility import pin_num_to_unicode, pin_num_to_alpha
 
-from threading import Timer
-
 import sys
 from PySide import QtGui, QtCore
 from qt.main_window import Ui_MainWindow
@@ -74,8 +72,10 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         self.udp_send = udp_send(port=5001)
         self.udp_recv = udp_recv(port=5000)
 
-        self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
-        self.timer.start()
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.check_msg)
+        timer.start(MSG_INTERVAL_S)
+#        self.timer.start()
 
         self.show()
 
@@ -137,12 +137,8 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         except:
             print('check_msg ERROR')
 
-
-        self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
-        self.timer.start()
-
-
-
+    #    self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
+    #    self.timer.start()
 
 
 if __name__ == '__main__':
