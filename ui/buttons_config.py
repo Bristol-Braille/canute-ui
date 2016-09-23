@@ -63,6 +63,9 @@ conf = {
     },
     'book': {
         'single': {
+            '1': {'obj': 'screen', 'method': 'home'},
+            '2': {'obj': 'screen', 'method': 'prev_skip', 'args': 10},
+            '3': {'obj': 'screen', 'method': 'next_skip', 'args': 10},
         },
     },
     'menu': {

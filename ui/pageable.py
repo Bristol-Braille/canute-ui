@@ -141,6 +141,12 @@ class Pageable(object):
         else:
             log.info("at home already")
 
+    def prev_skip(self, skip=10):
+        '''skip backwards x pages'''
+        self.page -= skip 
+        if self.page < 0:
+            self.page = 0
+
     def end(self):
         '''go to end'''
         if self.get_num_pages() == 0:
@@ -157,6 +163,11 @@ class Pageable(object):
         else:
             log.info("at end already")
 
+    def next_skip(self, skip=10):
+        '''skip forwards x pages'''
+        self.page += skip 
+        if self.page >= self.get_num_pages() - 1:
+            self.page = self.get_num_pages() - 1;
 
 class Menu(Pageable):
     '''
