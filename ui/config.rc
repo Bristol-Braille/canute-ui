@@ -4,7 +4,7 @@ log_file = canute.log
 # full path to book dir
 library_dir = ~/books/
 # where usb sticks will be automounted
-usb_dir = /tmp/newbooks/
+usb_dir = /media/
 
 [user]
-user_name = mattvenn
+user_name = pi
