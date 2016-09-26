@@ -3,3 +3,8 @@
 log_file = canute.log
 # full path to book dir
 library_dir = ~/books/
+# where usb sticks will be automounted
+usb_dir = /tmp/newbooks/
+
+[user]
+user_name = mattvenn
