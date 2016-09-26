@@ -31,10 +31,6 @@ def find_firmware(directory):
                 if filename == firmware_file:
                     return(os.path.join(root, filename))
 
-def find_books(directory):
-    '''return pef and canute format books'''
-    return find_files(directory, ('.pef', '.canute'))
-
 def find_files(directory, extensions):
     '''recursively look for files that end in the extensions tuple'''
     matches = []
@@ -43,7 +39,6 @@ def find_files(directory, extensions):
                 if filename.endswith(extensions):
                     matches.append(os.path.join(root, filename))
     return matches
-
 
 def unicode_to_pin_num(uni_char):
     '''
@@ -106,7 +101,7 @@ def alpha_to_pin_num(alpha):
     try:
         return mapping.index(alpha)
     except ValueError:
-        log.warning("problem converting [%s] to braille pic" % alpha)
+        log.warning("problem converting char #[%s] to pin number" % ord(alpha))
         return 0
 
 def alphas_to_pin_nums(alphas):

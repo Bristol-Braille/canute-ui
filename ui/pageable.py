@@ -182,7 +182,7 @@ class Menu(Pageable):
         self.ui = ui
 
         self.menu = [
-            {'title' : 'refresh library', 'action': self.refresh},
+            {'title' : 'replace library from USB stick', 'action': self.replace},
             {'title' : 'shutdown', 'action': self.shutdown},
             {'title' : 'ip: %s' % self.get_ip_address(), 'action': self.ignore},
             ]
@@ -222,13 +222,9 @@ class Menu(Pageable):
         log.warning("shutdown")
         self.ui.finish()
 
-    def refresh(self):
-        '''wipe out the library state files and reload'''
-        log.info("refresh library")
-        # ask library to refresh
-        self.ui.library.refresh()
-        # send sound
-        self.ui.driver.send_ok_sound()
+    def replace(self):
+        log.warning("replacing library")
+        self.ui.library.replace()
 
     def get_state_file(self):
         '''return the name of the state file'''
@@ -244,9 +240,11 @@ class Library(Pageable):
 
     '''
     native_ext = '.canute'
+    book_exts = (native_ext, '.pef', '.brf')
 
     def __init__(self, dimensions, config, ui):
         self.config = config
+        self.ui = ui
         self.book_dir = self.config.get('files', 'library_dir')
         self.book_defs_file = self.book_dir + 'book_defs.pkl'
 
@@ -259,14 +257,57 @@ class Library(Pageable):
 
         super(Library, self).__init__(book_titles_brl, dimensions, ui)
 
-        self.check_for_new_books()
+        self.add_new_books()
         log.info("library has %d books available" % len(self.book_defs))
 
-    def refresh(self):
-        '''we had a bug to do with library additions where the state file got out of sequence'''
+    def wipe_library(self):
+        '''wipe out the library books, state files and content'''
+        # files
+        for book in find_files(self.book_dir, Library.book_exts):
+            os.remove(book)
+        # remove state
         self.remove_state()
+        # remove content in memory
         self.delete_content()
-        self.check_for_new_books()
+
+    def replace(self):
+        '''check to see if there are books on a USB stick:
+            * if nothing make error noise
+            * if books then replace library with books from USB stick
+
+            depends on usbmount being installed - see [INSTALL.md](../INSTALL.md)
+        '''
+        usb_dir = self.config.get('files', 'usb_dir')
+        owner = self.config.get('user', 'user_name')
+        new_books = find_files(usb_dir, Library.book_exts)
+
+        # no books? return
+        if not len(new_books):
+            log.info("no new books found")
+            self.ui.driver.send_error_sound()
+            return
+
+        # wipe old library
+        self.wipe_library()
+
+        # copy new books to library dir
+        import pwd
+        import grp
+        import shutil
+        uid = pwd.getpwnam(owner).pw_uid
+        gid = grp.getgrnam(owner).gr_gid
+        for filename in new_books:
+            log.info("copying %s to %s" % (filename, self.book_dir))
+            shutil.copy(filename, self.book_dir)
+
+            # change ownership
+            basename = os.path.basename(filename)
+            new_path = self.book_dir + basename
+            log.info("changing ownership of %s to %s to %s" % (new_path, uid, gid))
+            os.chown(new_path, uid, gid)
+        
+        # change to library mode, which will force a check for the new books
+        self.ui.library_mode()
 
     def remove_state(self):
         self.book_defs = []
@@ -276,11 +317,11 @@ class Library(Pageable):
         '''return the name of the state file'''
         return self.book_dir + 'library.pkl'
 
-    def check_for_new_books(self):
+    def add_new_books(self):
         '''searchs the library directory for files that aren't in book_defs
         any new book is then added to the library
         '''
-        filenames = find_files(self.book_dir, ('.pef', Library.native_ext))
+        filenames = find_files(self.book_dir, Library.book_exts)
         for book_def in self.book_defs:
             try:
                 # remove existing books

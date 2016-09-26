@@ -146,7 +146,7 @@ class UI():
         log.info("library mode")
         self.state['mode'] = 'library'
         self.screen = self.library
-        self.library.check_for_new_books()
+        self.library.add_new_books()
 
     def menu_mode(self):
         log.info("menu mode")
