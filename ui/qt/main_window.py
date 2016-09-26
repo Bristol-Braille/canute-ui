@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created: Mon May 16 14:21:58 2016
-#      by: pyside-uic 0.2.15 running on PySide 1.2.1
+# Created: Mon Sep 26 17:44:06 2016
+#      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -139,6 +139,20 @@ class Ui_MainWindow(object):
         self.row_label_7.setObjectName("row_label_7")
         self.row_7.addWidget(self.row_label_7)
         self.verticalLayout.addLayout(self.row_7)
+        self.row_8 = QtGui.QHBoxLayout()
+        self.row_8.setObjectName("row_8")
+        self.row_button_9 = QtGui.QPushButton(self.centralwidget)
+        self.row_button_9.setMaximumSize(QtCore.QSize(48, 48))
+        self.row_button_9.setObjectName("row_button_9")
+        self.row_8.addWidget(self.row_button_9)
+        self.row_label_8 = QtGui.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.row_label_8.setFont(font)
+        self.row_label_8.setText("")
+        self.row_label_8.setObjectName("row_label_8")
+        self.row_8.addWidget(self.row_label_8)
+        self.verticalLayout.addLayout(self.row_8)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -160,7 +174,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 543, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 543, 25))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -180,6 +194,7 @@ class Ui_MainWindow(object):
         self.row_button_5.setText(QtGui.QApplication.translate("MainWindow", "6", None, QtGui.QApplication.UnicodeUTF8))
         self.row_button_6.setText(QtGui.QApplication.translate("MainWindow", "7", None, QtGui.QApplication.UnicodeUTF8))
         self.row_button_7.setText(QtGui.QApplication.translate("MainWindow", "8", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_9.setText(QtGui.QApplication.translate("MainWindow", "9", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "<", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_2.setText(QtGui.QApplication.translate("MainWindow", "Library", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_3.setText(QtGui.QApplication.translate("MainWindow", ">", None, QtGui.QApplication.UnicodeUTF8))

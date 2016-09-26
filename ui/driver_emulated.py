@@ -12,9 +12,9 @@ log = logging.getLogger(__name__)
 class Emulated(Driver):
 
     # hardware defs
-    BUTTONS = 8
+    BUTTONS = 9
     CHARS = 40
-    ROWS = 8
+    ROWS = 9
 
     """driver class that emulates the machine with a GUI
 

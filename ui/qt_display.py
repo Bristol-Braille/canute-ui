@@ -14,9 +14,9 @@ from qt.main_window import Ui_MainWindow
 log = logging.getLogger(__name__)
 
 # hardware defs
-BUTTONS = 8
+BUTTONS = 9
 CHARS = 40
-ROWS = 8
+ROWS = 9
 
 MSG_INTERVAL_S = 0.01
 
