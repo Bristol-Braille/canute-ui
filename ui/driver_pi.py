@@ -150,20 +150,9 @@ class Pi(Driver):
         :param cmd: command byte
         :param data: list of bytes
         '''
-        message = struct.pack('%sb' % 1, cmd)
-        self.port.write(message)
+        message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
         log.debug("tx cmd [%s]" % binascii.hexlify(message))
-        if len(data) > 0:
-            #64 bytes is the default arduino serial buffer size
-            for i in range(len(data) // 64):
-                data_chunk = data[i*64:(i+1)*64]
-                message = struct.pack('%sb' % 64, *data_chunk)
-                log.debug("tx data_chunk %i [%s]" % (i, binascii.hexlify(message)))
-                self.port.write(message)
-                # wait to receive an acknowledge byte added to protocol as
-                # otherwise serial comms doesnt work for data length >= 256
-                ack = self.port.read(1)
-                log.debug("rx ack: %s" % binascii.hexlify(ack))
+        self.port.write(message)
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware

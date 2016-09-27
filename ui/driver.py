@@ -126,16 +126,10 @@ class Driver(object):
             data = data[0:self.page_length]
 
         log.debug("setting page of braille:")
+
         for row in range(self.rows):
             row_braille = data[row*self.chars:row*self.chars+self.chars]
-            log.debug("row %i: |%s|" % (row, '|'.join(map(utility.pin_num_to_unicode, row_braille))))
-
-        self.send_data(CMD_SEND_PAGE, data)
-
-        # get status
-        self.status = self.get_data(CMD_SEND_PAGE)
-        if self.status != 0:
-            raise DriverError("got an error after setting braille: %d" % self.status)
+            self.set_braille_row(row, row_braille)
 
     def set_braille_row(self, row, data):
         if len(data) > self.chars:
