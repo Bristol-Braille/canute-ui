@@ -94,7 +94,7 @@ class Pi(Driver):
     def get_buttons(self):
         '''get button states
 
-        :rtype: list of 8 elements either set to False (unpressed) or one of
+        :rtype: list of elements either set to False (unpressed) or one of
         single, double, long
         '''
         buttons = {}
@@ -122,6 +122,8 @@ class Pi(Driver):
                         buttons['7'] = 'single'
                     elif (event.code == e.KEY_8):
                         buttons['8'] = 'single'
+                    elif (event.code == e.KEY_9):
+                        buttons['9'] = 'single'
                     elif (event.code == e.KEY_LEFT):
                         buttons['<'] = 'single'
                     elif (event.code == e.KEY_RIGHT):

@@ -2,31 +2,26 @@
 
 ## Raspberry Pi
 
-Install usbmount for automatic usb stick loading
+Install requirements:
 
-    sudo apt-get install usbmount
-
-Install python [pi-requirements](pi-requirements)
-
-    sudo pip install -r pi-requirements
+    sudo apt-get install usbmount python-pip
+    pip install -r requirements.txt
 
 ## Linux for testing
 
 Install python 2.x (will probably work with 3.x with little modification)
 
-Install the python [dev-requirements](ui/dev-requirements)
+Install requirements:
 
-    sudo pip install -r dev-requirements
-
-Set the absolute location of your books directory (eg:
-/home/me/canute-ui/books) in the ui/config.rc	
+    sudo apt-get install python-pyside python-pip
+    pip install -r requirements.txt
 
 Run the tests:
 
     cd ui/
-    python ./test.py --verbose
+    python test.py --verbose
 
 Run the UI using the emulator:
 
     cd ui/
-    python ./start_ui.py
+    python ui.py

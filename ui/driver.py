@@ -77,7 +77,7 @@ class Driver(object):
     @abc.abstractmethod
     def get_buttons(self):
         '''
-        returns an object of the 8 button states
+        returns an object of the button states
 
         :rtype: object of the buttons  {id: state} where state is
         set to 'single', 'long' or 'double' (or the id is not present if
