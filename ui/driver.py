@@ -144,4 +144,4 @@ class Driver(object):
         # get status
         self.status = self.get_data(CMD_SEND_LINE)
         if self.status != 0:
-            raise DriverError("got an error after setting braille: %d" % self.status)
+            log.warning("got an error after setting braille: %d" % self.status)
