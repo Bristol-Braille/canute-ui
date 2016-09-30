@@ -17,7 +17,7 @@ class UI():
     This implements the spec in [README.md](README.md)
 
     The UI can be configured to either use the :class:`.Pi` or
-    :class:`.Emulated` driver class.
+    :class:`.Emulated` driver class, or both at the same time.
 
     :param driver: the :class:`driver` object that abstracts the hardware
     """
@@ -33,7 +33,8 @@ class UI():
         self.library = Library(self.dimensions, config, self)
         self.menu = Menu(self.dimensions, config, self)
 
-        # the screen is the object that is shown and operated on by the buttons, it will be either the library or the book
+        # the screen is the object that is shown and operated on by the
+        # buttons, it will be either the library or the book
         self.load_state()
         if self.state['mode'] == 'book':
             log.info("starting in book mode")

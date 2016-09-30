@@ -1,7 +1,7 @@
 [files]
 # relative path to where log is kept
 log_file = canute.log
-# full path to book dir
+# book directory
 library_dir = ~/books/
 # where usb sticks will be automounted
 usb_dir = /media/
