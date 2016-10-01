@@ -38,8 +38,16 @@ class UI():
         self.load_state()
         if self.state['mode'] == 'book':
             log.info("starting in book mode")
-            self.book = self.library.get_book(self.state['book_num'])
-            self.screen = self.book
+            try:
+                self.book = self.library.get_book(self.state['book_num'])
+                self.screen = self.book
+            except IndexError:
+                #TODO make sure crap like this doesn't happen
+                #book doesn't exist, reset the state
+                self.state = {}
+                self.state['mode'] = 'library'
+                self.state['book_num'] = 0
+                self.screen = self.library
             self.show()
         elif self.state['mode'] == 'library':
             log.info("starting in library mode")
