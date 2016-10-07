@@ -1,2 +1,2 @@
 pyserial==2.7
-evdev
+evdev==0.6.2
