@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import argparse
 import pickle
 import logging
 import time
@@ -8,6 +7,8 @@ from pageable import Menu, Library
 from utility import write_pid_file, remove_pid_file
 import buttons_config
 import config_loader
+
+import argparser
 
 
 class UI():
@@ -219,61 +220,7 @@ def setup_logs():
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description="Canute UI")
-
-    parser.add_argument(
-        '--pi-buttons',
-        action='store_const',
-        dest='pi_buttons',
-        const=True,
-        default=False,
-        help="use the Pi to handle button presses"
-    )
-    parser.add_argument(
-        '--debug',
-        action='store_const',
-        dest='loglevel',
-        const=logging.DEBUG,
-        default=logging.INFO,
-        help="debugging content"
-    )
-    parser.add_argument(
-        '--text',
-        action='store_const',
-        dest='text',
-        const=True,
-        help="show text instead of braille"
-    )
-    parser.add_argument(
-        '--tty',
-        action='store',
-        dest='tty',
-        help="serial port for Canute stepstix board",
-        default='/dev/ttyACM0'
-    )
-    parser.add_argument('--delay',
-            action='store',
-            dest='delay',
-            help="simulate mechanical delay in milliseconds in the emulator",
-            default=0,
-            type=int
-    )
-    parser.add_argument('--disable-emulator',
-            action='store_const',
-            dest='emulated',
-            const=False,
-            default=True,
-            help="do not run the graphical emulator, run with real hardware"
-    )
-    parser.add_argument('--both',
-            action='store_const',
-            dest='both',
-            const=True,
-            default=False,
-            help="run both the emulator and the real hardware at the same time"
-    )
-
-    args = parser.parse_args()
+    args = argparser.parser.parse_args()
 
     config = config_loader.load()
     config.read('config.rc')
