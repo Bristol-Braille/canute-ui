@@ -12,10 +12,6 @@ Documentation is available at
 
 Read [INSTALL.md](INSTALL.md) for installation instructions.
 
-## Specification
-
-[Specfication document](spec.md)
-
 ## Design
 
 The top level [ui](ui/ui.py) uses a graphical display to emulate the hardware
