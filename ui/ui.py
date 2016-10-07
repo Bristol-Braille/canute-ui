@@ -39,7 +39,7 @@ class UI():
             try:
                 self.book = self.library.get_book(self.state['book_num'])
                 self.screen = self.book
-            except IndexError:
+            except (IndexError, OSError, IOError):
                 #TODO make sure crap like this doesn't happen
                 #book doesn't exist, reset the state
                 self.state = {}
@@ -170,7 +170,7 @@ class UI():
             self.screen = self.book
             self.state['book_num'] = number
             self.state['mode'] = 'book'
-        except IndexError:
+        except (IndexError, OSError, IOError):
             log.warning("no book at slot %d" % number)
             self.driver.send_error_sound()
 
@@ -297,7 +297,7 @@ if __name__ == '__main__':
                 ui = UI(driver, config)
                 ui.start()
         elif args.emulated and args.both:
-            log.info("running with both emulated and real hardware on port %s"                  % args.tty)
+            log.info("running with both emulated and real hardware on port %s" % args.tty)
             from driver_both import DriverBoth
             with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
                     delay=args.delay, display_text=args.text) as driver:
