@@ -377,5 +377,5 @@ if __name__ == '__main__':
     config = config_loader.load()
     config.read('config-test.rc')
     import logging
-    setup_logs(config, logging.INFO)
+    setup_logs(config, logging.ERROR)
     unittest.main()
