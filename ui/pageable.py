@@ -41,7 +41,10 @@ class Pageable(object):
 
     def get_num_pages(self):
         '''get number of pages in the content'''
-        return int(math.ceil(len(self.content) / float(self.rows)))
+        if self.title():
+            return int(math.ceil(len(self.content) / float(self.rows - 1)))
+        else:
+            return int(math.ceil(len(self.content) / float(self.rows)))
 
     def add_new_item(self, item):
         '''add a new item to the content, sort by alpha
@@ -100,6 +103,36 @@ class Pageable(object):
         return_text.append([0] * self.cells * missing_rows)
         return return_text
 
+    @abc.abstractmethod
+    def title(self):
+        '''return the page title or None for no title.'''
+        return
+
+    def format_title(self):
+        '''
+        format a title like this:
+            * title on the top line.
+            * use two dot-six characters to indicate all uppercase for the title.
+            * page numbers all the way at the right with 3 digits out of total, e.g. 001 / 003.
+        '''
+        uppercase = '  ' # hack - leave space at the beginning for the uppercase symbols
+        title = "%s%s" % (uppercase, self.title())
+        current_page = " %03d / %03d" % (self.page + 1, self.get_num_pages())
+
+        available_title_space = self.cells - len(current_page)
+
+        # make title right length
+        if len(title) > available_title_space:
+            # truncate 
+            title = title[0:available_title_space]
+        else:
+            # pad
+            title += " " * (available_title_space - len(title))
+    
+        title_pins = alphas_to_pin_nums(title + current_page)
+        # replace first 2 chars with the uppercase symbols
+        title_pins[0:2] = [32, 32]
+        return title_pins
 
     def show(self):
         '''
@@ -108,14 +141,25 @@ class Pageable(object):
         '''
         start_line = self.page * self.rows
         end_line = self.page * self.rows + self.rows - 1
+
+        if self.title():
+            # less room for text
+            start_line = self.page * (self.rows - 1)
+            end_line = self.page * (self.rows - 1) + self.rows - 2
+
         if end_line > len(self.content) - 1:
             end_line = len(self.content) - 1
 
         log.info("showing page %d of %d (lines %d -> %d)" % (self.page + 1, self.get_num_pages(), start_line, end_line+1))
 
         output = []
+
         #get the right content
         output = self.content[start_line:end_line+1]
+
+        # title
+        if self.title():
+            output.insert(0, self.format_title())
 
         # get everything the correct width & height
         output = self.fit_content(output)
@@ -192,6 +236,9 @@ class Menu(Pageable):
 
         super(Menu, self).__init__(menu_titles_brl, dimensions, ui)
 
+    def title(self):
+        return 'System Menu'
+
     def option(self, number):
         '''this is called by the UI to action a menu item'''
         menu_num = number + self.page * self.rows
@@ -259,6 +306,9 @@ class Library(Pageable):
 
         self.add_new_books()
         log.info("library has %d books available" % len(self.book_defs))
+
+    def title(self):
+        return 'Library Menu'
 
     def wipe_library(self):
         '''wipe out the library books, state files and content'''
@@ -519,6 +569,9 @@ class Book(Pageable):
 
         super(Book, self).__init__(content, dimensions, ui)
         log.info("book [%s] open at %d of %d pages" % (book_def["title"], self.page, self.get_num_pages()))
+
+    def title(self):
+        return None
 
     def get_state_file(self):
         return self.book_dir + self.book_def['title'] + '.pkl'

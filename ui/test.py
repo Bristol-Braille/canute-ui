@@ -175,7 +175,7 @@ class TestLibrary(unittest.TestCase):
     def test_add_new_brf_book(self):
         w = self._dimensions[0]
         h = self._dimensions[1]
-        exp_pos = 0
+        exp_pos = 1
         self._lib.delete_content()
         self._lib.remove_state()
         book_name = 'brf_test'
@@ -223,13 +223,14 @@ class TestLibrary(unittest.TestCase):
         self._lib.add_book(book_name)
         self.assertEqual(self._lib.get_num_pages(), 1)
 
-    def add_book_and_test(self, name, exp_pos, exp_len):
+    def add_book_and_test(self, name, exp_pos, exp_page,exp_len):
         w = self._dimensions[0]
         book_name = name + '.canute'
         self.create_book(book_name)
         self._lib.add_book(book_name)
 
         self.assertEqual(self._lib.get_num_pages(), exp_len)
+        self._lib.page = exp_page
         data = self._lib.show()
         self.assertEqual(data[w*exp_pos:w*exp_pos+3], alphas_to_pin_nums(name))
 
@@ -239,17 +240,18 @@ class TestLibrary(unittest.TestCase):
         self._lib.home()
 
         # add a bunch of books and check they go in the right order
-        self.add_book_and_test('ggg', 0, 1)
-        self.add_book_and_test('bbb', 0, 1)
-        self.add_book_and_test('bbc', 1, 1)
-        self.add_book_and_test('hhh', 3, 1)
+        self.add_book_and_test('ggg', 1, 0, 1) # expected pos, expected page, expected lib length
+        self.add_book_and_test('bbb', 1, 0, 1)
+        self.add_book_and_test('bbc', 2, 0, 1)
 
         # overflow to next page
-        self.add_book_and_test('hha', 3, 2)
+        self.add_book_and_test('hhh', 1, 1, 2)
+        self.add_book_and_test('hha', 1, 1, 2)
+        self.add_book_and_test('kkk', 3, 1, 2)
 
-        # check first book of 2nd page is the last one added
-        self._lib.end()
-        self.assertEqual(self._lib.show()[0:3], alphas_to_pin_nums('hhh'))
+        # overflow to next page
+        self.add_book_and_test('zzz', 1, 2, 3)
+        self.add_book_and_test('aab', 1, 0, 3)
 
     @classmethod
     def tearDownClass(cls):
