@@ -10,6 +10,7 @@ import config_loader
 
 import argparser
 
+log = logging.getLogger(__name__)
 
 class UI():
     """This is the UI class which is a framework to build a UI for the braille
@@ -192,7 +193,7 @@ class UI():
         self.save_state()
         log.info("display updated")
 
-def setup_logs():
+def setup_logs(config, loglevel):
     log_file = config.get('files', 'log_file')
     log_format = logging.Formatter(
             '%(asctime)s - %(name)-16s - %(levelname)-8s - %(message)s')
@@ -203,7 +204,7 @@ def setup_logs():
 
     # create console handler and set level to info
     ch = logging.StreamHandler()
-    ch.setLevel(args.loglevel)
+    ch.setLevel(loglevel)
 
     # create formatter for console
     ch.setFormatter(log_format)
@@ -211,7 +212,7 @@ def setup_logs():
 
     # create file handler and set to debug
     fh = logging.FileHandler(log_file)
-    fh.setLevel(args.loglevel)
+    fh.setLevel(loglevel)
 
     fh.setFormatter(log_format)
     log.addHandler(fh)
@@ -227,7 +228,7 @@ if __name__ == '__main__':
     library_dir = config.get('files', 'library_dir')
     config.set('files', 'library_dir', os.path.expanduser(library_dir))
 
-    log = setup_logs()
+    log = setup_logs(config, args.loglevel)
 
     if not buttons_config.test_config():
         log.exception("bad button config")

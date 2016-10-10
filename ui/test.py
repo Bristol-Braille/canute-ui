@@ -7,6 +7,7 @@ from utility import *
 from driver_emulated import Emulated
 from driver_pi import Pi
 from bookfile_list import BookFile_List
+from ui import UI, setup_logs
 import os
 import pty
 import struct
@@ -65,11 +66,61 @@ class TestMenu(unittest.TestCase):
         config = config_loader.load()
 
         ui = None
-        dimensions = [20,4]
-        cls._menu = Menu(dimensions, config, ui)
+        cls._dimensions = [20,4]
+        cls._menu = Menu(cls._dimensions, config, ui)
 
     def test_num_pages(self):
         self.assertEqual(self._menu.get_num_pages(), 1)
+
+    def test_title(self):
+        data = self._menu.show()
+        exp_pos = 0
+        w = self._dimensions[0]
+        self.assertEqual(data[w*exp_pos:w*exp_pos+w], self._menu.format_title())
+       
+        
+
+class TestDespatch(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        if "TRAVIS" in os.environ:
+            raise unittest.SkipTest("Skip emulated driver tests on TRAVIS")
+
+        from driver_emulated import Emulated
+        with Emulated() as driver:
+            ui = UI(driver, config)
+
+        cls._ui = ui
+        cls._bookfiles = []
+
+    @classmethod
+    def tearDownClass(cls):
+        for file in cls._bookfiles:
+            os.unlink(file)
+
+    def create_book(self, name, content):
+        # create a test file
+        pages = test_book(self._ui.dimensions, content)
+        with open(name, 'w') as fh:
+            for page in pages:
+                fh.write(bytearray(page))
+
+        self._bookfiles.append(name)
+
+    def test_add_books(self):
+        lib_dir = self._ui.library.config.get('files', 'library_dir') 
+        for book_id in range(2):
+            self.create_book(lib_dir + str(book_id) + '.canute', book_id)
+
+        self._ui.library_mode()
+        # offset by one because of the title
+        self._ui.despatch('single', '2')
+        self.assertEqual(self._ui.screen.show()[0], 0)
+
+        self._ui.library_mode()
+        self._ui.despatch('single', '3')
+        self.assertEqual(self._ui.screen.show()[0], 1)
 
 class TestBook(unittest.TestCase):
 
@@ -263,7 +314,7 @@ class TestDriverEmulated(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if "TRAVIS" in os.environ:
-            raise unittest.SkipTest("Skip Tkinter tests on TRAVIS")
+            raise unittest.SkipTest("Skip emulated driver tests on TRAVIS")
         cls._driver = Emulated()
 
     def test_rxtx_data(self):
@@ -323,7 +374,8 @@ class TestDriverPi(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    config = config_loader.load()
+    config.read('config-test.rc')
     import logging
-    log = logging.getLogger('')
-    log.setLevel(logging.DEBUG)
+    setup_logs(config, logging.INFO)
     unittest.main()

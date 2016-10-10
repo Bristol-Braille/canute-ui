@@ -108,7 +108,7 @@ def alphas_to_pin_nums(alphas):
     '''convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`'''
     return map(alpha_to_pin_num, alphas)
 
-def test_book(dimensions):
+def test_book(dimensions, content=None):
     '''
     returns a book of 8 pages with each page showing all possible combinations of the 8 rotor positions
     '''
@@ -116,7 +116,10 @@ def test_book(dimensions):
     for i in range(8):
         char = i + (i << 3)
         for j in range(dimensions[1]):
-            text.append([char] * dimensions[0])
+            if content is not None:
+                text.append([content] * dimensions[0])
+            else:
+                text.append([char] * dimensions[0])
     return text
 
 def test_pattern(dimensions):

@@ -36,6 +36,7 @@ class udp_recv():
         self.port = port
         self.sock = socket.socket(socket.AF_INET,  # Internet
                              socket.SOCK_DGRAM)  # UDP
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.setblocking(0)
         self.sock.bind((UDP_IP, self.port))
         log.debug("binding to port %d" % self.port)
