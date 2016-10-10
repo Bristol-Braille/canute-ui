@@ -319,6 +319,8 @@ class Library(Pageable):
         self.remove_state()
         # remove content in memory
         self.delete_content()
+        # update page
+        self.page = 0
 
     def replace(self):
         '''check to see if there are books on a USB stick:
