@@ -402,7 +402,7 @@ class Library(Pageable):
         if ext == '.pef':
             log.info("converting pef to canute")
             native_file = self.book_dir + basename + Library.native_ext
-            self.convert_pef(book_file, native_file)
+            self.convert_pef(book_file, native_file, remove)
             book_file = native_file
         elif ext == '.brf':
             log.info("converting brf to canute")
@@ -469,7 +469,7 @@ class Library(Pageable):
             log.info("removing old brf file")
             os.remove(brf_file)
 
-    def convert_pef(self, pef_file, native_file):
+    def convert_pef(self, pef_file, native_file, remove=True):
         '''
         converts a pef format braille book (XML) to native.
         This format uses unicode of braille and uses the
@@ -486,28 +486,41 @@ class Library(Pageable):
             log.error("could not convert %s" % pef_file)
             return
 
-
-        rows = xml_doc.getElementsByTagName('row')
-        log.debug("got %d rows" % len(rows))
+        pages = xml_doc.getElementsByTagName('page')
+        log.debug("got %d pages" % len(pages))
         lines = []
 
-        # do the conversion from unicode to pin numbers
-        for row in rows:
-            try:
-                data = row.childNodes[0].data.rstrip()
-                line = []
-                for uni_char in data:
-                    pin_num = unicode_to_pin_num(uni_char)
-                    line.append(pin_num)
-            except IndexError:
-                # empty row element
-                line = [0] * self.cells
+        rows_per_page = self.dimensions[1]
 
-            # ensure right length
-            missing_cells = self.cells - len(line)
-            line.extend([0] * missing_cells)
+        def pad_page(page):
+            num_rows = len(page.getElementsByTagName('row'))
+            for i in range(rows_per_page-num_rows):
+                log.info("padding blank row")
+                blank_row = xml_doc.createElement("row")
+                txt = xml_doc.createTextNode("")
+                blank_row.appendChild(txt)
+                page.appendChild(blank_row)
 
-            lines.append(line)
+        #rows do the conversion from unicode to pin numbers
+        for page in pages:
+            # pad missing rows
+            pad_page(page)
+            for row in page.getElementsByTagName('row'):
+                try:
+                    data = row.childNodes[0].data.rstrip()
+                    line = []
+                    for uni_char in data:
+                        pin_num = unicode_to_pin_num(uni_char)
+                        line.append(pin_num)
+                except IndexError:
+                    # empty row element
+                    line = [0] * self.cells
+
+                # ensure right length
+                missing_cells = self.cells - len(line)
+                line.extend([0] * missing_cells)
+
+                lines.append(line)
 
         log.info("pef loaded with %d lines" % len(lines))
         log.info("writing to [%s]" % native_file)
@@ -518,7 +531,9 @@ class Library(Pageable):
                 fh.write(bytearray(line[:self.cells]))
 
         log.info("removing old pef file")
-        os.remove(pef_file)
+        if remove:
+            log.info("removing old pef file")
+            os.remove(pef_file)
 
     def load_book_defs(self):
         '''load book defs from a state file'''

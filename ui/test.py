@@ -221,7 +221,35 @@ class TestLibrary(unittest.TestCase):
         self.assertEqual(self._lib.page, 0)
 
     def test_add_new_pef_book(self):
-        return
+        w = self._dimensions[0]
+        h = self._dimensions[1]
+        exp_pos = 1
+        self._lib.delete_content()
+        self._lib.remove_state()
+        book_name = 'pef_test'
+        book_ext = '.pef'
+        book_path = '../test-books/'
+        self._lib.add_book(book_path + book_name + book_ext, name=None, remove=False)
+
+        self._lib.home()
+        data = self._lib.show()
+        # test the name is in the library
+        self.assertEqual(data[w*exp_pos:w*exp_pos+len(book_name)], alphas_to_pin_nums(book_name))
+
+        # test content
+        book = self._lib.get_book(0)
+        book.home()
+
+        # check pages
+        self.assertEqual(book.get_num_pages(), 25)
+
+        # get first page
+        content = book.show()
+        alphas = pin_nums_to_alphas(content)
+        alphas = ''.join(alphas).lower()
+        self.assertEqual(alphas[0:40], 'the quickbrownfoxjumpedoverlazydog.000  ')
+
+
 
     def test_add_new_brf_book(self):
         w = self._dimensions[0]
@@ -231,7 +259,7 @@ class TestLibrary(unittest.TestCase):
         self._lib.remove_state()
         book_name = 'brf_test'
         book_ext = '.brf'
-        book_path = '../books/'
+        book_path = '../test-books/'
         self._lib.add_book(book_path + book_name + book_ext, name=None, remove=False)
         self.assertEqual(self._lib.get_num_pages(), 1)
 
@@ -376,6 +404,10 @@ class TestDriverPi(unittest.TestCase):
 if __name__ == '__main__':
     config = config_loader.load()
     config.read('config-test.rc')
+    try:
+        os.mkdir(config.get('files', 'library_dir'))
+    except OSError:
+        pass
     import logging
     setup_logs(config, logging.ERROR)
     unittest.main()
