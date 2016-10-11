@@ -5,7 +5,7 @@ import pickle
 import os.path
 from bookfile_list import BookFile_List
 from xml.dom.minidom import parse
-from utility import pin_nums_to_alphas, unicode_to_pin_num, alphas_to_pin_nums, find_files
+from utility import pin_nums_to_alphas, unicode_to_pin_num, alphas_to_pin_nums, find_files, FormfeedConversionException, LinefeedConversionException, alpha_to_pin_num
 
 log = logging.getLogger(__name__)
 
@@ -445,22 +445,42 @@ class Library(Pageable):
         '''
         log.info("converting brf %s" % brf_file)
 
+
+        def pad_line(converted):
+            converted.extend([0] * (self.cells - len(converted)))
+
         # do the conversion from brf to pin numbers
-        lines = []
+        book = []
         with open(brf_file) as fh:
-            for in_line in fh.readlines():
-                line = alphas_to_pin_nums(in_line)
+            for line in fh.readlines():
+                converted = []
+                for char in line:
+                    try:
+                        converted.append(alpha_to_pin_num(char))
+                    except LinefeedConversionException:
+                        if len(converted):
+                            pad_line(converted)
+                            book.append(converted)
+                            converted = []
+                    except FormfeedConversionException:
+                        log.debug("padding formfeed")
+                        if len(converted):
+                            pad_line(converted)
+                            book.append(converted)
+                            converted = []
 
-                # ensure right length
-                missing_cells = self.cells - len(line)
-                line.extend([0] * missing_cells)
+                        # pad up to the next page
+                        while len(book) % self.rows != 0:
+                            book.append([0] * self.cells)
 
-                lines.append(line)
+                if len(converted):
+                    pad_line(converted)
+                    book.append(converted)
 
-        log.info("brf loaded with %d lines" % len(lines))
+        log.info("brf loaded with %d lines" % len(book))
         log.info("writing to [%s]" % native_file)
         with open(native_file, 'w') as fh:
-            for index,line in enumerate(lines):
+            for index,line in enumerate(book):
                 if len(line) > self.cells:
                     log.warning("length of row %d is %d which is greater than %d, truncating" % (index, len(line), self.cells))
                 fh.write(bytearray(line[:self.cells]))

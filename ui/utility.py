@@ -9,6 +9,8 @@ import os
 import logging
 log = logging.getLogger(__name__)
 
+class FormfeedConversionException(Exception): pass
+class LinefeedConversionException(Exception): pass
 
 def get_pid_file():
     return os.path.dirname(os.path.realpath(__file__)) + "/ui.pid"
@@ -101,6 +103,11 @@ def alpha_to_pin_num(alpha):
     try:
         return mapping.index(alpha)
     except ValueError:
+        # form feed
+        if ord(alpha) == 12:
+            raise FormfeedConversionException()
+        if ord(alpha) == 10:
+            raise LinefeedConversionException()
         log.warning("problem converting char #[%s] to pin number" % ord(alpha))
         return 0
 
