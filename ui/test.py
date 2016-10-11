@@ -63,7 +63,6 @@ class TestMenu(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        config = config_loader.load()
 
         ui = None
         cls._dimensions = [20,4]
@@ -126,7 +125,6 @@ class TestBook(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        config = config_loader.load()
         cls._bookfile = 'book'
 
         # create a test file
@@ -200,7 +198,6 @@ class TestLibrary(unittest.TestCase):
     def setUpClass(cls):
         cls._bookfiles = []
         cls._dimensions = (40,4) #canute
-        config = config_loader.load()
 
         ui = None
         cls._lib = Library(cls._dimensions, config, ui)
@@ -263,14 +260,8 @@ class TestLibrary(unittest.TestCase):
         self._lib.add_book(book_path + book_name + book_ext, name=None, remove=False)
         self.assertEqual(self._lib.get_num_pages(), 1)
 
-        self._lib.home()
-        data = self._lib.show()
-        # test the name is in the library
-        self.assertEqual(data[w*exp_pos:w*exp_pos+len(book_name)], alphas_to_pin_nums(book_name))
-
         # test the content
         book = self._lib.get_book(0)
-        book.home()
         # get first page
         content = book.show()
         alphas = pin_nums_to_alphas(content)
@@ -290,11 +281,29 @@ class TestLibrary(unittest.TestCase):
         alphas = ''.join(alphas).lower()
         self.assertEqual(alphas, brf_content)
 
-        # test book is right length
-        book.end()
-        self.assertEqual(book.page, len(lines) / h)
+        # test book is right length (not lines/4 because now take into account
+        # form feeds and line breaks
+        self.assertEqual(book.get_num_pages(), 248)
             
-        
+    def test_convert_brf_breaks(self):
+        w = self._dimensions[0]
+        h = self._dimensions[1]
+        self._lib.delete_content()
+        self._lib.remove_state()
+        book_name = 'brf_break_test'
+        book_ext = '.brf'
+        book_path = '../test-books/'
+        self._lib.add_book(book_path + book_name + book_ext, name=None, remove=False)
+        # test the content
+        book = self._lib.get_book(0)
+
+        # get first page
+        content = book.show()
+        alphas = pin_nums_to_alphas(content)
+
+        # check book is right length
+        self.assertEqual(book.get_num_pages(), 4)
+
     def test_add_new_canute_book(self):
         self._lib.delete_content()
         book_name = 'aaa.canute'
