@@ -96,6 +96,8 @@ def pin_nums_to_alphas(numerics):
 def alpha_to_pin_num(alpha):
     '''
     convert a single alpha, digit or some punctuation to 6 pin braille
+    will raise Formfeed or Linefeed ConversionExceptions if they are found
+    other unknown characters will be logged and a space will be returned.
     '''
     # mapping from http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
     mapping = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="
@@ -112,8 +114,19 @@ def alpha_to_pin_num(alpha):
         return 0
 
 def alphas_to_pin_nums(alphas):
-    '''convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`'''
-    return map(alpha_to_pin_num, alphas)
+    '''
+    convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`
+    form feed and line feed characters are supressed
+    '''
+    pin_nums = []
+    for alpha in alphas:
+        try:
+            pin_nums.append(alpha_to_pin_num(alpha))
+        except FormfeedConversionException():
+            pass
+        except LinefeedConversionException():
+            pass
+    return pin_nums
 
 def test_book(dimensions, content=None):
     '''
