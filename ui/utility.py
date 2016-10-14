@@ -153,3 +153,10 @@ def test_pattern(dimensions):
     for i in range(cols * rows):
         text.append(i % 64)
     return text
+
+def flatten(l):
+    return [item for sublist in l for item in sublist]
+
+def pad_line(w, line):
+    line.extend([0] * (w - len(line)))
+    return line
