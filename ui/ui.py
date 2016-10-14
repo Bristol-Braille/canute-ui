@@ -234,7 +234,6 @@ if __name__ == '__main__':
         log.exception("bad button config")
         exit(1)
 
-    # write pid file
     write_pid_file()
 
     try:
