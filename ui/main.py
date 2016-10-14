@@ -1,4 +1,10 @@
 import os
+import pydux
+from pydux.extend import extend
+from pydux.create_store import create_store
+
+import logging
+log = logging.getLogger(__name__)
 
 from bookfile_list import BookFile_List
 import utility
@@ -11,8 +17,23 @@ initial_state = {
     'button_bindings' : {}
 }
 
+def update(state = initial_state, action = None):
+    if action['type'] == 'GO_TO_BOOK':
+        try:
+            location = state['books'][action['value']]
+        except IndexError:
+            log.warning('no book at {}'.format(action['value']))
+            return state
+        return extend(
+            state,
+            {'location': location}
+        )
+    return state
+
+store = create_store(update)
+
 def render(state):
-    if (state['location']['item'] == 'library'):
+    if state['location']['item'] == 'library':
         render_library(state.page, state.books)
 
 def get_title(book):
