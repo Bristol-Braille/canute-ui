@@ -25,15 +25,30 @@ initial_state = {
     'button_bindings' : {}
 }
 
+action_types = ['set_books', 'go_to_book']
+
+def make_action_method(name):
+    def f(value):
+        return {'type': name, 'value': value}
+    return f
+
+#just an empty object
+def actions(): pass
+
+#then we give it methods
+for action in action_types:
+    setattr(actions, action, make_action_method(action))
+
+
 def update(state, action = None):
-    if action['type'] == 'GO_TO_BOOK':
+    if action['type'] == 'go_to_book':
         try:
             location = state['books'][action['value']]
         except:
             log.warning('no book at {}'.format(action['value']))
             return state
         return extend(state, {'location': location})
-    elif action['type'] == 'SET_BOOKS':
+    elif action['type'] == 'set_books':
         books = []
         for filename in action['value']:
             books.append({'data': BookFile_List(filename, [WIDTH, HEIGHT]), 'page': 0})
@@ -61,7 +76,7 @@ def render_location(driver, page, data):
 
 
 def handle_changes(driver):
-    state = store['get_state']()
+    state = store.get_state()
     log.debug(state)
     render(driver, state)
 
@@ -78,9 +93,9 @@ if __name__ == '__main__':
         state = initial_state
         render(driver, state)
         quit = False
-        store['subscribe'](functools.partial(handle_changes, driver))
+        store.subscribe(functools.partial(handle_changes, driver))
         file_names = utility.find_files(library_dir, '.canute')
-        store['dispatch']({'type':'SET_BOOKS', 'value': file_names})
+        store.dispatch(actions.set_books(file_names))
         while not quit:
             time.sleep(1)
 
