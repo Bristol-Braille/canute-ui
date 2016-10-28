@@ -229,8 +229,7 @@ class Menu(Pageable):
         self.menu = [
             {'title' : 'replace library from USB stick', 'action': self.replace},
             {'title' : 'shutdown', 'action': self.shutdown},
-            {'title' : 'ip: %s' % self.get_ip_address(), 'action': self.ignore},
-            ]
+        ]
 
         menu_titles = [item["title"] for item in self.menu]
         menu_titles_brl = map(alphas_to_pin_nums, menu_titles)
