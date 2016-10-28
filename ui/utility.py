@@ -6,7 +6,9 @@ contains various utility methods used by many of the modules
 """
 
 import os
+import re
 import logging
+import functools
 log = logging.getLogger(__name__)
 
 class FormfeedConversionException(Exception): pass
@@ -34,12 +36,14 @@ def find_firmware(directory):
                     return(os.path.join(root, filename))
 
 def find_files(directory, extensions):
-    '''recursively look for files that end in the extensions tuple'''
+    '''recursively look for files that end in the extensions tuple (case insensitive)'''
     matches = []
     for root, dirnames, filenames in os.walk(directory):
         for filename in filenames:
-                if filename.endswith(extensions):
+            for ext in extensions:
+                if re.search(ext + '$', filename, re.I):
                     matches.append(os.path.join(root, filename))
+                    break
     return matches
 
 def unicode_to_pin_num(uni_char):

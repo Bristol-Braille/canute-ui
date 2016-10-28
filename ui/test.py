@@ -76,8 +76,8 @@ class TestMenu(unittest.TestCase):
         exp_pos = 0
         w = self._dimensions[0]
         self.assertEqual(data[w*exp_pos:w*exp_pos+w], self._menu.format_title())
-       
-        
+
+
 
 class TestDespatch(unittest.TestCase):
 
@@ -108,7 +108,7 @@ class TestDespatch(unittest.TestCase):
         self._bookfiles.append(name)
 
     def test_add_books(self):
-        lib_dir = self._ui.library.config.get('files', 'library_dir') 
+        lib_dir = self._ui.library.config.get('files', 'library_dir')
         for book_id in range(2):
             self.create_book(lib_dir + str(book_id) + '.canute', book_id)
 
@@ -255,7 +255,7 @@ class TestLibrary(unittest.TestCase):
         self._lib.delete_content()
         self._lib.remove_state()
         book_name = 'brf_test'
-        book_ext = '.brf'
+        book_ext = '.BRF'
         book_path = '../test-books/'
         self._lib.add_book(book_path + book_name + book_ext, name=None, remove=False)
         self.assertEqual(self._lib.get_num_pages(), 1)
@@ -284,7 +284,7 @@ class TestLibrary(unittest.TestCase):
         # test book is right length (not lines/4 because now take into account
         # form feeds and line breaks
         self.assertEqual(book.get_num_pages(), 248)
-            
+
     def test_convert_brf_breaks(self):
         w = self._dimensions[0]
         h = self._dimensions[1]
@@ -408,6 +408,11 @@ class TestDriverPi(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls._driver.join()
+
+class TestUtility(unittest.TestCase):
+
+    def test_find_files(self):
+        self.assertEqual(len(find_files('../test-books', ('.brf',))), 2)
 
 
 if __name__ == '__main__':

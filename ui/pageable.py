@@ -1,4 +1,5 @@
 import abc
+import re
 import logging
 import math
 import pickle
@@ -123,12 +124,12 @@ class Pageable(object):
 
         # make title right length
         if len(title) > available_title_space:
-            # truncate 
+            # truncate
             title = title[0:available_title_space]
         else:
             # pad
             title += " " * (available_title_space - len(title))
-    
+
         title_pins = alphas_to_pin_nums(title + current_page)
         # replace first 2 chars with the uppercase symbols
         title_pins[0:2] = [32, 32]
@@ -187,7 +188,7 @@ class Pageable(object):
 
     def prev_skip(self, skip=10):
         '''skip backwards x pages'''
-        self.page -= skip 
+        self.page -= skip
         if self.page < 0:
             self.page = 0
 
@@ -209,7 +210,7 @@ class Pageable(object):
 
     def next_skip(self, skip=10):
         '''skip forwards x pages'''
-        self.page += skip 
+        self.page += skip
         if self.page >= self.get_num_pages() - 1:
             self.page = self.get_num_pages() - 1;
 
@@ -357,7 +358,7 @@ class Library(Pageable):
             new_path = self.book_dir + basename
             log.info("changing ownership of %s to %s to %s" % (new_path, uid, gid))
             os.chown(new_path, uid, gid)
-        
+
         # change to library mode, which will force a check for the new books
         self.ui.library_mode()
 
@@ -399,17 +400,17 @@ class Library(Pageable):
         basename, ext = os.path.splitext(os.path.basename(book_file))
 
         # do conversions based on extensions
-        if ext == '.pef':
+        if re.match('\.pef$', ext, re.I):
             log.info("converting pef to canute")
             native_file = self.book_dir + basename + Library.native_ext
             self.convert_pef(book_file, native_file, remove)
             book_file = native_file
-        elif ext == '.brf':
+        elif re.match('\.brf$', ext, re.I):
             log.info("converting brf to canute")
             native_file = self.book_dir + basename + Library.native_ext
             self.convert_brf(book_file, native_file, remove)
             book_file = native_file
-        elif ext == Library.native_ext:
+        elif re.match(Library.native_ext + '$', ext, re.I):
             log.info("book is already native format")
         else:
             raise PageableError("book %s in unknown format %s" % (book_file, ext))
