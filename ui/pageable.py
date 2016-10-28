@@ -287,8 +287,8 @@ class Library(Pageable):
     overrides __init__ so that we can load content from the library
 
     '''
-    native_ext = '.canute'
-    book_exts = (native_ext, '.pef', '.brf')
+    native_ext = 'canute'
+    book_exts = (native_ext, 'pef', 'brf')
 
     def __init__(self, dimensions, config, ui):
         self.config = config
@@ -410,7 +410,7 @@ class Library(Pageable):
             native_file = self.book_dir + basename + Library.native_ext
             self.convert_brf(book_file, native_file, remove)
             book_file = native_file
-        elif re.match(Library.native_ext + '$', ext, re.I):
+        elif re.match('\.' + Library.native_ext + '$', ext, re.I):
             log.info("book is already native format")
         else:
             raise PageableError("book %s in unknown format %s" % (book_file, ext))

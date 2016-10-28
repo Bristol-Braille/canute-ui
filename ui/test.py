@@ -412,7 +412,7 @@ class TestDriverPi(unittest.TestCase):
 class TestUtility(unittest.TestCase):
 
     def test_find_files(self):
-        self.assertEqual(len(find_files('../test-books', ('.brf',))), 2)
+        self.assertEqual(len(find_files('../test-books', ('brf',))), 2)
 
 
 if __name__ == '__main__':
