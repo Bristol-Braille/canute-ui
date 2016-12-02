@@ -2,7 +2,7 @@ import os
 import pydux
 from pydux.extend import extend
 from pydux.create_store import create_store
-import functools
+from functools import partial
 import time
 
 import logging
@@ -51,7 +51,12 @@ def update(state, action = None):
     elif action['type'] == 'set_books':
         books = []
         for filename in action['value']:
-            books.append({'data': BookFile_List(filename, [WIDTH, HEIGHT]), 'page': 0})
+            books.append(
+                {
+                    'data': BookFile_List(filename, [WIDTH, HEIGHT]),
+                    'page': 0
+                }
+            )
         library = {'data': map(get_title, books), 'page': 0}
         return extend(state, {'books': books, 'library': library})
     return state
@@ -70,7 +75,7 @@ def render(driver, state):
 def render_location(driver, page, data):
     n = page * HEIGHT
     lines = data[n : n + HEIGHT]
-    lines = map(functools.partial(utility.pad_line, WIDTH), lines)
+    lines = map(partial(utility.pad_line, WIDTH), lines)
     log.debug(lines)
     driver.set_braille(utility.flatten(lines))
 
@@ -93,7 +98,7 @@ if __name__ == '__main__':
         state = initial_state
         render(driver, state)
         quit = False
-        store.subscribe(functools.partial(handle_changes, driver))
+        store.subscribe(partial(handle_changes, driver))
         file_names = utility.find_files(library_dir, '.canute')
         store.dispatch(actions.set_books(file_names))
         while not quit:
