@@ -10,6 +10,7 @@ import re
 import logging
 import functools
 log = logging.getLogger(__name__)
+from types import FunctionType
 
 class FormfeedConversionException(Exception): pass
 class LinefeedConversionException(Exception): pass
@@ -160,3 +161,6 @@ def flatten(l):
 def pad_line(w, line):
     line.extend([0] * (w - len(line)))
     return line
+
+def get_methods (cls):
+    return [x for x,y in cls.__dict__.items() if type(y) == FunctionType]
