@@ -13,20 +13,22 @@ from ui import setup_logs
 from store import store, actions
 
 def render(driver, state):
-    if state['location'] == 'library':
+    width = state['display']['width']
+    height = state['display']['height']
+    location = state['location']
+    if location == 'library':
         page = state['library']['page']
         data = state['library']['data']
-        width = state['display']['width']
-        height = state['display']['height']
-        render_location(driver, page, data, width, height)
-
-
-def render_location(driver, page, data, width, height):
-    n = page * height
-    lines = data[n : n + height]
-    lines = map(partial(utility.pad_line, width), lines)
-    log.debug(lines)
-    driver.set_braille(utility.flatten(lines))
+        n = page * height
+        lines = data[n : n + height]
+        lines = map(partial(utility.pad_line, width), lines)
+        driver.set_braille(utility.flatten(lines))
+    elif type(location) == int:
+        page = state['books'][location]['page']
+        data = state['books'][location]['data']
+        n = page * height
+        data = data[n: n + height]
+        driver.set_braille(utility.flatten(data))
 
 
 def handle_changes(driver):
@@ -53,7 +55,9 @@ if __name__ == '__main__':
             state = store.get_state()
             bindings = state['button_bindings']
             location = state['location']
-            for id in buttons:
-                type = buttons[id]
-                store.dispatch(bindings[location][type][id]())
+            if type(location) == int:
+                location = 'book'
+            for _id in buttons:
+                _type = buttons[_id]
+                store.dispatch(bindings[location][_type][_id]())
 

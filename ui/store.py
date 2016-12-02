@@ -2,6 +2,7 @@ import os
 import pydux
 from pydux.extend import extend
 from pydux.create_store import create_store
+from functools import partial
 
 from bookfile_list import BookFile_List
 import utility
@@ -22,6 +23,13 @@ for action in action_types:
 
 button_bindings = {
     'library': {
+        'single': {
+            '>' : actions.next_page,
+            '<' : actions.previous_page,
+            '1' : partial(actions.go_to_book, 0),
+        }
+    },
+    'book': {
         'single': {
             '>' : actions.next_page,
             '<' : actions.previous_page,
@@ -55,7 +63,7 @@ def reducer(state, action = None):
         except:
             log.warning('no book at {}'.format(action['value']))
             return state
-        return extend(state, {'location': location})
+        return extend(state, {'location': action['value']})
     elif action['type'] == 'set_books':
         books = []
         for filename in action['value']:
