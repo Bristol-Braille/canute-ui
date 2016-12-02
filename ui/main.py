@@ -21,7 +21,6 @@ def render(driver, state):
         data = state['library']['data']
         n = page * height
         lines = data[n : n + height]
-        lines = map(partial(utility.pad_line, width), lines)
         driver.set_braille(utility.flatten(lines))
     elif type(location) == int:
         page = state['books'][location]['page']

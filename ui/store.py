@@ -97,7 +97,9 @@ def reducer(state, action = None):
                     'page': 0
                 }
             )
-        library = {'data': map(get_title, books), 'page': 0}
+        data = map(get_title, books)
+        data = map(partial(utility.pad_line, width), data)
+        library = {'data': data, 'page': 0}
         return extend(state, {'books': tuple(books), 'library': library})
     elif action['type'] == 'next_page':
         if location == 'library':
