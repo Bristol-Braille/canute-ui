@@ -4,6 +4,9 @@ from pydux.extend import extend
 from pydux.create_store import create_store
 from functools import partial
 
+import logging
+log = logging.getLogger(__name__)
+
 from bookfile_list import BookFile_List
 import utility
 

@@ -12,6 +12,19 @@ import config_loader
 from ui import setup_logs
 from store import store, actions
 
+previous_data = []
+def set_display(data, page, height):
+    global previous_data
+    n = page * height
+    data = data[n: n + height]
+    data = utility.flatten(data)
+    if data != previous_data:
+        driver.set_braille(data)
+        previous_data = data
+    else:
+        log.debug('not setting display with identical data')
+
+
 def render(driver, state):
     width = state['display']['width']
     height = state['display']['height']
@@ -19,15 +32,11 @@ def render(driver, state):
     if location == 'library':
         page = state['library']['page']
         data = state['library']['data']
-        n = page * height
-        lines = data[n : n + height]
-        driver.set_braille(utility.flatten(lines))
+        set_display(data, page, height)
     elif type(location) == int:
         page = state['books'][location]['page']
         data = state['books'][location]['data']
-        n = page * height
-        data = data[n: n + height]
-        driver.set_braille(utility.flatten(data))
+        set_display(data, page, height)
 
 
 def handle_changes(driver):
