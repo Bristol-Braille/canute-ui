@@ -7,7 +7,7 @@ from functools import partial
 from bookfile_list import BookFile_List
 import utility
 
-action_types = ['set_books', 'go_to_book', 'next_page', 'previous_page']
+action_types = ['set_books', 'go_to_book', 'go_to_library', 'next_page', 'previous_page']
 
 
 def make_action_method(name):
@@ -43,6 +43,7 @@ button_bindings = {
         'single': {
             '>' : actions.next_page,
             '<' : actions.previous_page,
+            'L' : actions.go_to_library
         }
     }
 }
@@ -76,12 +77,17 @@ def reducer(state, action = None):
     height = state['display']['height']
     location = state['location']
     if action['type'] == 'go_to_book':
+        page = state['library']['page']
+        line_number = page * height
+        print(line_number)
         try:
-            location = state['books'][action['value']]
+            location = state['books'][line_number + action['value']]
         except:
             log.warning('no book at {}'.format(action['value']))
             return state
-        return extend(state, {'location': action['value']})
+        return extend(state, {'location': line_number + action['value']})
+    elif action['type'] == 'go_to_library':
+        return extend(state, {'location': 'library'})
     elif action['type'] == 'set_books':
         books = []
         for filename in action['value']:
@@ -109,7 +115,7 @@ def reducer(state, action = None):
     elif action['type'] == 'previous_page':
         if location == 'library':
             library = state['library']
-            page    = state['library']['page'] - 1
+            page    = library['page'] - 1
             library = set_page(library, page, height)
             return extend(state, {'library': library})
         elif type(location) == int:
