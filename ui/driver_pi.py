@@ -30,7 +30,8 @@ class Pi(Driver):
     :param port: the serial port the display is plugged into
     :param pi_buttons: whether to use the evdev input for button presses
     """
-    def __init__(self, port='/dev/ttyACM0', pi_buttons=False):
+    def __init__(self, port='/dev/ttyACM0', pi_buttons=False, timeout=60):
+        self.timeout = timeout
         # get serial connection
         if port:
             self.port = self.setup_serial(port)
@@ -70,7 +71,7 @@ class Pi(Driver):
         try:
             serial_port = serial.Serial()
             serial_port.port = port
-            serial_port.timeout = 60.0
+            serial_port.timeout = self.timeout
             serial_port.open()
             serial_port.flush()
             return serial_port

@@ -224,9 +224,6 @@ if __name__ == '__main__':
     args = argparser.parser.parse_args()
 
     config = config_loader.load()
-    config.read('config.rc')
-    library_dir = config.get('files', 'library_dir')
-    config.set('files', 'library_dir', os.path.expanduser(library_dir))
 
     log = setup_logs(config, args.loglevel)
 
@@ -251,9 +248,14 @@ if __name__ == '__main__':
                 ui = UI(driver, config)
                 ui.start()
         else:
-            log.info("running with real hardware on port %s" % args.tty)
+            # have to do this because couldn't find a way to set a default inside a section
+            if config.has_option('comms', 'timeout'):
+                timeout = float(config.get('comms', 'timeout'))
+            else:
+                timeout = 60
+            log.info("running with real hardware on port %s, timeout %s" % (args.tty, timeout))
             from driver_pi import Pi
-            with Pi(port=args.tty, pi_buttons=args.pi_buttons) as driver:
+            with Pi(port=args.tty, pi_buttons=args.pi_buttons, timeout=timeout) as driver:
                 ui = UI(driver, config)
                 ui.start()
     except Exception as e:

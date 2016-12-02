@@ -8,3 +8,6 @@ usb_dir = /media/
 
 [user]
 user_name = pi
+
+[comms]
+timeout = 120
