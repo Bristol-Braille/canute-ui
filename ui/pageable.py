@@ -1,9 +1,11 @@
 import abc
+import time
 import re
 import logging
 import math
 import pickle
 import os.path
+import shutil
 from bookfile_list import BookFile_List
 from xml.dom.minidom import parse
 from utility import pin_nums_to_alphas, unicode_to_pin_num, alphas_to_pin_nums, find_files, FormfeedConversionException, LinefeedConversionException, alpha_to_pin_num
@@ -229,6 +231,7 @@ class Menu(Pageable):
         self.menu = [
             {'title' : 'replace library from USB stick', 'action': self.replace},
             {'title' : 'shutdown', 'action': self.shutdown},
+            {'title' : 'backup log to USB stick', 'action': self.backup_log},
         ]
 
         menu_titles = [item["title"] for item in self.menu]
@@ -272,6 +275,18 @@ class Menu(Pageable):
     def replace(self):
         log.warning("replacing library")
         self.ui.library.replace()
+
+    def backup_log(self):
+        usb_dir = self.config.get('files', 'usb_dir')
+        log_file = self.config.get('files', 'log_file')
+        # make a filename based on the date
+        backup_file = usb_dir + time.strftime("%Y%m%d_log.txt")
+        log.warning("backing up log to USB stick: %s" % backup_file)
+        try:
+            import shutil
+            shutil.copyfile(log_file, backup_file)
+        except IOError as e:
+            log.warning("couldn't backup log file: %s" % e)
 
     def get_state_file(self):
         '''return the name of the state file'''
@@ -345,7 +360,6 @@ class Library(Pageable):
         # copy new books to library dir
         import pwd
         import grp
-        import shutil
         uid = pwd.getpwnam(owner).pw_uid
         gid = grp.getgrnam(owner).gr_gid
         for filename in new_books:
