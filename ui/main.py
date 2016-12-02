@@ -33,6 +33,10 @@ def render(driver, state):
         page = state['library']['page']
         data = state['library']['data']
         set_display(data, page, height)
+    elif location == 'menu':
+        page = state['menu']['page']
+        data = state['menu']['data']
+        set_display(data, page, height)
     elif type(location) == int:
         page = state['books'][location]['page']
         data = state['books'][location]['data']

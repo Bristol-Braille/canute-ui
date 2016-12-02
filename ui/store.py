@@ -7,53 +7,19 @@ from functools import partial
 import logging
 log = logging.getLogger(__name__)
 
+import menu
 from bookfile_list import BookFile_List
 import utility
-
-action_types = ['set_books', 'go_to_book', 'go_to_library', 'next_page', 'previous_page']
-
-
-def make_action_method(name):
-    def action_method(value = None):
-        return {'type': name, 'value': value}
-    return action_method
-
-
-#just an empty object
-def actions(): pass
-#then we give it a method for each action
-for action in action_types:
-    setattr(actions, action, make_action_method(action))
-
-
-button_bindings = {
-    'library': {
-        'single': {
-            '>' : actions.next_page,
-            '<' : actions.previous_page,
-            '1' : partial(actions.go_to_book, 0),
-            '2' : partial(actions.go_to_book, 1),
-            '3' : partial(actions.go_to_book, 2),
-            '4' : partial(actions.go_to_book, 3),
-            '5' : partial(actions.go_to_book, 4),
-            '6' : partial(actions.go_to_book, 5),
-            '7' : partial(actions.go_to_book, 6),
-            '8' : partial(actions.go_to_book, 7),
-            '9' : partial(actions.go_to_book, 8),
-        }
-    },
-    'book': {
-        'single': {
-            '>' : actions.next_page,
-            '<' : actions.previous_page,
-            'L' : actions.go_to_library
-        }
-    }
-}
+from actions import actions
+from button_bindings import button_bindings
 
 initial_state = {
     'location'        : 'library',
-    'library'         : {'data': [], 'page': 0},
+    'library'         : {'data': tuple(), 'page': 0},
+    'menu'            : {
+        'data': map(partial(utility.pad_line, 40), menu.menu_titles_braille),
+        'page': 0
+    },
     'books'           : tuple(),
     'button_bindings' : button_bindings,
     'display'         : {'width': 40, 'height': 9}
@@ -91,6 +57,8 @@ def reducer(state, action = None):
         return extend(state, {'location': line_number + action['value']})
     elif action['type'] == 'go_to_library':
         return extend(state, {'location': 'library'})
+    elif action['type'] == 'go_to_menu':
+        return extend(state, {'location': 'menu'})
     elif action['type'] == 'set_books':
         books = []
         for filename in action['value']:
