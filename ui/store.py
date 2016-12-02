@@ -9,10 +9,12 @@ import utility
 
 action_types = ['set_books', 'go_to_book', 'next_page', 'previous_page']
 
+
 def make_action_method(name):
     def action_method(value = None):
         return {'type': name, 'value': value}
     return action_method
+
 
 #just an empty object
 def actions(): pass
@@ -61,6 +63,13 @@ def get_max_pages(data, height):
 def get_title(book):
     return utility.alphas_to_pin_nums(os.path.basename(book['data'].filename))
 
+def set_page(book, page, height):
+    data = book['data']
+    if page < 0 or page > get_max_pages(data, height):
+        return book
+    else:
+        return {'data': data, 'page': page}
+
 
 def reducer(state, action = None):
     width = state['display']['width']
@@ -86,41 +95,30 @@ def reducer(state, action = None):
         return extend(state, {'books': tuple(books), 'library': library})
     elif action['type'] == 'next_page':
         if location == 'library':
-            data = state['library']['data']
-            page = state['library']['page'] + 1
-            if page > get_max_pages(data, height):
-                return state
-            else:
-                return extend(state, {'library': {'data': data, 'page': page}})
+            library = state['library']
+            page    = state['library']['page'] + 1
+            library = set_page(library, page, height)
+            return extend(state, {'library': library})
         elif type(location) == int:
             book = state['books'][location]
             data = book['data']
             page = book['page'] + 1
-            if page > get_max_pages(data, height):
-                return state
-            else:
-                books = list(state['books'])
-                books[location] = {'data': data, 'page': page}
-                return extend(state, {'books': tuple(books)})
-
+            books = list(state['books'])
+            books[location] = set_page(book, page, height)
+            return extend(state, {'books': tuple(books)})
     elif action['type'] == 'previous_page':
         if location == 'library':
-            data = state['library']['data']
-            page = state['library']['page'] - 1
-            if page < 0:
-                return state
-            else:
-                return extend(state, {'library': {'data': data, 'page': page}})
+            library = state['library']
+            page    = state['library']['page'] - 1
+            library = set_page(library, page, height)
+            return extend(state, {'library': library})
         elif type(location) == int:
             book = state['books'][location]
             data = book['data']
             page = book['page'] - 1
-            if page < 0:
-                return state
-            else:
-                books = list(state['books'])
-                books[location] = {'data': data, 'page': page}
-                return extend(state, {'books': tuple(books)})
+            books = list(state['books'])
+            books[location] = set_page(book, page, height)
+            return extend(state, {'books': tuple(books)})
     return state
 
 
