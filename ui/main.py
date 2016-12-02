@@ -48,7 +48,7 @@ if __name__ == '__main__':
     with Emulated(delay=args.delay, display_text=args.text) as driver:
         quit = False
         store.subscribe(partial(handle_changes, driver))
-        file_names = utility.find_files(library_dir, '.canute')
+        file_names = utility.find_files(library_dir, ('canute',))
         store.dispatch(actions.set_books(file_names))
         while not quit:
             buttons = driver.get_buttons()
