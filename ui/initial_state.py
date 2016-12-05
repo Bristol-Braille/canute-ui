@@ -15,6 +15,7 @@ initial_state = {
         'page': 0
     },
     'books'           : tuple(),
+    'replace_library' : False,
     'button_bindings' : button_bindings,
     'display'         : {'width': 40, 'height': 9}
 }

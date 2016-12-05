@@ -71,7 +71,7 @@ class Reducers():
             return extend(state, {'books': tuple(books)})
         return state
     def replace_library(state, value):
-        return state
+        return extend(state, {'replace_library', 'start'})
     def shutdown(state, value):
         return state
     def backup_log(state, value):
