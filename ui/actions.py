@@ -1,10 +1,13 @@
 import os
 import pydux
 from pydux.extend import extend
+
+import logging
+log = logging.getLogger(__name__)
+
 import utility
 from functools import partial
 from bookfile_list import BookFile_List
-import pprint
 
 def dimensions(state):
     width = state['display']['width']
@@ -48,7 +51,6 @@ class Reducers():
         return extend(state, {'location': 'menu'})
     @staticmethod
     def set_books(state, action):
-        print(state)
         width, height = dimensions(state)
         books = []
         for filename in action['value']:
