@@ -17,8 +17,8 @@ class TestConvert(unittest.TestCase):
         brf_file = book_path + book_name + '.brf'
         native_file = book_path + book_name + '.canute'
         convert.convert_brf(40, 4, brf_file, native_file, remove=False)
-        book = BookFile_List(native_file, [40, 4])
-        lines = len(book)
+        content = BookFile_List(native_file, [40, 4])
+        lines = len(content)
         pages = math.ceil(lines / 4.0)
         self.assertEqual(pages, 4)
 
@@ -37,6 +37,36 @@ class TestConvert(unittest.TestCase):
         alphas = utility.pin_nums_to_alphas(content)
         alphas = ''.join(alphas).lower()
         self.assertEqual(alphas[0:40], 'the quickbrownfoxjumpedoverlazydog.000  ')
+
+    def test_convert_brf(self):
+        book_name = 'brf_test'
+        book_path = '../test-books/'
+        brf_file = book_path + book_name + '.BRF'
+        native_file = book_path + book_name + '.canute'
+        convert.convert_brf(40, 4, brf_file, native_file, remove=False)
+        content = BookFile_List(native_file, [40, 4])
+
+        lines = len(content)
+        pages = math.ceil(lines / 4.0)
+        self.assertEqual(pages, 248)
+        content = utility.flatten(content[0:4])
+
+        alphas = utility.pin_nums_to_alphas(content)
+        alphas = ''.join(alphas).lower()
+
+        with open(brf_file) as fh:
+            lines = fh.readlines()
+
+        # just test first 4 lines
+        brf_content = ''
+        for line in lines[0:4]:
+            # pad the line to be the same as width
+            line = line.strip()
+            line += ' ' * (40 - len(line))
+            brf_content += line
+
+        self.assertEqual(alphas, brf_content)
+
 
 if __name__ == '__main__':
     config = config_loader.load()
