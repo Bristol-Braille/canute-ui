@@ -415,12 +415,12 @@ class Library(Pageable):
         # do conversions based on extensions
         if re.match('\.pef$', ext, re.I):
             log.info("converting pef to canute")
-            native_file = self.book_dir + basename + Library.native_ext
+            native_file = self.book_dir + basename + '.' + Library.native_ext
             self.convert_pef(book_file, native_file, remove)
             book_file = native_file
         elif re.match('\.brf$', ext, re.I):
             log.info("converting brf to canute")
-            native_file = self.book_dir + basename + Library.native_ext
+            native_file = self.book_dir + basename + '.' + Library.native_ext
             self.convert_brf(book_file, native_file, remove)
             book_file = native_file
         elif re.match('\.' + Library.native_ext + '$', ext, re.I):
