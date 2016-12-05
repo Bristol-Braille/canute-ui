@@ -34,6 +34,7 @@ class Reducers():
                     'page': 0
                 }
             )
+        books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
         library = {'data': data, 'page': 0}
@@ -76,6 +77,10 @@ class Reducers():
         return state
     def backup_log(state, value):
         return state
+
+
+def sort_books(books):
+    return sorted(books, key=lambda book: book['data'].filename)
 
 
 def dimensions(state):

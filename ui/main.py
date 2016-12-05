@@ -4,6 +4,7 @@ import time
 import shutil
 import pwd
 import grp
+import re
 
 import logging
 log = logging.getLogger(__name__)
@@ -15,6 +16,7 @@ import config_loader
 from setup_logs import setup_logs
 from store import store
 from actions import actions
+import convert
 
 NATIVE_EXTENSION = 'canute'
 BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
@@ -24,12 +26,13 @@ def main():
 
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
+    library_dir = config.get('files', 'library_dir')
 
     from driver_emulated import Emulated
     with Emulated(delay=args.delay, display_text=args.text) as driver:
         quit = False
         store.subscribe(partial(handle_changes, driver, config))
-        setup_library(config)
+        setup_library(library_dir)
         while not quit:
             buttons = driver.get_buttons()
             state = store.get_state()
@@ -48,10 +51,27 @@ def handle_changes(driver, config):
     change_files(config, state)
 
 
-def setup_library(config):
-    library_dir = config.get('files', 'library_dir')
+def setup_library(library_dir):
     file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
     store.dispatch(actions.set_books(file_names))
+
+def refresh_library(library_dir):
+    file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
+    store.dispatch(actions.check_books(file_names))
+
+
+def convert_library(width, height, library_dir):
+    file_names = utility.find_files(library_dir, BOOK_EXTENSIONS)
+    for name in file_names:
+        basename, ext = os.path.splitext(os.path.basename(name))
+        if re.match('\.pef$', ext, re.I):
+            log.info("converting pef to canute")
+            native_file = library_dir + basename + '.' + NATIVE_EXTENSION
+            convert.convert_pef(width, height, name, native_file)
+        elif re.match('\.brf$', ext, re.I):
+            log.info("converting brf to canute")
+            native_file = library_dir + basename + '.' + NATIVE_EXTENSION
+            convert.convert_brf(width, height, name, native_file)
 
 
 
@@ -74,7 +94,10 @@ def change_files(config, state):
             log.debug('changing ownership of {} to {} to {}'.format(new_path, uid, gid))
             os.chown(new_path, uid, gid)
         store.dispatch(actions.replace_library(False))
-        setup_library(config)
+        width = state['display']['width']
+        height = state['display']['height']
+        convert_library(width, height, library_dir)
+        setup_library(library_dir)
         store.dispatch(actions.go_to_library())
 
 
