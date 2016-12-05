@@ -32,7 +32,6 @@ def get_max_pages(data, height):
 
 
 class Reducers():
-    @staticmethod
     def go_to_book(state, action):
         width, height = dimensions(state)
         page = state['library']['page']
@@ -43,13 +42,10 @@ class Reducers():
             log.warning('no book at {}'.format(action['value']))
             return state
         return extend(state, {'location': line_number + action['value']})
-    @staticmethod
     def go_to_library(state, action):
         return extend(state, {'location': 'library'})
-    @staticmethod
     def go_to_menu(state, action):
         return extend(state, {'location': 'menu'})
-    @staticmethod
     def set_books(state, action):
         width, height = dimensions(state)
         books = []
@@ -64,7 +60,6 @@ class Reducers():
         data = map(partial(utility.pad_line, width), data)
         library = {'data': data, 'page': 0}
         return extend(state, {'books': tuple(books), 'library': library})
-    @staticmethod
     def next_page(state, action):
         width, height = dimensions(state)
         location = state['location']
@@ -80,7 +75,7 @@ class Reducers():
             books = list(state['books'])
             books[location] = set_page(book, page, height)
             return extend(state, {'books': tuple(books)})
-    @staticmethod
+        return state
     def previous_page(state, action):
         width, height = dimensions(state)
         location = state['location']
@@ -96,13 +91,11 @@ class Reducers():
             books = list(state['books'])
             books[location] = set_page(book, page, height)
             return extend(state, {'books': tuple(books)})
-    @staticmethod
+        return state
     def replace_library(state, action):
         return state
-    @staticmethod
     def shutdown(state, action):
         return state
-    @staticmethod
     def backup_log(state, action):
         return state
 
