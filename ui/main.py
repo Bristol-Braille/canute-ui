@@ -55,10 +55,6 @@ def setup_library(library_dir):
     file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
     store.dispatch(actions.set_books(file_names))
 
-def refresh_library(library_dir):
-    file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
-    store.dispatch(actions.check_books(file_names))
-
 
 def convert_library(width, height, library_dir):
     file_names = utility.find_files(library_dir, BOOK_EXTENSIONS)
@@ -72,7 +68,6 @@ def convert_library(width, height, library_dir):
             log.info("converting brf to canute")
             native_file = library_dir + basename + '.' + NATIVE_EXTENSION
             convert.convert_brf(width, height, name, native_file)
-
 
 
 def change_files(config, state):
