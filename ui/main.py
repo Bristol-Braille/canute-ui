@@ -10,7 +10,8 @@ import argparser
 import buttons_config
 import config_loader
 from ui import setup_logs
-from store import store, actions
+from store import store
+from actions import actions
 
 previous_data = []
 def set_display(data, page, height):
