@@ -1,6 +1,7 @@
 from functools import partial
 
 from actions import actions
+from menu import menu
 
 button_bindings = {
     'library': {
@@ -31,9 +32,10 @@ button_bindings = {
             '>' : actions.next_page,
             '<' : actions.previous_page,
             'L' : actions.go_to_library,
-            '1' : actions.replace_library,
-            '2' : actions.replace_library,
         }
     }
 }
 
+for i,item in enumerate(menu):
+    action = menu[item]
+    button_bindings['menu']['single'][str(i + 1)] = action
