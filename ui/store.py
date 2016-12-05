@@ -21,6 +21,6 @@ def reducer(state, action = None):
         state = initial_state
     for name in reducer_dict:
         if action['type'] == name:
-            return reducer_dict[name](state, action)
+            return reducer_dict[name](state, action['value'])
 
 store = pydux.create_store(reducer, initial_state)
