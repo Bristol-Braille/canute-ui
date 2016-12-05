@@ -1,8 +1,9 @@
+from functools import partial
 import utility
 from actions import actions
 
 menu = {
-    'replace library from USB stick' : actions.replace_library,
+    'replace library from USB stick' : partial(actions.replace_library, True),
     'shutdown'                       : actions.shutdown,
     'backup log to USB stick'        : actions.backup_log,
 }
