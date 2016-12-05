@@ -76,7 +76,7 @@ class Reducers():
     def shutdown(state, value):
         return state
     def backup_log(state, value):
-        return state
+        return extend(state, {'backup_log': value})
 
 
 def sort_books(books):

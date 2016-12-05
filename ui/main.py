@@ -91,7 +91,7 @@ def change_files(config, state):
             # change ownership
             basename = os.path.basename(filename)
             new_path = library_dir + basename
-            log.debug('changing ownership of {} to {} to {}'.format(new_path, uid, gid))
+            log.debug('changing ownership of {} from {} to {}'.format(new_path, uid, gid))
             os.chown(new_path, uid, gid)
         store.dispatch(actions.replace_library(False))
         width = state['display']['width']
@@ -99,7 +99,17 @@ def change_files(config, state):
         convert_library(width, height, library_dir)
         setup_library(library_dir)
         store.dispatch(actions.go_to_library())
-
+    if state['backup_log']:
+        usb_dir = config.get('files', 'usb_dir')
+        log_file = config.get('files', 'log_file')
+        # make a filename based on the date
+        backup_file = os.path.join(usb_dir, time.strftime('%Y%m%d_log.txt'))
+        log.warning('backing up log to USB stick: {}'.format(backup_file))
+        try:
+            shutil.copyfile(log_file, backup_file)
+        except IOError as e:
+            log.warning("couldn't backup log file: {}".format(e))
+        store.dispatch(actions.backup_log(False))
 
 
 def wipe_library(library_dir):

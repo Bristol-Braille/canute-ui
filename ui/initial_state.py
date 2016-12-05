@@ -16,6 +16,7 @@ initial_state = {
     },
     'books'           : tuple(),
     'replace_library' : False,
+    'backup_log'      : False,
     'button_bindings' : button_bindings,
     'display'         : {'width': 40, 'height': 9}
 }
