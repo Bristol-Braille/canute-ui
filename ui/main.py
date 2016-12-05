@@ -9,7 +9,7 @@ import utility
 import argparser
 import buttons_config
 import config_loader
-from ui import setup_logs
+from setup_logs import setup_logs
 from store import store
 from actions import actions
 
@@ -43,8 +43,8 @@ def main():
 def handle_changes(driver, config):
     state = store.get_state()
     render(driver, state)
-    if state['replace_library'] == 'start':
-        log.debug(config)
+    if state['replace_library'] == 'started':
+        library_dir = config.get('files', 'library_dir')
 
 
 previous_data = []
