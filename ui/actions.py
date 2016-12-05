@@ -9,28 +9,6 @@ import utility
 from functools import partial
 from bookfile_list import BookFile_List
 
-def dimensions(state):
-    width = state['display']['width']
-    height = state['display']['height']
-    return [width, height]
-
-
-def get_title(book):
-    return utility.alphas_to_pin_nums(os.path.basename(book['data'].filename))
-
-
-def set_page(book, page, height):
-    data = book['data']
-    if page < 0 or page > get_max_pages(data, height):
-        return book
-    else:
-        return {'data': data, 'page': page}
-
-
-def get_max_pages(data, height):
-    return len(data) // height
-
-
 class Reducers():
     def go_to_book(state, number):
         width, height = dimensions(state)
@@ -100,7 +78,28 @@ class Reducers():
         return state
 
 
-action_types = utility.get_methods(Reducers)
+def dimensions(state):
+    width = state['display']['width']
+    height = state['display']['height']
+    return [width, height]
+
+
+def get_title(book):
+    return utility.alphas_to_pin_nums(os.path.basename(book['data'].filename))
+
+
+def set_page(book, page, height):
+    data = book['data']
+    if page < 0 or page > get_max_pages(data, height):
+        return book
+    else:
+        return {'data': data, 'page': page}
+
+
+def get_max_pages(data, height):
+    return len(data) // height
+
+
 
 def make_action_method(name):
     '''Returns a method that returns a dict to be passed to dispatch'''
@@ -109,6 +108,7 @@ def make_action_method(name):
     return action_method
 
 
+action_types = utility.get_methods(Reducers)
 #just an empty object
 def actions(): pass
 #then we give it a method for each action
