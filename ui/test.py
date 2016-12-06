@@ -1,14 +1,133 @@
+#!/usr/bin/env python
+from multiprocessing import Process
 import unittest
-import logging
-log = logging.getLogger(__name__)
-import convert
-from bookfile_list import BookFile_List
-import math
-import logging
-import config_loader
 import os
+import pty
+import struct
+import math
+
+from bookfile_list import BookFile_List
+from driver_emulated import Emulated
+from driver_pi import Pi
 from setup_logs import setup_logs
 import utility
+import comms_codes as comms
+import config_loader
+import convert
+
+class TestUtility(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_pin_num_to_unicode(self):
+        for p in range(64):
+            self.assertEqual(utility.unicode_to_pin_num(utility.pin_num_to_unicode(p)), p)
+
+    def test_pin_num_to_alpha(self):
+        for p in range(64):
+            self.assertEqual(utility.alpha_to_pin_num(utility.pin_num_to_alpha(p)), p)
+
+    def test_find_files(self):
+        self.assertEqual(len(utility.find_files('../test-books', ('brf',))), 2)
+
+
+class TestBookFile_List(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._book = 'book'
+        # create a test file
+        cls._width = 40
+        pages = utility.test_book((cls._width, 8))
+
+        cls._len = len(pages)
+
+        with open(cls._book, 'w') as fh:
+            for page in pages:
+                fh.write(bytearray(page))
+
+        cls._bookfile = BookFile_List(cls._book, cls._width)
+
+    def test_book_file_create(self):
+        self.assertIsInstance(self._bookfile, BookFile_List)
+
+    def test_book_file_len(self):
+        self.assertEqual(len(self._bookfile), self._len)
+
+    def test_book_file_content(self):
+        w = self._width
+        h = 8
+        # test every page of the book
+        for i in range(8):
+            expected_pin = i + (i << 3)
+            self.assertEqual(self._bookfile[i*h:i*h+1][0], (expected_pin,) * w)
+
+    @classmethod
+    def tearDownClass(cls):
+        os.unlink(cls._book)
+
+
+class TestDriverEmulated(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        if "TRAVIS" in os.environ:
+            raise unittest.SkipTest("Skip emulated driver tests on TRAVIS")
+        cls._driver = Emulated()
+
+    def test_rxtx_data(self):
+        self._driver.send_data(comms.CMD_GET_CHARS)
+        self.assertEqual(self._driver.get_data(None), Emulated.CHARS)
+
+        self._driver.send_data(comms.CMD_GET_ROWS)
+        self.assertEqual(self._driver.get_data(None), Emulated.ROWS)
+
+        self._driver.send_data(comms.CMD_SEND_PAGE)
+        self.assertEqual(self._driver.get_data(None), 0)
+
+    def test_rxtx_row(self):
+        self._driver.send_data(comms.CMD_SEND_LINE)
+        self.assertEqual(self._driver.get_data(None), 0)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._driver.__exit__(None, None, None)
+
+
+class TestDriverPi(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        master, slave = pty.openpty()
+        s_name = os.ttyname(slave)
+        cls._master = master
+        cls._driver = Process(target=Pi, args=(s_name, False))
+        cls._driver.start()
+
+    def get_message(self, len=1):
+        message = os.read(self._master,1)
+        data = struct.unpack('1b', message)
+        return data
+
+    def send_message(self, data, cmd):
+        message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
+        os.write(self._master, message)
+
+    def test_rxtx_data(self):
+        # receive the get chars message
+        self.assertEqual(self.get_message()[0], comms.CMD_GET_CHARS)
+
+        # send chars
+        self.send_message([24], comms.CMD_GET_CHARS)
+
+        # receive the get rows message
+        self.assertEqual(self.get_message()[0], comms.CMD_GET_ROWS)
+
+        # send rows
+        self.send_message([4], comms.CMD_GET_ROWS)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._driver.join()
+
 
 class TestConvert(unittest.TestCase):
     def test_convert_brf_breaks(self):
@@ -71,5 +190,10 @@ class TestConvert(unittest.TestCase):
 if __name__ == '__main__':
     config = config_loader.load()
     config.read('config-test.rc')
+    try:
+        os.mkdir(config.get('files', 'library_dir'))
+    except OSError:
+        pass
+    import logging
     setup_logs(config, logging.ERROR)
     unittest.main()
