@@ -56,36 +56,36 @@ def main():
 
 
 def run(driver, config):
-    quit = False
     init_state = initial_state.read()
     width, height = driver.get_dimensions()
     init_state['display'] = {'width': width, 'height': height}
     store.subscribe(partial(handle_changes, driver, config))
     store.dispatch(actions.init(init_state))
-    while not quit:
-        quit = button_loop(driver)
+    button_loop(driver)
 
 
 def button_loop(driver):
-    buttons = driver.get_buttons()
-    state = store.get_state()
-    location = state['location']
-    if not isinstance(driver, Pi):
-        if not driver.is_ok():
-            log.debug('shutting down due to GUI closed')
-            store.dispatch(actions.shutdown(True))
-        if state['shutting_down']:
-            del driver
-            return True
-    if type(location) == int:
-        location = 'book'
-    for _id in buttons:
-        _type = buttons[_id]
-        try:
-            store.dispatch(button_bindings[location][_type][_id]())
-        except KeyError:
-            log.debug('no binding for key {}, {} press'.format(_id, _type))
-    return False
+    quit = False
+    while not quit:
+        buttons = driver.get_buttons()
+        state = store.get_state()
+        location = state['location']
+        if not isinstance(driver, Pi):
+            if not driver.is_ok():
+                log.debug('shutting down due to GUI closed')
+                store.dispatch(actions.shutdown(True))
+            if state['shutting_down']:
+                del driver
+                quit = True
+                break
+        if type(location) == int:
+            location = 'book'
+        for _id in buttons:
+            _type = buttons[_id]
+            try:
+                store.dispatch(button_bindings[location][_type][_id]())
+            except KeyError:
+                log.debug('no binding for key {}, {} press'.format(_id, _type))
 
 
 def handle_changes(driver, config):
