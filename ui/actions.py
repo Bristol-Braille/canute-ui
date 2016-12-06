@@ -74,11 +74,17 @@ class Reducers():
             return extend(state, {'books': tuple(books)})
         return state
     def replace_library(state, value):
-        return extend(state, {'replacing_library': value})
+        if state['replacing_library'] == 'in progress':
+            return state
+        else:
+            return extend(state, {'replacing_library': value})
     def shutdown(state, value):
         return extend(state, {'shutting_down': value})
     def backup_log(state, value):
-        return extend(state, {'backing_up_log': value})
+        if state['backing_up_log'] == 'in progress':
+            return state
+        else:
+            return extend(state, {'backing_up_log': value})
 
 
 def sort_books(books):

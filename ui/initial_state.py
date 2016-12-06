@@ -25,17 +25,24 @@ initial_state = {
 state_file = 'state.pkl'
 
 def read():
+    log.debug('reading initial state')
     try:
         with open(state_file) as fh:
-            return pickle.load(fh)
+            state = pickle.load(fh)
+            log.debug(state)
+            return state
     except:
         log.debug('error reading state file, using hard-coded initial state')
-        return initial_state
+        return extend(initial_state)
 
 
 def write(state):
     log.debug('writing state file')
-    #only select the bits of the state we wan't to persist
-    state = extend(initial_state, {'books': state['books']})
+    #only select the bits of the state we want to persist
+    state = extend(state, {'library': extend(state['library'], {'page': 0})})
+    state = extend(state, {'location': 'library'})
+    state = extend(state, {'backing_up_log': False})
+    state = extend(state, {'replacing_library': False})
+    log.debug(state)
     with open(state_file, 'w') as fh:
         pickle.dump(state, fh)

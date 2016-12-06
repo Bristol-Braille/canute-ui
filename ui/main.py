@@ -5,6 +5,7 @@ import shutil
 import pwd
 import grp
 import re
+from pydux.extend import extend
 
 import logging
 log = logging.getLogger(__name__)
@@ -55,6 +56,7 @@ def main():
 def run(driver, config):
     quit = False
     init_state = initial_state.read()
+    init_state = extend(init_state, {'dimensions':driver.get_dimensions()})
     store.subscribe(partial(handle_changes, driver, config))
     store.dispatch(actions.init(init_state))
     while not quit:
@@ -90,7 +92,7 @@ def render(driver, state):
         n = page * height
         data = data[n : n + height]
         title = format_title('library menu', width, page, max_pages)
-        set_display(driver, [title] + data)
+        set_display(driver, [title] + list(data))
     elif location == 'menu':
         page = state['menu']['page']
         data = state['menu']['data']
@@ -99,7 +101,7 @@ def render(driver, state):
         title = format_title('system menu', width, page, max_pages)
         n = page * height
         data = data[n : n + height]
-        set_display(driver, [title] + data)
+        set_display(driver, [title] + list(data))
     elif type(location) == int:
         page = state['books'][location]['page']
         data = state['books'][location]['data']
@@ -139,9 +141,11 @@ def convert_library(width, height, library_dir):
 
 
 def change_files(config, state):
-    if state['replacing_library']:
+    if state['replacing_library'] == 'start':
+        store.dispatch(actions.replace_library('in progress'))
         replace_library(config, state)
-    if state['backing_up_log']:
+    if state['backing_up_log'] == 'start':
+        store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
 
 
@@ -189,12 +193,10 @@ def replace_library(config, state):
         new_path = library_dir + basename
         log.debug('changing ownership of {} from {} to {}'.format(new_path, uid, gid))
         os.chown(new_path, uid, gid)
-    store.dispatch(actions.replace_library(False))
     width = state['display']['width']
     height = state['display']['height']
     convert_library(width, height, library_dir)
     setup_library(library_dir)
-    store.dispatch(actions.go_to_library())
 
 
 def backup_log(config):
@@ -207,7 +209,7 @@ def backup_log(config):
         shutil.copyfile(log_file, backup_file)
     except IOError as e:
         log.warning("couldn't backup log file: {}".format(e))
-    store.dispatch(actions.backup_log(False))
+    store.dispatch(actions.backup_log('done'))
 
 
 def wipe_library(library_dir):
