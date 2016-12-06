@@ -56,9 +56,10 @@ def main():
 def run(driver, config):
     quit = False
     init_state = initial_state.read()
-    init_state = extend(init_state, {'dimensions':driver.get_dimensions()})
-    store.subscribe(partial(handle_changes, driver, config))
+    width, height = driver.get_dimensions()
+    init_state['display'] = {'width': width, 'height': height}
     store.dispatch(actions.init(init_state))
+    store.subscribe(partial(handle_changes, driver, config))
     while not quit:
         buttons = driver.get_buttons()
         state = store.get_state()
