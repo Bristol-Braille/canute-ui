@@ -73,7 +73,7 @@ def button_loop(driver):
         if not isinstance(driver, Pi):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
-                store.dispatch(actions.shutdown(True))
+                store.dispatch(actions.shutdown())
             if state['shutting_down']:
                 del driver
                 quit = True
@@ -146,12 +146,7 @@ def setup_library(library_dir, width):
     file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
     books = []
     for filename in file_names:
-        books.append(
-            {
-                'data': BookFile_List(filename, width),
-                'page': 0
-            }
-        )
+        books.append(BookFile_List(filename, width))
     store.dispatch(actions.set_books(books))
 
 

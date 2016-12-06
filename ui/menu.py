@@ -4,7 +4,7 @@ from actions import actions
 
 menu = {
     'replace library from USB stick' : partial(actions.replace_library, 'start'),
-    'shutdown'                       : partial(actions.shutdown, True),
+    'shutdown'                       : actions.shutdown,
     'backup log to USB stick'        : partial(actions.backup_log, 'start'),
 }
 

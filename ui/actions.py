@@ -27,6 +27,7 @@ class Reducers():
         return extend(state, {'location': 'menu'})
     def set_books(state, books):
         width, height = dimensions(state)
+        books = map(lambda b: {'data': b, 'page':0}, books)
         books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
@@ -70,7 +71,7 @@ class Reducers():
         else:
             return extend(state, {'replacing_library': value})
     def shutdown(state, value):
-        return extend(state, {'shutting_down': value})
+        return extend(state, {'shutting_down': True})
     def backup_log(state, value):
         if state['backing_up_log'] == 'in progress':
             return state
