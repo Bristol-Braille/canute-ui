@@ -15,7 +15,7 @@ import buttons_config
 import config_loader
 from setup_logs import setup_logs
 from store import store
-from actions import actions
+from actions import actions, get_max_pages, get_title
 import convert
 
 NATIVE_EXTENSION = 'canute'
@@ -42,13 +42,57 @@ def main():
                 location = 'book'
             for _id in buttons:
                 _type = buttons[_id]
-                store.dispatch(bindings[location][_type][_id]())
+                try:
+                    store.dispatch(bindings[location][_type][_id]())
+                except KeyError:
+                    log.debug('no binding for key {}, {} press'.format(_id, _type))
 
 
 def handle_changes(driver, config):
     state = store.get_state()
     render(driver, state)
     change_files(config, state)
+
+
+def render(driver, state):
+    width = state['display']['width']
+    height = state['display']['height']
+    location = state['location']
+    if location == 'library':
+        page = state['library']['page']
+        data = state['library']['data']
+        height = height - 1
+        max_pages = get_max_pages(data, height)
+        n = page * height
+        data = data[n : n + height]
+        title = format_title('library menu', width, page, max_pages)
+        set_display(driver, [title] + data)
+    elif location == 'menu':
+        page = state['menu']['page']
+        data = state['menu']['data']
+        height = height - 1
+        max_pages = get_max_pages(data, height)
+        title = format_title('system menu', width, page, max_pages)
+        n = page * height
+        data = data[n : n + height]
+        set_display(driver, [title] + data)
+    elif type(location) == int:
+        page = state['books'][location]['page']
+        data = state['books'][location]['data']
+        n = page * height
+        data = data[n : n + height]
+        set_display(driver, data)
+
+
+previous_data = []
+def set_display(driver, data):
+    global previous_data
+    data = utility.flatten(data)
+    if data != previous_data:
+        driver.set_braille(data)
+        previous_data = data
+    else:
+        log.debug('not setting display with identical data')
 
 
 def setup_library(library_dir):
@@ -75,6 +119,33 @@ def change_files(config, state):
         replace_library(config, state)
     if state['backup_log']:
         backup_log(config)
+
+
+def format_title(title, width, page_number, total_pages):
+    '''
+    format a title like this:
+        * title on the top line.
+        * use two dot-six characters to indicate all uppercase for the title.
+        * page numbers all the way at the right with 3 digits out of total, e.g. 001 / 003.
+    '''
+    uppercase = '  ' # hack - leave space at the beginning for the uppercase symbols
+    title = "%s%s" % (uppercase, title)
+    current_page = " %03d / %03d" % (page_number + 1, total_pages + 1)
+
+    available_title_space = width - len(current_page)
+
+    # make title right length
+    if len(title) > available_title_space:
+        # truncate
+        title = title[0:available_title_space]
+    else:
+        # pad
+        title += " " * (available_title_space - len(title))
+
+    title_pins = utility.alphas_to_pin_nums(title + current_page)
+    # replace first 2 chars with the uppercase symbols
+    title_pins[0:2] = [32, 32]
+    return title_pins
 
 
 def replace_library(config, state):
@@ -118,37 +189,6 @@ def backup_log(config):
 def wipe_library(library_dir):
     for book in utility.find_files(library_dir, BOOK_EXTENSIONS):
         os.remove(book)
-
-
-previous_data = []
-def set_display(driver, data, page, height):
-    global previous_data
-    n = page * height
-    data = data[n: n + height]
-    data = utility.flatten(data)
-    if data != previous_data:
-        driver.set_braille(data)
-        previous_data = data
-    else:
-        log.debug('not setting display with identical data')
-
-
-def render(driver, state):
-    width = state['display']['width']
-    height = state['display']['height']
-    location = state['location']
-    if location == 'library':
-        page = state['library']['page']
-        data = state['library']['data']
-        set_display(driver, data, page, height)
-    elif location == 'menu':
-        page = state['menu']['page']
-        data = state['menu']['data']
-        set_display(driver, data, page, height)
-    elif type(location) == int:
-        page = state['books'][location]['page']
-        data = state['books'][location]['data']
-        set_display(driver, data, page, height)
 
 
 if __name__ == '__main__':

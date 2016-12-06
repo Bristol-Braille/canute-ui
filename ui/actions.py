@@ -107,7 +107,6 @@ def get_max_pages(data, height):
     return len(data) // height
 
 
-
 def make_action_method(name):
     '''Returns a method that returns a dict to be passed to dispatch'''
     def action_method(value = None):
