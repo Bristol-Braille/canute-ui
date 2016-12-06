@@ -61,17 +61,21 @@ def run(driver, config):
     store.dispatch(actions.init(init_state))
     store.subscribe(partial(handle_changes, driver, config))
     while not quit:
-        buttons = driver.get_buttons()
-        state = store.get_state()
-        location = state['location']
-        if type(location) == int:
-            location = 'book'
-        for _id in buttons:
-            _type = buttons[_id]
-            try:
-                store.dispatch(button_bindings[location][_type][_id]())
-            except KeyError:
-                log.debug('no binding for key {}, {} press'.format(_id, _type))
+        button_loop(driver)
+
+
+def button_loop(driver):
+    buttons = driver.get_buttons()
+    state = store.get_state()
+    location = state['location']
+    if type(location) == int:
+        location = 'book'
+    for _id in buttons:
+        _type = buttons[_id]
+        try:
+            store.dispatch(button_bindings[location][_type][_id]())
+        except KeyError:
+            log.debug('no binding for key {}, {} press'.format(_id, _type))
 
 
 def handle_changes(driver, config):
