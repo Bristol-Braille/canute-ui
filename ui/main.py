@@ -58,8 +58,8 @@ def run(driver, config):
     init_state = initial_state.read()
     width, height = driver.get_dimensions()
     init_state['display'] = {'width': width, 'height': height}
-    store.dispatch(actions.init(init_state))
     store.subscribe(partial(handle_changes, driver, config))
+    store.dispatch(actions.init(init_state))
     while not quit:
         button_loop(driver)
 
@@ -80,9 +80,9 @@ def button_loop(driver):
 
 def handle_changes(driver, config):
     state = store.get_state()
+    initial_state.write(state)
     render(driver, state)
     change_files(config, state)
-    initial_state.write(state)
 
 
 def render(driver, state):
@@ -202,6 +202,7 @@ def replace_library(config, state):
     height = state['display']['height']
     convert_library(width, height, library_dir)
     setup_library(library_dir)
+    store.dispatch(actions.replace_library('done'))
 
 
 def backup_log(config):

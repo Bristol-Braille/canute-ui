@@ -17,7 +17,7 @@ for name in Reducers.__dict__:
         reducer_dict[name] = Reducers.__dict__[name]
 
 def reducer(state, action = None):
-    log.debug(state)
+    log.debug(action)
     for name in reducer_dict:
         if action['type'] == name:
             return reducer_dict[name](state, action['value'])

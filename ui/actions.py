@@ -40,7 +40,7 @@ class Reducers():
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
         library = {'data': data, 'page': 0}
-        return extend(state, {'books': tuple(books), 'library': library})
+        return extend(state, {'location': 'library', 'books': tuple(books), 'library': library})
     def next_page(state, value):
         width, height = dimensions(state)
         location = state['location']
