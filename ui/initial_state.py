@@ -40,9 +40,9 @@ def write(state):
     log.debug('writing state file')
     #only select the bits of the state we want to persist
     state = extend(state, {'library': extend(state['library'], {'page': 0})})
-    state = extend(state, {'location': 'library'})
-    state = extend(state, {'backing_up_log': False})
-    state = extend(state, {'replacing_library': False})
-    log.debug(state)
+    state['location']          = 'library'
+    state['backing_up_log']    = False
+    state['replacing_library'] = False
+    state['shutting_down']     = False
     with open(state_file, 'w') as fh:
         pickle.dump(state, fh)

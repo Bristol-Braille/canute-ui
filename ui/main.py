@@ -6,6 +6,7 @@ import pwd
 import grp
 import re
 from pydux.extend import extend
+from driver_pi import Pi
 
 import logging
 log = logging.getLogger(__name__)
@@ -50,7 +51,6 @@ def main():
         else:
             timeout = 60
         log.info("running with real hardware on port %s, timeout %s" % (args.tty, timeout))
-        from driver_pi import Pi
         with Pi(port=args.tty, pi_buttons=args.pi_buttons, timeout=timeout) as driver:
             run(driver, config)
 
@@ -63,13 +63,20 @@ def run(driver, config):
     store.subscribe(partial(handle_changes, driver, config))
     store.dispatch(actions.init(init_state))
     while not quit:
-        button_loop(driver)
+        quit = button_loop(driver)
 
 
 def button_loop(driver):
     buttons = driver.get_buttons()
     state = store.get_state()
     location = state['location']
+    if not isinstance(driver, Pi):
+        if not driver.is_ok():
+            log.debug('shutting down due to GUI closed')
+            store.dispatch(actions.shutdown(True))
+        if state['shutting_down']:
+            del driver
+            return True
     if type(location) == int:
         location = 'book'
     for _id in buttons:
@@ -78,6 +85,7 @@ def button_loop(driver):
             store.dispatch(button_bindings[location][_type][_id]())
         except KeyError:
             log.debug('no binding for key {}, {} press'.format(_id, _type))
+    return False
 
 
 def handle_changes(driver, config):
@@ -86,7 +94,9 @@ def handle_changes(driver, config):
     render(driver, state)
     change_files(config, state)
     if state['shutting_down']:
-        os.system("sudo shutdown -h now")
+        if isinstance(driver, Pi):
+            os.system("sudo shutdown -h now")
+
 
 
 def render(driver, state):
