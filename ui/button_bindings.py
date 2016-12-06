@@ -4,15 +4,11 @@ from actions import actions
 from menu import menu
 
 
-def noop():
-    pass
-
 button_bindings = {
     'library': {
         'single': {
             '>' : actions.next_page,
             '<' : actions.previous_page,
-            '1' : noop,
             '2' : partial(actions.go_to_book, 0),
             '3' : partial(actions.go_to_book, 1),
             '4' : partial(actions.go_to_book, 2),

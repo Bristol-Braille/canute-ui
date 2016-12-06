@@ -14,9 +14,10 @@ initial_state = {
         'data': map(partial(utility.pad_line, 40), menu.menu_titles_braille),
         'page': 0
     },
-    'books'           : tuple(),
-    'replace_library' : False,
-    'backup_log'      : False,
-    'button_bindings' : button_bindings,
-    'display'         : {'width': 40, 'height': 9}
+    'books'             : tuple(),
+    'replacing_library' : False,
+    'backing_up_log'    : False,
+    'shutting_down'     : False,
+    'button_bindings'   : button_bindings,
+    'display'           : {'width': 40, 'height': 9}
 }

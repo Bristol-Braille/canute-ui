@@ -115,9 +115,9 @@ def convert_library(width, height, library_dir):
 
 
 def change_files(config, state):
-    if state['replace_library']:
+    if state['replacing_library']:
         replace_library(config, state)
-    if state['backup_log']:
+    if state['backing_up_log']:
         backup_log(config)
 
 
