@@ -4,7 +4,7 @@ log_file = canute.log
 # book directory
 library_dir = ~/books/
 # where usb sticks will be automounted
-usb_dir = /home/kaspar/projects/braille/code/canute-ui/test-books
+usb_dir = /home/kaspar/projects/braille/code/canute-ui/books
 
 [user]
 user_name = kaspar

@@ -90,7 +90,9 @@ def dimensions(state):
 
 
 def get_title(book):
-    return utility.alphas_to_pin_nums(os.path.basename(book['data'].filename))
+    basename = os.path.basename(book['data'].filename)
+    title = os.path.splitext(basename)[0]
+    return utility.alphas_to_pin_nums(title)
 
 
 def set_page(book, page, height):
