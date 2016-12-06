@@ -33,6 +33,28 @@ class Reducers():
         data = map(partial(utility.pad_line, width), data)
         library = {'data': data, 'page': 0}
         return extend(state, {'location': 'library', 'books': tuple(books), 'library': library})
+    def add_book(self, state, book_data):
+        width, height = dimensions(state)
+        book = {'data': book_data, 'page':0}
+        books = list(state['books'])
+        books.append(book)
+        books = sort_books(books)
+        data = map(get_title, books)
+        data = map(partial(utility.pad_line, width), data)
+        page = state['library']['page']
+        library = {'data': data, 'page': page}
+        return extend(state, {'books': tuple(books), 'library': library})
+    def remove_book(self, state, filename):
+        width, height = dimensions(state)
+        books = filter(lambda b: b['data'].filename != filename, state['books'])
+        data = map(get_title, books)
+        data = map(partial(utility.pad_line, width), data)
+        maximum = get_max_pages(data, height)
+        page = state['library']['page']
+        if page > maximum:
+            page = maximum
+        library = {'data': data, 'page': page}
+        return extend(state, {'books': tuple(books), 'library': library})
     def next_page(self, state, value):
         width, height = dimensions(state)
         location = state['location']

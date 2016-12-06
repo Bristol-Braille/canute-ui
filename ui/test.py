@@ -14,6 +14,8 @@ import utility
 import comms_codes as comms
 import config_loader
 import convert
+import actions
+from initial_state import initial_state
 
 class TestUtility(unittest.TestCase):
 
@@ -185,6 +187,24 @@ class TestConvert(unittest.TestCase):
             brf_content += line
 
         self.assertEqual(alphas, brf_content)
+
+
+class TestActions(unittest.TestCase):
+    def test_add_book(self):
+        self.assertEqual(len(initial_state['books']), 0)
+        r = actions.Reducers()
+        state = r.add_book(initial_state, BookFile_List('test.py',40))
+        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(state['books']), 1)
+    def test_remove_book(self):
+        self.assertEqual(len(initial_state['books']), 0)
+        r = actions.Reducers()
+        state = r.add_book(initial_state, BookFile_List('test.py',40))
+        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(state['books']), 1)
+        state = r.remove_book(state, 'test.py')
+        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(state['books']), 0)
 
 
 if __name__ == '__main__':
