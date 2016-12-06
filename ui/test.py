@@ -5,6 +5,7 @@ import os
 import pty
 import struct
 import math
+import mock
 
 from bookfile_list import BookFile_List
 from driver_emulated import Emulated
@@ -193,16 +194,19 @@ class TestActions(unittest.TestCase):
     def test_add_book(self):
         self.assertEqual(len(initial_state['books']), 0)
         r = actions.Reducers()
-        state = r.add_book(initial_state, BookFile_List('test.py',40))
+        data = mock.MagicMock()
+        state = r.add_book(initial_state, data)
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
     def test_remove_book(self):
         self.assertEqual(len(initial_state['books']), 0)
         r = actions.Reducers()
-        state = r.add_book(initial_state, BookFile_List('test.py',40))
+        data = mock.MagicMock()
+        data.filename = 'test'
+        state = r.add_book(initial_state, data)
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
-        state = r.remove_book(state, 'test.py')
+        state = r.remove_book(state, data.filename)
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 0)
 
