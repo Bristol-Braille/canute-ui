@@ -17,6 +17,8 @@ from setup_logs import setup_logs
 from store import store
 from actions import actions, get_max_pages, get_title
 import convert
+import initial_state
+from button_bindings import button_bindings
 
 NATIVE_EXTENSION = 'canute'
 BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
@@ -26,32 +28,54 @@ def main():
 
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
-    library_dir = config.get('files', 'library_dir')
 
-    from driver_emulated import Emulated
-    with Emulated(delay=args.delay, display_text=args.text) as driver:
-        quit = False
-        store.subscribe(partial(handle_changes, driver, config))
-        setup_library(library_dir)
-        while not quit:
-            buttons = driver.get_buttons()
-            state = store.get_state()
-            bindings = state['button_bindings']
-            location = state['location']
-            if type(location) == int:
-                location = 'book'
-            for _id in buttons:
-                _type = buttons[_id]
-                try:
-                    store.dispatch(bindings[location][_type][_id]())
-                except KeyError:
-                    log.debug('no binding for key {}, {} press'.format(_id, _type))
+    if args.emulated and not args.both:
+        log.info("running with emulated hardware")
+        from driver_emulated import Emulated
+        with Emulated(delay=args.delay, display_text=args.text) as driver:
+            run(driver, config)
+    elif args.emulated and args.both:
+        log.info("running with both emulated and real hardware on port %s" % args.tty)
+        from driver_both import DriverBoth
+        with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
+                delay=args.delay, display_text=args.text) as driver:
+            run(driver, config)
+    else:
+        # have to do this because couldn't find a way to set a default inside a section
+        if config.has_option('comms', 'timeout'):
+            timeout = float(config.get('comms', 'timeout'))
+        else:
+            timeout = 60
+        log.info("running with real hardware on port %s, timeout %s" % (args.tty, timeout))
+        from driver_pi import Pi
+        with Pi(port=args.tty, pi_buttons=args.pi_buttons, timeout=timeout) as driver:
+            run(driver, config)
+
+
+def run(driver, config):
+    quit = False
+    init_state = initial_state.read()
+    store.subscribe(partial(handle_changes, driver, config))
+    store.dispatch(actions.init(init_state))
+    while not quit:
+        buttons = driver.get_buttons()
+        state = store.get_state()
+        location = state['location']
+        if type(location) == int:
+            location = 'book'
+        for _id in buttons:
+            _type = buttons[_id]
+            try:
+                store.dispatch(button_bindings[location][_type][_id]())
+            except KeyError:
+                log.debug('no binding for key {}, {} press'.format(_id, _type))
 
 
 def handle_changes(driver, config):
     state = store.get_state()
     render(driver, state)
     change_files(config, state)
+    initial_state.write(state)
 
 
 def render(driver, state):

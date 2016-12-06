@@ -10,6 +10,8 @@ from functools import partial
 from bookfile_list import BookFile_List
 
 class Reducers():
+    def init(_, state):
+        return state
     def go_to_book(state, number):
         width, height = dimensions(state)
         page = state['library']['page']

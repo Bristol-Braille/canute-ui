@@ -1,10 +1,11 @@
 from functools import partial
+from pydux.extend import extend
+import pickle
 import logging
 log = logging.getLogger(__name__)
 
 import utility
 import menu
-from button_bindings import button_bindings
 
 
 initial_state = {
@@ -18,6 +19,24 @@ initial_state = {
     'replacing_library' : False,
     'backing_up_log'    : False,
     'shutting_down'     : False,
-    'button_bindings'   : button_bindings,
     'display'           : {'width': 40, 'height': 9}
 }
+
+state_file = 'state.pkl'
+
+def read():
+    try:
+        with open(state_file) as fh:
+            return pickle.load(fh)
+    except:
+        log.debug('error reading state file, using hard-coded initial state')
+        return initial_state
+
+
+def write(state):
+    log.debug('writing state file')
+    library = state['library']
+    state = extend(state, {'location': 'library'})
+    state = extend(state, {'library': extend(library, {'page': 0})})
+    with open(state_file, 'w') as fh:
+        pickle.dump(state, fh)
