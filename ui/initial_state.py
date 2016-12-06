@@ -35,8 +35,7 @@ def read():
 
 def write(state):
     log.debug('writing state file')
-    library = state['library']
-    state = extend(state, {'location': 'library'})
-    state = extend(state, {'library': extend(library, {'page': 0})})
+    #only select the bits of the state we wan't to persist
+    state = extend(initial_state, {'books': state['books']})
     with open(state_file, 'w') as fh:
         pickle.dump(state, fh)
