@@ -11,10 +11,11 @@ import utility
 from actions import Reducers
 import initial_state
 
+reducers = Reducers()
 reducer_dict = {}
-for name in Reducers.__dict__:
+for name in dir(reducers):
     if not name.startswith('__'):
-        reducer_dict[name] = Reducers.__dict__[name]
+        reducer_dict[name] = getattr(reducers, name)
 
 def reducer(state, action = None):
     log.debug(action)

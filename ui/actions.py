@@ -9,9 +9,9 @@ import utility
 from functools import partial
 
 class Reducers():
-    def init(_, state):
+    def init(self, _, state):
         return state
-    def go_to_book(state, number):
+    def go_to_book(self, state, number):
         width, height = dimensions(state)
         page = state['library']['page']
         line_number = page * height
@@ -21,11 +21,11 @@ class Reducers():
             log.warning('no book at {}'.format(number))
             return state
         return extend(state, {'location': line_number + number})
-    def go_to_library(state, value):
+    def go_to_library(self, state, value):
         return extend(state, {'location': 'library'})
-    def go_to_menu(state, value):
+    def go_to_menu(self, state, value):
         return extend(state, {'location': 'menu'})
-    def set_books(state, books):
+    def set_books(self, state, books):
         width, height = dimensions(state)
         books = map(lambda b: {'data': b, 'page':0}, books)
         books = sort_books(books)
@@ -33,7 +33,7 @@ class Reducers():
         data = map(partial(utility.pad_line, width), data)
         library = {'data': data, 'page': 0}
         return extend(state, {'location': 'library', 'books': tuple(books), 'library': library})
-    def next_page(state, value):
+    def next_page(self, state, value):
         width, height = dimensions(state)
         location = state['location']
         if location == 'library':
@@ -49,7 +49,7 @@ class Reducers():
             books[location] = set_page(book, page, height)
             return extend(state, {'books': tuple(books)})
         return state
-    def previous_page(state, value):
+    def previous_page(self, state, value):
         width, height = dimensions(state)
         location = state['location']
         if location == 'library':
@@ -65,14 +65,14 @@ class Reducers():
             books[location] = set_page(book, page, height)
             return extend(state, {'books': tuple(books)})
         return state
-    def replace_library(state, value):
+    def replace_library(self, state, value):
         if state['replacing_library'] == 'in progress':
             return state
         else:
             return extend(state, {'replacing_library': value})
-    def shutdown(state, value):
+    def shutdown(self, state, value):
         return extend(state, {'shutting_down': True})
-    def backup_log(state, value):
+    def backup_log(self, state, value):
         if state['backing_up_log'] == 'in progress':
             return state
         else:
