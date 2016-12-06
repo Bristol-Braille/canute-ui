@@ -20,6 +20,8 @@ from actions import actions, get_max_pages, get_title
 import convert
 import initial_state
 from button_bindings import button_bindings
+from bookfile_list import BookFile_List
+
 
 NATIVE_EXTENSION = 'canute'
 BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
@@ -126,9 +128,17 @@ def set_display(driver, data):
         log.debug('not setting display with identical data')
 
 
-def setup_library(library_dir):
+def setup_library(library_dir, width):
     file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
-    store.dispatch(actions.set_books(file_names))
+    books = []
+    for filename in file_names:
+        books.append(
+            {
+                'data': BookFile_List(filename, width),
+                'page': 0
+            }
+        )
+    store.dispatch(actions.set_books(books))
 
 
 def convert_library(width, height, library_dir):
@@ -201,7 +211,7 @@ def replace_library(config, state):
     width = state['display']['width']
     height = state['display']['height']
     convert_library(width, height, library_dir)
-    setup_library(library_dir)
+    setup_library(library_dir, width)
     store.dispatch(actions.replace_library('done'))
 
 

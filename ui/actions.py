@@ -7,7 +7,6 @@ log = logging.getLogger(__name__)
 
 import utility
 from functools import partial
-from bookfile_list import BookFile_List
 
 class Reducers():
     def init(_, state):
@@ -26,16 +25,8 @@ class Reducers():
         return extend(state, {'location': 'library'})
     def go_to_menu(state, value):
         return extend(state, {'location': 'menu'})
-    def set_books(state, value):
+    def set_books(state, books):
         width, height = dimensions(state)
-        books = []
-        for filename in value:
-            books.append(
-                {
-                    'data': BookFile_List(filename, [width, height]),
-                    'page': 0
-                }
-            )
         books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
