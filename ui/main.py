@@ -85,13 +85,17 @@ def handle_changes(driver, config):
     initial_state.write(state)
     render(driver, state)
     change_files(config, state)
+    if state['shutting_down']:
+        os.system("sudo shutdown -h now")
 
 
 def render(driver, state):
     width = state['display']['width']
     height = state['display']['height']
     location = state['location']
-    if location == 'library':
+    if state['shutting_down']:
+        driver.clear_page()
+    elif location == 'library':
         page = state['library']['page']
         data = state['library']['data']
         height = height - 1
