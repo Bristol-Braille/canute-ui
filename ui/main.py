@@ -1,11 +1,11 @@
 import os
+from frozendict import frozendict
 from functools import partial
 import time
 import shutil
 import pwd
 import grp
 import re
-from pydux.extend import extend
 from driver_pi import Pi
 
 import logging
@@ -58,7 +58,7 @@ def main():
 def run(driver, config):
     init_state = initial_state.read()
     width, height = driver.get_dimensions()
-    init_state['display'] = {'width': width, 'height': height}
+    init_state = init_state.copy(dimensions = frozendict({'width': width, 'height': height}))
     store.subscribe(partial(handle_changes, driver, config))
     store.dispatch(actions.init(init_state))
     button_loop(driver)

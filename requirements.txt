@@ -1,4 +1,5 @@
 pyserial==2.7
 evdev==0.6.2
 mock
+frozendict==1.2
 -e git+https://github.com/benjamin9999/pydux@1bc044c912912c1c7f2623a4cfef543d3f9b2954#egg=pydux

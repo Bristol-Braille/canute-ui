@@ -1,6 +1,5 @@
 import os
 import pydux
-from pydux.extend import extend
 
 import logging
 log = logging.getLogger(__name__)

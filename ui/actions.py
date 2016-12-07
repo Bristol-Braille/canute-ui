@@ -1,6 +1,6 @@
 import os
 import pydux
-from pydux.extend import extend
+from frozendict import frozendict
 
 import logging
 log = logging.getLogger(__name__)
@@ -20,19 +20,19 @@ class Reducers():
         except:
             log.warning('no book at {}'.format(number))
             return state
-        return extend(state, {'location': line_number + number})
+        return state.copy(location = line_number + number)
     def go_to_library(self, state, value):
-        return extend(state, {'location': 'library'})
+        return state.copy(location = 'library')
     def go_to_menu(self, state, value):
-        return extend(state, {'location': 'menu'})
+        return state.copy(location = 'menu')
     def set_books(self, state, books):
         width, height = dimensions(state)
         books = map(lambda b: {'data': b, 'page':0}, books)
         books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
-        library = {'data': data, 'page': 0}
-        return extend(state, {'location': 'library', 'books': tuple(books), 'library': library})
+        library = frozendict({'data': data, 'page': 0})
+        return state.copy(location = 'library', books = tuple(books), library = library)
     def add_book(self, state, book_data):
         width, height = dimensions(state)
         book = {'data': book_data, 'page':0}
@@ -42,8 +42,8 @@ class Reducers():
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
         page = state['library']['page']
-        library = {'data': data, 'page': page}
-        return extend(state, {'books': tuple(books), 'library': library})
+        library = frozendict({'data': data, 'page': page})
+        return state.copy(books = tuple(books), library = library)
     def remove_book(self, state, filename):
         width, height = dimensions(state)
         books = filter(lambda b: b['data'].filename != filename, state['books'])
@@ -53,8 +53,8 @@ class Reducers():
         page = state['library']['page']
         if page > maximum:
             page = maximum
-        library = {'data': data, 'page': page}
-        return extend(state, {'books': tuple(books), 'library': library})
+        library = frozendict({'data': data, 'page': page})
+        return state.copy(books = tuple(books), library = library)
     def next_page(self, state, value):
         width, height = dimensions(state)
         location = state['location']
@@ -62,14 +62,14 @@ class Reducers():
             library = state['library']
             page    = state['library']['page'] + 1
             library = set_page(library, page, (height - 1))
-            return extend(state, {'library': library})
+            return state.copy(library = library)
         elif type(location) == int:
             book = state['books'][location]
             data = book['data']
             page = book['page'] + 1
             books = list(state['books'])
             books[location] = set_page(book, page, height)
-            return extend(state, {'books': tuple(books)})
+            return state.copy(books = tuple(books))
         return state
     def previous_page(self, state, value):
         width, height = dimensions(state)
@@ -78,27 +78,27 @@ class Reducers():
             library = state['library']
             page    = library['page'] - 1
             library = set_page(library, page, (height - 1))
-            return extend(state, {'library': library})
+            return state.copy(library = library)
         elif type(location) == int:
             book = state['books'][location]
             data = book['data']
             page = book['page'] - 1
             books = list(state['books'])
             books[location] = set_page(book, page, height)
-            return extend(state, {'books': tuple(books)})
+            return state.copy(library = tuple(books))
         return state
     def replace_library(self, state, value):
         if state['replacing_library'] == 'in progress':
             return state
         else:
-            return extend(state, {'replacing_library': value})
-    def shutdown(self, state, value):
-        return extend(state, {'shutting_down': True})
+            return state.copy(replacing_library = value)
     def backup_log(self, state, value):
         if state['backing_up_log'] == 'in progress':
             return state
         else:
-            return extend(state, {'backing_up_log': value})
+            return state.copy(backing_up_log = value)
+    def shutdown(self, state, value):
+        return state.copy(shutting_down = True)
 
 
 def sort_books(books):
@@ -122,7 +122,7 @@ def set_page(book, page, height):
     if page < 0 or page > get_max_pages(data, height):
         return book
     else:
-        return {'data': data, 'page': page}
+        return frozendict({'data': data, 'page': page})
 
 
 def get_max_pages(data, height):
