@@ -29,7 +29,7 @@ def read():
     try:
         with open(state_file) as fh:
             state = pickle.load(fh)
-            return frozendict(state)
+            return state
     except:
         log.debug('error reading state file, using hard-coded initial state')
         return initial_state
@@ -44,4 +44,4 @@ def write(state):
     write_state['replacing_library'] = False
     write_state['shutting_down']     = False
     with open(state_file, 'w') as fh:
-        pickle.dump(write_state, fh)
+        pickle.dump(frozendict(write_state), fh)

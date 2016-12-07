@@ -31,7 +31,7 @@ class Reducers():
         books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
-        library = frozendict({'data': data, 'page': 0})
+        library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location = 'library', books = tuple(books), library = library)
     def add_book(self, state, book_data):
         width, height = dimensions(state)
