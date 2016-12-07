@@ -4,10 +4,10 @@ log_file = canute.log
 # book directory
 library_dir = ~/books/
 # where usb sticks will be automounted
-usb_dir = /home/kaspar/projects/braille/code/canute-ui/books
+usb_dir = /media/
 
 [user]
-user_name = kaspar
+user_name = pi
 
 [comms]
 timeout = 120
