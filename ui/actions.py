@@ -14,7 +14,7 @@ class Reducers():
     def go_to_book(self, state, number):
         width, height = dimensions(state)
         page = state['library']['page']
-        line_number = page * height
+        line_number = page * (height - 1)
         try:
             location = state['books'][line_number + number]
         except:
@@ -61,7 +61,7 @@ class Reducers():
         if location == 'library':
             library = state['library']
             page    = state['library']['page'] + 1
-            library = set_page(library, page, height)
+            library = set_page(library, page, (height - 1))
             return extend(state, {'library': library})
         elif type(location) == int:
             book = state['books'][location]
@@ -77,7 +77,7 @@ class Reducers():
         if location == 'library':
             library = state['library']
             page    = library['page'] - 1
-            library = set_page(library, page, height)
+            library = set_page(library, page, (height - 1))
             return extend(state, {'library': library})
         elif type(location) == int:
             book = state['books'][location]

@@ -9,9 +9,9 @@ import menu
 
 
 initial_state = {
-    'location'        : 'library',
-    'library'         : {'data': tuple(), 'page': 0},
-    'menu'            : {
+    'location' : 'library',
+    'library'  : {'data': tuple(), 'page': 0},
+    'menu'     : {
         'data': map(partial(utility.pad_line, 40), menu.menu_titles_braille),
         'page': 0
     },
@@ -29,7 +29,6 @@ def read():
     try:
         with open(state_file) as fh:
             state = pickle.load(fh)
-            log.debug(state)
             return state
     except:
         log.debug('error reading state file, using hard-coded initial state')
