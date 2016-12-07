@@ -14,19 +14,6 @@ log = logging.getLogger(__name__)
 class FormfeedConversionException(Exception): pass
 class LinefeedConversionException(Exception): pass
 
-def get_pid_file():
-    return os.path.dirname(os.path.realpath(__file__)) + "/ui.pid"
-
-def write_pid_file():
-    pid = str(os.getpid())
-    file(get_pid_file(), 'w').write(pid)
-
-def remove_pid_file():
-    try:
-        os.unlink(get_pid_file())
-    except OSError:
-        pass
-
 def find_firmware(directory):
     '''recursively look for firmware, return first one found'''
     firmware_file = 'canute-firmware.zip'
