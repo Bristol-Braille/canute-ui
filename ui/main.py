@@ -56,9 +56,9 @@ def main():
 
 
 def run(driver, config):
-    init_state = initial_state.read()
+    init_state    = initial_state.read()
     width, height = driver.get_dimensions()
-    init_state = init_state.copy(dimensions = frozendict({'width': width, 'height': height}))
+    init_state    = init_state.copy(dimensions = frozendict({'width': width, 'height': height}))
     store.subscribe(partial(handle_changes, driver, config))
     store.dispatch(actions.init(init_state))
     button_loop(driver)
@@ -90,13 +90,12 @@ def button_loop(driver):
 
 def handle_changes(driver, config):
     state = store.get_state()
-    initial_state.write(state)
     render(driver, state)
     change_files(config, state)
+    initial_state.write(state)
     if state['shutting_down']:
         if isinstance(driver, Pi):
             os.system("sudo shutdown -h now")
-
 
 
 def render(driver, state):
