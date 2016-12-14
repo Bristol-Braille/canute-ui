@@ -75,9 +75,7 @@ def button_loop(driver):
                 log.debug('shutting down due to GUI closed')
                 store.dispatch(actions.shutdown())
             if state['shutting_down']:
-                del driver
                 quit = True
-                break
         if type(location) == int:
             location = 'book'
         for _id in buttons:
