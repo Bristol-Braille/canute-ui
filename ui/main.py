@@ -17,7 +17,7 @@ import buttons_config
 import config_loader
 from setup_logs import setup_logs
 from store import store
-from actions import actions, get_max_pages, get_title
+from actions import actions, get_max_pages, get_title, dimensions
 import convert
 import initial_state
 from button_bindings import button_bindings
@@ -55,16 +55,23 @@ def run(driver, config):
     init_state    = initial_state.read()
     width, height = driver.get_dimensions()
     init_state    = init_state.copy(dimensions = frozendict({'width': width, 'height': height}))
-    store.subscribe(partial(handle_changes, driver, config))
     store.dispatch(actions.init(init_state))
+    sync_library(init_state, config.get('files', 'library_dir'))
+    store.subscribe(partial(handle_changes, driver, config))
+    # since handle_changes subscription happens after init and sync_library it
+    # may not have triggered. so we trigger it here. if we put it before init
+    # it will start of by rendering a possibly invalid state. sync_library
+    # won't dispatch if the library is already in sync so there would be no
+    # guarantee of the subscription triggering if subscribed before that.
+    store.dispatch(actions.trigger())
     button_loop(driver)
 
 
 def button_loop(driver):
     quit = False
     while not quit:
-        buttons = driver.get_buttons()
-        state = store.get_state()
+        buttons  = driver.get_buttons()
+        state    = store.get_state()
         location = state['location']
         if not isinstance(driver, Pi):
             if not driver.is_ok():
@@ -87,9 +94,8 @@ def handle_changes(driver, config):
     render(driver, state)
     change_files(config, state)
     initial_state.write(state)
-    if state['shutting_down']:
-        if isinstance(driver, Pi):
-            os.system("sudo shutdown -h now")
+    if state['shutting_down'] and isinstance(driver, Pi):
+        os.system("sudo shutdown -h now")
 
 
 def render(driver, state):
@@ -137,12 +143,18 @@ def set_display(driver, data):
         log.debug('not setting display with identical data')
 
 
-def setup_library(library_dir, width):
-    file_names = utility.find_files(library_dir, (NATIVE_EXTENSION,))
-    books = []
-    for filename in file_names:
-        books.append(BookFile_List(filename, width))
-    store.dispatch(actions.set_books(books))
+def sync_library(state, library_dir):
+    width, height = dimensions(state)
+    convert_library(width, height, library_dir)
+    library_files = map(lambda b: b['data'].filename, state['books'])
+    disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
+    not_added = filter(lambda f: f not in library_files, disk_files)
+    if not_added != []:
+        not_added_data = map(lambda f: BookFile_List(f, width), not_added)
+        store.dispatch(actions.add_books(not_added_data))
+    non_existent = filter(lambda f: f not in disk_files, library_files)
+    if non_existent != []:
+        store.dispatch(actions.remove_books(non_existent))
 
 
 def convert_library(width, height, library_dir):
@@ -160,6 +172,7 @@ def convert_library(width, height, library_dir):
 
 
 def change_files(config, state):
+    library_dir = config.get('files', 'library_dir')
     if state['replacing_library'] == 'start':
         store.dispatch(actions.replace_library('in progress'))
         replace_library(config, state)
@@ -214,8 +227,7 @@ def replace_library(config, state):
         os.chown(new_path, uid, gid)
     width = state['display']['width']
     height = state['display']['height']
-    convert_library(width, height, library_dir)
-    setup_library(library_dir, width)
+    sync_library(state, library_dir)
     store.dispatch(actions.replace_library('done'))
 
 

@@ -191,34 +191,34 @@ class TestConvert(unittest.TestCase):
 
 
 class TestActions(unittest.TestCase):
-    def test_add_book(self):
+    def test_add_books(self):
         self.assertEqual(len(initial_state['books']), 0)
         r = actions.Reducers()
         data = mock.MagicMock()
-        state = r.add_book(initial_state, data)
+        state = r.add_books(initial_state, [data])
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
-    def test_add_book2(self):
+    def test_add_books2(self):
         '''cannot add the same book twice'''
         self.assertEqual(len(initial_state['books']), 0)
         r = actions.Reducers()
         data = mock.MagicMock()
         data.filename = 'test'
-        state = r.add_book(initial_state, data)
+        state = r.add_books(initial_state, [data])
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
-        state = r.add_book(state, data)
+        state = r.add_books(state, [data])
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
-    def test_remove_book(self):
+    def test_remove_books(self):
         self.assertEqual(len(initial_state['books']), 0)
         r = actions.Reducers()
         data = mock.MagicMock()
         data.filename = 'test'
-        state = r.add_book(initial_state, data)
+        state = r.add_books(initial_state, [data])
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
-        state = r.remove_book(state, data.filename)
+        state = r.remove_books(state, [data.filename])
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 0)
 

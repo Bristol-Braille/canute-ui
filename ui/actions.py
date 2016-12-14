@@ -11,6 +11,9 @@ from functools import partial
 class Reducers():
     def init(self, _, state):
         return state
+    def trigger(self, state, value):
+        '''bit ugly but gives the abiliy to trigger any state subscribers'''
+        return state
     def go_to_book(self, state, number):
         width, height = dimensions(state)
         page = state['library']['page']
@@ -33,23 +36,21 @@ class Reducers():
         data = map(partial(utility.pad_line, width), data)
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location = 'library', books = tuple(books), library = library)
-    def add_book(self, state, book_data):
+    def add_books(self, state, books_to_add):
         width, height = dimensions(state)
-        book = {'data': book_data, 'page':0}
         book_filenames = map(lambda b: b['data'].filename, state['books'])
-        if book_data.filename in book_filenames:
-            return state
+        books_to_add = filter(lambda d: d.filename not in book_filenames, books_to_add)
+        books_to_add = map(lambda b: {'data': b, 'page':0}, books_to_add)
         books = list(state['books'])
-        books.append(book)
+        books += list(books_to_add)
         books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
-        page = state['library']['page']
-        library = frozendict({'data': data, 'page': page})
+        library = frozendict({'data': tuple(data), 'page': state['library']['page']})
         return state.copy(books = tuple(books), library = library)
-    def remove_book(self, state, filename):
+    def remove_books(self, state, filenames):
         width, height = dimensions(state)
-        books = filter(lambda b: b['data'].filename != filename, state['books'])
+        books = filter(lambda b: b['data'].filename not in filenames, state['books'])
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
         maximum = get_max_pages(data, height)
