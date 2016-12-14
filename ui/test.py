@@ -198,6 +198,18 @@ class TestActions(unittest.TestCase):
         state = r.add_book(initial_state, data)
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 1)
+    def test_add_book2(self):
+        '''cannot add the same book twice'''
+        self.assertEqual(len(initial_state['books']), 0)
+        r = actions.Reducers()
+        data = mock.MagicMock()
+        data.filename = 'test'
+        state = r.add_book(initial_state, data)
+        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(state['books']), 1)
+        state = r.add_book(state, data)
+        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(state['books']), 1)
     def test_remove_book(self):
         self.assertEqual(len(initial_state['books']), 0)
         r = actions.Reducers()

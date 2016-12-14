@@ -36,6 +36,9 @@ class Reducers():
     def add_book(self, state, book_data):
         width, height = dimensions(state)
         book = {'data': book_data, 'page':0}
+        book_filenames = map(lambda b: b['data'].filename, state['books'])
+        if book_data.filename in book_filenames:
+            return state
         books = list(state['books'])
         books.append(book)
         books = sort_books(books)
