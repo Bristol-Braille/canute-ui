@@ -1,3 +1,9 @@
+'''
+This module defines the DriverBoth class that combines the emulated and real
+driver (Pi) allowing you to run them at the same time. Methods are sent to both
+drivers but only return values from the emulated one. This means, for instance,
+that only the button presses from the emulated GUI are registered.
+'''
 from types import FunctionType
 import logging
 log = logging.getLogger(__name__)
