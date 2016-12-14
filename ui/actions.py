@@ -130,7 +130,7 @@ def set_page(book, page, height):
 
 
 def get_max_pages(data, height):
-    return len(data) // height
+    return (len(data) - 1) // height
 
 
 def make_action_method(name):
