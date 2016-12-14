@@ -45,11 +45,7 @@ def main():
                 delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
     else:
-        # have to do this because couldn't find a way to set a default inside a section
-        if config.has_option('comms', 'timeout'):
-            timeout = float(config.get('comms', 'timeout'))
-        else:
-            timeout = 60
+        timeout = config.get('comms', 'timeout')
         log.info("running with real hardware on port %s, timeout %s" % (args.tty, timeout))
         with Pi(port=args.tty, pi_buttons=args.pi_buttons, timeout=timeout) as driver:
             run(driver, config)
