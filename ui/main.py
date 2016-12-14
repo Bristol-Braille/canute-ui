@@ -93,38 +93,40 @@ def handle_changes(driver, config):
 
 
 def render(driver, state):
-    width = state['display']['width']
-    height = state['display']['height']
+    width    = state['display']['width']
+    height   = state['display']['height']
     location = state['location']
     if state['shutting_down']:
         driver.clear_page()
     elif location == 'library':
-        page = state['library']['page']
-        data = state['library']['data']
-        height = height - 1
+        page      = state['library']['page']
+        data      = state['library']['data']
+        #subtract title from page height
+        height    = height - 1
         max_pages = get_max_pages(data, height)
-        n = page * height
-        data = data[n : n + height]
-        title = format_title('library menu', width, page, max_pages)
-        set_display(driver, [title] + list(data))
+        n         = page * height
+        data      = data[n : n + height]
+        title     = format_title('library menu', width, page, max_pages)
+        set_display(driver, tuple([title]) + tuple(data))
     elif location == 'menu':
-        page = state['menu']['page']
-        data = state['menu']['data']
-        height = height - 1
+        page      = state['menu']['page']
+        data      = state['menu']['data']
+        #subtract title from page height
+        height    = height - 1
         max_pages = get_max_pages(data, height)
-        title = format_title('system menu', width, page, max_pages)
-        n = page * height
-        data = data[n : n + height]
-        set_display(driver, [title] + list(data))
+        title     = format_title('system menu', width, page, max_pages)
+        n         = page * height
+        data      = data[n : n + height]
+        set_display(driver, tuple([title]) + tuple(data))
     elif type(location) == int:
         page = state['books'][location]['page']
         data = state['books'][location]['data']
-        n = page * height
+        n    = page * height
         data = data[n : n + height]
         set_display(driver, data)
 
 
-previous_data = []
+previous_data = ()
 def set_display(driver, data):
     global previous_data
     data = utility.flatten(data)
