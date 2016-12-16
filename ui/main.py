@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 
 import utility
 import argparser
-import buttons_config
 import config_loader
 from setup_logs import setup_logs
 from store import store
