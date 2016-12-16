@@ -89,7 +89,7 @@ class Reducers():
             page = book['page'] - 1
             books = list(state['books'])
             books[location] = set_page(book, page, height)
-            return state.copy(library = tuple(books))
+            return state.copy(books = tuple(books))
         return state
     def replace_library(self, state, value):
         if state['replacing_library'] == 'in progress':
