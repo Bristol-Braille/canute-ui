@@ -136,7 +136,7 @@ class Driver(object):
         log.debug("setting row of braille:")
         log.debug("row %i: |%s|" % (row, '|'.join(map(utility.pin_num_to_unicode, data))))
 
-        self.send_data(CMD_SEND_LINE, [row] + data)
+        self.send_data(CMD_SEND_LINE, [row] + list(data))
 
         # get status
         self.status = self.get_data(CMD_SEND_LINE)
