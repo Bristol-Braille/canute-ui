@@ -117,7 +117,7 @@ def dimensions(state):
 
 def get_title(book):
     basename = os.path.basename(book['data'].filename)
-    title = os.path.splitext(basename)[0]
+    title = os.path.splitext(basename)[0].replace('_', ' ')
     return utility.alphas_to_pin_nums(title)
 
 
