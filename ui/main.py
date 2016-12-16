@@ -99,8 +99,7 @@ def handle_changes(driver, config):
 
 
 def render(driver, state):
-    width    = state['display']['width']
-    height   = state['display']['height']
+    width, height = dimensions(state)
     location = state['location']
     if state['shutting_down']:
         driver.clear_page()
@@ -108,21 +107,27 @@ def render(driver, state):
         page      = state['library']['page']
         data      = state['library']['data']
         #subtract title from page height
-        height    = height - 1
-        max_pages = get_max_pages(data, height)
-        n         = page * height
-        data      = data[n : n + height]
-        title     = format_title('library menu', width, page, max_pages)
+        data_height = height - 1
+        max_pages   = get_max_pages(data, data_height)
+        n           = page * data_height
+        data        = data[n : n + data_height]
+        #pad page with empty rows
+        while len(data) < data_height:
+            data += ((0,) * width,)
+        title       = format_title('library menu', width, page, max_pages)
         set_display(driver, tuple([title]) + tuple(data))
     elif location == 'menu':
         page      = state['menu']['page']
         data      = state['menu']['data']
         #subtract title from page height
-        height    = height - 1
-        max_pages = get_max_pages(data, height)
-        title     = format_title('system menu', width, page, max_pages)
-        n         = page * height
-        data      = data[n : n + height]
+        data_height = height - 1
+        max_pages   = get_max_pages(data, data_height)
+        title       = format_title('system menu', width, page, max_pages)
+        n           = page * data_height
+        data        = data[n : n + data_height]
+        #pad page with empty rows
+        while len(data) < data_height:
+            data += ((0,) * width,)
         set_display(driver, tuple([title]) + tuple(data))
     elif type(location) == int:
         page = state['books'][location]['page']
