@@ -138,15 +138,15 @@ def render(driver, state):
         set_display(driver, data)
 
 
-previous_data = {}
+previous_data = []
 def set_display(driver, data):
     global previous_data
-    for row, braille in enumerate(data):
-        if braille != previous_data.get(row):
+    if data != previous_data:
+        for row, braille in enumerate(data):
             driver.set_braille_row(row, braille)
-            previous_data[row] = braille
-        else:
-            log.debug('not setting row with identical data')
+        previous_data = data
+    else:
+        log.debug('not setting page with identical data')
 
 
 def sync_library(state, library_dir):
