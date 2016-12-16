@@ -10,10 +10,9 @@ class BookFile_List(list):
     :param filename: the file to open
     :param dimensions: display dimensions tuple
     '''
-    def __init__(self, filename, dimensions):
+    def __init__(self, filename, cells):
         list.__init__(self)
-        self.cells = dimensions[0]
-        self.rows = dimensions[1]
+        self.cells = cells
         self.filename = filename
         statinfo = os.stat(filename)
         self.num_pages = statinfo.st_size / self.cells
@@ -34,5 +33,5 @@ class BookFile_List(list):
         return pages
 
 if __name__ == '__main__':
-    book = BookFile_List('./bookfile_list.py', [32, 4])
+    book = BookFile_List('./bookfile_list.py', 32)
     print(book[2:8])
