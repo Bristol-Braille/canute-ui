@@ -102,7 +102,8 @@ def render(driver, state):
     width, height = dimensions(state)
     location = state['location']
     if state['shutting_down']:
-        driver.clear_page()
+        if isinstance(driver, Pi):
+            driver.clear_page()
     elif location == 'library':
         page      = state['library']['page']
         data      = state['library']['data']
