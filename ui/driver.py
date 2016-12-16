@@ -121,9 +121,6 @@ class Driver(object):
         as returned by :func:`get_dimensions`
 
         '''
-        if len(data) > self.page_length:
-            log.warning("page data too long, length %d, truncating to %d" % (len(data), self.page_length))
-            data = data[0:self.page_length]
 
         log.debug("setting page of braille:")
 
