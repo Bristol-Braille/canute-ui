@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from multiprocessing import Process
+from frozendict import frozendict
 import unittest
 import os
 import pty
@@ -17,6 +18,7 @@ import config_loader
 import convert
 import actions
 from initial_state import initial_state
+from main import sync_library
 
 class TestUtility(unittest.TestCase):
 
@@ -222,6 +224,35 @@ class TestActions(unittest.TestCase):
         self.assertEqual(len(initial_state['books']), 0)
         self.assertEqual(len(state['books']), 0)
 
+    def test_book_navigation(self):
+        self.assertEqual(len(initial_state['books']), 0)
+        r = actions.Reducers()
+        pages = utility.test_book((40, 9))
+        with open('/tmp/book', 'w') as fh:
+            for page in pages:
+                fh.write(bytearray(page))
+
+        bookfile = BookFile_List('/tmp/book', 40)
+        state = r.add_books(initial_state, [bookfile])
+        state = r.go_to_book(state, 0)
+
+        self.assertEqual(state['location'], 0)
+        self.assertEqual(state['books'][0]['page'], 0)
+
+        # check we can't go backwards from page 0
+        state = r.previous_page(state, None)
+        self.assertEqual(state['books'][0]['page'], 0)
+
+        # check we can go forwards from page 0
+        state = r.next_page(state, None)
+        self.assertEqual(state['books'][0]['page'], 1)
+
+        # go fowards too many times
+        for i in range(10):
+            state = r.next_page(state, None)
+
+        # and check we're on the last page
+        self.assertEqual(state['books'][0]['page'], 7)
 
 if __name__ == '__main__':
     config = config_loader.load()
