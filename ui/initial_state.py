@@ -39,7 +39,10 @@ def write(state):
     log.debug('writing state file')
     write_state                      = dict(state)
     write_state['library']           = state['library'].copy(page = 0)
-    write_state['location']          = 'library'
+    location = state['location']
+    if location == 'menu':
+        location = 'library'
+    write_state['location']          = location
     write_state['backing_up_log']    = False
     write_state['replacing_library'] = False
     write_state['shutting_down']     = False
