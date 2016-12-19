@@ -27,7 +27,10 @@ class BookFile_List(list):
             for pos in range(i, j):
                 fh.seek(pos * self.cells)
                 data = fh.read(self.cells)
-                page = struct.unpack("%db" % self.cells, data)
+                try:
+                    page = struct.unpack("%db" % self.cells, data)
+                except struct.error:    
+                    page = [0] * self.cells
                 pages.append(page)
 
         return pages
