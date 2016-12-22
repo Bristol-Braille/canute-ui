@@ -10,4 +10,5 @@ usb_dir = /media/
 user_name = pi
 
 [comms]
-timeout = 120
+# serial timeout in seconds
+timeout = 1000
