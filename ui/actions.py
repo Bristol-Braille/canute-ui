@@ -106,6 +106,11 @@ class Reducers():
             return state
         else:
             return state.copy(warming_up = value)
+    def reset_display(self, state, value):
+        if state['resetting_display'] == 'in progress':
+            return state
+        else:
+            return state.copy(resetting_display = value)
     def shutdown(self, state, value):
         return state.copy(shutting_down = True)
 

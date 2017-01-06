@@ -8,6 +8,7 @@ menu = OrderedDict([
     ('shutdown'                       , actions.shutdown),
     ('backup log to USB stick'        , partial(actions.backup_log, 'start')),
     ('run warm up routine'            , partial(actions.warm_up, 'start')),
+    ('reset display'                  , partial(actions.reset_display, 'start')),
 ])
 
 menu_titles_braille = map(utility.alphas_to_pin_nums, menu)

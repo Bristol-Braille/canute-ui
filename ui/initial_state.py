@@ -20,6 +20,7 @@ initial_state = frozendict({
     'backing_up_log'    : False,
     'shutting_down'     : False,
     'warming_up'        : False,
+    'resetting_display' : False,
     'display'           : frozendict({'width': 40, 'height': 9}),
 })
 

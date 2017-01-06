@@ -100,7 +100,11 @@ def handle_changes(driver, config):
 def render(driver, state):
     width, height = dimensions(state)
     location = state['location']
-    if state['warming_up'] == 'start':
+    if state['resetting_display'] == 'start':
+        store.dispatch(actions.reset_display('in progress'))
+        driver.reset_display()
+        store.dispatch(actions.reset_display(False))
+    elif state['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
         store.dispatch(actions.warm_up(False))
