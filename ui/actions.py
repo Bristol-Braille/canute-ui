@@ -101,6 +101,11 @@ class Reducers():
             return state
         else:
             return state.copy(backing_up_log = value)
+    def warm_up(self, state, value):
+        if state['warming_up'] == 'in progress':
+            return state
+        else:
+            return state.copy(warming_up = value)
     def shutdown(self, state, value):
         return state.copy(shutting_down = True)
 

@@ -100,7 +100,11 @@ def handle_changes(driver, config):
 def render(driver, state):
     width, height = dimensions(state)
     location = state['location']
-    if state['shutting_down']:
+    if state['warming_up'] == 'start':
+        store.dispatch(actions.warm_up('in progress'))
+        driver.warm_up()
+        store.dispatch(actions.warm_up(False))
+    elif state['shutting_down']:
         if isinstance(driver, Pi):
             driver.clear_page()
     elif location == 'library':

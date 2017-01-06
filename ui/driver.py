@@ -49,6 +49,10 @@ class Driver(object):
         self.send_data(CMD_RESET)
         return self.get_data(CMD_RESET)
 
+    def warm_up(self):
+        self.send_data(CMD_WARMUP)
+        return self.get_data(CMD_WARMUP)
+
     def get_dimensions(self):
         '''
         returns dimensions of the display

@@ -19,6 +19,7 @@ initial_state = frozendict({
     'replacing_library' : False,
     'backing_up_log'    : False,
     'shutting_down'     : False,
+    'warming_up'        : False,
     'display'           : frozendict({'width': 40, 'height': 9}),
 })
 
