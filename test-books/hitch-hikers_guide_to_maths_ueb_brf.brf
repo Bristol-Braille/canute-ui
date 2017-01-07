@@ -1,0 +1,731 @@
+,,,! HIT*HIK]'S GUIDE TO UEB MA!MATICS,'
+           ,F/ PUBLI%$ #BJJH
+             ,REVIS$ #BJAC
+
+ ,,,UEB CURRICULA SUPPORT WRIT+ GR\P,'
+
+   ,ADAPT$ 9 A3ORD.E ) ,SEC;N #FI ( !
+           ,COPY"R ,ACT #AIID
+ BY ! ,ROYAL ,NEW ,Z1L& ,F.DA;N ( ! ,BL
+
+           ,PRODUC$ #BJAC BY
+       ,A3ESSIBLE ,=MAT ,PRODUC;N
+      ,,RNZFB1 ,AUCKL&1 ,NEW ,Z1L&
+
+             ,9 #A ,VOLUME
+      ,BRL PAGES P#A-P#I & #A-#BF
+           ,PR9T PAGES #A-#AD       P#A
+
+        ,,,UEB HIT*HIK]'S GUIDE,'
+
+           ,,,SPECIAL SYMBOLS
+            US$ 9 ? VOLUME,'
+
+  ,? VOLUME HAS BE5 PRODUC$ 9 ,UNIFI$
+,5GLI% ,BRL4
+
+.= DOT LOCATOR
+.=,,, CAPITALS PASSAGE 9DICATOR
+.=,' CAPITALS MODE T]M9ATOR
+.="< OP5+ R.D BRACKET
+.="> CLOS+ R.D BRACKET
+.=.< OP5+ SQU>E BRACKET
+.=.> CLOS+ SQU>E BRACKET
+.=_< OP5+ CURLY BRACKET
+.=_> CLOS+ CURLY BRACKET
+.=< OP5+ BRL GR\P+ SYMBOL
+.=> CLOS+ BRL GR\P+ SYMBOL
+.=,- DA%
+.=_4 BULLET PO9T
+.=4 FULL-/OP OR DECIMAL PO9T
+.=" NUM]ICAL SPACE
+.=@C C5T
+.=@S DOLL>                          P#C
+       ,,,UEB HIT*HIK]'S GUIDE,'
+.=@E EURO
+.=.0 P]C5T
+.=^J DEGREE
+.=% OP5+ RADICAL "<ROOT">
+.=+ CLOS+ RADICAL "<ROOT">
+.=/ SIMPLE NUM]ICAL FRAC;N L9E
+.=./ G5]AL FRAC;N L9E
+.=( G5]AL FRAC;N OP5+ 9DICATOR
+.=) G5]AL FRAC;N CLOS+ 9DICATOR
+.=#= 9F9;Y
+.=_[ ANGLE SIGN
+.=.A ,GREEK ALPHA
+.=.B ,GREEK 2TA
+.=.? ,GREEK !TA
+.=.P ,GREEK PI
+.=.S ,GREEK SIGMA
+.=,.S ,GREEK CAPITAL SIGMA
+.="6 PLUS SIGN
+.="- M9US SIGN
+.=_6 PLUS OR M9US SIGN
+.="8 MULTIPLICA;N SIGN
+.="4 MULTIPLICA;N DOT
+.="/ DIVI.N SIGN
+.="7 EQUALS                         P#D
+       ,,,UEB HIT*HIK]'S GUIDE,'
+.="7@: IS N EQUAL TO
+.=3 COLON OR RATIO
+.=@: L9E "? PREVI\S ITEM "<C.ELLA;N1
+  8N0">
+.=@< IS LESS ?AN
+.=@> IS GRT] ?AN
+.=_@< IS LESS ?AN OR EQUAL TO
+.=_@> IS GRT] ?AN OR EQUAL TO
+.=9 SUP]SCRIPT OR EXPON5T 9DICATOR
+  "<LEVEL *ANGE UP">
+.=5 SUBSCRIPT 9DICATOR "<LEVEL *ANGE
+  D[N">
+.=$ %APE 9DICATOR
+.=$#C REGUL> "<EQUILAT]AL"> TRIANGLE
+.=$#D SQU>E
+.=$= CIRCLE
+.=$#E REGUL> P5TAGON
+.=\ >R[ 9DICATOR
+.=\O SIMPLE "R-PO9T+ >R[
+.=\[ SIMPLE LEFT-PO9T+ >R[ "<WE/">
+.=\+ SIMPLE UP-PO9T+ >R[ "<NOR?">
+.=\% SIMPLE D[N-PO9T+ >R[ "<S\?">
+.=R REGUL> B>B1 FULL1 9 L9E ( DIREC;N
+.=\33RRO D\BLE-B>B$ >R[             P#E
+       ,,,UEB HIT*HIK]'S GUIDE,'
+.=#L P>ALLEL TO
+.=#- P]P5DICUL> TO
+.=+ G5]AL OMIS.N SYMBOL
+.=_ TALLY M>K
+.=; GRADE #A SYMBOL
+.=;; GRADE #A ^W
+.=;;; GRADE #A PASSAGE
+.=;' GRADE #A T]M9ATOR
+.=^1 BOLDFACE ^W
+.=^7 BOLDFACE PASSAGE
+.=^' BOLDFACE T]M9ATOR
+.=_1 "UL9$ ^W
+.=.7 ITALIC PASSAGE
+.=.' ITALIC T]M9ATOR
+.=@.< OP5+ TRANSCRIB]'S NOTE 9DICATOR
+.=@.> CLOS+ TRANSCRIB]'S NOTE 9DICATOR
+.=@A AT SIGN
+.=^9 TILDE OV] TILDE "<IS APPROXIMATELY
+  EQUAL TO">
+.=_9 TILDE OV] HORIZONTAL L9E "<IS
+  APPROXIMATELY EQUAL TO">
+.="9 A/]ISK
+.=",- L;G DA%
+.=6 FACTORIAL SIGN                  P#F
+       ,,,UEB HIT*HIK]'S GUIDE,'
+.=,* "!=E
+.=@/ S9CE
+.=444 ELLIPSIS
+.=@,? DA7]
+
+                                    P#G
+       ,,,UEB HIT*HIK]'S GUIDE,'
+
+         ,,TRANSCRIB]',S ,,NOTE
+
+  ,,UEB SYMBOL DOT 3FIGURA;NS1 REPRES5T$
+9 PR9T BY 9K DOTS "<8SIMBRL0">1 >E
+9DICAT$ 9 ? BRL $I;N ) ! DOT LOCATOR =
+8M5;N03 .=4
+
+                                    P#H
+       ,,,UEB HIT*HIK]'S GUIDE,'
+
+           ,3T5TS,-,MA!MATICS
+
+,QK ,REF];E """"""""""""""""""""""""" #A
+,9TRODUC;N """""""""""""""""""""""""" #C
+,,KISS ,PR9CIPLES,-#AJ ,SIMPLE
+  ,RULES """""""""""""""""""""""""""" #D
+,:AT ON ,E>? IS T8 """""""""""""""""" #E
+,BRL ,9DICATORS
+  ,NUMB] ,SIGN """""""""""""""""""""" #F
+  ,GRADE #A ,9DICATORS """""""""""""" #F
+,SIGNS (
+  ,OP]A;NS """""""""""""""""""""""""" #G
+  ,COMP>ISON """""""""""""""""""""""" #G
+  ,GR\P+ """""""""""""""""""""""""""" #G
+,FRAC;NS """""""""""""""""""""""""""" #H
+,DECIMALS """"""""""""""""""""""""""" #I
+,SUP]SCRIPTS & ,SUBSCRIPTS """""""""" #I
+,SQU>E ,ROOTS """"""""""""""""""""""" #I
+,GREEK ,LRS """""""""""""""""""""""" #AJ
+,PR9T ,SYMBOLS """"""""""""""""""""" #AJ
+,=MATT+ """""""""""""""""""""""""""" #AJ
+,LI/ ( ,COMMON ,SYMBOLS """""""""""" #AA
+                                    P#I
+
+
+         ,,,! HIT*HIK]'S GUIDE
+           TO UEB MA!MATICS,'
+
+              ,AC"KL$GE;TS
+
+  ,?ANKS G TO ! ,M9I/RY ( ,$UCA;N = _!
+SUPPORT 9 ! DEVELOP;T ( ? RES\RCE : IS
+LIC5S$ "U ! ,CR1TIVE ,COMMONS
+,ATTRIBU;N-,NON,COMM]CIAL-,%>E,ALIKE
+LIC;E4 ,TO VIEW A COPY ( ? LIC;E1 VISIT
+HTTP3_/_/CREATIVECOMMONS4ORG_/"
+LICENSES_/BY-NC-SA_/#C4J_/NZ_/
+  ,! MEMB]S ( ! #BJJH ,,UEB ,CURRICULA
+,SUPPORT ,WRIT+ ,GR\P 7 ,ELA9E ,GILM\R1
+,J5NY ,MC,FADD51 ,CA!R9E ,WE/1 ,DIANE
+,GLYNAN1 ,JANET ,REYNOLDS1 ,ISOBEL ,D9N+
+& ,/EVE ,BELLAMY4
+
+                                      #A
+       ,,,UEB HIT*HIK]'S GUIDE,'      #A
+
+        ,,,UEB MA?S QK REF];E,'
+
+.=#A NUM]AL "O
+.=#B NUM]AL TWO
+.=1 COMMA
+.=4 DECIMAL PO9T
+.=" NUM]IC SPACE
+.=@C C5T
+.=@S DOLL>
+.=.0 P]C5T
+.=^J DEGREE
+.=% .=+ SQU>E ROOT
+.=/ FRAC;N L9E
+.=#= 9F9;Y
+.=_[ ANGLE 9DICATOR
+.=.P ,GREEK PI
+.="6 PLUS
+.="- M9US
+.="8 MULTIPLY
+.="/ DIVIDE
+.=_6 PLUS OR M9US
+.="4 MULTIPLICA;N DOT
+.=3 RATIO                             #B
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#A
+.="7 EQUALS
+.=@< IS LESS ?AN
+.=@> IS GRT] ?AN
+.=_@< IS LESS ?AN OR EQUAL TO
+.=_@> IS GRT] ?AN OR EQUAL TO
+.="7@: N EQUAL TO
+.=9 SUP]SCRIPT,-*ANGE LEVEL UP
+.="< R.D BRACKET
+.="> R.D BRACKET
+.=$#C EQUILAT]AL TRIANGLE
+.=$#D SQU>E
+.=$= CIRCLE
+.=\ >R[ 9DICATOR
+.=\O "R-PO9T+ >R[
+.=#L P>ALLEL
+.=#- P]P5DICUL>
+.=+ G5]AL OMIS.N
+.=_ TALLY M>K
+
+    ,EXAMPLES
+#CB"6#BF "7 #EH
+#C/D
+#E#C/D
+#E9#B "7 #BE                          #C
+       ,,,UEB HIT*HIK]'S GUIDE,'     B#A
+;%#D+
+"-#C
+
+                                      #D
+       ,,,UEB HIT*HIK]'S GUIDE,'   #B-#C
+
+               ,9TRODUC;N
+
+  ,! ,HIT*HIK]'S ,GUIDE TO ,,UEB F/ $I;N
+0 WRITT5 9 #BJJH BY A GR\P ( D$ICAT$
+,RES\RCE ,T1*]S ,VI.N F ! ,BL & ,L[
+,VI.N ,NET"W ,NEW ,Z1L& TGR ) SUPPORT F
+/AFF AT ! ,ROYAL ,NEW ,Z1L& ,F.DA;N ( !
+,BL1 ,A3ESSIBLE ,=MAT ,PRODUC;N4
+  ,! T1M MEMB]S GIFT$ _! "T1 K & PAS.N =
+BRL1 TO PRODUCE A RES\RCE TO SUPPORT
+/AFF1 LE>N]S & PRODUC]S ) ,UNIFI$ ,5GLI%
+,BRL "<,,UEB"> PRODUC;N1 Z ,NEW ,Z1L&'S
+ADOP;N ( ,,UEB 2CAME A R1L;Y 9 ! $UCA;N
+& BRL _WS4
+  ,! ,HIT*HIK]'S ,GUIDE TO ,,UEB 0
+DEVELOP$ TO S]VE Z A QK MEMORY JO7]4 ,X
+IS N A COMPREH5SIVE BRL 9/RUC;N GUIDE4
+,? $I;N1 UPDAT$ 9 #BJAC1 RE9=CES ! USE (
+! GUIDE Z A REF];E TOOL TO 2 US$ BY
+,RES\RCE ,T1*]S ,VI.N "<,,RTV,'S">1
+T1*]S1 T1*] AIDES1 ,:_ANAU & P>5TS1 :O
+F9D !MVS NE$+ TO BRL TEXTS QKLY = /UD5T
+USE4                                  #E
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#C
+  ,= M 9-DEP? BRL RULES PL1SE REF] TO !
+,BRL ,AU?OR;Y ( ,NEW ,Z1L& ,AOTEAROA
+,TRU/ ,,BANZAT WEBSITE AT
+WWW4BANZAT4ORG4NZ F : ! CURR5T $I;NS ( !
+MANUALS LI/$ 2L C 2 D[NLOAD$4
+
+_4 ,UNIFI$ ,5GLI% ,BRL ,MANUAL3 ,NEW
+  ,Z1L& ,$I;N
+_4 ,UNIFI$ ,5GLI% ,BRL ,GUIDEL9ES =
+  ,TE*NICAL ,MAT]IAL
+_4 ,! ,RULES ( ,UNIFI$ ,5GLI% ,BRL
+
+                                      #F
+       ,,,UEB HIT*HIK]'S GUIDE,'      #D
+
+           ,,KISS ,PR9CIPLES
+         "<,KEEP+ X S SIMPLE6">
+                ,= ,,UEB
+
+    #AJ ^1,V ,SIMPLIFI$ ,RULES
+#A4 "6 "- "8 "/ "7 ALL TAKE DOT #E
+#B4 M"OY SYMBOLS TAKE DOT #D & >E FOLL[$
+  BY NUMB] SIGN
+#C4 OP]A;N SIGNS >E UNSPAC$ BO? SIDES
+#D4 COMP>ISON SIGNS >E SPAC$ 2F & AF
+#E4 GRT] ?AN & LESS SIGNS ?AN TAKE DOT
+  #D
+#F4 SIMPLE FRAC;N L9E3 .=/
+#G4 MIX$ NUM]ALS,-REP1T NUMB] SIGN
+#H4 SUP]SCRIPT,-*ANGE LEVEL UP3 .=9
+#I4 SUBSCRIPT,-*ANGE LEVEL D[N3 .=5
+#AJ4 SQU>E ROOT HAS TO OP5 & CLOSE3
+  .=% .=+ 
+
+                                      #G
+       ,,,UEB HIT*HIK]'S GUIDE,'      #E
+
+               ,U4,E4,B4
+          ,:AT ON ,E>? IS ,T8
+
+      @.<,PR9T TABLE %[N Z 9D5T$ LI/ 9
+    BRL4@.>
+
+,DOT #D SYMBOLS
+  ,M"OY SYMBOLS3
+    .=@S DOLL>
+    .=@C C5T
+    .=@E ,EURO
+  .=@A AT SIGN
+  .=@< IS LESS ?AN
+  .=@> IS GRT] ?AN
+  .=@.< OP5 TRANSCRIB]'S NOTE
+  .=@.> CLOSE TRANSCRIB]'S NOTE
+  .=@: L9E "? PREVI\S ITEM "<CANCELLA;N1
+    8N0"> E4G4 .="7@:
+,DOTS #D1 #E SYMBOLS
+  .=^J DEGREE
+  .=^9 TILDE OV] TILDE @.<IS
+    APPROXIMATELY EQUAL TO@.>
+                                      #H
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#E
+,DOTS #D1 #E1 #F SYMBOLS
+  .=_6 PLUS OR M9US
+  .=_@> GRT] ?AN OR EQUAL TO
+  .=_@< LESS ?AN OR EQUAL TO
+  .=_/ =W>D SLA%
+  .=_9 APPROXIMATELY EQUAL TO "<TILDE
+    OV] HORIZONTAL L9E">
+  .=_[ ANGLE
+,DOTS #D1 #F
+  .=.0 P]C5T
+  .=./ G5]AL FRAC;N L9E
+  ,GREEK LRS3
+    .=.A ALPHA
+    .=.B 2TA
+    .=.P PI
+    .=,.S CAPITAL SIGMA
+  .=.< .=.> SQU>E BRACKETS
+,DOT #E
+  ,OP]A;N SIGNS3
+    .="6 PLUS
+    .="- M9US
+    .="8 MULTIPLY
+    .="4 MULTIPLICA;N DOT
+    .="/ DIVIDE                       #I
+       ,,,UEB HIT*HIK]'S GUIDE,'     B#E
+  ,SIGNS ( COMP>ISON3
+    .="7 EQUALS
+    .="7@: N EQUAL TO
+  .="9 A/]ISK
+  .=",- L;G DA%1 TYPICALLY US$ TO
+    9DICATE MISS+ ANSW]
+  
+  ,DOT #E IS US$ Z ! NUM]IC SPACE SYMBOL
+TO 9DICATE :5 A SPACE HAS BE5 US$ 9/1D (
+A COMMA E4G4 #A"JJJ"JJJ
+
+                                     #AJ
+       ,,,UEB HIT*HIK]'S GUIDE,'      #F
+
+         ,! ,HIT*HIK]'S ,GUIDE
+          TO ,,UEB ,MA!MATICS
+
+7777777777777777777777777777777777777777
+  ,9 ,,UEB EA* PR9T SYMBOL HAS ^7"O &
+ONLY "O^' BRL EQUIVAL5T4
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+
+  ,,UEB ,MA?S IS N A SEP>ATE CODE4 ,ALL
+! SYMBOLS Y WD MEET 9 ,,UEB LIT]>Y
+MAT]IAL >E ! SAME :5 MET 9 A MA?S SETT+4
+
+            ,BRL ,9DICATORS
+
+  ,! LIMITA;NS ( ! #F-DOT CELL MAKE X
+IMPOSSIBLE TO REPRES5T 9 BRL1 )\T
+DUPLICA;N1 ! _M >BITR>Y SIGNS US$ 9 PR9T
+MA!MATICS4 ,A SY/EM ( BRL ^19DICATORS IS
+"!=E US$4 ,^! 9DICATORS H NO CORRESPOND+
+9K PR9T SIGNS B IM"P "PICUL> M1N+S TO !
+BRL SYMBOLS : PREC$E OR FOLL[ !M4
+
+                                     #AA
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#F
+
+    ,NUMB] ,SIGN "<DOTS #C-#D-#E-#F">
+  ,! MO/ COMMON BRL 9DICATOR IS ! NUMB]
+SIGN : SIGNALS T ! FOLL[+ CELL "<OR
+CELLS"> =MS A NUMB]4 ,! DIGITS "O TO N9E
+& Z]O >E %[N BY ! LRS A TO ;J PREC$$ BY
+! NUMB] SIGN4
+  E4G4 #A   #EJJ
+
+    ,GRADE #A ,9DICATORS "<DOTS #E-#F">
+  ,IF A BRL SYMBOL AL HAS A ,GRADE #B
+M1N+ !N ! ^7,GRADE #A ,9DICATOR^' M/ 2
+US$ UN.S ,GRADE #A MODE IS ALR 9 =CE4
+
+.=; 9DICATES ! FOLL[+ _1SYMBOL IS 9
+  ,GRADE #A
+.=;; 9DICATES ! FOLL[+ _1^W IS 9 ,GRADE
+  #A
+.=;;; 9DICATES ! FOLL[+ _1PASSAGE IS 9
+  ,GRADE #A
+.=;' "<DOTS #E-#F1 #C"> T]M9ATES !
+  ,GRADE #A PASSAGE4
+
+  ,ANY ALGEBRA EXPRES.N MAY NE$ A    #AB
+       ,,,UEB HIT*HIK]'S GUIDE,'     B#F
+^7,GRADE #A ,^W ,9DICATOR^' OR1 IF X
+9CLUDES SPACES1 A ^7,GRADE #A ,PASSAGE
+,9DICATOR^'4 ,A SIMPLE >I?METIC EQUA;N W
+N4
+
+7777777777777777777777777777777777777777
+  ,! ,NUMB] ,SIGN ACTS Z A ,GRADE #A
+9DICATOR4
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+--------------------------------------#G
+
+    ,SIGNS ( ,OP]A;N
+  ,! BASIC MA!MATICAL OP]A;NS >E ADDI;N1
+SUBTRAC;N1 MULTIPLICA;N & DIVI.N4 ,^! >E
+#B-CELL SIGNS4
+
+PLUS .="6 "<DOT #E1 DOTS #B-#C-#E">
+M9US .="- "<DOT #E1 DOTS #C-#F">
+MULTIPLY .="8 "<DOT #E1 DOTS #B-#C-#F">
+DIVIDE .="/ "<DOT #E1 DOTS #C-#D">
+PLUS OR M9US .=_6 "<DOTS #D-#E-#F1 DOTS
+  #B-#C-#E">
+MULTIPLICA;N DOT .="4 "<DOT #E1 DOTS #B-
+  #E-#F">                            #AC
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#G
+
+  ,! SIGNS ( OP]A;N >E UNSPAC$4
+  E4G4 #F"6#C1 #D"-#B1 #H"8#I
+
+    ,SIGNS ( ,COMP>ISON
+  ,9 BRL ^! >E AT L1/ #B-CELL SIGNS & M/
+2 PREC$$ & FOLL[$ BY A SPACE4 ,! MO/
+COMMON IS ! EQUALS SIGN4 ,O!RS 9CLUDE !
+SYMBOLS = GRT] ?AN @>1 LESS ?AN @<1 ETC4
+
+EQUALS .="7 "<DOT #E1 DOTS #B-#C-#E-#F">
+GRT] ?AN .=@> "<DOT #D1 DOTS #C-#D-#E">
+LESS ?AN .=@< "<DOT #D1 DOTS #A-#B-#F">
+N EQUAL TO .="7@: "<DOT #E1 DOTS #B-#C-
+  #E-#F1 DOT #D1 DOTS #A-#E-#F">
+
+E4G4 #F"6#C "7 #I
+
+                                     #AD
+       ,,,UEB HIT*HIK]'S GUIDE,'     B#G
+
+    ,SIGNS ( ,GR\P+
+  ,! BASIC BRACKETS >E
+
+,R.D BRACKETS .="< .=">
+  "<OP5+3 DOT #E1 DOTS #A-#B-#F2
+    CLOS+3 DOT #E1 DOTS #C-#D-#E">
+,SQU>E BRACKETS .=.< .=.>
+  "<OP5+3 DOTS #D-#F1 DOTS #A-#B-#F2
+    CLOS+3 DOTS #D-#F1 DOTS #C-#D-#E">
+,CURLY BRACKETS .=_< .=_>
+  "<OP5+3 DOTS #D-#E-#F1 DOTS #A-#B-#F2
+    CLOS+3 DOTS #D-#E-#F1 DOTS #C-#D-
+    #E">
+--------------------------------------#H
+  
+    ,BRL ,5CLOSURE ,9DICATORS
+  ,BRL GR\P+ 9DICATORS >E US$ :5 "! >E
+NO PR9T BRACKETS B ! SYMBOLS / NE$ TR1T+
+Z AN ITEM4 ,SEE ! LA/ EXAMPLES 9 !
+,SUP]SCRIPTS & ,SUBSCRIPTS ,SEC;N AT !
+TOP ( BRL PAGE #AG4
+
+OP5+ .=< "<DOTS #A-#B-#F">           #AE
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#H
+CLOS+ .=> "<DOTS #C-#D-#E">
+
+    ,SIMPLE ,FRAC;NS
+  ,9 BRL1 FRAC;NS >E A LL DI6]5T F !
+PR9T =MS 2C !Y >E WRITT5 ACR ! L9E4 ,WE
+D N TALK AB ! TOP & BOTTOM "PS ( A
+FRAC;N2 WE REF] TO !M BY _! CORRECT
+"NS,-NUM]ATOR & D5OM9ATOR4
+  ,9 PR9T1 SIMPLE FRAC;NS MAY 2 WRITT5
+EI Z #C/D OR Z #C_/#D & 9 BO? CASES WE
+WD SAY EI 8?REE QU>T]S0 OR 8?REE OV]
+F\R04 ,2 3SI/5T & USE ! SAME =M = EA*
+CASE4
+  #C/D   #E#A/B
+
+    ,COMPLEX ,FRAC;NS
+  ,:5 Y H FRAC;NS ) M COMPLEX NUM]ATORS
+OR D5OM9ATORS Y W NE$ TO 9DICATE T X IS
+A FRAC;N BY US+ ! ^7,G5]AL ,FRAC;N ,OP5
+& ,CLOSE ,9DICATORS^'4
+
+,OP5+ .=( "<DOTS #A-#B-#C-#E-#F">
+CLOS+ .=) "<DOTS #B-#C-#D-#E-#F">
+                                     #AF
+       ,,,UEB HIT*HIK]'S GUIDE,'     B#H
+
+  ,S9CE ! ^7,G5]AL ,FRAC;N ,OP5
+,9DICATOR^' HAS A ,GRADE #B M1N+ !
+FOLL[+ EXAMPLE USES ! ^7,GRADE #A ,^W
+,9DICATOR^'4
+  ;(#C"6#F./#D)
+  ;(X./#B)
+--------------------------------------#I
+
+    ,DECIMAL ,PO9T
+  ,! SYMBOL US$ = ! DECIMAL PO9T IS DOTS
+#B-#E-#F .=4,-! SAME Z ! FULL /OP 2C A
+DECIMAL PO9T LOOKS L A FULL /OP4
+
+    ,SUP]SCRIPTS & ,SUBSCRIPTS "<,LEVEL
+    ,9DICATORS">
+  ,SUP]SCRIPTS H *ANG$ LEVEL UP & >E
+9DICAT$ BY .=9
+  #C9#B
+,IF LRS >E 9VOLV$ !N ! LEVEL 9DICATOR CD
+2 A 3TRAC;N S A ,GRADE #A 9DICATOR IS
+NE$$4
+  Y;9#B
+,A LEVEL 9DICATOR ONLY REF]S TO !    #AG
+       ,,,UEB HIT*HIK]'S GUIDE,'     A#I
+NEXT ITEM4 ,IF A SUP]SCRIPT 3TA9S M ?AN
+"O SYMBOL,-E4G4 ;;Y9<"-#B>1
+;;X9<#D"6#E>1 ! ITEMS "-#B & #D"6#E M/ 2
+5CLOS$ 9 BRL GR\P+ SYMBOLS4
+  ;;Y9<"-#B>   ;;X9<#D"6#E>
+,NOTICE T ! ,GRADE #A ^W 9DICATOR COV]S
+ALL ! POSSIBLE 3TRAC;NS 9 ? EXPRES.N4
+  ,SUBSCRIPTS H *ANG$ LEVEL D[N4 ,!Y >E
+9DICAT$ BY .=5 & ! RULES >E ! SAME4
+
+    ,SQU>E ,ROOTS & O!R ,RADICALS
+  ,! EXPRES.N 9SIDE ! SQU>E ROOT SIGN 9
+PR9T "<! RADIC&"> %D 2 PREC$$ BY ! OP5
+RADICAL SIGN & FOLL[$ BY ! CLOSE RADICAL
+SIGN4
+  OP5+ .=% "<DOTS #A-#D-#F">
+  CLOS+ .=+ "<DOTS #C-#D-#F">
+
+  ;%#D+
+
+                                     #AH
+       ,,,UEB HIT*HIK]'S GUIDE,'     B#I
+
+7777777777777777777777777777777777777777
+  ,BO? ! OP5+ & CLOS+ RADICAL SIGNS H
+ALT]NATIVE GRADE #B M1N+S S WE NE$ !
+,GRADE #A ,9DICATOR4
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+-------------------------------------#AJ
+
+    ,GREEK ,LRS
+  ,GREEK LRS >E US$ Q A LOT 9 MA?S1 =
+V>I\S R1SONS4 ,! MO/ FAM\S IS1 ( C\RSE1
+PI,-OR Z ! ,GREEKS WRITE X1 .P4 ,!
+,GREEK LRS USUALLY CORRESPOND TO PR9T
+LRS E4G4 ALPHA IS 8A01 B "S H NO S+LE LR
+EQUIVAL5T E4G4 .? !TA4
+  ,! SYMBOL US$ TO 9DICATE T ! NEXT LR
+IS A ,GREEK LR IS DOTS #D-#F4
+  E4G4
+  .A "<ALPHA">
+  .B "<2TA">
+  .? "<!TA">
+  .P "<PI">
+  .S "<SIGMA">
+  ,.S "<SIGMA,-UPP] CASE">           #AI
+       ,,,UEB HIT*HIK]'S GUIDE,'    A#AJ
+
+7777777777777777777777777777777777777777
+  ,NOTE T ! CAPITAL SIGN COMES 2F !
+,GREEK LR SYMBOL4
+GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+
+    ,PR9T ,SYMBOLS
+  ,IF ! PR9T "* LOOKS L A LR ( "S K9D !N
+! BRL (T5 USES T LR PREC$$ BY ! PREFIX
+DOT #D4
+  E4G4
+  @S "<DOT #D1 ;S">
+  @A "<DOT #D1 A">
+  ,SEE ! ,,UEB ,SYMBOLS LI/1 OR
+.7,GUIDEL9ES = ,TE*NICAL ,MAT]IAL.'1 = A
+FULL SET ( ,MA?S SYMBOLS4
+
+    ,=MATT+
+  ,! NORMAL BRL L9E HAS SPACE = #DJ
+CELLS4 ,MAKE SURE ! BRLR IS SET AT ?
+L5G?4
+  ,2G9 AT ! V F/ CELL ( ! L9E4 ,IF !
+EQUA;N OR ! PROBLEM HAS TO EXT5D ON TO
+SUBSEQU5T L9ES ^! >E CALL$ 8RUN-     #BJ
+       ,,,UEB HIT*HIK]'S GUIDE,'    B#AJ
+OV]S04 ,RUN-OV]S G 9 CELL #C ( ! SECOND
+& FOLL[+ L9ES4
+  ,9 #B- OR #C-/EP EQUA;NS : OV]RUN MAKE
+SURE T ! EQUALS SIGN /AYS ) ! ANSW]4
+,NORMALLY ? M1NS T ! RUN-OV] L9E WD />T
+) ! EQUALS SIGN4 ,? MAKES X EASY = !
+/UD5T TO REVIEW & = ! T1*] TO M>K4
+
+                                     #BA
+       ,,,UEB HIT*HIK]'S GUIDE,'     #AA
+
+            ,COMMON ,SYMBOLS
+
+    ,DATE
+#BH-#E-#BJAD
+#AI_/#A_/#BJAD
+
+      @.<,! PR9T %[S A TABLE ) COLUMN
+    H1D+S FOLL[+ EA* O!R 9 ? ORD]3 ,,UEB
+    & ,"N3 ,EXAMPLES4@.>
+
+    ,NUMB]S1 M"OY1 M1SURE;T
+#A DIGIT "O3 #AB   #J   #CJJ
+#AST F/
+#ETH FIF?
+.=4 DECIMAL PO9T3 #J4EF "<DECIMAL">  
+  #4G
+.=1 COMMA3 #A1JJJ1JJJ
+.=" NUM]IC SPACE3 #A"JJJ"JJJ
+.=@C C5T3 #II@C
+.=@S DOLL>3 @S#DD4II
+.=.0 P]C5T3 #EJ.0 ( @S#B4EJ
+.=^J DEGREE3 #C ^J,C
+CM C5TIMETRE3 #J4DE CM               #BB
+       ,,,UEB HIT*HIK]'S GUIDE,'    A#AA
+;M METRE3 #J4DE ;M
+KM KILOMETRE3 #DE KM
+;G GRAM3 #EJJ ;G
+KG KILOGRAM3 #E KM
+M,L MILLILITRE3 #BEJ M,L
+;,L LITRE3 #E ;,L
+-------------------------------------#AB
+
+    ,OP]A;N SIGNS
+.="6 PLUS3 #I"6#C
+.="- M9US3 #G"-#B
+.="8 MULTIPLI$ BY3 #AB"8#AB
+.="4 MULTIPLICA;N DOT3 #C"4A
+.="/ DIVID$ BY3 #CI"/#AC
+.=3 RATIO3 #C3#D
+.=_6 PLUS OR M9US3 X_6#C
+.=% .=+ SQU>E ROOT3 ;%#D+
+  ,N4,B4 ! SQU>E ROOT SYMBOLS 5CLOSE !
+    NUMB]4
+.=6 FACTORIAL SIGN3 #F6
+
+    ,COMP>ISON SIGNS
+.="7 EQUALS3 #D"6#E "7 #I
+.=@> GRT] ?AN3 #F @> #E              #BC
+       ,,,UEB HIT*HIK]'S GUIDE,'    A#AB
+.=@< LESS ?AN #D @< #E
+.=_@> GRT] ?AN OR EQUAL TO3 #D _@> ;D
+.=_@< LESS ?AN OR EQUAL TO3 #F _@< ;X
+.="7@: N EQUAL TO3 #D "7@: #H
+
+    ,"T
+#E3#CJ PM
+#E4CJ AM
+#ACJJ HRS
+#HJ KM_/H
+-------------------------------------#AC
+
+    ,FRAC;NS
+.=/ SIMPLE NUM]IC FRAC;N L9E3 #C/D1
+  #C/D   #E#A/B
+.=./ G5]AL FRAC;N L9E
+.=( G5]AL FRAC;N OP5 9DICATOR
+.=) G5]AL FRAC;N CLOSE 9DICATOR3
+  ;(A"6#F./#D) ,,NB ,NUMB] SIGN M/ 2
+    REP1T$ AF ! G5]AL FRAC;N L9E4
+
+                                     #BD
+       ,,,UEB HIT*HIK]'S GUIDE,'    A#AC
+
+    ,SUP]SCRIPTS & ,SUBSCRIPTS
+.=9 SUP]SCRIPT,-*ANGE LEVEL UP3 #C9#B
+  Y;9#B   ;;Y9<"-#B>   ;;X9<#D"6#E>
+.=5 SUBSCRIPT,-*ANGE LEVEL D[N3 ,P;5#A
+  #AJJ5#B
+
+    ,MISCELLANE\S MA!MATICAL SYMBOLS
+.=#= 9F9;Y
+.=_[ ANGLE SIGN
+.=#L P>ALLEL TO
+.=#- P]P5DICUL> TO
+.=,* 8"!=E0
+.=@/ 8S9CE0
+.=+ G5]AL OMIS.N SYMBOL
+
+    ,%APES
+.=$ %APE 9DICATOR
+.=$#C REGUL> "<EQUILAT]AL"> TRIANGLE
+.=$#D SQU>E
+.=$#E REGUL> P5TAGON "<#E-SID$ FIGURE">
+.=$= CIRCLE
+
+                                     #BE
+       ,,,UEB HIT*HIK]'S GUIDE,'     #AD
+
+    ,>R[S
+.=\ >R[ 9DICATOR
+.=\O SIMPLE "R PO9T+ >R[ "<EA/">
+.=\[ SIMPLE LEFT PO9T+ >R[ "<WE/">
+.=\+ SIMPLE UP PO9T+ >R[ "<NOR?">
+.=\% SIMPLE D[N PO9T+ >R[ "<S\?">
+
+  ,& J 2C 444
+
+    ,BULLETS1 ,B>BS & ,DA7]S6
+.=_4 BULLET
+.=R REGUL> B>B1 FULL1 9 L9E ( DIREC;N
+.=\33RRO D\BLE-B>B$ >R[
+.=@,? DA7]
+
+                ,,! ,,5D
+
+                                     #BF
+
