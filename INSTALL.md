@@ -9,7 +9,9 @@ Install requirements:
     sudo apt install python-pyside python-pip python-dev
     pip install --user -r requirements.txt
 
-Configure the library_dir in [ui/config.rc](ui/config.rc) to point at the [books](books) directory which is full of test books.
+Copy the test books to the home directory:
+
+    cp -r books ~/
 
 Run the tests:
 
