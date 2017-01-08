@@ -92,22 +92,22 @@ class Reducers():
             return state.copy(books = tuple(books))
         return state
     def replace_library(self, state, value):
-        if state['replacing_library'] == 'in progress':
+        if state['replacing_library'] == 'in progress' and value != 'done':
             return state
         else:
             return state.copy(replacing_library = value)
     def backup_log(self, state, value):
-        if state['backing_up_log'] == 'in progress':
+        if state['backing_up_log'] == 'in progress' and value != 'done':
             return state
         else:
             return state.copy(backing_up_log = value)
     def warm_up(self, state, value):
-        if state['warming_up'] == 'in progress':
+        if state['warming_up'] == 'in progress' and value != 'done':
             return state
         else:
             return state.copy(warming_up = value)
     def reset_display(self, state, value):
-        if state['resetting_display'] == 'in progress':
+        if state['resetting_display'] == 'in progress' and value != 'done':
             return state
         else:
             return state.copy(resetting_display = value)
