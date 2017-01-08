@@ -35,6 +35,8 @@ class TestUtility(unittest.TestCase):
 
     def test_find_files(self):
         self.assertEqual(len(utility.find_files('../test-books', ('brf',))), 2)
+        self.assertEqual(len(utility.find_files('../test-books', ('pef',))), 1)
+        self.assertEqual(len(utility.find_files('../test-books', ('brf','pef'))), 3)
 
 
 class TestBookFile_List(unittest.TestCase):
