@@ -91,6 +91,23 @@ class Reducers():
             books[location] = set_page(book, page, height)
             return state.copy(books = tuple(books))
         return state
+    def go_to_start(self, state, value):
+        width, height = dimensions(state)
+        location = state['location']
+        book = state['books'][location]
+        page = 0
+        books = list(state['books'])
+        books[location] = set_page(book, page, height)
+        return state.copy(books = tuple(books))
+    def skip_pages(self, state, value):
+        width, height = dimensions(state)
+        location = state['location']
+        book = state['books'][location]
+        data = book['data']
+        page = book['page'] + value
+        books = list(state['books'])
+        books[location] = set_page(book, page, height)
+        return state.copy(books = tuple(books))
     def replace_library(self, state, value):
         if state['replacing_library'] == 'in progress' and value != 'done':
             return state
