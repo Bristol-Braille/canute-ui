@@ -19,20 +19,22 @@ initial_state = frozendict({
     'replacing_library' : False,
     'backing_up_log'    : False,
     'shutting_down'     : False,
+    'halt_ui'           : False,
     'warming_up'        : False,
     'resetting_display' : False,
+    'update_ui'         : False,
     'display'           : frozendict({'width': 40, 'height': 9}),
 })
 
 state_file = 'state.pkl'
 
-def read():
-    log.debug('reading initial state')
+def read(state_file = state_file):
+    log.debug('reading initial state from %s' % state_file)
     try:
         with open(state_file) as fh:
             state = pickle.load(fh)
             return state
-    except:
+    except IOError:
         log.debug('error reading state file, using hard-coded initial state')
         return initial_state
 

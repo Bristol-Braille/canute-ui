@@ -64,6 +64,14 @@ def run(driver, config):
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
     button_loop(driver)
+    run_update(config)
+
+
+def run_update(config):
+    state = store.get_state()
+    if state['update_ui'] == 'in progress':
+        store.dispatch(actions.update_ui('done')) # set as done, if it fails, need to be able to try again
+        utility.update_ui(config)
 
 
 def button_loop(driver):
@@ -76,7 +84,7 @@ def button_loop(driver):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
                 store.dispatch(actions.shutdown())
-            if state['shutting_down']:
+            if state['shutting_down'] or state['halt_ui']:
                 quit = True
         if type(location) == int:
             location = 'book'
@@ -86,6 +94,8 @@ def button_loop(driver):
                 store.dispatch(button_bindings[location][_type][_id]())
             except KeyError:
                 log.debug('no binding for key {}, {} press'.format(_id, _type))
+
+    store.dispatch(actions.halt_ui(False))
 
 
 def handle_changes(driver, config):
@@ -192,6 +202,14 @@ def change_files(config, state):
     if state['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
+    if state['update_ui'] == 'start':
+        log.info("update ui = start")
+        if utility.find_ui_update(config):
+            store.dispatch(actions.update_ui('in progress'))
+            store.dispatch(actions.halt_ui(True))
+        else:
+            log.info("update not found")
+            store.dispatch(actions.update_ui('done'))
 
 
 def format_title(title, width, page_number, total_pages):
