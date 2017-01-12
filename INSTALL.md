@@ -29,7 +29,7 @@ Run the UI using the emulator:
     python main.py
 
 ## Mac (emulator only)
-For the Mac installation is slightly different depending on whether you use the version of python that comes with OS, or one installed with Macports or Homwbrew.
+For the Mac, installation is slightly different depending on whether you use the version of python that comes with OS, or one installed with Macports or Homwbrew.
 
 First, comment out (put a hash in front) of the `evdev` line in `requirements.txt`. (This package is only used on linux, and if you try to install it on a mac it will fail). 
 
