@@ -1,13 +1,35 @@
 # Install
 
-## Linux for testing
+## Linux/Mac for testing
 
-Install python 2.x (will probably work with 3.x with little modification)
+Install python 2.x (will probably work with 3.x with little modification).
 
-Install requirements:
+Install pip:
+For Debian/Ubuntu (and various other Linux distros)
 
-    sudo apt install python-pyside python-pip python-dev
-    pip install --user -r requirements.txt
+    sudo apt install python-pip    
+
+For Mac, depending on whether you are using the native python, MacPorts or Homebrew
+Mac native: `sudo easy_install pip`
+Macports: `sudo port install py27-pip`
+Homebrew: pip gets installed automatically when you install python.
+
+
+If you wish to run the emulator, install PySide, and optionally the Python development tools:
+```
+pip install pyside
+```
+
+(For Linux you may prefer to use)
+```
+sudo apt install python-pyside python-dev
+```
+
+Install other requirements: 
+(For the Mac, you will need to comment out the `evdev` line in `requirements.txt`)
+```
+pip install --user -r requirements.txt
+```
 
 Copy the test books to the home directory:
 
