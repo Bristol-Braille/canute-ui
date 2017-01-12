@@ -37,5 +37,5 @@ Copy the test books to the home directory:
 Run the UI software without the emulator:
 
     cd ui/
-    python main.py --disbale-emulator
+    python main.py --disable-emulator
 
