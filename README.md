@@ -14,7 +14,7 @@ Read [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## Design
 
-The top level [ui](ui/ui.py) uses a graphical display to emulate the hardware
+The top level [ui](ui/main.py) uses a graphical display to emulate the hardware
 by default.
 
 The emulated hardware has the same interface as the real hardware, but also
