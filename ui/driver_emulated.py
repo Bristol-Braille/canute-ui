@@ -1,12 +1,12 @@
 from driver import Driver
 import time
 import logging
-from udp_utility import udp_send, udp_recv
+from multiprocessing import Process, Queue
+from Queue import Empty
 from comms_codes import *
-import subprocess
+import qt_display
 
 log = logging.getLogger(__name__)
-
 
 
 class Emulated(Driver):
@@ -32,25 +32,19 @@ class Emulated(Driver):
         self.buttons = {}
 
         # message passing queues: pass messages to display on parent, fetch messages on chlid
-        self.udp_send = udp_send(port=5000)
-        self.udp_recv = udp_recv(port=5001)
-
+        self.send_queue = Queue()
+        self.receive_queue = Queue()
         # start the gui program as a separated process as tkinter & threads don't play well
-        process = ["./qt_display.py" ]
-        if display_text:
-            process.append("--text")
-        self.process = subprocess.Popen(process)
-
-        # wait for it to start up or it will miss the first communication
-        time.sleep(0.5)
+        self.process = Process(target=qt_display.start,
+                               kwargs={"to_display_queue" : self.send_queue,
+                                       "from_display_queue": self.receive_queue,
+                                       "display_text" : display_text})
+        self.process.start()
         log.info("started qt_display.py with process id %d" % self.process.pid)
 
     def is_ok(self):
         '''The UI needs to know when to quit, so the GUI can tell it using this method'''
-        if self.process.poll() is None:
-            return True
-        else:
-            return False
+        return self.process.is_alive()
 
     def send_error_sound(self):
         log.info("error sound!");
@@ -62,9 +56,9 @@ class Emulated(Driver):
         '''__exit__ method allows us to shut down the threads properly'''
         if ex_type is not None:
             log.error("%s : %s" % (ex_type.__name__, ex_value))
-        if self.process.poll() is None:
+        if self.process.is_alive() is None:
             log.info("killing GUI subprocess")
-            self.process.kill()
+            self.process.terminate()
         log.info("done")
 
     def __enter__(self):
@@ -76,10 +70,13 @@ class Emulated(Driver):
 
         :rtype: list of 8 elements either set to False (unpressed) or one of single, double, long
         '''
-        msg = self.udp_recv.get()
-        if msg is not None:
+        try:
+            msg = self.receive_queue.get_nowait()
             log.debug("got button msg %s" % msg)
             self.buttons[msg['id']] = msg['type']
+        except Empty:
+            pass
+
         ret = self.buttons
         # reset
         self.buttons = {}
@@ -101,7 +98,7 @@ class Emulated(Driver):
             log.debug("received data for emulator %s" % data)
             log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
             time.sleep(self.delay / 1000.0)
-            self.udp_send.put([CMD_SEND_PAGE] + data)
+            self.send_queue.put_nowait([CMD_SEND_PAGE] + data)
         elif cmd == CMD_SEND_ERROR:
             log.error("making error sound!")
         elif cmd == CMD_SEND_OK:
@@ -111,7 +108,7 @@ class Emulated(Driver):
             log.debug("received row data for emulator %s" % data)
             log.debug("delaying %s milliseconds to emulate hardware" % self.delay)
             time.sleep(self.delay / 1000.0)
-            self.udp_send.put([CMD_SEND_LINE] + data)
+            self.send_queue.put_nowait([CMD_SEND_LINE] + data)
         elif cmd == CMD_RESET:
             self.data = 0
 
