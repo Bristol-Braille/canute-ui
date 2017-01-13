@@ -146,3 +146,59 @@ class Driver(object):
         self.status = self.get_data(CMD_SEND_LINE)
         if self.status != 0:
             log.warning("got an error after setting braille: %d" % self.status)
+
+    @staticmethod
+    def _make_char(cell_data):
+        """
+        Translates a bitmapped list-of-lists to a braille cell number
+
+        :type cell_data: List[List[int]]
+        cell_data is assumed to be in the format [[A,B],[C,D],[E,F]], and each entry is a zero or non-zero.
+        zero (=black) means pin should be raised.
+        """
+
+        return sum(((cell_data[y][x] == 0) * 2 ** (x * 3 + y)) for x in range(2) for y in range(3))
+
+    def display_graphic(self, graphic_data):
+        """
+        displays a graphic, formatted as a rectangular list of list of the right size.
+
+        :type graphic_data: List[List[int]]
+        graphic_data is a list of lists of integers, representing a graphic to be displayed. The first list is the
+        first row of pixels, and so on. A zero represents pin raised (=black). Any other number represents pin
+        lowered (=white).
+        """
+        for row in range(self.rows):
+            row_braille = [self._make_char([x[i * 2:(i + 1) * 2]
+                                            for x in graphic_data[row * 3:(row + 1) * 3]])
+                           for i in range(self.chars)]
+            self.set_braille_row(row, row_braille)
+
+    def load_graphic(self, fname):
+        """
+         loads and displays a graphic from a file.
+
+         :type fname: basestring - path to the file to be opened.
+         """
+        from PIL import Image
+        try:
+            im = Image.open(fname)
+        except IOError:
+            log.error("Could not load graphics file: %s" % fname)
+            return
+        # reformat to right size and monochrome.
+        # TODO: Add option to account for gaps between cells, preserving overall shapes.
+        # (Would need much more detail on geometry of cell layout.)
+        canvas_width = self.chars * 2
+        canvas_height = self.rows * 3
+        gray = im.convert('L')
+        bw = gray.point(lambda x: 0 if x < 128 else 255, '1')
+        bw.thumbnail((canvas_width, canvas_height))
+        pixels = list(bw.getdata())
+        width, height = bw.size
+        pixels = [pixels[i * width:(i + 1) * width] for i in xrange(height)]
+        pixels = [a + [255] * (canvas_width - width) for a in pixels] \
+                 + [[255] * canvas_width] * (canvas_height - height)
+        self.display_graphic(pixels)
+        # To save the scaled/formatted graphic for debugging purposes:
+        # bw.save('debug.png')

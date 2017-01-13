@@ -3,3 +3,4 @@ evdev==0.6.2
 mock
 frozendict==1.2
 pydux==0.2.1
+pillow>=3.5.0
