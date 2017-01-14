@@ -39,6 +39,7 @@ class Emulated(Driver):
                                kwargs={"to_display_queue" : self.send_queue,
                                        "from_display_queue": self.receive_queue,
                                        "display_text" : display_text})
+        self.process.daemon=True
         self.process.start()
         log.info("started qt_display.py with process id %d" % self.process.pid)
 
