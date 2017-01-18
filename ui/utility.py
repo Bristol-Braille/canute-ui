@@ -17,35 +17,6 @@ log = logging.getLogger(__name__)
 class FormfeedConversionException(Exception): pass
 class LinefeedConversionException(Exception): pass
 
-def update_ui(config):
-    '''
-    updates the ui by:
-
-    * archiving the ui directory in config's install_dir
-    * untar.gz new archive into place
-    '''
-    log.info("updating UI")
-    ui_file = find_ui_update(config)
-
-    install_dir = config.get('files', 'install_dir')
-    install_dir = os.path.expanduser(install_dir)
-
-    archive_dir = config.get('files', 'archive_dir')
-    archive_dir = os.path.expanduser(archive_dir)
-
-    # archive old ui
-    log.info("archiving %s to %s" % (install_dir, archive_dir))
-    """
-    archive_dir += datetime.now().strftime("%Y%m%d-%H%M%S-ui")
-    shutil.move(install_dir, archive_dir)
-
-    # untar new ui
-    log.info("untar")
-    with tarfile.open(ui_file, 'r:*') as archive:
-        archive.extractall(install_dir)
-    """
-
-
 def find_ui_update(config):
     '''
     recursively look for firmware in the usb_dir,

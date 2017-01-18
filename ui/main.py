@@ -57,6 +57,12 @@ def run(driver, config):
     store.dispatch(actions.init(init_state))
     sync_library(init_state, config.get('files', 'library_dir'))
     store.subscribe(partial(handle_changes, driver, config))
+    
+    # if we startup and update_ui is still 'in progress' then we are using the old state file
+    # and update has failed
+    if init_state["update_ui"] == "in progress":
+        store.dispatch(actions.update_ui('failed'))
+
     # since handle_changes subscription happens after init and sync_library it
     # may not have triggered. so we trigger it here. if we put it before init
     # it will start of by rendering a possibly invalid state. sync_library
@@ -64,14 +70,6 @@ def run(driver, config):
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
     button_loop(driver)
-    run_update(config)
-
-
-def run_update(config):
-    state = store.get_state()
-    if state['update_ui'] == 'in progress':
-        store.dispatch(actions.update_ui('done')) # set as done, if it fails, need to be able to try again
-        utility.update_ui(config)
 
 
 def button_loop(driver):
