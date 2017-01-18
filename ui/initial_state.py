@@ -1,6 +1,7 @@
 from frozendict import frozendict
 from functools import partial
 import pickle
+import json
 import logging
 log = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ def read(state_file = state_file):
         with open(state_file) as fh:
             state = pickle.load(fh)
             return state
-    except IOError:
+    except:
         log.debug('error reading state file, using hard-coded initial state')
         return initial_state
 
@@ -52,3 +53,9 @@ def write(state):
     write_state['shutting_down']     = False
     with open(state_file, 'w') as fh:
         pickle.dump(frozendict(write_state), fh)
+
+if __name__ == '__main__':
+    import os
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    print(read(state_file = dir_path + "/state.pkl")['update_ui'])
