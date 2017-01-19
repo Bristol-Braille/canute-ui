@@ -32,8 +32,9 @@ def need_update():
 
 '''
 archive the ui directory in config's install_dir
+then untar.gz new archive into place
 '''
-def archive():
+def archive_and_untar():
     install_dir = config.get('files', 'install_dir')
     install_dir = os.path.expanduser(install_dir)
 
@@ -44,11 +45,6 @@ def archive():
     archive_dir += datetime.now().strftime("%Y%m%d-%H%M%S-ui")
     shutil.move(install_dir, archive_dir)
 
-
-'''
-untar.gz new archive into place
-'''
-def untar(update_file):
     # untar new ui
     log.info("untar to %s" % install_dir)
     with tarfile.open(update_file, 'r:*') as archive:
@@ -66,6 +62,4 @@ if __name__ == '__main__':
 
     log.info("found update file: %s" % update_file)
 
-    archive()
-
-    untar(update_file)
+    archive_and_untar()
