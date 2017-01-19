@@ -131,9 +131,6 @@ class Reducers():
     def shutdown(self, state, value):
         return state.copy(shutting_down = True)
 
-    def halt_ui(self, state, value):
-        return state.copy(halt_ui = value)
-
     def update_ui(self, state, value):
         return state.copy(update_ui = value)
 

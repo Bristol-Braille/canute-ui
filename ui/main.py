@@ -82,7 +82,9 @@ def button_loop(driver):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
                 store.dispatch(actions.shutdown())
-            if state['shutting_down'] or state['halt_ui']:
+            if state['shutting_down'] or state['update_ui'] == 'in progress':
+                log.debug("shutting down due to state change")
+                initial_state.write(state)
                 quit = True
         if type(location) == int:
             location = 'book'
@@ -92,8 +94,6 @@ def button_loop(driver):
                 store.dispatch(button_bindings[location][_type][_id]())
             except KeyError:
                 log.debug('no binding for key {}, {} press'.format(_id, _type))
-
-    store.dispatch(actions.halt_ui(False))
 
 
 def handle_changes(driver, config):
@@ -204,10 +204,9 @@ def change_files(config, state):
         log.info("update ui = start")
         if utility.find_ui_update(config):
             store.dispatch(actions.update_ui('in progress'))
-            store.dispatch(actions.halt_ui(True))
         else:
             log.info("update not found")
-            store.dispatch(actions.update_ui('done'))
+            store.dispatch(actions.update_ui('failed'))
 
 
 def format_title(title, width, page_number, total_pages):
