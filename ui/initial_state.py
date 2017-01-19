@@ -1,7 +1,6 @@
 from frozendict import frozendict
 from functools import partial
 import pickle
-import json
 import logging
 log = logging.getLogger(__name__)
 
