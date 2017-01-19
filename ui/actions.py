@@ -131,6 +131,9 @@ class Reducers():
     def shutdown(self, state, value):
         return state.copy(shutting_down = True)
 
+    def update_ui(self, state, value):
+        return state.copy(update_ui = value)
+
 
 def sort_books(books):
     return sorted(books, key=lambda book: book['data'].filename)

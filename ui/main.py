@@ -57,6 +57,12 @@ def run(driver, config):
     store.dispatch(actions.init(init_state))
     sync_library(init_state, config.get('files', 'library_dir'))
     store.subscribe(partial(handle_changes, driver, config))
+    
+    # if we startup and update_ui is still 'in progress' then we are using the old state file
+    # and update has failed
+    if init_state["update_ui"] == "in progress":
+        store.dispatch(actions.update_ui('failed'))
+
     # since handle_changes subscription happens after init and sync_library it
     # may not have triggered. so we trigger it here. if we put it before init
     # it will start of by rendering a possibly invalid state. sync_library
@@ -76,7 +82,9 @@ def button_loop(driver):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
                 store.dispatch(actions.shutdown())
-            if state['shutting_down']:
+            if state['shutting_down'] or state['update_ui'] == 'in progress':
+                log.debug("shutting down due to state change")
+                initial_state.write(state)
                 quit = True
         if type(location) == int:
             location = 'book'
@@ -192,6 +200,13 @@ def change_files(config, state):
     if state['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
+    if state['update_ui'] == 'start':
+        log.info("update ui = start")
+        if utility.find_ui_update(config):
+            store.dispatch(actions.update_ui('in progress'))
+        else:
+            log.info("update not found")
+            store.dispatch(actions.update_ui('failed'))
 
 
 def format_title(title, width, page_number, total_pages):

@@ -19,15 +19,17 @@ initial_state = frozendict({
     'replacing_library' : False,
     'backing_up_log'    : False,
     'shutting_down'     : False,
+    'halt_ui'           : False,
     'warming_up'        : False,
     'resetting_display' : False,
+    'update_ui'         : False,
     'display'           : frozendict({'width': 40, 'height': 9}),
 })
 
 state_file = 'state.pkl'
 
-def read():
-    log.debug('reading initial state')
+def read(state_file = state_file):
+    log.debug('reading initial state from %s' % state_file)
     try:
         with open(state_file) as fh:
             state = pickle.load(fh)
@@ -50,3 +52,9 @@ def write(state):
     write_state['shutting_down']     = False
     with open(state_file, 'w') as fh:
         pickle.dump(frozendict(write_state), fh)
+
+if __name__ == '__main__':
+    import os
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    print(read(state_file = dir_path + "/state.pkl")['update_ui'])
