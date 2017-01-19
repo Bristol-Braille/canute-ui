@@ -11,10 +11,10 @@ import tarfile
 config = load("ui/config.rc")
 log = setup_logs(config, logging.DEBUG)
 
-'''
-checks the state, if state is set to in_progress, get the update file and continue
-'''
 def need_update():
+    '''
+    checks the state, if state is set to in_progress, get the update file and continue
+    '''
     log.info("checking state")
     process = Popen(["python", "ui/initial_state.py"], stdout=PIPE)
     (update_state, err) = process.communicate()
@@ -30,11 +30,11 @@ def need_update():
         return True
 
 
-'''
-archive the ui directory in config's install_dir
-then untar.gz new archive into place
-'''
 def archive_and_untar():
+    '''
+    archive the ui directory in config's install_dir
+    then untar.gz new archive into place
+    '''
     install_dir = config.get('files', 'install_dir')
     install_dir = os.path.expanduser(install_dir)
 
