@@ -52,9 +52,3 @@ def write(state):
     write_state['shutting_down']     = False
     with open(state_file, 'w') as fh:
         pickle.dump(frozendict(write_state), fh)
-
-if __name__ == '__main__':
-    import os
-    path = os.path.abspath(__file__)
-    dir_path = os.path.dirname(path)
-    print(read(state_file = dir_path + "/state.pkl")['update_ui'])
