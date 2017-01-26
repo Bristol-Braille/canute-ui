@@ -9,7 +9,6 @@ import math
 import mock
 
 from bookfile_list import BookFile_List
-from driver_emulated import Emulated
 from driver_pi import Pi
 from setup_logs import setup_logs
 import utility
@@ -19,7 +18,9 @@ import convert
 import actions
 from initial_state import initial_state
 from main import sync_library
-
+if "TRAVIS" not in os.environ:
+    from driver_emulated import Emulated
+    
 class TestUtility(unittest.TestCase):
 
     def setUp(self):
@@ -79,7 +80,8 @@ class TestDriverEmulated(unittest.TestCase):
     def setUpClass(cls):
         if "TRAVIS" in os.environ:
             raise unittest.SkipTest("Skip emulated driver tests on TRAVIS")
-        cls._driver = Emulated()
+        else:
+            cls._driver = Emulated()
 
     def test_rxtx_data(self):
         self._driver.send_data(comms.CMD_GET_CHARS)
