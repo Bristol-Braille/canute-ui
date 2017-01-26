@@ -111,7 +111,7 @@ def render(driver, state):
     if state['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
-        store.dispatch(actions.reset_display(False))
+        store.dispatch(actions.reset_display('done'))
     elif state['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
