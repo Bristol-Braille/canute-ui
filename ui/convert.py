@@ -32,7 +32,6 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
                         book.append(converted)
                         converted = []
                 except utility.FormfeedConversionException:
-                    log.debug("padding formfeed")
                     if len(converted):
                         pad_line(converted)
                         book.append(converted)
@@ -84,7 +83,6 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
     def pad_page(page):
         num_rows = len(page.getElementsByTagName('row'))
         for i in range(height - num_rows):
-            log.debug("padding blank row")
             blank_row = xml_doc.createElement("row")
             txt = xml_doc.createTextNode("")
             blank_row.appendChild(txt)
