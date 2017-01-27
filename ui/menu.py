@@ -7,7 +7,6 @@ menu = OrderedDict([
     ('replace library from USB stick' , partial(actions.replace_library, 'start')),
     ('shutdown'                       , actions.shutdown),
     ('backup log to USB stick'        , partial(actions.backup_log, 'start')),
-    ('run warm up routine'            , partial(actions.warm_up, 'start')),
     ('reset display'                  , partial(actions.reset_display, 'start')),
     ('update UI from USB stick'       , partial(actions.update_ui, 'start')),
 ])

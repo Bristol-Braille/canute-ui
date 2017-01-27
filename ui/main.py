@@ -53,11 +53,11 @@ def main():
 def run(driver, config):
     init_state    = initial_state.read()
     width, height = driver.get_dimensions()
-    init_state    = init_state.copy(dimensions = frozendict({'width': width, 'height': height}))
+    init_state    = init_state.copy(dimensions = frozendict({'width': width, 'height': height}), resetting_display = 'start')
     store.dispatch(actions.init(init_state))
     sync_library(init_state, config.get('files', 'library_dir'))
     store.subscribe(partial(handle_changes, driver, config))
-    
+
     # if we startup and update_ui is still 'in progress' then we are using the old state file
     # and update has failed
     if init_state["update_ui"] == "in progress":
@@ -111,7 +111,11 @@ def render(driver, state):
     if state['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
-        store.dispatch(actions.reset_display(False))
+        store.dispatch(actions.reset_display('done'))
+    elif state['warming_up'] == 'in progress' or state['resetting_display'] == 'in progress':
+        # our render method can be called asynchronously, we don't don anything
+        # unless these are done
+        pass
     elif state['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
