@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 from __future__ import print_function
+import time
 import argparse
 import logging
+from udp_utility import udp_send, udp_recv
 from comms_codes import *
 from utility import pin_num_to_unicode, pin_num_to_alpha
-from multiprocessing import Queue
-from Queue import Empty
+
 import sys
 from PySide import QtGui, QtCore
 from qt.main_window import Ui_MainWindow
@@ -30,26 +31,19 @@ def main():
     args = parser.parse_args()
 
     app = QtGui.QApplication(sys.argv)
-    display = Display(to_display_queue=Queue(), from_display_queue=Queue(), display_text=args.text)
+    display = Display(display_text=args.text)
     sys.exit(app.exec_())
 
 class HardwareError(Exception):
     pass
 
 
-def start(to_display_queue, from_display_queue, display_text):
-    log.info("display GUI")
-
-    app = QtGui.QApplication(sys.argv)
-    _ = Display(to_display_queue=to_display_queue, from_display_queue=from_display_queue, display_text=display_text)
-    sys.exit(app.exec_())
-
 def get_all(t, cls):
     return [y for x,y in cls.__dict__.items() if type(y) == t]
 
 class Display(QtGui.QMainWindow, Ui_MainWindow):
     '''shows an emulation of the braille machine'''
-    def __init__(self, to_display_queue, from_display_queue, display_text=False):
+    def __init__(self, display_text=False):
         '''create the display object'''
         self.display_text = display_text
 
@@ -75,8 +69,9 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         for n in range(ROWS):
             self.label_rows.append(self.__getattribute__('row_label_%i' % n))
 
-        self.send_queue = from_display_queue
-        self.receive_queue = to_display_queue
+        self.udp_send = udp_send(port=5001)
+        self.udp_recv = udp_recv(port=5000)
+
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.check_msg)
         timer.start(MSG_INTERVAL_S)
@@ -104,7 +99,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''
         log.info("sending %s button = %s" % (button_type, button_id))
-        self.send_queue.put_nowait({'id': button_id, 'type': button_type})
+        self.udp_send.put({'id': button_id, 'type': button_type})
 
     def print_braille(self, data):
         '''print braille to the display
@@ -131,7 +126,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         :func:`print_braille`
         '''
         try:
-            msg = self.receive_queue.get_nowait()
+            msg = self.udp_recv.get()
             if msg is not None:
                 msgType = msg[0]
                 msg = msg[1:]
@@ -139,8 +134,6 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
                     self.print_braille(msg)
                 elif msgType == CMD_SEND_LINE:
                     self.print_braille_row(msg[0], msg[1:])
-        except Empty:
-            pass
         except:
             print('check_msg ERROR')
 
