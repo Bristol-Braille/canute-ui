@@ -8,15 +8,15 @@ import utility
 import menu
 
 
-initial_state = frozendict({
-    'app': frozendict({
+initial_state = utility.freeze({
+    'app': {
         'location' : 'library',
-    }),
-    'library'  : frozendict({'data': tuple(), 'page': 0}),
-    'menu'     : frozendict({
+    },
+    'library'  : {'data': tuple(), 'page': 0},
+    'menu'     : {
         'data': tuple(map(partial(utility.pad_line, 40), menu.menu_titles_braille)),
         'page': 0
-    }),
+    },
     'books'             : tuple(),
     'replacing_library' : False,
     'backing_up_log'    : False,
@@ -25,7 +25,7 @@ initial_state = frozendict({
     'warming_up'        : False,
     'resetting_display' : False,
     'update_ui'         : False,
-    'display'           : frozendict({'width': 40, 'height': 9}),
+    'display'           : {'width': 40, 'height': 9},
 })
 
 state_file = 'state.pkl'
@@ -41,28 +41,9 @@ def read(state_file = state_file):
         return initial_state
 
 
-def to_dict(frozen):
-    writable = {}
-    for key in frozen:
-        if type(frozen[key]) == frozendict:
-            writable[key] = to_dict(frozen[key])
-        else:
-            writable[key] = frozen[key]
-    return writable
-
-def freeze(writable):
-    frozen = {}
-    for key in writable:
-        if type(writable[key]) == dict:
-            frozen[key] = freeze(writable[key])
-        else:
-            frozen[key] = writable[key]
-    return frozendict(frozen)
-
-
 def write(state):
     log.debug('writing state file')
-    write_state            = to_dict(state)
+    write_state            = utility.to_dict(state)
     write_state['library'] = state['library'].copy(page = 0)
     location = state['app']['location']
     if location == 'menu':
@@ -74,7 +55,7 @@ def write(state):
     write_state['warming_up']        = False
     write_state['shutting_down']     = False
     with open(state_file, 'w') as fh:
-        pickle.dump(freeze(write_state), fh)
+        pickle.dump(utility.freeze(write_state), fh)
 
 if __name__ == '__main__':
     import os

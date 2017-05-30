@@ -11,6 +11,7 @@ import logging
 import functools
 import tarfile
 import shutil
+from frozendict import frozendict
 from datetime import datetime
 log = logging.getLogger(__name__)
 
@@ -161,3 +162,21 @@ def pad_line(w, line):
 def get_methods(cls):
     methods = [x for x in dir(cls) if callable(getattr(cls, x))]
     return filter(lambda x: not x.startswith('__'), methods)
+
+def to_dict(frozen):
+    writable = {}
+    for key in frozen:
+        if type(frozen[key]) == frozendict:
+            writable[key] = to_dict(frozen[key])
+        else:
+            writable[key] = frozen[key]
+    return writable
+
+def freeze(writable):
+    frozen = {}
+    for key in writable:
+        if type(writable[key]) == dict:
+            frozen[key] = freeze(writable[key])
+        else:
+            frozen[key] = writable[key]
+    return frozendict(frozen)
