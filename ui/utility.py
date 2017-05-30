@@ -163,20 +163,24 @@ def get_methods(cls):
     methods = [x for x in dir(cls) if callable(getattr(cls, x))]
     return filter(lambda x: not x.startswith('__'), methods)
 
-def to_dict(frozen):
-    writable = {}
-    for key in frozen:
-        if type(frozen[key]) == frozendict:
-            writable[key] = to_dict(frozen[key])
-        else:
-            writable[key] = frozen[key]
-    return writable
+def unfreeze(frozen):
+    if type(frozen) is tuple:
+        return list(map(unfreeze, writable))
+    elif type(frozen) is frozendict:
+        writable = {}
+        for key in frozen:
+            writable[key] = unfreeze(frozen[key])
+        return writable
+    else:
+        return frozen
 
 def freeze(writable):
-    frozen = {}
-    for key in writable:
-        if type(writable[key]) == dict:
+    if type(writable) is list:
+        return tuple(map(freeze, writable))
+    elif type(writable) is dict:
+        frozen = {}
+        for key in writable:
             frozen[key] = freeze(writable[key])
-        else:
-            frozen[key] = writable[key]
-    return frozendict(frozen)
+        return frozendict(frozen)
+    else:
+        return writable

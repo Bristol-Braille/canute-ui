@@ -43,7 +43,7 @@ def read(state_file = state_file):
 
 def write(state):
     log.debug('writing state file')
-    write_state            = utility.to_dict(state)
+    write_state            = utility.unfreeze(state)
     write_state['library'] = state['library'].copy(page = 0)
     location = state['app']['location']
     if location == 'menu':
