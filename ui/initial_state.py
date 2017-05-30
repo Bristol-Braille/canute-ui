@@ -11,13 +11,13 @@ import menu
 initial_state = utility.freeze({
     'app': {
         'location' : 'library',
-        'library'  : {'data': tuple(), 'page': 0},
+        'library'  : {'data': [], 'page': 0},
     },
     'menu'     : {
-        'data': tuple(map(partial(utility.pad_line, 40), menu.menu_titles_braille)),
+        'data': [utility.pad_line(40, line) for line in menu.menu_titles_braille],
         'page': 0
     },
-    'books'             : tuple(),
+    'books'             : [],
     'replacing_library' : False,
     'backing_up_log'    : False,
     'shutting_down'     : False,
@@ -43,7 +43,7 @@ def read(state_file = state_file):
 
 def write(state):
     log.debug('writing state file')
-    write_state            = utility.unfreeze(state)
+    write_state  = utility.unfreeze(state)
     write_state['app']['library'] = state['app']['library'].copy(page = 0)
     location = state['app']['location']
     if location == 'menu':
