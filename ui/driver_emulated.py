@@ -72,7 +72,7 @@ class Emulated(Driver):
         :rtype: list of 8 elements either set to False (unpressed) or one of single, double, long
         '''
         try:
-            msg = self.receive_queue.get_nowait()
+            msg = self.receive_queue.get(timeout=1)
             log.debug("got button msg %s" % msg)
             self.buttons[msg['id']] = msg['type']
         except Empty:

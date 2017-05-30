@@ -17,7 +17,7 @@ BUTTONS = 9
 CHARS = 40
 ROWS = 9
 
-MSG_INTERVAL_S = 0.01
+MSG_INTERVAL_S = 10 # This is in milliseconds
 
 def main():
     logging.basicConfig(level=logging.INFO)
