@@ -11,7 +11,8 @@ import logging
 import functools
 import tarfile
 import shutil
-from frozendict import frozendict
+from collections import OrderedDict
+from frozendict import frozendict, FrozenOrderedDict
 from datetime import datetime
 log = logging.getLogger(__name__)
 
@@ -130,6 +131,7 @@ def alphas_to_pin_nums(alphas):
             pass
     return pin_nums
 
+
 def test_book(dimensions, content=None):
     '''
     returns a book of 8 pages with each page showing all possible combinations of the 8 rotor positions
@@ -144,6 +146,7 @@ def test_book(dimensions, content=None):
                 text.append([char] * dimensions[0])
     return text
 
+
 def test_pattern(dimensions):
     '''creates a repeating pattern of all possible dot patterns'''
     cols, rows = dimensions
@@ -152,35 +155,38 @@ def test_pattern(dimensions):
         text.append(i % 64)
     return text
 
+
 def flatten(l):
     return [item for sublist in l for item in sublist]
+
 
 def pad_line(w, line):
     line.extend([0] * (w - len(line)))
     return line
 
+
 def get_methods(cls):
     methods = [x for x in dir(cls) if callable(getattr(cls, x))]
     return filter(lambda x: not x.startswith('__'), methods)
 
+
 def unfreeze(frozen):
-    if type(frozen) is tuple:
-        return list(map(unfreeze, writable))
-    elif type(frozen) is frozendict:
-        writable = {}
-        for key in frozen:
-            writable[key] = unfreeze(frozen[key])
-        return writable
+    if type(frozen) is tuple or type(frozen) is list:
+        return list(unfreeze(x) for x in frozen)
+    elif type(frozen) is OrderedDict or type(frozen) is FrozenOrderedDict:
+        return OrderedDict([(k, unfreeze(v)) for k, v in frozen.items()])
+    elif type(frozen) is dict or type(frozen) is frozendict:
+        return {k: unfreeze(v) for k, v in frozen.items()}
     else:
         return frozen
 
+
 def freeze(writable):
-    if type(writable) is list:
-        return tuple(map(freeze, writable))
-    elif type(writable) is dict:
-        frozen = {}
-        for key in writable:
-            frozen[key] = freeze(writable[key])
-        return frozendict(frozen)
+    if type(writable) is tuple or type(writable) is list:
+        return tuple(freeze(x) for x in writable)
+    elif type(writable) is OrderedDict or type(writable) is FrozenOrderedDict:
+        return FrozenOrderedDict([(k, freeze(v)) for k, v in writable.items()])
+    elif type(writable) is dict or type(writable) is frozendict:
+        return frozendict({k: freeze(v) for k, v in writable.items()})
     else:
         return writable
