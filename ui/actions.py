@@ -16,7 +16,7 @@ class Reducers():
         return state
     def go_to_book(self, state, number):
         width, height = dimensions(state)
-        page = state['library']['page']
+        page = state['app']['library']['page']
         line_number = page * (height - 1)
         try:
             location = state['books'][line_number + number]
@@ -35,7 +35,7 @@ class Reducers():
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
         library = frozendict({'data': tuple(data), 'page': 0})
-        return state.copy(app = state['app'].copy(location = 'library'), books = tuple(books), library = library)
+        return state.copy(app = state['app'].copy(location = 'library', library = library), books = tuple(books))
     def add_books(self, state, books_to_add):
         width, height = dimensions(state)
         book_filenames = map(lambda b: b['data'].filename, state['books'])
@@ -46,27 +46,27 @@ class Reducers():
         books = sort_books(books)
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
-        library = frozendict({'data': tuple(data), 'page': state['library']['page']})
-        return state.copy(books = tuple(books), library = library)
+        library = frozendict({'data': tuple(data), 'page': state['app']['library']['page']})
+        return state.copy(books = tuple(books), app = state['app'].copy(library = library))
     def remove_books(self, state, filenames):
         width, height = dimensions(state)
         books = filter(lambda b: b['data'].filename not in filenames, state['books'])
         data = map(get_title, books)
         data = map(partial(utility.pad_line, width), data)
         maximum = get_max_pages(data, height)
-        page = state['library']['page']
+        page = state['app']['library']['page']
         if page > maximum:
             page = maximum
         library = frozendict({'data': data, 'page': page})
-        return state.copy(books = tuple(books), library = library)
+        return state.copy(books = tuple(books), app = state['app'].copy(library = library))
     def next_page(self, state, value):
         width, height = dimensions(state)
         location = state['app']['location']
         if location == 'library':
-            library = state['library']
-            page    = state['library']['page'] + 1
+            library = state['app']['library']
+            page    = state['app']['library']['page'] + 1
             library = set_page(library, page, (height - 1))
-            return state.copy(library = library)
+            return state.copy(app = state['app'].copy(library = library))
         elif type(location) == int:
             book = state['books'][location]
             data = book['data']
@@ -79,10 +79,10 @@ class Reducers():
         width, height = dimensions(state)
         location = state['app']['location']
         if location == 'library':
-            library = state['library']
+            library = state['app']['library']
             page    = library['page'] - 1
             library = set_page(library, page, (height - 1))
-            return state.copy(library = library)
+            return state.copy(app = state['app'].copy(library = library))
         elif type(location) == int:
             book = state['books'][location]
             data = book['data']

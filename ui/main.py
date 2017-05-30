@@ -124,8 +124,8 @@ def render(driver, state):
         if isinstance(driver, Pi):
             driver.clear_page()
     elif location == 'library':
-        page      = state['library']['page']
-        data      = state['library']['data']
+        page      = state['app']['library']['page']
+        data      = state['app']['library']['data']
         #subtract title from page height
         data_height = height - 1
         max_pages   = get_max_pages(data, data_height)
