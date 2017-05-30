@@ -20,7 +20,7 @@ from initial_state import initial_state
 from main import sync_library
 if "TRAVIS" not in os.environ:
     from driver_emulated import Emulated
-    
+
 class TestUtility(unittest.TestCase):
 
     def setUp(self):
@@ -240,7 +240,7 @@ class TestActions(unittest.TestCase):
         state = r.add_books(initial_state, [bookfile])
         state = r.go_to_book(state, 0)
 
-        self.assertEqual(state['location'], 0)
+        self.assertEqual(state['app']['location'], 0)
         self.assertEqual(state['books'][0]['page'], 0)
 
         # check we can't go backwards from page 0

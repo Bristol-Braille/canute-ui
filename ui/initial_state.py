@@ -9,7 +9,9 @@ import menu
 
 
 initial_state = frozendict({
-    'location' : 'library',
+    'app': frozendict({
+        'location' : 'library',
+    }),
     'library'  : frozendict({'data': tuple(), 'page': 0}),
     'menu'     : frozendict({
         'data': tuple(map(partial(utility.pad_line, 40), menu.menu_titles_braille)),
@@ -39,21 +41,40 @@ def read(state_file = state_file):
         return initial_state
 
 
+def to_dict(frozen):
+    writable = {}
+    for key in frozen:
+        if type(frozen[key]) == frozendict:
+            writable[key] = to_dict(frozen[key])
+        else:
+            writable[key] = frozen[key]
+    return writable
+
+def freeze(writable):
+    frozen = {}
+    for key in writable:
+        if type(writable[key]) == dict:
+            frozen[key] = freeze(writable[key])
+        else:
+            frozen[key] = writable[key]
+    return frozendict(frozen)
+
+
 def write(state):
     log.debug('writing state file')
-    write_state                      = dict(state)
-    write_state['library']           = state['library'].copy(page = 0)
-    location = state['location']
+    write_state            = to_dict(state)
+    write_state['library'] = state['library'].copy(page = 0)
+    location = state['app']['location']
     if location == 'menu':
         location = 'library'
-    write_state['location']          = location
+    write_state['app']['location']   = location
     write_state['backing_up_log']    = False
     write_state['replacing_library'] = False
     write_state['resetting_display'] = False
     write_state['warming_up']        = False
     write_state['shutting_down']     = False
     with open(state_file, 'w') as fh:
-        pickle.dump(frozendict(write_state), fh)
+        pickle.dump(freeze(write_state), fh)
 
 if __name__ == '__main__':
     import os

@@ -77,7 +77,7 @@ def button_loop(driver):
     while not quit:
         buttons  = driver.get_buttons()
         state    = store.get_state()
-        location = state['location']
+        location = state['app']['location']
         if not isinstance(driver, Pi):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
@@ -107,7 +107,7 @@ def handle_changes(driver, config):
 
 def render(driver, state):
     width, height = dimensions(state)
-    location = state['location']
+    location = state['app']['location']
     if state['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
