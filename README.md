@@ -18,17 +18,18 @@ Canute UI
 
 optional arguments:
   -h, --help          show this help message and exit
-  --pi-buttons        use the Pi to handle button presses
+  --pi-buttons        use evdev to process button presses more
+                      directly(recommended for embedded usage on the Raspberry
+                      Pi)
   --debug             debugging content
   --text              show text instead of braille
-  --tty TTY           serial port for Canute stepstix board
+  --tty TTY           serial port for the display and button board
   --delay DELAY       simulate mechanical delay in milliseconds in the
                       emulator
   --disable-emulator  do not run the graphical emulator, run with real
                       hardware
   --both              run both the emulator and the real hardware at the same
                       time
-
 ```
 
 ## Getting started

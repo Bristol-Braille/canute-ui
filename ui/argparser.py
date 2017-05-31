@@ -9,7 +9,8 @@ parser.add_argument(
     dest='pi_buttons',
     const=True,
     default=False,
-    help="use the Pi to handle button presses"
+    help="use evdev to process button presses more directly"
+    + "(recommended for embedded usage on the Raspberry Pi)"
 )
 parser.add_argument(
     '--debug',
@@ -30,7 +31,7 @@ parser.add_argument(
     '--tty',
     action='store',
     dest='tty',
-    help="serial port for Canute stepstix board",
+    help="serial port for the display and button board",
     default='/dev/ttyACM0'
 )
 parser.add_argument(
