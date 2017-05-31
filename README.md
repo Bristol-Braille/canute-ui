@@ -5,12 +5,10 @@ electronic Braille reader](http://bristolbraille.co.uk/#canute).
 
 ## Usage
 
-The top level [main.py](main.py) runs a graphical display to emulate the hardware
-by default.
-
-The emulated hardware has the same interface as the real hardware, but also
-runs a graphical program called [qt_display.py](qt_display.py). This
-shows how the machine will look, and provides the buttons.
+[`main.py`](main.py) runs a graphical display to emulate the hardware by
+default. The emulated hardware has the same interface as the real hardware, but
+also runs a graphical program called [qt_display.py](qt_display.py). This shows
+how the machine will look, and provides the buttons.
 
 ```
 usage: main.py [-h] [--pi-buttons] [--debug] [--text] [--tty TTY]
@@ -38,5 +36,6 @@ optional arguments:
 Read [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## API
+
 Automatically generated documentation is available at
 [http://ui.readthedocs.org/en/latest/](http://ui.readthedocs.org/en/latest/)
