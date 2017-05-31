@@ -9,5 +9,5 @@ install: "pip install -r requirements.txt -r requirements-dev.txt"
 script:
   - mkdir ~/books
   - cd ui
-  - python test.py --verbose
+  - python -m unittest discover
   - flake8 *.py

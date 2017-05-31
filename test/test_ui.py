@@ -6,18 +6,20 @@ import pty
 import struct
 import math
 import mock
-
-from bookfile_list import BookFile_List
-from driver_pi import Pi
-from setup_logs import setup_logs
-import utility
-import comms_codes as comms
-import config_loader
-import convert
-import actions
-from initial_state import initial_state
+from ui.bookfile_list import BookFile_List
+from ui.driver_pi import Pi
+from ui.setup_logs import setup_logs
+import ui.utility as utility
+import ui.comms_codes as comms
+import ui.config_loader as config_loader
+import ui.convert as convert
+import ui.actions as actions
+from ui.initial_state import initial_state
 if "TRAVIS" not in os.environ:
-    from driver_emulated import Emulated
+    from ui.driver_emulated import Emulated
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+test_books_dir = os.path.join(dir_path, 'test-books')
 
 
 class TestUtility(unittest.TestCase):
@@ -36,10 +38,9 @@ class TestUtility(unittest.TestCase):
                 utility.pin_num_to_alpha(p)), p)
 
     def test_find_files(self):
-        self.assertEqual(len(utility.find_files('../test-books', ('brf',))), 2)
-        self.assertEqual(len(utility.find_files('../test-books', ('pef',))), 1)
-        self.assertEqual(len(utility.find_files(
-            '../test-books', ('brf', 'pef'))), 3)
+        self.assertEqual(len(utility.find_files(test_books_dir, ('brf',))), 2)
+        self.assertEqual(len(utility.find_files(test_books_dir, ('pef',))), 1)
+        self.assertEqual(len(utility.find_files(test_books_dir, ('brf', 'pef'))), 3)
 
 
 class TestBookFile_List(unittest.TestCase):
@@ -144,9 +145,8 @@ class TestDriverPi(unittest.TestCase):
 class TestConvert(unittest.TestCase):
     def test_convert_brf_breaks(self):
         book_name = 'brf_break_test'
-        book_path = '../test-books/'
-        brf_file = book_path + book_name + '.brf'
-        native_file = book_path + book_name + '.canute'
+        brf_file = os.path.join(test_books_dir, book_name + '.brf')
+        native_file = os.path.join(test_books_dir, book_name + '.canute')
         convert.convert_brf(40, 4, brf_file, native_file, remove=False)
         content = BookFile_List(native_file, 40)
         lines = len(content)
@@ -155,9 +155,8 @@ class TestConvert(unittest.TestCase):
 
     def test_convert_pef(self):
         book_name = 'pef_test'
-        book_path = '../test-books/'
-        pef_file = book_path + book_name + '.pef'
-        native_file = book_path + book_name + '.canute'
+        pef_file = os.path.join(test_books_dir, book_name + '.pef')
+        native_file = os.path.join(test_books_dir, book_name + '.canute')
         convert.convert_pef(40, 4, pef_file, native_file, remove=False)
         content = BookFile_List(native_file, 40)
         lines = len(content)
@@ -172,9 +171,8 @@ class TestConvert(unittest.TestCase):
 
     def test_convert_brf(self):
         book_name = 'brf_test'
-        book_path = '../test-books/'
-        brf_file = book_path + book_name + '.BRF'
-        native_file = book_path + book_name + '.canute'
+        brf_file = os.path.join(test_books_dir, book_name + '.BRF')
+        native_file = os.path.join(test_books_dir, book_name + '.canute')
         convert.convert_brf(40, 4, brf_file, native_file, remove=False)
         content = BookFile_List(native_file, 40)
 
@@ -266,15 +264,3 @@ class TestActions(unittest.TestCase):
 
         # and check we're on the last page
         self.assertEqual(state['books'][0]['page'], 7)
-
-
-if __name__ == '__main__':
-    config = config_loader.load()
-    config.read('config-test.rc')
-    try:
-        os.mkdir(config.get('files', 'library_dir'))
-    except OSError:
-        pass
-    import logging
-    setup_logs(config, logging.ERROR)
-    unittest.main()

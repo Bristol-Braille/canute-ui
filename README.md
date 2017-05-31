@@ -5,11 +5,11 @@ electronic Braille reader](http://bristolbraille.co.uk/#canute).
 
 ## Usage
 
-The top level [ui](ui/main.py) uses a graphical display to emulate the hardware
+The top level [main.py](main.py) runs a graphical display to emulate the hardware
 by default.
 
 The emulated hardware has the same interface as the real hardware, but also
-runs a graphical program called [qt_display.py](ui/qt_display.py). This
+runs a graphical program called [qt_display.py](qt_display.py). This
 shows how the machine will look, and provides the buttons.
 
 ```

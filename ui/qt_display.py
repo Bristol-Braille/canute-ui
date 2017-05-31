@@ -3,12 +3,12 @@ from __future__ import print_function
 import argparse
 import logging
 import comms_codes as comms
-from utility import pin_num_to_unicode, pin_num_to_alpha
 from multiprocessing import Queue
 from Queue import Empty
 import sys
 from PySide import QtGui, QtCore
 from qt.main_window import Ui_MainWindow
+from ui.utility import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
 

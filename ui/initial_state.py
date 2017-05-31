@@ -63,4 +63,6 @@ if __name__ == '__main__':
     import os
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
-    print(read(state_file=dir_path + "/state.pkl")['update_ui'])
+    state_file = os.path.join(dir_path, '../state.pkl')
+    print(state_file)
+    print(read(state_file=state_file)['app']['update_ui'])
