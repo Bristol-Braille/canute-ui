@@ -10,6 +10,7 @@ class BookFile_List(list):
     :param filename: the file to open
     :param dimensions: display dimensions tuple
     '''
+
     def __init__(self, filename, cells):
         list.__init__(self)
         self.cells = cells
@@ -29,11 +30,12 @@ class BookFile_List(list):
                 data = fh.read(self.cells)
                 try:
                     page = struct.unpack("%db" % self.cells, data)
-                except struct.error:    
+                except struct.error:
                     page = [0] * self.cells
                 pages.append(page)
 
         return pages
+
 
 if __name__ == '__main__':
     book = BookFile_List('./bookfile_list.py', 32)

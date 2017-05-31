@@ -6,11 +6,18 @@ from utility import test_pattern
 
 if __name__ == '__main__':
 
-    
-    parser = argparse.ArgumentParser(description="shows a repeating pattern of all possible dot patterns")
+    parser = argparse.ArgumentParser(
+        description="shows a repeating pattern of all possible dot patterns"
+    )
 
-    parser.add_argument('--tty', action='store', dest='tty', help="serial port for Canute stepstix board", default='/dev/ttyACM0')
-    parser.add_argument('--emulated', action='store_const', dest='emulated', const=True, default=False, help="emulate the hardware (use GUI)")
+    parser.add_argument(
+        '--tty', action='store', dest='tty',
+        help="serial port for Canute stepstix board", default='/dev/ttyACM0'
+    )
+    parser.add_argument(
+        '--emulated', action='store_const', dest='emulated',
+        const=True, default=False, help="emulate the hardware (use GUI)"
+    )
 
     args = parser.parse_args()
 
@@ -31,5 +38,3 @@ if __name__ == '__main__':
             driver = Driver(hardware)
             pattern = test_pattern(driver.get_dimensions())
             driver.set_braille(pattern)
-
-

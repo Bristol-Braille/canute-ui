@@ -2,7 +2,7 @@
 from __future__ import print_function
 import argparse
 import logging
-from comms_codes import *
+import comms_codes as comms
 from utility import pin_num_to_unicode, pin_num_to_alpha
 from multiprocessing import Queue
 from Queue import Empty
@@ -17,7 +17,8 @@ BUTTONS = 9
 CHARS = 40
 ROWS = 9
 
-MSG_INTERVAL_S = 10 # This is in milliseconds
+MSG_INTERVAL_S = 10  # This is in milliseconds
+
 
 def main():
     logging.basicConfig(level=logging.INFO)
@@ -26,12 +27,14 @@ def main():
 
     parser = argparse.ArgumentParser(description="Canute Emulator")
     parser.add_argument('--text', action='store_const', dest='text',
-            const=True, help="show text instead of braille")
+                        const=True, help="show text instead of braille")
     args = parser.parse_args()
 
     app = QtGui.QApplication(sys.argv)
-    display = Display(to_display_queue=Queue(), from_display_queue=Queue(), display_text=args.text)
+    Display(to_display_queue=Queue(), from_display_queue=Queue(),
+            display_text=args.text)
     sys.exit(app.exec_())
+
 
 class HardwareError(Exception):
     pass
@@ -41,15 +44,20 @@ def start(to_display_queue, from_display_queue, display_text):
     log.info("display GUI")
 
     app = QtGui.QApplication(sys.argv)
-    _ = Display(to_display_queue=to_display_queue, from_display_queue=from_display_queue, display_text=display_text)
+    Display(to_display_queue=to_display_queue,
+            from_display_queue=from_display_queue, display_text=display_text)
     sys.exit(app.exec_())
 
+
 def get_all(t, cls):
-    return [y for x,y in cls.__dict__.items() if type(y) == t]
+    return [y for x, y in cls.__dict__.items() if type(y) == t]
+
 
 class Display(QtGui.QMainWindow, Ui_MainWindow):
     '''shows an emulation of the braille machine'''
-    def __init__(self, to_display_queue, from_display_queue, display_text=False):
+
+    def __init__(self, to_display_queue,
+                 from_display_queue, display_text=False):
         '''create the display object'''
         self.display_text = display_text
 
@@ -115,7 +123,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         log.debug("printing data: %s" % data)
 
         for row in range(ROWS):
-            row_braille = data[row*CHARS:row*CHARS+CHARS]
+            row_braille = data[row * CHARS:row * CHARS + CHARS]
             self.print_braille_row(row, row_braille)
 
     def print_braille_row(self, row, row_braille):
@@ -135,9 +143,9 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
             if msg is not None:
                 msgType = msg[0]
                 msg = msg[1:]
-                if msgType == CMD_SEND_PAGE:
+                if msgType == comms.CMD_SEND_PAGE:
                     self.print_braille(msg)
-                elif msgType == CMD_SEND_LINE:
+                elif msgType == comms.CMD_SEND_LINE:
                     self.print_braille_row(msg[0], msg[1:])
         except Empty:
             pass

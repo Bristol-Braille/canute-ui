@@ -2,7 +2,9 @@ import os.path
 from ConfigParser import ConfigParser
 
 config_file = 'config.rc'
-def load (config_file = config_file):
+
+
+def load(config_file=config_file):
     config = ConfigParser()
     config.read(config_file)
     library_dir = config.get('files', 'library_dir')

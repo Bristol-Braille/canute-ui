@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from multiprocessing import Process
-from frozendict import frozendict
 import unittest
 import os
 import pty
@@ -17,10 +16,10 @@ import config_loader
 import convert
 import actions
 from initial_state import initial_state
-from main import sync_library
 if "TRAVIS" not in os.environ:
     from driver_emulated import Emulated
-    
+
+
 class TestUtility(unittest.TestCase):
 
     def setUp(self):
@@ -28,16 +27,19 @@ class TestUtility(unittest.TestCase):
 
     def test_pin_num_to_unicode(self):
         for p in range(64):
-            self.assertEqual(utility.unicode_to_pin_num(utility.pin_num_to_unicode(p)), p)
+            self.assertEqual(utility.unicode_to_pin_num(
+                utility.pin_num_to_unicode(p)), p)
 
     def test_pin_num_to_alpha(self):
         for p in range(64):
-            self.assertEqual(utility.alpha_to_pin_num(utility.pin_num_to_alpha(p)), p)
+            self.assertEqual(utility.alpha_to_pin_num(
+                utility.pin_num_to_alpha(p)), p)
 
     def test_find_files(self):
         self.assertEqual(len(utility.find_files('../test-books', ('brf',))), 2)
         self.assertEqual(len(utility.find_files('../test-books', ('pef',))), 1)
-        self.assertEqual(len(utility.find_files('../test-books', ('brf','pef'))), 3)
+        self.assertEqual(len(utility.find_files(
+            '../test-books', ('brf', 'pef'))), 3)
 
 
 class TestBookFile_List(unittest.TestCase):
@@ -68,7 +70,8 @@ class TestBookFile_List(unittest.TestCase):
         # test every page of the book
         for i in range(8):
             expected_pin = i + (i << 3)
-            self.assertEqual(self._bookfile[i*h:i*h+1][0], (expected_pin,) * w)
+            self.assertEqual(
+                self._bookfile[i * h:i * h + 1][0], (expected_pin,) * w)
 
     @classmethod
     def tearDownClass(cls):
@@ -112,7 +115,7 @@ class TestDriverPi(unittest.TestCase):
         cls._driver.start()
 
     def get_message(self, len=1):
-        message = os.read(self._master,1)
+        message = os.read(self._master, 1)
         data = struct.unpack('1b', message)
         return data
 
@@ -164,7 +167,8 @@ class TestConvert(unittest.TestCase):
         content = utility.flatten(content)
         alphas = utility.pin_nums_to_alphas(content)
         alphas = ''.join(alphas).lower()
-        self.assertEqual(alphas[0:40], 'the quickbrownfoxjumpedoverlazydog.000  ')
+        self.assertEqual(
+            alphas[0:40], 'the quickbrownfoxjumpedoverlazydog.000  ')
 
     def test_convert_brf(self):
         book_name = 'brf_test'
@@ -196,48 +200,53 @@ class TestConvert(unittest.TestCase):
         self.assertEqual(alphas, brf_content)
 
 
+initial = initial_state['app']
+
+
 class TestActions(unittest.TestCase):
     def test_add_books(self):
-        self.assertEqual(len(initial_state['books']), 0)
-        r = actions.Reducers()
+        self.assertEqual(len(initial['books']), 0)
+        r = actions.AppReducers()
         data = mock.MagicMock()
-        state = r.add_books(initial_state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
+        state = r.add_books(initial, [data])
+        self.assertEqual(len(initial['books']), 0)
         self.assertEqual(len(state['books']), 1)
+
     def test_add_books2(self):
         '''cannot add the same book twice'''
-        self.assertEqual(len(initial_state['books']), 0)
-        r = actions.Reducers()
+        self.assertEqual(len(initial['books']), 0)
+        r = actions.AppReducers()
         data = mock.MagicMock()
         data.filename = 'test'
-        state = r.add_books(initial_state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
+        state = r.add_books(initial, [data])
+        self.assertEqual(len(initial['books']), 0)
         self.assertEqual(len(state['books']), 1)
         state = r.add_books(state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(initial['books']), 0)
         self.assertEqual(len(state['books']), 1)
+
     def test_remove_books(self):
-        self.assertEqual(len(initial_state['books']), 0)
-        r = actions.Reducers()
+        self.assertEqual(len(initial['books']), 0)
+        r = actions.AppReducers()
         data = mock.MagicMock()
         data.filename = 'test'
-        state = r.add_books(initial_state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
+        state = r.add_books(initial, [data])
+        self.assertEqual(len(initial['books']), 0)
         self.assertEqual(len(state['books']), 1)
         state = r.remove_books(state, [data.filename])
-        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(initial['books']), 0)
         self.assertEqual(len(state['books']), 0)
 
     def test_book_navigation(self):
-        self.assertEqual(len(initial_state['books']), 0)
-        r = actions.Reducers()
+        self.assertEqual(len(initial['books']), 0)
+        r = actions.AppReducers()
         pages = utility.test_book((40, 9))
         with open('/tmp/book', 'w') as fh:
             for page in pages:
                 fh.write(bytearray(page))
 
         bookfile = BookFile_List('/tmp/book', 40)
-        state = r.add_books(initial_state, [bookfile])
+        state = r.add_books(initial, [bookfile])
         state = r.go_to_book(state, 0)
 
         self.assertEqual(state['location'], 0)
@@ -257,6 +266,7 @@ class TestActions(unittest.TestCase):
 
         # and check we're on the last page
         self.assertEqual(state['books'][0]['page'], 7)
+
 
 if __name__ == '__main__':
     config = config_loader.load()
