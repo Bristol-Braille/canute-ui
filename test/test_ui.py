@@ -8,10 +8,8 @@ import math
 import mock
 from ui.bookfile_list import BookFile_List
 from ui.driver_pi import Pi
-from ui.setup_logs import setup_logs
 import ui.utility as utility
 import ui.comms_codes as comms
-import ui.config_loader as config_loader
 import ui.convert as convert
 import ui.actions as actions
 from ui.initial_state import initial_state
@@ -40,7 +38,10 @@ class TestUtility(unittest.TestCase):
     def test_find_files(self):
         self.assertEqual(len(utility.find_files(test_books_dir, ('brf',))), 2)
         self.assertEqual(len(utility.find_files(test_books_dir, ('pef',))), 1)
-        self.assertEqual(len(utility.find_files(test_books_dir, ('brf', 'pef'))), 3)
+        self.assertEqual(
+            len(utility.find_files(test_books_dir, ('brf', 'pef'))),
+            3
+        )
 
 
 class TestBookFile_List(unittest.TestCase):

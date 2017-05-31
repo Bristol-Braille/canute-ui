@@ -30,7 +30,6 @@ initial_state = utility.freeze({
 })
 
 
-
 def read():
     log.debug('reading initial state from %s' % STATE_FILE)
     try:

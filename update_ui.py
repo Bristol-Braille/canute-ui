@@ -1,4 +1,3 @@
-from subprocess import Popen, PIPE
 from ui.utility import find_ui_update
 from ui.config_loader import load
 from ui.setup_logs import setup_logs
@@ -12,9 +11,11 @@ import ui.initial_state
 config = load("ui/config.rc")
 log = setup_logs(config, logging.DEBUG)
 
+
 def need_update():
     '''
-    checks the state, if state is set to in_progress, get the update file and continue
+    checks the state, if state is set to in_progress, get the update file and
+    continue
     '''
     update_state = ui.initial_state.read()['app']['update_ui']
     log.info("update_ui = %s" % update_state)
