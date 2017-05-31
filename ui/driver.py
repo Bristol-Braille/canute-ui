@@ -1,8 +1,11 @@
 import logging
-log = logging.getLogger(__name__)
-from comms_codes import *
 import abc
+import comms_codes as comms
 import utility
+
+
+log = logging.getLogger(__name__)
+
 
 class DriverError(Exception):
     pass
@@ -18,7 +21,8 @@ class Driver(object):
         self.status = 0
         (self.chars, self.rows) = self.get_dimensions()
         self.page_length = self.rows * self.chars
-        log.info("device ready with %d x %d characters" % (self.chars, self.rows))
+        log.info("device ready with %d x %d characters" %
+                 (self.chars, self.rows))
 
     @abc.abstractmethod
     def is_ok(self):
@@ -46,12 +50,12 @@ class Driver(object):
         return
 
     def reset_display(self):
-        self.send_data(CMD_RESET)
-        return self.get_data(CMD_RESET)
+        self.send_data(comms.CMD_RESET)
+        return self.get_data(comms.CMD_RESET)
 
     def warm_up(self):
-        self.send_data(CMD_WARMUP)
-        return self.get_data(CMD_WARMUP)
+        self.send_data(comms.CMD_WARMUP)
+        return self.get_data(comms.CMD_WARMUP)
 
     def get_dimensions(self):
         '''
@@ -60,10 +64,10 @@ class Driver(object):
         :rtype: a tuple containing 2 integers: number of cells and number of
         rows
         '''
-        self.send_data(CMD_GET_CHARS)
-        chars = self.get_data(CMD_GET_CHARS)
-        self.send_data(CMD_GET_ROWS)
-        rows = self.get_data(CMD_GET_ROWS)
+        self.send_data(comms.CMD_GET_CHARS)
+        chars = self.get_data(comms.CMD_GET_CHARS)
+        self.send_data(comms.CMD_GET_ROWS)
+        rows = self.get_data(comms.CMD_GET_ROWS)
         return (chars, rows)
 
     def get_page_length(self):
@@ -129,20 +133,22 @@ class Driver(object):
         log.debug("setting page of braille:")
 
         for row in range(self.rows):
-            row_braille = data[row*self.chars:row*self.chars+self.chars]
+            row_braille = data[row * self.chars:row * self.chars + self.chars]
             self.set_braille_row(row, row_braille)
 
     def set_braille_row(self, row, data):
         if len(data) > self.chars:
-            log.warning("row data too long, length %d, truncating to %d" % (len(data), self.chars))
+            log.warning("row data too long, length %d, truncating to %d" %
+                        (len(data), self.chars))
             data = data[0:self.chars]
 
         log.debug("setting row of braille:")
-        log.debug("row %i: |%s|" % (row, '|'.join(map(utility.pin_num_to_unicode, data))))
+        log.debug("row %i: |%s|" %
+                  (row, '|'.join(map(utility.pin_num_to_unicode, data))))
 
-        self.send_data(CMD_SEND_LINE, [row] + list(data))
+        self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
 
         # get status
-        self.status = self.get_data(CMD_SEND_LINE)
+        self.status = self.get_data(comms.CMD_SEND_LINE)
         if self.status != 0:
             log.warning("got an error after setting braille: %d" % self.status)

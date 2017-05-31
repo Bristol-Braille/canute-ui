@@ -1,5 +1,5 @@
 from driver import Driver
-from comms_codes import *
+import comms_codes as comms
 import time
 import serial
 import logging
@@ -10,9 +10,9 @@ import threading
 
 log = logging.getLogger(__name__)
 
-long_press   = 500.0 #ms
-double_click = 200.0 #ms
-debounce     = 20 #ms
+long_press = 500.0  # ms
+double_click = 200.0  # ms
+debounce = 20  # ms
 
 try:
     import evdev
@@ -29,6 +29,7 @@ class Pi(Driver):
     :param port: the serial port the display is plugged into
     :param pi_buttons: whether to use the evdev input for button presses
     """
+
     def __init__(self, port='/dev/ttyACM0', pi_buttons=False, timeout=60):
         self.timeout = timeout
         # get serial connection
@@ -42,10 +43,9 @@ class Pi(Driver):
 
         if pi_buttons:
             self.button_queue = Queue.Queue()
-            self.button_thread = threading.Thread(target = self.button_loop)
+            self.button_thread = threading.Thread(target=self.button_loop)
             self.button_thread.daemon = True
             self.button_thread.start()
-
 
     def button_loop(self):
         devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -54,7 +54,7 @@ class Pi(Driver):
             if d.name == 'Arduino LLC Arduino Leonardo':
                 device = d
                 break
-        if device == None:
+        if device is None:
             log.error('Arduino not found')
             return
         for event in device.read_loop():
@@ -102,9 +102,11 @@ class Pi(Driver):
             for _ in range(100):
                 try:
                     event = self.button_queue.get_nowait()
+                    key = event.type == evdev.ecodes.EV_KEY
+                    down = event.value == evdev.KeyEvent.key_down
                 except Queue.Empty:
                     event = None
-                if event is not None and (event.type == evdev.ecodes.EV_KEY) and (event.value == evdev.KeyEvent.key_down):
+                if event is not None and key and down:
                     e = evdev.ecodes
                     if (event.code == e.KEY_1):
                         buttons['1'] = 'single'
@@ -137,12 +139,12 @@ class Pi(Driver):
     def send_error_sound(self):
         '''make the hardware make an error sound'''
         log.debug("error sound")
-        self.send_data(CMD_SEND_ERROR)
+        self.send_data(comms.CMD_SEND_ERROR)
 
     def send_ok_sound(self):
         '''make the hardware make an ok sound'''
         log.debug("ok sound")
-        self.send_data(CMD_SEND_OK)
+        self.send_data(comms.CMD_SEND_OK)
 
     def send_data(self, cmd, data=[]):
         '''send data to the hardware
@@ -169,7 +171,8 @@ class Pi(Driver):
             log.warning("unexpected rx data length %d" % len(message))
         data = struct.unpack('2b', message)
         if data[0] != expected_cmd:
-            log.warning("unexpected rx command %d, expecting %d" % (data[0], expected_cmd))
+            log.warning("unexpected rx command %d, expecting %d" %
+                        (data[0], expected_cmd))
         return data[1]
 
     def __exit__(self, ex_type, ex_value, traceback):
@@ -185,6 +188,7 @@ class Pi(Driver):
     def __enter__(self):
         '''method required for using the `with` statement'''
         return self
+
 
 Driver.register(Pi)
 

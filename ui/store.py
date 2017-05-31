@@ -1,10 +1,11 @@
 import pydux
-
 import logging
-log = logging.getLogger(__name__)
-
 from actions import AppReducers, HardwareReducers
 from initial_state import initial_state
+
+
+log = logging.getLogger(__name__)
+
 
 def dictify(cls):
     reducers = cls()
@@ -17,7 +18,8 @@ def dictify(cls):
 
 def makeReducer(cls):
     reducer_dict = dictify(cls)
-    def reducer(state, action = None):
+
+    def reducer(state, action=None):
         for name in reducer_dict:
             if action['type'] == name:
                 return reducer_dict[name](state, action['value'])

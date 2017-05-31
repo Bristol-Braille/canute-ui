@@ -1,9 +1,11 @@
 import logging
-log = logging.getLogger(__name__)
 import os
 import xml.dom.minidom as minidom
-
 import utility
+
+
+log = logging.getLogger(__name__)
+
 
 def convert_brf(width, height, brf_file, native_file, remove=True):
     '''
@@ -13,7 +15,6 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
     :param native_file: filename of the destination file
     '''
     log.info("converting brf %s" % brf_file)
-
 
     def pad_line(converted):
         converted.extend([0] * (width - len(converted)))
@@ -48,14 +49,19 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
     log.info("brf loaded with %d lines" % len(book))
     log.info("writing to [%s]" % native_file)
     with open(native_file, 'w') as fh:
-        for index,line in enumerate(book):
+        for index, line in enumerate(book):
             if len(line) > width:
-                log.warning("length of row %d is %d which is greater than %d, truncating" % (index, len(line), width))
+                log.warning(
+                   'length of row %d is %d which is greater than %d,'
+                   + ' truncating'
+                   % (index, len(line), width)
+                )
             fh.write(bytearray(line[:width]))
 
     if remove:
         log.info("removing old brf file")
         os.remove(brf_file)
+
 
 def convert_pef(width, height, pef_file, native_file, remove=True):
     '''
@@ -88,7 +94,7 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
             blank_row.appendChild(txt)
             page.appendChild(blank_row)
 
-    #rows do the conversion from unicode to pin numbers
+    # rows do the conversion from unicode to pin numbers
     for page in pages:
         # pad missing rows
         pad_page(page)
@@ -112,9 +118,13 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
     log.info("pef loaded with %d lines" % len(lines))
     log.info("writing to [%s]" % native_file)
     with open(native_file, 'w') as fh:
-        for index,line in enumerate(lines):
+        for index, line in enumerate(lines):
             if len(line) > width:
-                log.warning("length of row %d is %d which is greater than %d, truncating" % (index, len(line), width))
+                log.warning(
+                   'length of row %d is %d which is greater than %d,'
+                   + ' truncating'
+                   % (index, len(line), width)
+                )
             fh.write(bytearray(line[:width]))
 
     if remove:
