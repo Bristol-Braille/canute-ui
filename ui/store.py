@@ -16,10 +16,12 @@ def dictify(cls):
     return reducer_dict
 
 
-def makeReducer(cls):
+def makeReducer(key, cls):
     reducer_dict = dictify(cls)
 
     def reducer(state, action=None):
+        if state is None:
+            state = initial_state[key]
         for name in reducer_dict:
             if action['type'] == name:
                 return reducer_dict[name](state, action['value'])
@@ -28,8 +30,8 @@ def makeReducer(cls):
 
 
 combined = pydux.combine_reducers({
-    'app': makeReducer(AppReducers),
-    'hardware': makeReducer(HardwareReducers),
+    'app': makeReducer('app', AppReducers),
+    'hardware': makeReducer('hardware', HardwareReducers),
 })
 
 
