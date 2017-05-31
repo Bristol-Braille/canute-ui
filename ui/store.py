@@ -7,8 +7,8 @@ log = logging.getLogger(__name__)
 import menu
 from bookfile_list import BookFile_List
 import utility
-from actions import Reducers
-import initial_state
+from actions import AppReducers, HardwareReducers
+from initial_state import initial_state
 
 def dictify(cls):
     reducers = cls()
@@ -22,13 +22,27 @@ def dictify(cls):
 def makeReducer(cls):
     reducer_dict = dictify(cls)
     def reducer(state, action = None):
-        log.debug(action)
         for name in reducer_dict:
             if action['type'] == name:
                 return reducer_dict[name](state, action['value'])
         return state
     return reducer
 
-reducer = makeReducer(Reducers)
 
-store = pydux.create_store(reducer)
+combined = pydux.combine_reducers({
+    'app': makeReducer(AppReducers),
+    'hardware': makeReducer(HardwareReducers),
+})
+
+
+def main_reducer(state, action):
+    if action['type'] == '@@redux/INIT':
+        return initial_state
+    if action['type'] == 'init':
+        return action['value']
+    if state is None:
+        state = initial_state
+    return combined(state, action)
+
+
+store = pydux.create_store(main_reducer)

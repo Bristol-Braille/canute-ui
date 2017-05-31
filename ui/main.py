@@ -28,7 +28,6 @@ BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
 
 def main():
     args = argparser.parser.parse_args()
-
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
 
@@ -51,16 +50,17 @@ def main():
 
 
 def run(driver, config):
-    init_state    = initial_state.read()
+    state    = initial_state.read()
     width, height = driver.get_dimensions()
-    init_state    = init_state.copy(dimensions = frozendict({'width': width, 'height': height}), resetting_display = 'start')
-    store.dispatch(actions.init(init_state))
-    sync_library(init_state, config.get('files', 'library_dir'))
+    state = state.copy(app = state['app'].copy(display = frozendict({'width': width, 'height': height})))
+    state = state.copy(hardware = state['hardware'].copy(resetting_display = 'start'))
+    store.dispatch({'type': 'init', 'value': state})
+    sync_library(state, config.get('files', 'library_dir'))
     store.subscribe(partial(handle_changes, driver, config))
 
     # if we startup and update_ui is still 'in progress' then we are using the old state file
     # and update has failed
-    if init_state["update_ui"] == "in progress":
+    if state['app']['update_ui'] == 'in progress':
         store.dispatch(actions.update_ui('failed'))
 
     # since handle_changes subscription happens after init and sync_library it
@@ -82,7 +82,7 @@ def button_loop(driver):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
                 store.dispatch(actions.shutdown())
-            if state['shutting_down'] or state['update_ui'] == 'in progress':
+            if state['app']['shutting_down'] or state['app']['update_ui'] == 'in progress':
                 log.debug("shutting down due to state change")
                 initial_state.write(state)
                 quit = True
@@ -101,26 +101,26 @@ def handle_changes(driver, config):
     render(driver, state)
     change_files(config, state)
     initial_state.write(state)
-    if state['shutting_down'] and isinstance(driver, Pi):
+    if state['app']['shutting_down'] and isinstance(driver, Pi):
         os.system("sudo shutdown -h now")
 
 
 def render(driver, state):
-    width, height = dimensions(state)
+    width, height = dimensions(state['app'])
     location = state['app']['location']
-    if state['resetting_display'] == 'start':
+    if state['hardware']['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
         store.dispatch(actions.reset_display('done'))
-    elif state['warming_up'] == 'in progress' or state['resetting_display'] == 'in progress':
+    elif state['hardware']['warming_up'] == 'in progress' or state['hardware']['resetting_display'] == 'in progress':
         # our render method can be called asynchronously, we don't don anything
         # unless these are done
         pass
-    elif state['warming_up'] == 'start':
+    elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
         store.dispatch(actions.warm_up(False))
-    elif state['shutting_down']:
+    elif state['app']['shutting_down']:
         if isinstance(driver, Pi):
             driver.clear_page()
     elif location == 'library':
@@ -137,8 +137,8 @@ def render(driver, state):
         title       = format_title('library menu', width, page, max_pages)
         set_display(driver, tuple([title]) + tuple(data))
     elif location == 'menu':
-        page      = state['menu']['page']
-        data      = state['menu']['data']
+        page      = state['app']['menu']['page']
+        data      = state['app']['menu']['data']
         #subtract title from page height
         data_height = height - 1
         max_pages   = get_max_pages(data, data_height)
@@ -150,8 +150,8 @@ def render(driver, state):
             data += ((0,) * width,)
         set_display(driver, tuple([title]) + tuple(data))
     elif type(location) == int:
-        page = state['books'][location]['page']
-        data = state['books'][location]['data']
+        page = state['app']['books'][location]['page']
+        data = state['app']['books'][location]['data']
         n    = page * height
         data = data[n : n + height]
         set_display(driver, data)
@@ -169,9 +169,9 @@ def set_display(driver, data):
 
 
 def sync_library(state, library_dir):
-    width, height = dimensions(state)
+    width, height = dimensions(state['app'])
     convert_library(width, height, library_dir)
-    library_files = map(lambda b: b['data'].filename, state['books'])
+    library_files = map(lambda b: b['data'].filename, state['app']['books'])
     disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
     not_added = filter(lambda f: f not in library_files, disk_files)
     if not_added != []:
@@ -198,13 +198,13 @@ def convert_library(width, height, library_dir):
 
 def change_files(config, state):
     library_dir = config.get('files', 'library_dir')
-    if state['replacing_library'] == 'start':
+    if state['app']['replacing_library'] == 'start':
         store.dispatch(actions.replace_library('in progress'))
         replace_library(config, state)
-    if state['backing_up_log'] == 'start':
+    if state['app']['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
-    if state['update_ui'] == 'start':
+    if state['app']['update_ui'] == 'start':
         log.info("update ui = start")
         if utility.find_ui_update(config):
             store.dispatch(actions.update_ui('in progress'))
@@ -257,8 +257,8 @@ def replace_library(config, state):
         new_path = library_dir + basename
         log.debug('changing ownership of {} from {} to {}'.format(new_path, uid, gid))
         os.chown(new_path, uid, gid)
-    width = state['display']['width']
-    height = state['display']['height']
+    width = state['app']['display']['width']
+    height = state['app']['display']['height']
     sync_library(state, library_dir)
     store.dispatch(actions.replace_library('done'))
 

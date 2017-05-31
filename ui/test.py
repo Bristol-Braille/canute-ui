@@ -198,38 +198,38 @@ class TestConvert(unittest.TestCase):
 
 class TestActions(unittest.TestCase):
     def test_add_books(self):
-        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(initial_state['app']['books']), 0)
         r = actions.Reducers()
         data = mock.MagicMock()
         state = r.add_books(initial_state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
-        self.assertEqual(len(state['books']), 1)
+        self.assertEqual(len(initial_state['app']['books']), 0)
+        self.assertEqual(len(state['app']['books']), 1)
     def test_add_books2(self):
         '''cannot add the same book twice'''
-        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(initial_state['app']['books']), 0)
         r = actions.Reducers()
         data = mock.MagicMock()
         data.filename = 'test'
         state = r.add_books(initial_state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
-        self.assertEqual(len(state['books']), 1)
+        self.assertEqual(len(initial_state['app']['books']), 0)
+        self.assertEqual(len(state['app']['books']), 1)
         state = r.add_books(state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
-        self.assertEqual(len(state['books']), 1)
+        self.assertEqual(len(initial_state['app']['books']), 0)
+        self.assertEqual(len(state['app']['books']), 1)
     def test_remove_books(self):
-        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(initial_state['app']['books']), 0)
         r = actions.Reducers()
         data = mock.MagicMock()
         data.filename = 'test'
         state = r.add_books(initial_state, [data])
-        self.assertEqual(len(initial_state['books']), 0)
-        self.assertEqual(len(state['books']), 1)
+        self.assertEqual(len(initial_state['app']['books']), 0)
+        self.assertEqual(len(state['app']['books']), 1)
         state = r.remove_books(state, [data.filename])
-        self.assertEqual(len(initial_state['books']), 0)
-        self.assertEqual(len(state['books']), 0)
+        self.assertEqual(len(initial_state['app']['books']), 0)
+        self.assertEqual(len(state['app']['books']), 0)
 
     def test_book_navigation(self):
-        self.assertEqual(len(initial_state['books']), 0)
+        self.assertEqual(len(initial_state['app']['books']), 0)
         r = actions.Reducers()
         pages = utility.test_book((40, 9))
         with open('/tmp/book', 'w') as fh:
@@ -241,22 +241,22 @@ class TestActions(unittest.TestCase):
         state = r.go_to_book(state, 0)
 
         self.assertEqual(state['app']['location'], 0)
-        self.assertEqual(state['books'][0]['page'], 0)
+        self.assertEqual(state['app']['books'][0]['page'], 0)
 
         # check we can't go backwards from page 0
         state = r.previous_page(state, None)
-        self.assertEqual(state['books'][0]['page'], 0)
+        self.assertEqual(state['app']['books'][0]['page'], 0)
 
         # check we can go forwards from page 0
         state = r.next_page(state, None)
-        self.assertEqual(state['books'][0]['page'], 1)
+        self.assertEqual(state['app']['books'][0]['page'], 1)
 
         # go fowards too many times
         for i in range(10):
             state = r.next_page(state, None)
 
         # and check we're on the last page
-        self.assertEqual(state['books'][0]['page'], 7)
+        self.assertEqual(state['app']['books'][0]['page'], 7)
 
 if __name__ == '__main__':
     config = config_loader.load()

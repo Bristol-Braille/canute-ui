@@ -12,20 +12,21 @@ initial_state = utility.freeze({
     'app': {
         'location' : 'library',
         'library'  : {'data': [], 'page': 0},
+        'books'    : [],
+        'menu': {
+            'data': [utility.pad_line(40, line) for line in menu.menu_titles_braille],
+            'page': 0
+        },
+        'replacing_library' : False,
+        'backing_up_log'    : False,
+        'update_ui'         : False,
+        'shutting_down'     : False,
+        'dimensions'           : {'width': 40, 'height': 9},
     },
-    'menu'     : {
-        'data': [utility.pad_line(40, line) for line in menu.menu_titles_braille],
-        'page': 0
+    'hardware': {
+        'warming_up'        : False,
+        'resetting_display' : False,
     },
-    'books'             : [],
-    'replacing_library' : False,
-    'backing_up_log'    : False,
-    'shutting_down'     : False,
-    'halt_ui'           : False,
-    'warming_up'        : False,
-    'resetting_display' : False,
-    'update_ui'         : False,
-    'display'           : {'width': 40, 'height': 9},
 })
 
 state_file = 'state.pkl'
@@ -49,11 +50,11 @@ def write(state):
     if location == 'menu':
         location = 'library'
     write_state['app']['location']   = location
-    write_state['backing_up_log']    = False
-    write_state['replacing_library'] = False
-    write_state['resetting_display'] = False
-    write_state['warming_up']        = False
-    write_state['shutting_down']     = False
+    write_state['app']['backing_up_log']    = False
+    write_state['app']['replacing_library'] = False
+    write_state['hardware']['resetting_display'] = False
+    write_state['hardware']['warming_up']        = False
+    write_state['app']['shutting_down']     = False
     with open(state_file, 'w') as fh:
         pickle.dump(utility.freeze(write_state), fh)
 
