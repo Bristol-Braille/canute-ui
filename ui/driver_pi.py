@@ -1,11 +1,10 @@
-from driver import Driver, DriverError
+from driver import Driver
 from comms_codes import *
 import time
 import serial
 import logging
 import struct
 import binascii
-import itertools
 import Queue
 import threading
 

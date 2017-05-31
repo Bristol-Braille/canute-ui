@@ -16,7 +16,7 @@ import argparser
 import config_loader
 from setup_logs import setup_logs
 from store import store
-from actions import actions, get_max_pages, get_title, dimensions
+from actions import actions, get_max_pages, dimensions
 import convert
 import initial_state
 from button_bindings import button_bindings

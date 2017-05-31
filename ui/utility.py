@@ -8,12 +8,8 @@ contains various utility methods used by many of the modules
 import os
 import re
 import logging
-import functools
-import tarfile
-import shutil
 from collections import OrderedDict
 from frozendict import frozendict, FrozenOrderedDict
-from datetime import datetime
 log = logging.getLogger(__name__)
 
 class FormfeedConversionException(Exception): pass

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from multiprocessing import Process
-from frozendict import frozendict
 import unittest
 import os
 import pty
@@ -17,7 +16,6 @@ import config_loader
 import convert
 import actions
 from initial_state import initial_state
-from main import sync_library
 if "TRAVIS" not in os.environ:
     from driver_emulated import Emulated
 

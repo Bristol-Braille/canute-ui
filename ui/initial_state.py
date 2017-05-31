@@ -1,5 +1,3 @@
-from frozendict import frozendict
-from functools import partial
 import pickle
 import logging
 log = logging.getLogger(__name__)
@@ -21,7 +19,7 @@ initial_state = utility.freeze({
         'backing_up_log'    : False,
         'update_ui'         : False,
         'shutting_down'     : False,
-        'dimensions'           : {'width': 40, 'height': 9},
+        'dimensions'        : {'width': 40, 'height': 9},
     },
     'hardware': {
         'warming_up'        : False,
