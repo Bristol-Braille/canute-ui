@@ -3,16 +3,7 @@
 This is the repository for UI (user interface) development for the [Canute
 electronic Braille reader](http://bristolbraille.co.uk/#canute).
 
-## Documentation
-
-Documentation is available at
-[http://ui.readthedocs.org/en/latest/](http://ui.readthedocs.org/en/latest/)
-
-## Getting started
-
-Read [INSTALL.md](INSTALL.md) for installation instructions.
-
-## Design
+## Usage
 
 The top level [ui](ui/main.py) uses a graphical display to emulate the hardware
 by default.
@@ -21,5 +12,31 @@ The emulated hardware has the same interface as the real hardware, but also
 runs a graphical program called [qt_display.py](ui/qt_display.py). This
 shows how the machine will look, and provides the buttons.
 
-The gui and the UI communicate via UDP as we found that running the gui within
-a thread caused problems when using Python's debugging tools.
+```
+usage: main.py [-h] [--pi-buttons] [--debug] [--text] [--tty TTY]
+               [--delay DELAY] [--disable-emulator] [--both]
+
+Canute UI
+
+optional arguments:
+  -h, --help          show this help message and exit
+  --pi-buttons        use the Pi to handle button presses
+  --debug             debugging content
+  --text              show text instead of braille
+  --tty TTY           serial port for Canute stepstix board
+  --delay DELAY       simulate mechanical delay in milliseconds in the
+                      emulator
+  --disable-emulator  do not run the graphical emulator, run with real
+                      hardware
+  --both              run both the emulator and the real hardware at the same
+                      time
+
+```
+
+## Getting started
+
+Read [INSTALL.md](INSTALL.md) for installation instructions.
+
+## API
+Automatically generated documentation is available at
+[http://ui.readthedocs.org/en/latest/](http://ui.readthedocs.org/en/latest/)
