@@ -3,9 +3,6 @@ from frozendict import frozendict
 from functools import partial
 import time
 import shutil
-import pwd
-import grp
-import re
 import logging
 
 from ui.driver_pi import Pi
@@ -15,17 +12,12 @@ import ui.config_loader as config_loader
 from ui.setup_logs import setup_logs
 from ui.store import store
 from ui.actions import actions, get_max_pages, dimensions
-import ui.convert as convert
 import ui.initial_state as initial_state
 from ui.button_bindings import button_bindings
-from ui.bookfile_list import BookFile_List
+import ui.library as library
 
 
 log = logging.getLogger(__name__)
-
-
-NATIVE_EXTENSION = 'canute'
-BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
 
 
 def main():
@@ -65,7 +57,7 @@ def run(driver, config):
     state = state.copy(hardware=state['hardware'].copy(
         resetting_display='start'))
     store.dispatch({'type': 'init', 'value': state})
-    sync_library(state, config.get('files', 'library_dir'))
+    library.sync(state, config.get('files', 'library_dir'))
     store.subscribe(partial(handle_changes, driver, config))
 
     # if we startup and update_ui is still 'in progress' then we are using the
@@ -74,9 +66,9 @@ def run(driver, config):
     if state['app']['update_ui'] == 'in progress':
         store.dispatch(actions.update_ui('failed'))
 
-    # since handle_changes subscription happens after init and sync_library it
+    # since handle_changes subscription happens after init and library.sync it
     # may not have triggered. so we trigger it here. if we put it before init
-    # it will start of by rendering a possibly invalid state. sync_library
+    # it will start of by rendering a possibly invalid state. library.sync
     # won't dispatch if the library is already in sync so there would be no
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
@@ -116,6 +108,22 @@ def handle_changes(driver, config):
     initial_state.write(state)
     if state['app']['shutting_down'] and isinstance(driver, Pi):
         os.system("sudo shutdown -h now")
+
+
+def change_files(config, state):
+    if state['app']['replacing_library'] == 'start':
+        store.dispatch(actions.replace_library('in progress'))
+        library.replace(config, state)
+    if state['app']['backing_up_log'] == 'start':
+        store.dispatch(actions.backup_log('in progress'))
+        backup_log(config)
+    if state['app']['update_ui'] == 'start':
+        log.info("update ui = start")
+        if utility.find_ui_update(config):
+            store.dispatch(actions.update_ui('in progress'))
+        else:
+            log.info("update not found")
+            store.dispatch(actions.update_ui('failed'))
 
 
 def render(driver, state):
@@ -185,48 +193,17 @@ def set_display(driver, data):
         log.debug('not setting page with identical data')
 
 
-def sync_library(state, library_dir):
-    width, height = dimensions(state['app'])
-    convert_library(width, height, library_dir)
-    library_files = map(lambda b: b['data'].filename, state['app']['books'])
-    disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
-    not_added = filter(lambda f: f not in library_files, disk_files)
-    if not_added != []:
-        not_added_data = map(lambda f: BookFile_List(f, width), not_added)
-        store.dispatch(actions.add_books(not_added_data))
-    non_existent = filter(lambda f: f not in disk_files, library_files)
-    if non_existent != []:
-        store.dispatch(actions.remove_books(non_existent))
-
-
-def convert_library(width, height, library_dir):
-    file_names = utility.find_files(library_dir, BOOK_EXTENSIONS)
-    for name in file_names:
-        basename, ext = os.path.splitext(os.path.basename(name))
-        if re.match('\.pef$', ext, re.I):
-            log.info("converting pef to canute")
-            native_file = library_dir + basename + '.' + NATIVE_EXTENSION
-            convert.convert_pef(width, height, name, native_file)
-        elif re.match('\.brf$', ext, re.I):
-            log.info("converting brf to canute")
-            native_file = library_dir + basename + '.' + NATIVE_EXTENSION
-            convert.convert_brf(width, height, name, native_file)
-
-
-def change_files(config, state):
-    if state['app']['replacing_library'] == 'start':
-        store.dispatch(actions.replace_library('in progress'))
-        replace_library(config, state)
-    if state['app']['backing_up_log'] == 'start':
-        store.dispatch(actions.backup_log('in progress'))
-        backup_log(config)
-    if state['app']['update_ui'] == 'start':
-        log.info("update ui = start")
-        if utility.find_ui_update(config):
-            store.dispatch(actions.update_ui('in progress'))
-        else:
-            log.info("update not found")
-            store.dispatch(actions.update_ui('failed'))
+def backup_log(config):
+    usb_dir = config.get('files', 'usb_dir')
+    log_file = config.get('files', 'log_file')
+    # make a filename based on the date
+    backup_file = os.path.join(usb_dir, time.strftime('%Y%m%d_log.txt'))
+    log.warning('backing up log to USB stick: {}'.format(backup_file))
+    try:
+        shutil.copyfile(log_file, backup_file)
+    except IOError as e:
+        log.warning("couldn't backup log file: {}".format(e))
+    store.dispatch(actions.backup_log('done'))
 
 
 def format_title(title, width, page_number, total_pages):
@@ -256,46 +233,6 @@ def format_title(title, width, page_number, total_pages):
     # replace first 2 chars with the uppercase symbols
     title_pins[0:2] = [32, 32]
     return title_pins
-
-
-def replace_library(config, state):
-    library_dir = config.get('files', 'library_dir')
-    usb_dir = config.get('files', 'usb_dir')
-    owner = config.get('user', 'user_name')
-    wipe_library(library_dir)
-    new_books = utility.find_files(usb_dir, BOOK_EXTENSIONS)
-    uid = pwd.getpwnam(owner).pw_uid
-    gid = grp.getgrnam(owner).gr_gid
-    for filename in new_books:
-        log.info('copying {} to {}'.format(filename, library_dir))
-        shutil.copy(filename, library_dir)
-
-        # change ownership
-        basename = os.path.basename(filename)
-        new_path = library_dir + basename
-        log.debug('changing ownership of {} from {} to {}'.format(
-            new_path, uid, gid))
-        os.chown(new_path, uid, gid)
-    sync_library(state, library_dir)
-    store.dispatch(actions.replace_library('done'))
-
-
-def backup_log(config):
-    usb_dir = config.get('files', 'usb_dir')
-    log_file = config.get('files', 'log_file')
-    # make a filename based on the date
-    backup_file = os.path.join(usb_dir, time.strftime('%Y%m%d_log.txt'))
-    log.warning('backing up log to USB stick: {}'.format(backup_file))
-    try:
-        shutil.copyfile(log_file, backup_file)
-    except IOError as e:
-        log.warning("couldn't backup log file: {}".format(e))
-    store.dispatch(actions.backup_log('done'))
-
-
-def wipe_library(library_dir):
-    for book in utility.find_files(library_dir, BOOK_EXTENSIONS):
-        os.remove(book)
 
 
 if __name__ == '__main__':
