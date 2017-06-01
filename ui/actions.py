@@ -46,7 +46,9 @@ class AppReducers():
     def add_books(self, state, books_to_add):
         width, height = dimensions(state)
         book_filenames = [b['data'].filename for b in state['books']]
-        books_to_add = [d for d in books_to_add if d.filename not in book_filenames]
+        books_to_add = [
+            d for d in books_to_add if d.filename not in book_filenames
+        ]
         books_to_add = [{'data': b, 'page': 0} for b in books_to_add]
         books = list(state['books'])
         books += list(books_to_add)
@@ -61,7 +63,9 @@ class AppReducers():
 
     def remove_books(self, state, filenames):
         width, height = dimensions(state)
-        books = [b for b in state['books'] if b['data'].filename not in filenames]
+        books = [
+            b for b in state['books'] if b['data'].filename not in filenames
+        ]
         data = list(map(get_title, books))
         data = list(map(partial(utility.pad_line, width), data))
         maximum = get_max_pages(data, height)

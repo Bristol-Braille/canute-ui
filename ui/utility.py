@@ -189,7 +189,10 @@ def pad_line(w, line):
 
 
 def get_methods(cls):
-    methods = [x for x in dir(cls) if isinstance(getattr(cls, x), collections.Callable)]
+    methods = [
+        x for x in dir(cls)
+        if isinstance(getattr(cls, x), collections.Callable)
+    ]
     return [x for x in methods if not x.startswith('__')]
 
 
@@ -208,8 +211,8 @@ def freeze(writable):
     if type(writable) is tuple or type(writable) is list:
         return tuple(freeze(x) for x in writable)
     elif type(writable) is OrderedDict or type(writable) is FrozenOrderedDict:
-        return FrozenOrderedDict([(k, freeze(v)) for k, v in list(writable.items())])
+        return FrozenOrderedDict([(k, freeze(v)) for k, v in writable.items()])
     elif type(writable) is dict or type(writable) is frozendict:
-        return frozendict({k: freeze(v) for k, v in list(writable.items())})
+        return frozendict({k: freeze(v) for k, v in writable.items()})
     else:
         return writable
