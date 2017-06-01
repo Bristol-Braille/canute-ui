@@ -3,6 +3,7 @@ import logging
 import utility
 from menu import menu_titles_braille
 
+STATE_FILE = 'state.pkl'
 
 log = logging.getLogger(__name__)
 
@@ -28,13 +29,11 @@ initial_state = utility.freeze({
     },
 })
 
-state_file = 'state.pkl'
 
-
-def read(state_file=state_file):
-    log.debug('reading initial state from %s' % state_file)
+def read():
+    log.debug('reading initial state from %s' % STATE_FILE)
     try:
-        with open(state_file) as fh:
+        with open(STATE_FILE) as fh:
             state = pickle.load(fh)
             return state
     except:
@@ -55,12 +54,5 @@ def write(state):
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
-    with open(state_file, 'w') as fh:
+    with open(STATE_FILE, 'w') as fh:
         pickle.dump(utility.freeze(write_state), fh)
-
-
-if __name__ == '__main__':
-    import os
-    path = os.path.abspath(__file__)
-    dir_path = os.path.dirname(path)
-    print(read(state_file=dir_path + "/state.pkl")['update_ui'])

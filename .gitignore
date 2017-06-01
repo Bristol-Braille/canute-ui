@@ -1,3 +1,4 @@
 *.sw*
 *.pyc
 *venv/*
+test/test-books/*.canute

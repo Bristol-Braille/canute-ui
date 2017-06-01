@@ -1,4 +1,3 @@
-from subprocess import Popen, PIPE
 from ui.utility import find_ui_update
 from ui.config_loader import load
 from ui.setup_logs import setup_logs
@@ -7,27 +6,23 @@ import logging
 from datetime import datetime
 import shutil
 import tarfile
+import ui.initial_state
 
 config = load("ui/config.rc")
 log = setup_logs(config, logging.DEBUG)
 
+
 def need_update():
     '''
-    checks the state, if state is set to in_progress, get the update file and continue
+    checks the state, if state is set to in_progress, get the update file and
+    continue
     '''
-    log.info("checking state")
-    process = Popen(["python", "ui/initial_state.py"], stdout=PIPE)
-    (update_state, err) = process.communicate()
-    exit_code = process.wait()
-
-    if update_state is None:
-        log.warning("couldn't open state")
-        return False
-
-    update_state = update_state.strip()
+    update_state = ui.initial_state.read()['app']['update_ui']
     log.info("update_ui = %s" % update_state)
     if update_state == "in progress":
         return True
+    else:
+        return False
 
 
 def archive_and_untar():

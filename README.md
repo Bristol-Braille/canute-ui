@@ -5,12 +5,10 @@ electronic Braille reader](http://bristolbraille.co.uk/#canute).
 
 ## Usage
 
-The top level [ui](ui/main.py) uses a graphical display to emulate the hardware
-by default.
-
-The emulated hardware has the same interface as the real hardware, but also
-runs a graphical program called [qt_display.py](ui/qt_display.py). This
-shows how the machine will look, and provides the buttons.
+[`main.py`](main.py) runs a graphical display to emulate the hardware by
+default. The emulated hardware has the same interface as the real hardware, but
+also runs a graphical program called [qt_display.py](qt_display.py). This shows
+how the machine will look, and provides the buttons.
 
 ```
 usage: main.py [-h] [--pi-buttons] [--debug] [--text] [--tty TTY]
@@ -20,17 +18,18 @@ Canute UI
 
 optional arguments:
   -h, --help          show this help message and exit
-  --pi-buttons        use the Pi to handle button presses
+  --pi-buttons        use evdev to process button presses more
+                      directly(recommended for embedded usage on the Raspberry
+                      Pi)
   --debug             debugging content
   --text              show text instead of braille
-  --tty TTY           serial port for Canute stepstix board
+  --tty TTY           serial port for the display and button board
   --delay DELAY       simulate mechanical delay in milliseconds in the
                       emulator
   --disable-emulator  do not run the graphical emulator, run with real
                       hardware
   --both              run both the emulator and the real hardware at the same
                       time
-
 ```
 
 ## Getting started
@@ -38,5 +37,6 @@ optional arguments:
 Read [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## API
+
 Automatically generated documentation is available at
 [http://ui.readthedocs.org/en/latest/](http://ui.readthedocs.org/en/latest/)
