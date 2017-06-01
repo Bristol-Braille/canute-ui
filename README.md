@@ -36,6 +36,31 @@ optional arguments:
 
 Read [INSTALL.md](INSTALL.md) for installation instructions.
 
+
+## Development
+
+Run the tests:
+
+    python -m unittest discover
+
+Run the linter:
+
+    flake8 --exclude=doc,ui/qt/main_window.py
+
+Copy and amend the config file 
+
+    cp config.rc.in config.rc
+    $EDITOR config.rc
+
+Copy the test books to the home directory (or wherever you specified in config.rc):
+
+    cp -r books ~/
+
+Run the UI using the emulator:
+
+    python main.py
+
+
 ## API
 
 Automatically generated documentation is available at
