@@ -1,7 +1,7 @@
 import logging
 import abc
-import comms_codes as comms
-import utility
+from . import comms_codes as comms
+from . import utility
 
 
 log = logging.getLogger(__name__)
@@ -11,11 +11,9 @@ class DriverError(Exception):
     pass
 
 
-class Driver(object):
+class Driver(object, metaclass=abc.ABCMeta):
     '''Abstract base class of the braille device's capabilities.
     '''
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self):
         self.status = 0

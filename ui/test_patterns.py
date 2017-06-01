@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import logging
 import argparse
-from driver import Driver
-from utility import test_pattern
+from .driver import Driver
+from .utility import test_pattern
 
 if __name__ == '__main__':
 

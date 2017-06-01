@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import logging
 from .actions import get_max_pages, dimensions
 from . import utility

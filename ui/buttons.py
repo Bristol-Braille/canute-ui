@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import logging
 from .store import store
 from .driver_pi import Pi

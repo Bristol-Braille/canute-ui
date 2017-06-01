@@ -1,10 +1,10 @@
-from driver import Driver
+from .driver import Driver
 import time
 import logging
 from multiprocessing import Process, Queue
-from Queue import Empty
-import comms_codes as comms
-import qt_display
+from queue import Empty
+from . import comms_codes as comms
+from . import qt_display
 
 log = logging.getLogger(__name__)
 
@@ -36,8 +36,7 @@ class Emulated(Driver):
         # messages on chlid
         self.send_queue = Queue()
         self.receive_queue = Queue()
-        # start the gui program as a separated process as tkinter & threads
-        # don't play well
+        # start the gui program as a separated process
         self.process = Process(target=qt_display.start,
                                kwargs={
                                    "to_display_queue": self.send_queue,

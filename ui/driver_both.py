@@ -5,10 +5,10 @@ drivers but only return values from the emulated one. This means, for instance,
 that only the button presses from the emulated GUI are registered.
 '''
 import logging
-from driver import Driver
-from driver_emulated import Emulated
-from driver_pi import Pi
-import utility
+from .driver import Driver
+from .driver_emulated import Emulated
+from .driver_pi import Pi
+from . import utility
 
 
 log = logging.getLogger(__name__)

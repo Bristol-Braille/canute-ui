@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 import argparse
 import logging
-import comms_codes as comms
+from . import comms_codes as comms
 from multiprocessing import Queue
-from Queue import Empty
+from queue import Empty
 import sys
 from PySide import QtGui, QtCore
-from qt.main_window import Ui_MainWindow
+from .qt.main_window import Ui_MainWindow
 from ui.utility import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ def start(to_display_queue, from_display_queue, display_text):
 
 
 def get_all(t, cls):
-    return [y for x, y in cls.__dict__.items() if type(y) == t]
+    return [y for x, y in list(cls.__dict__.items()) if type(y) == t]
 
 
 class Display(QtGui.QMainWindow, Ui_MainWindow):

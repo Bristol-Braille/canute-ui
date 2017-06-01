@@ -1,6 +1,6 @@
-from utility import test_book
+from .utility import test_book
 from pageable import Library
-import config_loader
+from . import config_loader
 
 dimensions = (40, 9)
 config = config_loader.load()

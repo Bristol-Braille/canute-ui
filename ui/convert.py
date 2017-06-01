@@ -1,7 +1,7 @@
 import logging
 import os
 import xml.dom.minidom as minidom
-import utility
+from . import utility
 
 
 log = logging.getLogger(__name__)

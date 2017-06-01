@@ -39,4 +39,4 @@ class BookFile_List(list):
 
 if __name__ == '__main__':
     book = BookFile_List('./bookfile_list.py', 32)
-    print(book[2:8])
+    print((book[2:8]))

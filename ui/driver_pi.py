@@ -1,11 +1,11 @@
-from driver import Driver
-import comms_codes as comms
+from .driver import Driver
+from . import comms_codes as comms
 import time
 import serial
 import logging
 import struct
 import binascii
-import Queue
+import queue
 import threading
 
 log = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class Pi(Driver):
         super(Pi, self).__init__()
 
         if pi_buttons:
-            self.button_queue = Queue.Queue()
+            self.button_queue = queue.Queue()
             self.button_thread = threading.Thread(target=self.button_loop)
             self.button_thread.daemon = True
             self.button_thread.start()
@@ -104,7 +104,7 @@ class Pi(Driver):
                     event = self.button_queue.get_nowait()
                     key = event.type == evdev.ecodes.EV_KEY
                     down = event.value == evdev.KeyEvent.key_down
-                except Queue.Empty:
+                except queue.Empty:
                     event = None
                 if event is not None and key and down:
                     e = evdev.ecodes
