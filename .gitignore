@@ -3,3 +3,5 @@
 *venv/*
 test/test-books/*.canute
 config.rc
+*.pkl
+*.log
