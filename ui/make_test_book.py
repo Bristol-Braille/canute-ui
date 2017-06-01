@@ -9,7 +9,7 @@ pages = test_book(dimensions)
 book_dir = config.get('files', 'library_dir')
 native_file = book_dir + 'test' + Library.native_ext
 
-with open(native_file, 'w') as fh:
+with open(native_file, 'wb') as fh:
     for page in pages:
         fh.write(bytearray(page))
 
