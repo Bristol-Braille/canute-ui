@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-flake8 --exclude=doc,ui/qt/main_window.py && echo 'Lint OK'
+flake8 --filename='./canute-ui,*.py' \
+    --exclude=doc,ui/qt/main_window.py && echo 'Lint OK'

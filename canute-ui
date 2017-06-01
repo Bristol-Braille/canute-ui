@@ -14,8 +14,8 @@ from ui.setup_logs import setup_logs
 from ui.store import store
 from ui.actions import actions, get_max_pages, dimensions
 import ui.initial_state as initial_state
-from ui.button_bindings import button_bindings
 import ui.library as library
+import ui.buttons as buttons
 
 
 log = logging.getLogger(__name__)
@@ -71,33 +71,7 @@ def run(driver, config):
     # won't dispatch if the library is already in sync so there would be no
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
-    button_loop(driver)
-
-
-def button_loop(driver):
-    quit = False
-    while not quit:
-        buttons = driver.get_buttons()
-        state = store.get_state()
-        location = state['app']['location']
-        if not isinstance(driver, Pi):
-            if not driver.is_ok():
-                log.debug('shutting down due to GUI closed')
-                store.dispatch(actions.shutdown())
-            shutting_down = state['app']['shutting_down']
-            update_ui = state['app']['update_ui'] == 'in progress'
-            if shutting_down or update_ui:
-                log.debug("shutting down due to state change")
-                initial_state.write(state)
-                quit = True
-        if type(location) == int:
-            location = 'book'
-        for _id in buttons:
-            _type = buttons[_id]
-            try:
-                store.dispatch(button_bindings[location][_type][_id]())
-            except KeyError:
-                log.debug('no binding for key {}, {} press'.format(_id, _type))
+    buttons.run_loop(driver)
 
 
 def handle_changes(driver, config):
