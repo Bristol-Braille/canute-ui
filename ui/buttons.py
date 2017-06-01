@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import logging
-from . import store
+from .store import store
 from .driver_pi import Pi
 from .button_bindings import button_bindings
 from .actions import actions
