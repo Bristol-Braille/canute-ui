@@ -3,3 +3,4 @@ flake8
 pyserial==2.7
 frozendict==1.2
 pydux==0.2.1
+pillow>=3.5.0
