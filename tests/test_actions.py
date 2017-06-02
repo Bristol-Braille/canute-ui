@@ -14,6 +14,7 @@ class TestActions(unittest.TestCase):
         self.assertEqual(len(initial['books']), 0)
         r = actions.AppReducers()
         data = mock.MagicMock()
+        data.filename = 'foo'
         state = r.add_books(initial, [data])
         self.assertEqual(len(initial['books']), 0)
         self.assertEqual(len(state['books']), 1)
