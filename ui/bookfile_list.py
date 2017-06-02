@@ -23,14 +23,14 @@ class BookFile_List(list):
 
     def __getitem__(self, i):
         if type(i) is slice:
-            log.debug("requested lines %d to %d" % (i.start, i.stop))
+            log.debug('requested lines %d to %d' % (i.start, i.stop))
             with open(self.filename, 'rb') as fh:
                 lines = []
                 for pos in range(i.start, i.stop):
                     fh.seek(pos * self.cells)
                     data = fh.read(self.cells)
                     try:
-                        line = struct.unpack("%db" % self.cells, data)
+                        line = struct.unpack('%db' % self.cells, data)
                     except struct.error:
                         line = [0] * self.cells
                     lines.append(line)

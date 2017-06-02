@@ -1,9 +1,9 @@
-"""
+'''
 Utility
 =======
 
 contains various utility methods used by many of the modules
-"""
+'''
 
 import os
 import re
@@ -31,7 +31,7 @@ def find_ui_update(config):
     usb_dir = config.get('files', 'usb_dir')
     ui_file = 'canute-ui.tar.gz'
 
-    log.info("update UI - looking for new ui in %s" % usb_dir)
+    log.info('update UI - looking for new ui in %s' % usb_dir)
     for root, dirnames, filenames in os.walk(usb_dir):
         for filename in filenames:
             if filename == ui_file:
@@ -103,8 +103,8 @@ def pin_num_to_unicode(pin_num):
 
 
 def pin_num_to_alpha(numeric):
-    mapping = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,"
-    mapping += "*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="
+    mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
+    mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     return mapping[numeric]
 
 
@@ -123,8 +123,8 @@ def alpha_to_pin_num(alpha):
     '''
     # mapping from
     # http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
-    mapping = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,"
-    mapping += "*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="
+    mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
+    mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     alpha = alpha.upper()
     try:
         return mapping.index(alpha)
@@ -134,7 +134,7 @@ def alpha_to_pin_num(alpha):
             raise FormfeedConversionException()
         if ord(alpha) == 10:
             raise LinefeedConversionException()
-        log.warning("problem converting char #[%s] to pin number" % ord(alpha))
+        log.warning('problem converting char #[%s] to pin number' % ord(alpha))
         return 0
 
 

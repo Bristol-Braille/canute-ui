@@ -8,7 +8,7 @@ import shutil
 import tarfile
 import ui.initial_state
 
-config = load("ui/config.rc")
+config = load('ui/config.rc')
 log = setup_logs(config, logging.DEBUG)
 
 
@@ -18,8 +18,8 @@ def need_update():
     continue
     '''
     update_state = ui.initial_state.read()['app']['update_ui']
-    log.info("update_ui = %s" % update_state)
-    if update_state == "in progress":
+    log.info('update_ui = %s' % update_state)
+    if update_state == 'in progress':
         return True
     else:
         return False
@@ -36,12 +36,12 @@ def archive_and_untar():
     archive_dir = config.get('files', 'archive_dir')
     archive_dir = os.path.expanduser(archive_dir)
 
-    log.info("archiving %s to %s" % (install_dir, archive_dir))
-    archive_dir += datetime.now().strftime("%Y%m%d-%H%M%S-ui")
+    log.info('archiving %s to %s' % (install_dir, archive_dir))
+    archive_dir += datetime.now().strftime('%Y%m%d-%H%M%S-ui')
     shutil.move(install_dir, archive_dir)
 
     # untar new ui
-    log.info("untar to %s" % install_dir)
+    log.info('untar to %s' % install_dir)
     with tarfile.open(update_file, 'r:*') as archive:
         archive.extractall(install_dir)
 
@@ -52,9 +52,9 @@ if __name__ == '__main__':
 
     update_file = find_ui_update(config)
     if update_file is None:
-        log.warning("no update file found")
+        log.warning('no update file found')
         exit(1)
 
-    log.info("found update file: %s" % update_file)
+    log.info('found update file: %s' % update_file)
 
     archive_and_untar()

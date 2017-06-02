@@ -21,21 +21,21 @@ except ImportError:
 
 
 class Pi(Driver):
-    """driver class for use with the Raspberry Pi
+    '''driver class for use with the Raspberry Pi
 
     connects to the display via serial and knows how to send and receive data
     to it
 
     :param port: the serial port the display is plugged into
     :param pi_buttons: whether to use the evdev input for button presses
-    """
+    '''
 
     def __init__(self, port='/dev/ttyACM0', pi_buttons=False, timeout=60):
         self.timeout = timeout
         # get serial connection
         if port:
             self.port = self.setup_serial(port)
-            log.info("hardware detected on port %s" % port)
+            log.info('hardware detected on port %s' % port)
         else:
             self.port = None
 
@@ -75,7 +75,7 @@ class Pi(Driver):
             serial_port.flush()
             return serial_port
         except IOError as e:
-            log.error("check usb connection to arduino %s", e)
+            log.error('check usb connection to arduino %s', e)
             exit(1)
 
     def is_ok(self):
@@ -138,12 +138,12 @@ class Pi(Driver):
 
     def send_error_sound(self):
         '''make the hardware make an error sound'''
-        log.debug("error sound")
+        log.debug('error sound')
         self.send_data(comms.CMD_SEND_ERROR)
 
     def send_ok_sound(self):
         '''make the hardware make an ok sound'''
-        log.debug("ok sound")
+        log.debug('ok sound')
         self.send_data(comms.CMD_SEND_OK)
 
     def send_data(self, cmd, data=[]):
@@ -153,7 +153,7 @@ class Pi(Driver):
         :param data: list of bytes
         '''
         message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        log.debug("tx cmd [%s]" % binascii.hexlify(message))
+        log.debug('tx cmd [%s]' % binascii.hexlify(message))
         self.port.write(message)
 
     def get_data(self, expected_cmd):
@@ -166,21 +166,21 @@ class Pi(Driver):
         '''
         log.debug('trying to read 2 bytes')
         message = self.port.read(2)
-        log.debug("rx [%s]" % binascii.hexlify(message))
+        log.debug('rx [%s]' % binascii.hexlify(message))
         if len(message) != 2:
-            log.warning("unexpected rx data length %d" % len(message))
+            log.warning('unexpected rx data length %d' % len(message))
         data = struct.unpack('2b', message)
         if data[0] != expected_cmd:
-            log.warning("unexpected rx command %d, expecting %d" %
+            log.warning('unexpected rx command %d, expecting %d' %
                         (data[0], expected_cmd))
         return data[1]
 
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the port properly'''
         if ex_type is not None:
-            log.error("%s : %s" % (ex_type.__name__, ex_value))
+            log.error('%s : %s' % (ex_type.__name__, ex_value))
         if self.port:
-            log.error("closing serial port")
+            log.error('closing serial port')
             self.port.close()
         if hasattr(self, 'button_thread'):
             self.button_thread.join()

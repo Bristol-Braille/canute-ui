@@ -19,7 +19,7 @@ class Driver(object, metaclass=abc.ABCMeta):
         self.status = 0
         (self.chars, self.rows) = self.get_dimensions()
         self.page_length = self.rows * self.chars
-        log.info("device ready with %d x %d characters" %
+        log.info('device ready with %d x %d characters' %
                  (self.chars, self.rows))
 
     @abc.abstractmethod
@@ -128,7 +128,7 @@ class Driver(object, metaclass=abc.ABCMeta):
 
         '''
 
-        log.debug("setting page of braille:")
+        log.debug('setting page of braille:')
 
         for row in range(self.rows):
             row_braille = data[row * self.chars:row * self.chars + self.chars]
@@ -136,12 +136,12 @@ class Driver(object, metaclass=abc.ABCMeta):
 
     def set_braille_row(self, row, data):
         if len(data) > self.chars:
-            log.warning("row data too long, length %d, truncating to %d" %
+            log.warning('row data too long, length %d, truncating to %d' %
                         (len(data), self.chars))
             data = data[0:self.chars]
 
-        log.debug("setting row of braille:")
-        log.debug("row %i: |%s|" %
+        log.debug('setting row of braille:')
+        log.debug('row %i: |%s|' %
                   (row, '|'.join(map(utility.pin_num_to_unicode, data))))
 
         self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
@@ -149,4 +149,4 @@ class Driver(object, metaclass=abc.ABCMeta):
         # get status
         self.status = self.get_data(comms.CMD_SEND_LINE)
         if self.status != 0:
-            log.warning("got an error after setting braille: %d" % self.status)
+            log.warning('got an error after setting braille: %d' % self.status)

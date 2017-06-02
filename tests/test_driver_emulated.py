@@ -1,15 +1,15 @@
 import unittest
 import os
 import ui.comms_codes as comms
-if "TRAVIS" not in os.environ:
+if 'TRAVIS' not in os.environ:
     from ui.driver_emulated import Emulated
 
 
 class TestDriverEmulated(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if "TRAVIS" in os.environ:
-            raise unittest.SkipTest("Skip emulated driver tests on TRAVIS")
+        if 'TRAVIS' in os.environ:
+            raise unittest.SkipTest('Skip emulated driver tests on TRAVIS')
         else:
             cls._driver = Emulated()
 

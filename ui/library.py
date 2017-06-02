@@ -38,11 +38,11 @@ def convert_books(width, height, library_dir):
     for name in file_names:
         basename, ext = os.path.splitext(os.path.basename(name))
         if re.match('\.pef$', ext, re.I):
-            log.info("converting pef to canute")
+            log.info('converting pef to canute')
             native_file = library_dir + basename + '.' + NATIVE_EXTENSION
             convert.convert_pef(width, height, name, native_file)
         elif re.match('\.brf$', ext, re.I):
-            log.info("converting brf to canute")
+            log.info('converting brf to canute')
             native_file = library_dir + basename + '.' + NATIVE_EXTENSION
             convert.convert_brf(width, height, name, native_file)
 
