@@ -78,7 +78,7 @@ class Emulated(Driver):
         single, double, long
         '''
         try:
-            msg = self.receive_queue.get_nowait()
+            msg = self.receive_queue.get(timeout=0.01)
             log.debug("got button msg %s" % msg)
             self.buttons[msg['id']] = msg['type']
         except Empty:

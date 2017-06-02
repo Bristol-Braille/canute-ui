@@ -75,29 +75,18 @@ def run(driver, config):
     quit = False
     while not quit:
         state = store.get_state()
-        if not isinstance(driver, Pi):
-            if not driver.is_ok():
-                log.debug('shutting down due to GUI closed')
-                store.dispatch(actions.shutdown())
-            shutting_down = state['app']['shutting_down']
-            update_ui = state['app']['update_ui'] == 'in progress'
-            if shutting_down or update_ui:
-                log.debug("shutting down due to state change")
-                initial_state.write(state)
-                quit = True
-                break
+        if handle_hardware(driver, state):
+            quit = True
+            break
         buttons.check(driver, state)
         display.render_line(driver)
 
 
 def handle_changes(driver, config):
     state = store.get_state()
-    if handle_hardware(driver, state):
-        display.render(state)
+    display.render(state)
     change_files(config, state)
     initial_state.write(state)
-    if state['app']['shutting_down'] and isinstance(driver, Pi):
-        os.system("sudo shutdown -h now")
 
 
 def change_files(config, state):
@@ -118,28 +107,25 @@ def change_files(config, state):
 
 def handle_hardware(driver, state):
     width, height = dimensions(state['app'])
-    warming_up = state['hardware']['warming_up'] == 'in progress'
-    resetting_display = state['hardware']['resetting_display'] == 'in progress'
-    if state['hardware']['resetting_display'] == 'start':
+    if not driver.is_ok():
+        log.debug('shutting down due to GUI closed')
+        initial_state.write(state)
+        store.dispatch(actions.shutdown())
+    if state['app']['shutting_down']:
+        if isinstance(driver, Pi):
+            os.system("sudo shutdown -h now")
+        return True
+    elif state['hardware']['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
         store.dispatch(actions.reset_display('done'))
-        return False
-    elif warming_up or resetting_display:
-        # our render method can be called asynchronously, we don't don anything
-        # unless these are done
-        return False
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
         store.dispatch(actions.warm_up(False))
-        return False
     elif state['app']['shutting_down']:
         if isinstance(driver, Pi):
             driver.clear_page()
-        return False
-    else:
-        return True
 
 
 def backup_log(config):
