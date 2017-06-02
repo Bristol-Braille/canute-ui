@@ -81,12 +81,12 @@ def run(driver, config):
             quit = True
             break
         buttons.check(driver, state)
-        display.render_line(driver)
+        display.send_line(driver)
 
 
 def handle_changes(driver, config):
     state = store.get_state()
-    display.render(state)
+    display.render_to_buffer(state)
     change_files(config, state)
     initial_state.write(state)
 

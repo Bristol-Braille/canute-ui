@@ -9,10 +9,10 @@ log = logging.getLogger(__name__)
 class Display():
     def __init__(self):
         self.row = 0
-        self.previous_data = []
-        self.display_data = []
+        self.hardware_state = []
+        self.buffer = []
 
-    def render(self, state):
+    def render_to_buffer(self, state):
         width, height = dimensions(state['app'])
         location = state['app']['location']
         if location == 'library':
@@ -27,7 +27,7 @@ class Display():
             while len(data) < data_height:
                 data += ((0,) * width,)
             title = format_title('library menu', width, page, max_pages)
-            self.set_display(tuple([title]) + tuple(data))
+            self._set_buffer(tuple([title]) + tuple(data))
         elif location == 'menu':
             page = state['app']['menu']['page']
             data = state['app']['menu']['data']
@@ -40,28 +40,28 @@ class Display():
             # pad page with empty rows
             while len(data) < data_height:
                 data += ((0,) * width,)
-            self.set_display(tuple([title]) + tuple(data))
+            self._set_buffer(tuple([title]) + tuple(data))
         elif type(location) == int:
             page = state['app']['books'][location]['page']
             data = state['app']['books'][location]['data']
             n = page * height
             data = data[n: n + height]
-            self.set_display(data)
+            self._set_buffer(data)
 
-    def render_line(self, driver):
+    def send_line(self, driver):
         row = self.row
-        if row >= len(self.display_data):
+        if row >= len(self.buffer):
             return
-        while row >= len(self.previous_data):
-            self.previous_data.append([])
-        line = self.display_data[row]
-        if line != self.previous_data[row]:
-            driver.set_braille_row(row, line)
-            self.previous_data[row] = line
+        while row >= len(self.hardware_state):
+            self.hardware_state.append([])
+        braille = self.buffer[row]
+        if braille != self.hardware_state[row]:
+            driver.set_braille_row(row, braille)
+            self.hardware_state[row] = braille
         self.row += 1
 
-    def set_display(self, data):
-        self.display_data = data
+    def _set_buffer(self, data):
+        self.buffer = data
         self.row = 0
 
 
