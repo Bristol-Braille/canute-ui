@@ -1,10 +1,6 @@
-
 import logging
 from .store import store
-from .driver_pi import Pi
 from .button_bindings import button_bindings
-from .actions import actions
-from . import initial_state
 
 
 log = logging.getLogger(__name__)

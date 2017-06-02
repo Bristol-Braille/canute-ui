@@ -75,7 +75,6 @@ def run(driver, config):
     quit = False
     while not quit:
         state = store.get_state()
-        location = state['app']['location']
         if not isinstance(driver, Pi):
             if not driver.is_ok():
                 log.debug('shutting down due to GUI closed')
@@ -88,14 +87,13 @@ def run(driver, config):
                 quit = True
                 break
         buttons.check(driver, state)
-
-
+        display.render_line(driver)
 
 
 def handle_changes(driver, config):
     state = store.get_state()
     if handle_hardware(driver, state):
-        display.render(driver, state)
+        display.render(state)
     change_files(config, state)
     initial_state.write(state)
     if state['app']['shutting_down'] and isinstance(driver, Pi):
