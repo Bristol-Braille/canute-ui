@@ -78,7 +78,7 @@ class Emulated(Driver):
         single, double, long
         '''
         try:
-            msg = self.receive_queue.get(timeout=1)
+            msg = self.receive_queue.get(timeout=0.01)
             log.debug("got button msg %s" % msg)
             self.buttons[msg['id']] = msg['type']
         except Empty:
@@ -149,4 +149,3 @@ if __name__ == '__main__':
                 [count % 64] * Emulated.ROWS * Emulated.CHARS
             )
             count += 1
-            time.sleep(1)

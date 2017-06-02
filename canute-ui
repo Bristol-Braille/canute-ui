@@ -12,11 +12,13 @@ import ui.argparser as argparser
 import ui.config_loader as config_loader
 from ui.setup_logs import setup_logs
 from ui.store import store
-from ui.actions import actions, dimensions
+from ui.actions import actions
 import ui.initial_state as initial_state
 import ui.library as library
 import ui.buttons as buttons
-import ui.display as display
+from ui.display import Display
+
+display = Display()
 
 
 log = logging.getLogger(__name__)
@@ -61,8 +63,7 @@ def run(driver, config):
     store.subscribe(partial(handle_changes, driver, config))
 
     # if we startup and update_ui is still 'in progress' then we are using the
-    # old state file
-    # and update has failed
+    # old state file and update has failed
     if state['app']['update_ui'] == 'in progress':
         store.dispatch(actions.update_ui('failed'))
 
@@ -72,27 +73,31 @@ def run(driver, config):
     # won't dispatch if the library is already in sync so there would be no
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
-    buttons.run_loop(driver)
+    quit = False
+    while not quit:
+        state = store.get_state()
+        if handle_hardware(driver, state):
+            quit = True
+            break
+        buttons.check(driver, state)
+        display.send_line(driver)
 
 
 def handle_changes(driver, config):
     state = store.get_state()
-    if handle_hardware(driver, state):
-        display.render(driver, state)
-    change_files(config, state)
+    display.render_to_buffer(state['app'])
+    change_files(config, state['app'])
     initial_state.write(state)
-    if state['app']['shutting_down'] and isinstance(driver, Pi):
-        os.system("sudo shutdown -h now")
 
 
 def change_files(config, state):
-    if state['app']['replacing_library'] == 'start':
+    if state['replacing_library'] == 'start':
         store.dispatch(actions.replace_library('in progress'))
         library.replace(config, state)
-    if state['app']['backing_up_log'] == 'start':
+    if state['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
-    if state['app']['update_ui'] == 'start':
+    if state['update_ui'] == 'start':
         log.info("update ui = start")
         if utility.find_ui_update(config):
             store.dispatch(actions.update_ui('in progress'))
@@ -102,29 +107,23 @@ def change_files(config, state):
 
 
 def handle_hardware(driver, state):
-    width, height = dimensions(state['app'])
-    warming_up = state['hardware']['warming_up'] == 'in progress'
-    resetting_display = state['hardware']['resetting_display'] == 'in progress'
-    if state['hardware']['resetting_display'] == 'start':
+    if not driver.is_ok():
+        log.debug('shutting down due to GUI closed')
+        initial_state.write(state)
+        store.dispatch(actions.shutdown())
+    if state['app']['shutting_down']:
+        if isinstance(driver, Pi):
+            driver.clear_page()
+            os.system("sudo shutdown -h now")
+        return True
+    elif state['hardware']['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
         store.dispatch(actions.reset_display('done'))
-        return False
-    elif warming_up or resetting_display:
-        # our render method can be called asynchronously, we don't don anything
-        # unless these are done
-        return False
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
         store.dispatch(actions.warm_up(False))
-        return False
-    elif state['app']['shutting_down']:
-        if isinstance(driver, Pi):
-            driver.clear_page()
-        return False
-    else:
-        return True
 
 
 def backup_log(config):
