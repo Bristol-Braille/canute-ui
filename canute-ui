@@ -72,7 +72,24 @@ def run(driver, config):
     # won't dispatch if the library is already in sync so there would be no
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
-    buttons.run_loop(driver)
+    quit = False
+    while not quit:
+        state = store.get_state()
+        location = state['app']['location']
+        if not isinstance(driver, Pi):
+            if not driver.is_ok():
+                log.debug('shutting down due to GUI closed')
+                store.dispatch(actions.shutdown())
+            shutting_down = state['app']['shutting_down']
+            update_ui = state['app']['update_ui'] == 'in progress'
+            if shutting_down or update_ui:
+                log.debug("shutting down due to state change")
+                initial_state.write(state)
+                quit = True
+                break
+        buttons.check(driver, state)
+
+
 
 
 def handle_changes(driver, config):
