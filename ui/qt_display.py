@@ -17,7 +17,7 @@ BUTTONS = 9
 CHARS = 40
 ROWS = 9
 
-MSG_INTERVAL_S = 10  # This is in milliseconds
+MSG_INTERVAL_MS = 10
 
 
 def main():
@@ -87,8 +87,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         self.receive_queue = to_display_queue
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.check_msg)
-        timer.start(MSG_INTERVAL_S)
-#        self.timer.start()
+        timer.start(MSG_INTERVAL_MS)
 
         self.show()
 
@@ -151,9 +150,6 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
             pass
         except:
             print('check_msg ERROR')
-
-    #    self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
-    #    self.timer.start()
 
 
 if __name__ == '__main__':
