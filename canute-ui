@@ -63,8 +63,7 @@ def run(driver, config):
     store.subscribe(partial(handle_changes, driver, config))
 
     # if we startup and update_ui is still 'in progress' then we are using the
-    # old state file
-    # and update has failed
+    # old state file and update has failed
     if state['app']['update_ui'] == 'in progress':
         store.dispatch(actions.update_ui('failed'))
 
@@ -86,19 +85,19 @@ def run(driver, config):
 
 def handle_changes(driver, config):
     state = store.get_state()
-    display.render_to_buffer(state)
-    change_files(config, state)
+    display.render_to_buffer(state['app'])
+    change_files(config, state['app'])
     initial_state.write(state)
 
 
 def change_files(config, state):
-    if state['app']['replacing_library'] == 'start':
+    if state['replacing_library'] == 'start':
         store.dispatch(actions.replace_library('in progress'))
         library.replace(config, state)
-    if state['app']['backing_up_log'] == 'start':
+    if state['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
-    if state['app']['update_ui'] == 'start':
+    if state['update_ui'] == 'start':
         log.info("update ui = start")
         if utility.find_ui_update(config):
             store.dispatch(actions.update_ui('in progress'))

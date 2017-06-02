@@ -13,11 +13,11 @@ class Display():
         self.buffer = []
 
     def render_to_buffer(self, state):
-        width, height = dimensions(state['app'])
-        location = state['app']['location']
+        width, height = dimensions(state)
+        location = state['location']
         if location == 'library':
-            page = state['app']['library']['page']
-            data = state['app']['library']['data']
+            page = state['library']['page']
+            data = state['library']['data']
             # subtract title from page height
             data_height = height - 1
             max_pages = get_max_pages(data, data_height)
@@ -29,8 +29,8 @@ class Display():
             title = format_title('library menu', width, page, max_pages)
             self._set_buffer(tuple([title]) + tuple(data))
         elif location == 'menu':
-            page = state['app']['menu']['page']
-            data = state['app']['menu']['data']
+            page = state['menu']['page']
+            data = state['menu']['data']
             # subtract title from page height
             data_height = height - 1
             max_pages = get_max_pages(data, data_height)
@@ -42,8 +42,8 @@ class Display():
                 data += ((0,) * width,)
             self._set_buffer(tuple([title]) + tuple(data))
         elif type(location) == int:
-            page = state['app']['books'][location]['page']
-            data = state['app']['books'][location]['data']
+            page = state['books'][location]['page']
+            data = state['books'][location]['data']
             n = page * height
             data = data[n: n + height]
             self._set_buffer(data)
