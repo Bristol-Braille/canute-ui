@@ -16,7 +16,9 @@ from ui.actions import actions
 import ui.initial_state as initial_state
 import ui.library as library
 import ui.buttons as buttons
-import ui.display as display
+from ui.display import Display
+
+display = Display()
 
 
 log = logging.getLogger(__name__)
