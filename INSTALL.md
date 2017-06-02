@@ -15,26 +15,20 @@ If you want to test and develop the direct button interface (`--pi-buttons`) the
     pip3 install --user -r requirements-pi.txt
 
 ## Mac
-For the Mac, installation is slightly different depending on whether you use the version of python that comes with OS, or one installed with Macports or Homwbrew.
+For the Mac, installation is slightly different depending on whether you want to use Macports or Homwbrew.
 
 Evdev is for Linux only so the `--pi-buttons` option will not be usable on Mac.
 
-For native installation:
-
-    sudo easy_install pip
-    pip install python-pyside
-    pip install --user -r requirements.txt
-
 For MacPorts:
 
-    sudo port install py27-pip py27-pyside
-    pip install --user -r requirements.txt
+    sudo port install py36-pip py36-pyside
+    pip-3.6 install --user -r requirements.txt
 
 For Homebrew:
 
-    brew install python brew-pip
-    brew pip install python-pyside
-    pip install --user -r requirements.txt
+    brew install python3
+    pip3 install python-pyside
+    pip3 install -r requirements.txt
 
 
 ## Deploying to Raspberry Pi
