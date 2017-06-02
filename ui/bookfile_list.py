@@ -16,26 +16,26 @@ class BookFile_List(list):
         self.cells = cells
         self.filename = filename
         statinfo = os.stat(filename)
-        self.num_pages = statinfo.st_size // self.cells
+        self.num_lines = statinfo.st_size // self.cells
 
     def __len__(self):
-        return self.num_pages
+        return self.num_lines
 
     def __getitem__(self, i):
         if type(i) is slice:
             log.debug("requested lines %d to %d" % (i.start, i.stop))
             with open(self.filename, 'rb') as fh:
-                pages = []
+                lines = []
                 for pos in range(i.start, i.stop):
                     fh.seek(pos * self.cells)
                     data = fh.read(self.cells)
                     try:
-                        page = struct.unpack("%db" % self.cells, data)
+                        line = struct.unpack("%db" % self.cells, data)
                     except struct.error:
-                        page = [0] * self.cells
-                    pages.append(page)
+                        line = [0] * self.cells
+                    lines.append(line)
 
-            return pages
+            return lines
 
 
 if __name__ == '__main__':
