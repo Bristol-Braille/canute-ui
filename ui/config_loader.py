@@ -1,5 +1,5 @@
 import os.path
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 config_file = 'config.rc'
 

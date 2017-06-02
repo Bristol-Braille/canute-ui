@@ -1,7 +1,7 @@
 from functools import partial
 
-from actions import actions
-from menu import menu
+from .actions import actions
+from .menu import menu
 
 
 button_bindings = {

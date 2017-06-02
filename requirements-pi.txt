@@ -1,4 +1,4 @@
 pyserial==2.7
 frozendict==1.2
-pydux==0.2.1
 evdev==0.6.2
+git+git://github.com/kasbah/pydux.git@fix-python3#egg=pydux

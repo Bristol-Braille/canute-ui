@@ -1,7 +1,7 @@
 import logging
 import os
 import xml.dom.minidom as minidom
-import utility
+from . import utility
 
 
 log = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
 
     log.info("brf loaded with %d lines" % len(book))
     log.info("writing to [%s]" % native_file)
-    with open(native_file, 'w') as fh:
+    with open(native_file, 'wb') as fh:
         for index, line in enumerate(book):
             if len(line) > width:
                 log.warning(
@@ -117,7 +117,7 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
 
     log.info("pef loaded with %d lines" % len(lines))
     log.info("writing to [%s]" % native_file)
-    with open(native_file, 'w') as fh:
+    with open(native_file, 'wb') as fh:
         for index, line in enumerate(lines):
             if len(line) > width:
                 log.warning(

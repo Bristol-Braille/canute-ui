@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import os
 import re
 import grp
@@ -22,13 +22,13 @@ BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
 def sync(state, library_dir):
     width, height = dimensions(state['app'])
     convert_books(width, height, library_dir)
-    library_files = map(lambda b: b['data'].filename, state['app']['books'])
+    library_files = [b['data'].filename for b in state['app']['books']]
     disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
-    not_added = filter(lambda f: f not in library_files, disk_files)
+    not_added = [f for f in disk_files if f not in library_files]
     if not_added != []:
-        not_added_data = map(lambda f: BookFile_List(f, width), not_added)
+        not_added_data = [BookFile_List(f, width) for f in not_added]
         store.dispatch(actions.add_books(not_added_data))
-    non_existent = filter(lambda f: f not in disk_files, library_files)
+    non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
         store.dispatch(actions.remove_books(non_existent))
 

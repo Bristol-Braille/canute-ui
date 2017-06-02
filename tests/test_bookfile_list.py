@@ -14,7 +14,7 @@ class TestBookFile_List(unittest.TestCase):
 
         cls._len = len(pages)
 
-        with open(cls._book, 'w') as fh:
+        with open(cls._book, 'wb') as fh:
             for page in pages:
                 fh.write(bytearray(page))
 

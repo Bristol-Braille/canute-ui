@@ -1,7 +1,7 @@
 import pydux
 import logging
-from actions import AppReducers, HardwareReducers
-from initial_state import initial_state
+from .actions import AppReducers, HardwareReducers
+from .initial_state import initial_state
 
 
 log = logging.getLogger(__name__)

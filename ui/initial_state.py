@@ -1,7 +1,7 @@
 import pickle
 import logging
-import utility
-from menu import menu_titles_braille
+from . import utility
+from .menu import menu_titles_braille
 
 STATE_FILE = 'state.pkl'
 
@@ -54,5 +54,5 @@ def write(state):
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
-    with open(STATE_FILE, 'w') as fh:
+    with open(STATE_FILE, 'wb') as fh:
         pickle.dump(utility.freeze(write_state), fh)

@@ -2,7 +2,7 @@ import os
 import logging
 from functools import partial
 from frozendict import frozendict
-import utility
+from . import utility
 
 
 log = logging.getLogger(__name__)
@@ -36,26 +36,25 @@ class AppReducers():
 
     def set_books(self, state, books):
         width, height = dimensions(state)
-        books = map(lambda b: {'data': b, 'page': 0}, books)
+        books = [{'data': b, 'page': 0} for b in books]
         books = tuple(sort_books(books))
-        data = map(get_title, books)
-        data = map(partial(utility.pad_line, width), data)
+        data = list(map(get_title, books))
+        data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location='library', books=books, library=library)
 
     def add_books(self, state, books_to_add):
         width, height = dimensions(state)
         book_filenames = [b['data'].filename for b in state['books']]
-        books_to_add = filter(
-            lambda d: d.filename not in book_filenames,
-            books_to_add
-        )
-        books_to_add = map(lambda b: {'data': b, 'page': 0}, books_to_add)
+        books_to_add = [
+            d for d in books_to_add if d.filename not in book_filenames
+        ]
+        books_to_add = [{'data': b, 'page': 0} for b in books_to_add]
         books = list(state['books'])
         books += list(books_to_add)
         books = sort_books(books)
-        data = map(get_title, books)
-        data = map(partial(utility.pad_line, width), data)
+        data = list(map(get_title, books))
+        data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({
             'data': tuple(data),
             'page': state['library']['page']
@@ -64,12 +63,11 @@ class AppReducers():
 
     def remove_books(self, state, filenames):
         width, height = dimensions(state)
-        books = filter(
-            lambda b: b['data'].filename not in filenames,
-            state['books']
-        )
-        data = map(get_title, books)
-        data = map(partial(utility.pad_line, width), data)
+        books = [
+            b for b in state['books'] if b['data'].filename not in filenames
+        ]
+        data = list(map(get_title, books))
+        data = list(map(partial(utility.pad_line, width), data))
         maximum = get_max_pages(data, height)
         page = state['library']['page']
         if page > maximum:

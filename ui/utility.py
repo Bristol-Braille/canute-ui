@@ -10,6 +10,7 @@ import re
 import logging
 from collections import OrderedDict
 from frozendict import frozendict, FrozenOrderedDict
+import collections
 log = logging.getLogger(__name__)
 
 
@@ -95,7 +96,7 @@ used by the gui to display braille
 
 
 def pin_num_to_unicode(pin_num):
-    return unichr(pin_num + 10240)
+    return chr(pin_num + 10240)
 
 
 ''' for sorting & debugging '''
@@ -108,7 +109,7 @@ def pin_num_to_alpha(numeric):
 
 
 def pin_nums_to_alphas(numerics):
-    return map(pin_num_to_alpha, numerics)
+    return list(map(pin_num_to_alpha, numerics))
 
 
 ''' used to convert plain text to pin pattern numbers '''
@@ -188,17 +189,20 @@ def pad_line(w, line):
 
 
 def get_methods(cls):
-    methods = [x for x in dir(cls) if callable(getattr(cls, x))]
-    return filter(lambda x: not x.startswith('__'), methods)
+    methods = [
+        x for x in dir(cls)
+        if isinstance(getattr(cls, x), collections.Callable)
+    ]
+    return [x for x in methods if not x.startswith('__')]
 
 
 def unfreeze(frozen):
     if type(frozen) is tuple or type(frozen) is list:
         return list(unfreeze(x) for x in frozen)
     elif type(frozen) is OrderedDict or type(frozen) is FrozenOrderedDict:
-        return OrderedDict([(k, unfreeze(v)) for k, v in frozen.items()])
+        return OrderedDict([(k, unfreeze(v)) for k, v in list(frozen.items())])
     elif type(frozen) is dict or type(frozen) is frozendict:
-        return {k: unfreeze(v) for k, v in frozen.items()}
+        return {k: unfreeze(v) for k, v in list(frozen.items())}
     else:
         return frozen
 

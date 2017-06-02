@@ -6,18 +6,18 @@ import shutil
 import pwd
 import grp
 import re
-from driver_pi import Pi
+from .driver_pi import Pi
 import logging
-import utility
-import argparser
-import config_loader
-from setup_logs import setup_logs
-from store import store
-from actions import actions, get_max_pages, dimensions
-import convert
-import initial_state
-from button_bindings import button_bindings
-from bookfile_list import BookFile_List
+from . import utility
+from . import argparser
+from . import config_loader
+from .setup_logs import setup_logs
+from .store import store
+from .actions import actions, get_max_pages, dimensions
+from . import convert
+from . import initial_state
+from .button_bindings import button_bindings
+from .bookfile_list import BookFile_List
 
 
 log = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def main():
 
     if args.emulated and not args.both:
         log.info("running with emulated hardware")
-        from driver_emulated import Emulated
+        from .driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
     elif args.emulated and args.both:
@@ -42,7 +42,7 @@ def main():
             "running with both emulated and real hardware on port %s"
             % args.tty
         )
-        from driver_both import DriverBoth
+        from .driver_both import DriverBoth
         with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
                         delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
@@ -187,13 +187,13 @@ def set_display(driver, data):
 def sync_library(state, library_dir):
     width, height = dimensions(state['app'])
     convert_library(width, height, library_dir)
-    library_files = map(lambda b: b['data'].filename, state['app']['books'])
+    library_files = [b['data'].filename for b in state['app']['books']]
     disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
-    not_added = filter(lambda f: f not in library_files, disk_files)
+    not_added = [f for f in disk_files if f not in library_files]
     if not_added != []:
-        not_added_data = map(lambda f: BookFile_List(f, width), not_added)
+        not_added_data = [BookFile_List(f, width) for f in not_added]
         store.dispatch(actions.add_books(not_added_data))
-    non_existent = filter(lambda f: f not in disk_files, library_files)
+    non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
         store.dispatch(actions.remove_books(non_existent))
 

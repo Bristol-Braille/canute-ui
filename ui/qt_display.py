@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 import argparse
 import logging
-import comms_codes as comms
+from . import comms_codes as comms
 from multiprocessing import Queue
-from Queue import Empty
+from queue import Empty
 import sys
 from PySide import QtGui, QtCore
-from qt.main_window import Ui_MainWindow
+from .qt.main_window import Ui_MainWindow
 from ui.utility import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ BUTTONS = 9
 CHARS = 40
 ROWS = 9
 
-MSG_INTERVAL_S = 10  # This is in milliseconds
+MSG_INTERVAL_MS = 10
 
 
 def main():
@@ -50,7 +50,7 @@ def start(to_display_queue, from_display_queue, display_text):
 
 
 def get_all(t, cls):
-    return [y for x, y in cls.__dict__.items() if type(y) == t]
+    return [y for x, y in list(cls.__dict__.items()) if type(y) == t]
 
 
 class Display(QtGui.QMainWindow, Ui_MainWindow):
@@ -87,8 +87,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         self.receive_queue = to_display_queue
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.check_msg)
-        timer.start(MSG_INTERVAL_S)
-#        self.timer.start()
+        timer.start(MSG_INTERVAL_MS)
 
         self.show()
 
@@ -151,9 +150,6 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
             pass
         except:
             print('check_msg ERROR')
-
-    #    self.timer = Timer(MSG_INTERVAL_S, self.check_msg)
-    #    self.timer.start()
 
 
 if __name__ == '__main__':
