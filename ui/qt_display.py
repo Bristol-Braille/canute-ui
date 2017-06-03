@@ -23,11 +23,11 @@ MSG_INTERVAL_MS = 10
 def main():
     logging.basicConfig(level=logging.INFO)
     log = logging.getLogger(__name__)
-    log.info("display GUI")
+    log.info('display GUI')
 
-    parser = argparse.ArgumentParser(description="Canute Emulator")
+    parser = argparse.ArgumentParser(description='Canute Emulator')
     parser.add_argument('--text', action='store_const', dest='text',
-                        const=True, help="show text instead of braille")
+                        const=True, help='show text instead of braille')
     args = parser.parse_args()
 
     app = QtGui.QApplication(sys.argv)
@@ -41,7 +41,7 @@ class HardwareError(Exception):
 
 
 def start(to_display_queue, from_display_queue, display_text):
-    log.info("display GUI")
+    log.info('display GUI')
 
     app = QtGui.QApplication(sys.argv)
     Display(to_display_queue=to_display_queue,
@@ -106,11 +106,11 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         elif e.key() == QtCore.Qt.Key_R:
             self.send_button_msg('R', 'single')
         elif (e.key() >= 49 and e.key() <= 56):
-            self.send_button_msg("%i" % (e.key() - 48,), 'single')
+            self.send_button_msg('%i' % (e.key() - 48,), 'single')
 
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''
-        log.info("sending %s button = %s" % (button_type, button_id))
+        log.info('sending %s button = %s' % (button_type, button_id))
         self.send_queue.put_nowait({'id': button_id, 'type': button_type})
 
     def print_braille(self, data):
@@ -119,7 +119,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         :param data: a list of characters to display.  Assumed to be the right
         length and filled with numbers from 1 to 64
         '''
-        log.debug("printing data: %s" % data)
+        log.debug('printing data: %s' % data)
 
         for row in range(ROWS):
             row_braille = data[row * CHARS:row * CHARS + CHARS]

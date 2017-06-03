@@ -13,11 +13,11 @@ with open(native_file, 'wb') as fh:
     for page in pages:
         fh.write(bytearray(page))
 
-""" used for debugging wrong sort order
+''' used for debugging wrong sort order
 # write 8 books with only one page
 for page in range(8):
     native_file = book_dir + str(page) + Library.native_ext
     print(native_file)
     with open(native_file, 'w') as fh:
         fh.write(bytearray([alpha_to_pin_num(str(page))]*dimensions[0]))
-"""
+'''

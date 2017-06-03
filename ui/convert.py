@@ -14,7 +14,7 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
     :param brf: filename of the pef file
     :param native_file: filename of the destination file
     '''
-    log.info("converting brf %s" % brf_file)
+    log.info('converting brf %s' % brf_file)
 
     def pad_line(converted):
         converted.extend([0] * (width - len(converted)))
@@ -46,8 +46,8 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
                 pad_line(converted)
                 book.append(converted)
 
-    log.info("brf loaded with %d lines" % len(book))
-    log.info("writing to [%s]" % native_file)
+    log.info('brf loaded with %d lines' % len(book))
+    log.info('writing to [%s]' % native_file)
     with open(native_file, 'wb') as fh:
         for index, line in enumerate(book):
             if len(line) > width:
@@ -59,7 +59,7 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
             fh.write(bytearray(line[:width]))
 
     if remove:
-        log.info("removing old brf file")
+        log.info('removing old brf file')
         os.remove(brf_file)
 
 
@@ -73,24 +73,24 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
     :param pef_file: filename of the pef file
     :param native_file: filename of the destination file
     '''
-    log.info("converting pef %s" % pef_file)
+    log.info('converting pef %s' % pef_file)
     try:
         xml_doc = minidom.parse(pef_file)
     except:
-        log.error("could not convert %s" % pef_file)
+        log.error('could not convert %s' % pef_file)
         if remove:
             os.remove(pef_file)
         return
 
     pages = xml_doc.getElementsByTagName('page')
-    log.debug("got %d pages" % len(pages))
+    log.debug('got %d pages' % len(pages))
     lines = []
 
     def pad_page(page):
         num_rows = len(page.getElementsByTagName('row'))
         for i in range(height - num_rows):
-            blank_row = xml_doc.createElement("row")
-            txt = xml_doc.createTextNode("")
+            blank_row = xml_doc.createElement('row')
+            txt = xml_doc.createTextNode('')
             blank_row.appendChild(txt)
             page.appendChild(blank_row)
 
@@ -115,8 +115,8 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
 
             lines.append(line)
 
-    log.info("pef loaded with %d lines" % len(lines))
-    log.info("writing to [%s]" % native_file)
+    log.info('pef loaded with %d lines' % len(lines))
+    log.info('writing to [%s]' % native_file)
     with open(native_file, 'wb') as fh:
         for index, line in enumerate(lines):
             if len(line) > width:
@@ -128,5 +128,5 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
             fh.write(bytearray(line[:width]))
 
     if remove:
-        log.info("removing old pef file")
+        log.info('removing old pef file')
         os.remove(pef_file)

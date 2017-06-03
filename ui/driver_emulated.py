@@ -16,7 +16,7 @@ class Emulated(Driver):
     CHARS = 40
     ROWS = 9
 
-    """driver class that emulates the machine with a GUI
+    '''driver class that emulates the machine with a GUI
 
     we fake the :func:`send_data` and :func:`get_data` functions
 
@@ -24,7 +24,7 @@ class Emulated(Driver):
     look and provide buttons.
 
     message passing is done with queues
-    """
+    '''
 
     def __init__(self, delay=0, display_text=False):
         super(Emulated, self).__init__()
@@ -39,13 +39,13 @@ class Emulated(Driver):
         # start the gui program as a separated process
         self.process = Process(target=qt_display.start,
                                kwargs={
-                                   "to_display_queue": self.send_queue,
-                                   "from_display_queue": self.receive_queue,
-                                   "display_text": display_text
+                                   'to_display_queue': self.send_queue,
+                                   'from_display_queue': self.receive_queue,
+                                   'display_text': display_text
                                })
         self.process.daemon = True
         self.process.start()
-        log.info("started qt_display.py with process id %d" % self.process.pid)
+        log.info('started qt_display.py with process id %d' % self.process.pid)
 
     def is_ok(self):
         '''The UI needs to know when to quit, so the GUI can tell it using this
@@ -53,19 +53,19 @@ class Emulated(Driver):
         return self.process.is_alive()
 
     def send_error_sound(self):
-        log.info("error sound!")
+        log.info('error sound!')
 
     def send_ok_sound(self):
-        log.info("ok sound!")
+        log.info('ok sound!')
 
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the threads properly'''
         if ex_type is not None:
-            log.error("%s : %s" % (ex_type.__name__, ex_value))
+            log.error('%s : %s' % (ex_type.__name__, ex_value))
         if self.process.is_alive() is None:
-            log.info("killing GUI subprocess")
+            log.info('killing GUI subprocess')
             self.process.terminate()
-        log.info("done")
+        log.info('done')
 
     def __enter__(self):
         '''method required for using the `with` statement'''
@@ -79,7 +79,7 @@ class Emulated(Driver):
         '''
         try:
             msg = self.receive_queue.get(timeout=0.01)
-            log.debug("got button msg %s" % msg)
+            log.debug('got button msg %s' % msg)
             self.buttons[msg['id']] = msg['type']
         except Empty:
             pass
@@ -103,19 +103,19 @@ class Emulated(Driver):
             self.data = Emulated.ROWS
         elif cmd == comms.CMD_SEND_PAGE:
             self.data = 0
-            log.debug("received data for emulator %s" % data)
-            log.debug("delaying %s milliseconds to emulate hardware" %
+            log.debug('received data for emulator %s' % data)
+            log.debug('delaying %s milliseconds to emulate hardware' %
                       self.delay)
             time.sleep(self.delay / 1000.0)
             self.send_queue.put_nowait([comms.CMD_SEND_PAGE] + data)
         elif cmd == comms.CMD_SEND_ERROR:
-            log.error("making error sound!")
+            log.error('making error sound!')
         elif cmd == comms.CMD_SEND_OK:
-            log.error("making OK sound!")
+            log.error('making OK sound!')
         elif cmd == comms.CMD_SEND_LINE:
             self.data = 0
-            log.debug("received row data for emulator %s" % data)
-            log.debug("delaying %s milliseconds to emulate hardware" %
+            log.debug('received row data for emulator %s' % data)
+            log.debug('delaying %s milliseconds to emulate hardware' %
                       self.delay)
             time.sleep(self.delay / 1000.0)
             self.send_queue.put_nowait([comms.CMD_SEND_LINE] + data)
@@ -134,18 +134,3 @@ class Emulated(Driver):
 
 
 Driver.register(Emulated)
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    log = logging.getLogger(__name__)
-    log.info("showing all braille pin pics")
-    count = 0
-
-    with Emulated() as driver:
-        while driver.is_ok():
-            log.info(driver.get_buttons())
-            driver.send_data(
-                comms.CMD_SEND_PAGE,
-                [count % 64] * Emulated.ROWS * Emulated.CHARS
-            )
-            count += 1

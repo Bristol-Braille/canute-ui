@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-flake8 --filename='./canute-ui,*.py' \
-    --exclude='doc,ui/qt/main_window.py' && echo 'Lint OK'
+flake8 --filename='./canute_ui,*.py' \
+    --exclude='doc,ui/qt/main_window.py' \
+    --multiline-quotes="'" && echo 'Lint OK'

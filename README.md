@@ -5,13 +5,13 @@ electronic Braille reader](http://bristolbraille.co.uk/#canute).
 
 ## Usage
 
-[`./canute-ui`](canute-ui) runs a graphical display to emulate the hardware by
+[`./canute_ui`](canute_ui) runs a graphical display to emulate the hardware by
 default. The emulated hardware has the same interface as the real hardware, but
 also runs a graphical program called [qt_display.py](ui/qt_display.py). This shows
 how the machine will look, and provides the buttons.
 
 ```
-usage: canute-ui [-h] [--pi-buttons] [--debug] [--text] [--tty TTY]
+usage: canute_ui [-h] [--pi-buttons] [--debug] [--text] [--tty TTY]
                [--delay DELAY] [--disable-emulator] [--both]
 
 Canute UI
@@ -58,7 +58,7 @@ Copy the test books to the home directory (or wherever you specified in config.r
 
 Run the UI using the emulator:
 
-    ./canute-ui
+    ./canute_ui
 
 
 ## API

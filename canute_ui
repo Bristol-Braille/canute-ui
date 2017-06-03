@@ -30,12 +30,12 @@ def main():
     log = setup_logs(config, args.loglevel)
 
     if args.emulated and not args.both:
-        log.info("running with emulated hardware")
+        log.info('running with emulated hardware')
         from ui.driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
     elif args.emulated and args.both:
-        log.info("running with both emulated and real hardware on port %s"
+        log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
         from ui.driver_both import DriverBoth
         with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
@@ -43,7 +43,7 @@ def main():
             run(driver, config)
     else:
         timeout = config.get('comms', 'timeout')
-        log.info("running with real hardware on port %s, timeout %s" %
+        log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
         with Pi(port=args.tty,
                 pi_buttons=args.pi_buttons,
@@ -98,11 +98,11 @@ def change_files(config, state):
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
     if state['update_ui'] == 'start':
-        log.info("update ui = start")
+        log.info('update ui = start')
         if utility.find_ui_update(config):
             store.dispatch(actions.update_ui('in progress'))
         else:
-            log.info("update not found")
+            log.info('update not found')
             store.dispatch(actions.update_ui('failed'))
 
 
@@ -114,7 +114,7 @@ def handle_hardware(driver, state):
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
             driver.clear_page()
-            os.system("sudo shutdown -h now")
+            os.system('sudo shutdown -h now')
         return True
     elif state['hardware']['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))

@@ -75,8 +75,8 @@ def format_title(title, width, page_number, total_pages):
     '''
     # hack - leave space at the beginning for the uppercase symbols
     uppercase = '  '
-    title = "%s%s" % (uppercase, title)
-    current_page = " %03d / %03d" % (page_number + 1, total_pages + 1)
+    title = '%s%s' % (uppercase, title)
+    current_page = ' %03d / %03d' % (page_number + 1, total_pages + 1)
 
     available_title_space = width - len(current_page)
 
@@ -86,7 +86,7 @@ def format_title(title, width, page_number, total_pages):
         title = title[0:available_title_space]
     else:
         # pad
-        title += " " * (available_title_space - len(title))
+        title += ' ' * (available_title_space - len(title))
 
     title_pins = utility.alphas_to_pin_nums(title + current_page)
     # replace first 2 chars with the uppercase symbols
