@@ -16,10 +16,10 @@ log = logging.getLogger(__name__)
 
 class DriverBoth():
     def __init__(self, port='/dev/ttyACM0', pi_buttons=False,
-                 delay=0, display_text=False):
+                 delay=0, display_text=False, timeout=60):
         log.debug('__init__')
         self.emulated = Emulated(delay, display_text)
-        self.pi = Pi(port, pi_buttons)
+        self.pi = Pi(port, pi_buttons, timeout=timeout)
         self.chars = 40
         self.rows = 9
 
