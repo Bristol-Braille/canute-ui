@@ -28,6 +28,7 @@ def main():
     args = argparser.parser.parse_args()
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
+    timeout = config.get('comms', 'timeout')
 
     if args.emulated and not args.both:
         log.info('running with emulated hardware')
@@ -39,10 +40,10 @@ def main():
                  % args.tty)
         from ui.driver_both import DriverBoth
         with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
-                        delay=args.delay, display_text=args.text) as driver:
+                        delay=args.delay, display_text=args.text,
+                        timeout=timeout) as driver:
             run(driver, config)
     else:
-        timeout = config.get('comms', 'timeout')
         log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
         with Pi(port=args.tty,
