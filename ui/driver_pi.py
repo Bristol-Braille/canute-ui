@@ -101,7 +101,7 @@ class Pi(Driver):
         if hasattr(self, 'button_queue'):
             for _ in range(100):
                 try:
-                    event = self.button_queue.get_nowait()
+                    event = self.button_queue.get(timeout=0.001)
                     key = event.type == evdev.ecodes.EV_KEY
                     down = event.value == evdev.KeyEvent.key_down
                 except queue.Empty:
