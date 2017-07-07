@@ -1,0 +1,9 @@
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+
+sudo -u pi bash /home/pi/canute-ui/run.sh &
+
+exit 0
