@@ -35,8 +35,12 @@ For Homebrew:
 
 Install requirements:
 
-    sudo apt install usbmount python3-pip python3-dev
+    sudo apt install -y usbmount python3-pip python3-dev
     sudo pip3 install -r requirements-pi.txt
+
+Install the rc.local file to make canute_ui start on boot
+
+    sudo cp rc.local /etc/
 
 Copy the test books to the home directory:
 
