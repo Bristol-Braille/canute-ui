@@ -8,7 +8,7 @@ import shutil
 import tarfile
 import ui.initial_state
 
-config = load('ui/config.rc')
+config = load('config.rc')
 log = setup_logs(config, logging.DEBUG)
 
 
