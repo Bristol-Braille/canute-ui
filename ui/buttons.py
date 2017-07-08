@@ -22,6 +22,7 @@ bindings = {
             '8': partial(actions.go_to_book, 6),
             '9': partial(actions.go_to_book, 7),
             'L': actions.go_to_menu,
+            'R': partial(actions.reset_display, 'start')
         }
     },
     'book': {
@@ -32,6 +33,7 @@ bindings = {
             '>': actions.next_page,
             '<': actions.previous_page,
             'L': actions.go_to_library,
+            'R': partial(actions.reset_display, 'start')
         }
     },
     'menu': {
@@ -39,6 +41,7 @@ bindings = {
             '>': actions.next_page,
             '<': actions.previous_page,
             'L': actions.go_to_library,
+            'R': partial(actions.reset_display, 'start')
         }
     }
 }
