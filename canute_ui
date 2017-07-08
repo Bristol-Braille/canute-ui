@@ -57,8 +57,6 @@ def run(driver, config):
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
-    state = state.copy(hardware=state['hardware'].copy(
-        resetting_display='start'))
     store.dispatch({'type': 'init', 'value': state})
     library.sync(state, config.get('files', 'library_dir'))
     store.subscribe(partial(handle_changes, driver, config))
@@ -120,6 +118,7 @@ def handle_hardware(driver, state):
     elif state['hardware']['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
+        display.hardware_state = []
         store.dispatch(actions.reset_display('done'))
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
