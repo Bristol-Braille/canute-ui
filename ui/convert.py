@@ -51,11 +51,9 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
     with open(native_file, 'wb') as fh:
         for index, line in enumerate(book):
             if len(line) > width:
-                log.warning(
-                   'length of row %d is %d which is greater than %d,'
-                   + ' truncating'
-                   % (index, len(line), width)
-                )
+                m = 'length of row {} is {} which is '.format(index, len(line))
+                m += 'greater than {}, truncating'.format(width)
+                log.warning(m)
             fh.write(bytearray(line[:width]))
 
     if remove:
