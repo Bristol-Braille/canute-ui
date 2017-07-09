@@ -55,6 +55,10 @@ class Driver(object, metaclass=abc.ABCMeta):
         self.send_data(comms.CMD_WARMUP)
         return self.get_data(comms.CMD_WARMUP)
 
+    def lower_rods(self):
+        self.send_data(comms.CMD_LOWER)
+        return self.get_data(comms.CMD_WARMUP)
+
     def get_dimensions(self):
         '''
         returns dimensions of the display
