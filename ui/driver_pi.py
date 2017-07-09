@@ -7,6 +7,7 @@ import struct
 import binascii
 import queue
 import threading
+import serial.tools.list_ports
 
 log = logging.getLogger(__name__)
 
@@ -30,9 +31,16 @@ class Pi(Driver):
     :param pi_buttons: whether to use the evdev input for button presses
     '''
 
-    def __init__(self, port='/dev/ttyACM0', pi_buttons=False, timeout=60):
+    def __init__(self, port=None, pi_buttons=False, timeout=60):
         self.timeout = timeout
         # get serial connection
+        if port is None:
+            ports = serial.tools.list_ports.comports()
+            for p in ports:
+                if p[2] == 'USB VID:PID=2341:8036 SNR=HIDPC':
+                    port = p[0]
+                    log.info('autoselecting serial port {}'.format(port))
+                    break
         if port:
             self.port = self.setup_serial(port)
             log.info('hardware detected on port %s' % port)
@@ -51,7 +59,7 @@ class Pi(Driver):
         devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
         device = None
         for d in devices:
-            if d.name == 'Arduino LLC Arduino Leonardo':
+            if d.name == 'Bristol Braille Canute Buttons':
                 device = d
                 break
         if device is None:
