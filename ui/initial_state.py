@@ -33,7 +33,7 @@ initial_state = utility.freeze({
 def read():
     log.debug('reading initial state from %s' % STATE_FILE)
     try:
-        with open(STATE_FILE) as fh:
+        with open(STATE_FILE, 'rb') as fh:
             state = pickle.load(fh)
             return state
     except:
