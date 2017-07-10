@@ -32,7 +32,7 @@ parser.add_argument(
     action='store',
     dest='tty',
     help='serial port for the display and button board',
-    default='/dev/ttyACM0'
+    default=None
 )
 parser.add_argument(
     '--delay',
