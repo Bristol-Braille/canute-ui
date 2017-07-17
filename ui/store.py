@@ -41,6 +41,10 @@ combined = pydux.combine_reducers({
 
 
 def main_reducer(state, action):
+    if 'value' in action:
+        log.debug('dispatching {}:{}'.format(action['type'], action['value']))
+    else:
+        log.debug('dispatching {}'.format(action['type']))
     if action['type'] == '@@redux/INIT':
         return initial_state
     if action['type'] == 'init':
