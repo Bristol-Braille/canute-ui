@@ -42,7 +42,7 @@ combined = pydux.combine_reducers({
 def main_reducer(state, action):
     if action['type'] == '@@redux/INIT':
         return initial_state
-    if action['type'] == 'set_initial_state':
+    if action['type'] == 'init':
         return action['value']
     if state is None:
         state = initial_state
