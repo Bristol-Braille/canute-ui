@@ -2,7 +2,7 @@ import logging
 from functools import partial
 from .store import store
 from .actions import actions
-from .system_menu import system_menu
+from .system_menu.system_menu import system_menu
 from .library.buttons import library_buttons
 from .book.buttons import book_buttons
 

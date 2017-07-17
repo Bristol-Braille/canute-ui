@@ -1,7 +1,8 @@
 from functools import partial
-from . import utility
-from .actions import actions
 from collections import OrderedDict
+
+from .. import utility
+from ..actions import actions
 
 system_menu = OrderedDict([
     (
@@ -14,4 +15,5 @@ system_menu = OrderedDict([
     ('update UI from USB stick', partial(actions.update_ui, 'start')),
 ])
 
-system_menu_titles_braille = list(map(utility.alphas_to_pin_nums, system_menu))
+menu_titles = list(map(utility.alphas_to_pin_nums, system_menu))
+print(menu_titles)

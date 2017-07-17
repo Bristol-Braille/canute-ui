@@ -1,6 +1,7 @@
 import logging
 from . import utility
 from .library import view as library_view
+from .system_menu import view as system_menu_view
 
 
 log = logging.getLogger(__name__)
@@ -19,18 +20,8 @@ class Display():
             page_data = library_view.render(width, height, state['library'])
             self._set_buffer(page_data)
         elif location == 'system_menu':
-            page = state['system_menu']['page']
-            data = state['system_menu']['data']
-            # subtract title from page height
-            data_height = height - 1
-            max_pages = utility.get_max_pages(data, data_height)
-            title = utility.format_title('system menu', width, page, max_pages)
-            n = page * data_height
-            data = data[n: n + data_height]
-            # pad page with empty rows
-            while len(data) < data_height:
-                data += ((0,) * width,)
-            self._set_buffer(tuple([title]) + tuple(data))
+            page_data = system_menu_view.render(width, height, state['system_menu'])
+            self._set_buffer(page_data)
         elif type(location) == int:
             page = state['books'][location]['page']
             data = state['books'][location]['data']

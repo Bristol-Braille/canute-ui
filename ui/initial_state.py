@@ -1,7 +1,7 @@
 import pickle
 import logging
 from . import utility
-from .system_menu import system_menu_titles_braille
+from .system_menu.system_menu import menu_titles
 
 STATE_FILE = 'state.pkl'
 
@@ -14,8 +14,7 @@ initial_state = utility.freeze({
         'library': {'data': [], 'page': 0},
         'books': [],
         'system_menu': {
-            'data':
-                [utility.pad_line(40, l) for l in system_menu_titles_braille],
+            'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
         },
         'replacing_library': False,
