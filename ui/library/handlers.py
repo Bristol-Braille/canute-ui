@@ -1,15 +1,15 @@
-
 import os
 import re
 import grp
 import pwd
 import logging
 import shutil
-from .actions import actions
-from .store import store
-from . import convert
-from . import utility
-from .bookfile_list import BookFile_List
+
+from ..actions import actions
+from ..store import store
+from .. import convert
+from .. import utility
+from ..bookfile_list import BookFile_List
 
 
 log = logging.getLogger(__name__)

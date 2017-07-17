@@ -3,7 +3,7 @@ import logging
 from functools import partial
 import os
 
-from . import utility
+from .. import utility
 
 
 log = logging.getLogger(__name__)

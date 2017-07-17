@@ -1,7 +1,7 @@
 import logging
 from frozendict import frozendict
 from . import utility
-from .library_reducers import LibraryReducers
+from .library.reducers import LibraryReducers
 
 
 log = logging.getLogger(__name__)

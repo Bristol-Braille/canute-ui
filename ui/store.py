@@ -1,7 +1,7 @@
 import pydux
 import logging
 from .actions import AppReducers, HardwareReducers
-from .library_reducers import LibraryReducers
+from .library.reducers import LibraryReducers
 from .initial_state import initial_state
 
 
