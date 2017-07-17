@@ -4,6 +4,7 @@ from .store import store
 from .actions import actions
 from .system_menu import system_menu
 from .library.buttons import library_buttons
+from .book.buttons import book_buttons
 
 
 log = logging.getLogger(__name__)
@@ -11,17 +12,7 @@ log = logging.getLogger(__name__)
 
 bindings = {
     'library': library_buttons,
-    'book': {
-        'single': {
-            '1': actions.go_to_start,
-            '2': partial(actions.skip_pages, -10),
-            '3': partial(actions.skip_pages, 10),
-            '>': actions.next_page,
-            '<': actions.previous_page,
-            'L': actions.go_to_library,
-            'R': partial(actions.reset_display, 'start')
-        }
-    },
+    'book': book_buttons,
     'system_menu': {
         'single': {
             '>': actions.next_page,
