@@ -4,12 +4,16 @@ from ..actions import actions
 
 book_buttons = {
     'single': {
-        '1': actions.go_to_start,
-        '2': partial(actions.skip_pages, -10),
-        '3': partial(actions.skip_pages, 10),
+        '2': actions.enter_page_menu,
+        '3': actions.go_to_start,
+        # '4': actions.go_to_end,
+        # '5': actions.insert_bookmark,
+        # '6': actions.enter_bookmark_menu,
+        '8': actions.go_to_library,
+        '9': actions.go_to_system_menu,
+        'R': partial(actions.reset_display, 'start'),
         '>': actions.next_page,
         '<': actions.previous_page,
-        'L': actions.go_to_library,
-        'R': partial(actions.reset_display, 'start')
+        'L': actions.toggle_home_menu,
     }
 }

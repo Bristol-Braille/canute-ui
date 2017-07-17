@@ -19,3 +19,9 @@ class BookReducers():
         books = list(state['books'])
         books[location] = utility.set_page(book, page, height)
         return state.copy(books=tuple(books))
+
+    def enter_page_menu(self, state, value):
+        return state.copy(home_menu=False, page_menu=True)
+
+    def toggle_home_menu(self, state, value):
+        return state.copy(home_menu=not state['home_menu'], page_menu=False)
