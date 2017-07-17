@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+autopep8 --in-place canute_ui ui/*.py
