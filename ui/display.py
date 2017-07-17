@@ -1,5 +1,4 @@
 import logging
-from .actions import get_max_pages, dimensions
 from . import utility
 
 
@@ -13,14 +12,14 @@ class Display():
         self.buffer = []
 
     def render_to_buffer(self, state):
-        width, height = dimensions(state)
+        width, height = utility.dimensions(state)
         location = state['location']
         if location == 'library':
             page = state['library']['page']
             data = state['library']['data']
             # subtract title from page height
             data_height = height - 1
-            max_pages = get_max_pages(data, data_height)
+            max_pages = utility.get_max_pages(data, data_height)
             n = page * data_height
             data = data[n: n + data_height]
             # pad page with empty rows
@@ -33,7 +32,7 @@ class Display():
             data = state['menu']['data']
             # subtract title from page height
             data_height = height - 1
-            max_pages = get_max_pages(data, data_height)
+            max_pages = utility.get_max_pages(data, data_height)
             title = format_title('system menu', width, page, max_pages)
             n = page * data_height
             data = data[n: n + data_height]
