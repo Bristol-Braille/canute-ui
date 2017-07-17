@@ -119,9 +119,9 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
         for index, line in enumerate(lines):
             if len(line) > width:
                 log.warning(
-                   'length of row %d is %d which is greater than %d,'
-                   + ' truncating'
-                   % (index, len(line), width)
+                    'length of row %d is %d which is greater than %d,'
+                    + ' truncating'
+                    % (index, len(line), width)
                 )
             fh.write(bytearray(line[:width]))
 

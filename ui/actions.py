@@ -1,8 +1,7 @@
-import os
 import logging
-from functools import partial
 from frozendict import frozendict
 from . import utility
+from .library.reducers import LibraryReducers
 
 
 log = logging.getLogger(__name__)
@@ -17,66 +16,14 @@ class AppReducers():
         dimensions = frozendict({'width': value[0], 'height': value[1]})
         return state.copy(dimensions=dimensions)
 
-    def go_to_book(self, state, number):
-        width, height = dimensions(state)
-        page = state['library']['page']
-        line_number = page * (height - 1)
-        try:
-            state['books'][line_number + number]
-        except:
-            log.warning('no book at {}'.format(number))
-            return state
-        return state.copy(location=line_number + number)
-
     def go_to_library(self, state, value):
         return state.copy(location='library')
 
     def go_to_menu(self, state, value):
         return state.copy(location='menu')
 
-    def set_books(self, state, books):
-        width, height = dimensions(state)
-        books = [{'data': b, 'page': 0} for b in books]
-        books = tuple(sort_books(books))
-        data = list(map(get_title, books))
-        data = list(map(partial(utility.pad_line, width), data))
-        library = frozendict({'data': tuple(data), 'page': 0})
-        return state.copy(location='library', books=books, library=library)
-
-    def add_books(self, state, books_to_add):
-        width, height = dimensions(state)
-        book_filenames = [b['data'].filename for b in state['books']]
-        books_to_add = [
-            d for d in books_to_add if d.filename not in book_filenames
-        ]
-        books_to_add = [{'data': b, 'page': 0} for b in books_to_add]
-        books = list(state['books'])
-        books += list(books_to_add)
-        books = sort_books(books)
-        data = list(map(get_title, books))
-        data = list(map(partial(utility.pad_line, width), data))
-        library = frozendict({
-            'data': tuple(data),
-            'page': state['library']['page']
-        })
-        return state.copy(books=tuple(books), library=library)
-
-    def remove_books(self, state, filenames):
-        width, height = dimensions(state)
-        books = [
-            b for b in state['books'] if b['data'].filename not in filenames
-        ]
-        data = list(map(get_title, books))
-        data = list(map(partial(utility.pad_line, width), data))
-        maximum = get_max_pages(data, height)
-        page = state['library']['page']
-        if page > maximum:
-            page = maximum
-        library = frozendict({'data': data, 'page': page})
-        return state.copy(books=tuple(books), library=library)
-
     def next_page(self, state, value):
-        width, height = dimensions(state)
+        width, height = utility.dimensions(state)
         location = state['location']
         if location == 'library':
             library = state['library']
@@ -92,7 +39,7 @@ class AppReducers():
         return state
 
     def previous_page(self, state, value):
-        width, height = dimensions(state)
+        width, height = utility.dimensions(state)
         location = state['location']
         if location == 'library':
             library = state['library']
@@ -108,7 +55,7 @@ class AppReducers():
         return state
 
     def go_to_start(self, state, value):
-        width, height = dimensions(state)
+        width, height = utility.dimensions(state)
         location = state['location']
         book = state['books'][location]
         page = 0
@@ -117,7 +64,7 @@ class AppReducers():
         return state.copy(books=tuple(books))
 
     def skip_pages(self, state, value):
-        width, height = dimensions(state)
+        width, height = utility.dimensions(state)
         location = state['location']
         book = state['books'][location]
         page = book['page'] + value
@@ -158,32 +105,12 @@ class HardwareReducers():
             return state.copy(resetting_display=value)
 
 
-def sort_books(books):
-    return sorted(books, key=lambda book: book['data'].filename)
-
-
-def dimensions(state):
-    width = state['dimensions']['width']
-    height = state['dimensions']['height']
-    return [width, height]
-
-
-def get_title(book):
-    basename = os.path.basename(book['data'].filename)
-    title = os.path.splitext(basename)[0].replace('_', ' ')
-    return utility.alphas_to_pin_nums(title)
-
-
 def set_page(book, page, height):
     data = book['data']
-    if page < 0 or page > get_max_pages(data, height):
+    if page < 0 or page > utility.get_max_pages(data, height):
         return book
     else:
         return frozendict({'data': data, 'page': page})
-
-
-def get_max_pages(data, height):
-    return (len(data) - 1) // height
 
 
 def make_action_method(name):
@@ -194,6 +121,7 @@ def make_action_method(name):
 
 
 action_types = utility.get_methods(AppReducers)
+action_types.extend(utility.get_methods(LibraryReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
 
 # just an empty object

@@ -22,6 +22,16 @@ class LinefeedConversionException(Exception):
     pass
 
 
+def get_max_pages(data, height):
+    return (len(data) - 1) // height
+
+
+def dimensions(state):
+    width = state['dimensions']['width']
+    height = state['dimensions']['height']
+    return [width, height]
+
+
 def find_ui_update(config):
     '''
     recursively look for firmware in the usb_dir,

@@ -1,15 +1,15 @@
-
 import os
 import re
 import grp
 import pwd
 import logging
 import shutil
-from .actions import actions, dimensions
-from .store import store
-from . import convert
-from . import utility
-from .bookfile_list import BookFile_List
+
+from ..actions import actions
+from ..store import store
+from .. import convert
+from .. import utility
+from ..bookfile_list import BookFile_List
 
 
 log = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
 
 
 def sync(state, library_dir):
-    width, height = dimensions(state['app'])
+    width, height = utility.dimensions(state['app'])
     convert_books(width, height, library_dir)
     library_files = [b['data'].filename for b in state['app']['books']]
     disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
