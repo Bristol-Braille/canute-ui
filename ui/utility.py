@@ -26,6 +26,14 @@ def get_max_pages(data, height):
     return (len(data) - 1) // height
 
 
+def set_page(book, page, height):
+    data = book['data']
+    if page < 0 or page > get_max_pages(data, height):
+        return book
+    else:
+        return frozendict({'data': data, 'page': page})
+
+
 def dimensions(state):
     width = state['dimensions']['width']
     height = state['dimensions']['height']

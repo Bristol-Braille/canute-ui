@@ -2,6 +2,7 @@ import pydux
 import logging
 from .actions import AppReducers, HardwareReducers
 from .library.reducers import LibraryReducers
+from .book.reducers import BookReducers
 from .initial_state import initial_state
 
 
@@ -34,7 +35,7 @@ def makeReducer(key, clss):
 
 
 combined = pydux.combine_reducers({
-    'app': makeReducer('app', [AppReducers, LibraryReducers]),
+    'app': makeReducer('app', [AppReducers, LibraryReducers, BookReducers]),
     'hardware': makeReducer('hardware', [HardwareReducers]),
 })
 

@@ -9,20 +9,25 @@
 
 from PySide import QtCore, QtGui
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(543, 503)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Ignored)
+        sizePolicy = QtGui.QSizePolicy(
+            QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Ignored)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
         self.centralwidget = QtGui.QWidget(MainWindow)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        sizePolicy = QtGui.QSizePolicy(
+            QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
@@ -155,7 +160,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.row_8)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem = QtGui.QSpacerItem(
+            40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.pushButton = QtGui.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
@@ -166,7 +172,8 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QtGui.QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName("pushButton_3")
         self.horizontalLayout.addWidget(self.pushButton_3)
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QtGui.QSpacerItem(
+            40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.pushButton_4 = QtGui.QPushButton(self.centralwidget)
         self.pushButton_4.setObjectName("pushButton_4")
@@ -185,18 +192,31 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_0.setText(QtGui.QApplication.translate("MainWindow", "1", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_1.setText(QtGui.QApplication.translate("MainWindow", "2", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_2.setText(QtGui.QApplication.translate("MainWindow", "3", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_3.setText(QtGui.QApplication.translate("MainWindow", "4", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_4.setText(QtGui.QApplication.translate("MainWindow", "5", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_5.setText(QtGui.QApplication.translate("MainWindow", "6", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_6.setText(QtGui.QApplication.translate("MainWindow", "7", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_7.setText(QtGui.QApplication.translate("MainWindow", "8", None, QtGui.QApplication.UnicodeUTF8))
-        self.row_button_9.setText(QtGui.QApplication.translate("MainWindow", "9", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "<", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_2.setText(QtGui.QApplication.translate("MainWindow", "Library", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_3.setText(QtGui.QApplication.translate("MainWindow", ">", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_4.setText(QtGui.QApplication.translate("MainWindow", "Reset", None, QtGui.QApplication.UnicodeUTF8))
-
+        MainWindow.setWindowTitle(QtGui.QApplication.translate(
+            "MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_0.setText(QtGui.QApplication.translate(
+            "MainWindow", "1", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_1.setText(QtGui.QApplication.translate(
+            "MainWindow", "2", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_2.setText(QtGui.QApplication.translate(
+            "MainWindow", "3", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_3.setText(QtGui.QApplication.translate(
+            "MainWindow", "4", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_4.setText(QtGui.QApplication.translate(
+            "MainWindow", "5", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_5.setText(QtGui.QApplication.translate(
+            "MainWindow", "6", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_6.setText(QtGui.QApplication.translate(
+            "MainWindow", "7", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_7.setText(QtGui.QApplication.translate(
+            "MainWindow", "8", None, QtGui.QApplication.UnicodeUTF8))
+        self.row_button_9.setText(QtGui.QApplication.translate(
+            "MainWindow", "9", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton.setText(QtGui.QApplication.translate(
+            "MainWindow", "<", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_2.setText(QtGui.QApplication.translate(
+            "MainWindow", "Library", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_3.setText(QtGui.QApplication.translate(
+            "MainWindow", ">", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_4.setText(QtGui.QApplication.translate(
+            "MainWindow", "Reset", None, QtGui.QApplication.UnicodeUTF8))

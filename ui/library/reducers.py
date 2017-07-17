@@ -62,6 +62,12 @@ class LibraryReducers():
         library = frozendict({'data': data, 'page': page})
         return state.copy(books=tuple(books), library=library)
 
+    def replace_library(self, state, value):
+        if state['replacing_library'] == 'in progress' and value != 'done':
+            return state
+        else:
+            return state.copy(replacing_library=value)
+
 
 def sort_books(books):
     return sorted(books, key=lambda book: book['data'].filename)
