@@ -3,7 +3,7 @@ from . import utility
 from .actions import actions
 from collections import OrderedDict
 
-menu = OrderedDict([
+system_menu = OrderedDict([
     (
         'replace library from USB stick',
         partial(actions.replace_library, 'start')
@@ -14,4 +14,4 @@ menu = OrderedDict([
     ('update UI from USB stick', partial(actions.update_ui, 'start')),
 ])
 
-menu_titles_braille = list(map(utility.alphas_to_pin_nums, menu))
+menu_titles_braille = list(map(utility.alphas_to_pin_nums, system_menu))

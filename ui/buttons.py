@@ -2,7 +2,7 @@ import logging
 from functools import partial
 from .store import store
 from .actions import actions
-from .menu import menu
+from .system_menu import system_menu
 
 
 log = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ bindings = {
             '7': partial(actions.go_to_book, 5),
             '8': partial(actions.go_to_book, 6),
             '9': partial(actions.go_to_book, 7),
-            'L': actions.go_to_menu,
+            'L': actions.go_to_system_menu,
             'R': partial(actions.reset_display, 'start')
         }
     },
@@ -36,7 +36,7 @@ bindings = {
             'R': partial(actions.reset_display, 'start')
         }
     },
-    'menu': {
+    'system_menu': {
         'single': {
             '>': actions.next_page,
             '<': actions.previous_page,
@@ -47,9 +47,9 @@ bindings = {
 }
 
 
-for i, item in enumerate(menu):
-    action = menu[item]
-    bindings['menu']['single'][str(i + 2)] = action
+for i, item in enumerate(system_menu):
+    action = system_menu[item]
+    bindings['system_menu']['single'][str(i + 2)] = action
 
 
 def check(driver, state):

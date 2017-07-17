@@ -1,7 +1,7 @@
 import pickle
 import logging
 from . import utility
-from .menu import menu_titles_braille
+from .system_menu import system_menu_titles_braille
 
 STATE_FILE = 'state.pkl'
 
@@ -13,8 +13,9 @@ initial_state = utility.freeze({
         'location': 'library',
         'library': {'data': [], 'page': 0},
         'books': [],
-        'menu': {
-            'data': [utility.pad_line(40, l) for l in menu_titles_braille],
+        'system_menu': {
+            'data':
+                [utility.pad_line(40, l) for l in system_menu_titles_braille],
             'page': 0
         },
         'replacing_library': False,
@@ -46,7 +47,7 @@ def write(state):
     write_state = utility.unfreeze(state)
     write_state['app']['library'] = state['app']['library'].copy(page=0)
     location = state['app']['location']
-    if location == 'menu':
+    if location == 'system_menu':
         location = 'library'
     write_state['app']['location'] = location
     write_state['app']['backing_up_log'] = False

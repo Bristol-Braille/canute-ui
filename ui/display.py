@@ -27,9 +27,9 @@ class Display():
                 data += ((0,) * width,)
             title = format_title('library menu', width, page, max_pages)
             self._set_buffer(tuple([title]) + tuple(data))
-        elif location == 'menu':
-            page = state['menu']['page']
-            data = state['menu']['data']
+        elif location == 'system_menu':
+            page = state['system_menu']['page']
+            data = state['system_menu']['data']
             # subtract title from page height
             data_height = height - 1
             max_pages = utility.get_max_pages(data, data_height)
