@@ -14,6 +14,35 @@ import collections
 log = logging.getLogger(__name__)
 
 
+def format_title(title, width, page_number, total_pages):
+    '''
+    format a title like this:
+        * title on the top line.
+        * use two dot-six characters to indicate all uppercase for the title.
+        * page numbers all the way at the right with 3 digits out of total,
+        e.g. 001 / 003.
+    '''
+    # hack - leave space at the beginning for the uppercase symbols
+    uppercase = '  '
+    title = '%s%s' % (uppercase, title)
+    current_page = ' %03d / %03d' % (page_number + 1, total_pages + 1)
+
+    available_title_space = width - len(current_page)
+
+    # make title right length
+    if len(title) > available_title_space:
+        # truncate
+        title = title[0:available_title_space]
+    else:
+        # pad
+        title += ' ' * (available_title_space - len(title))
+
+    title_pins = alphas_to_pin_nums(title + current_page)
+    # replace first 2 chars with the uppercase symbols
+    title_pins[0:2] = [32, 32]
+    return title_pins
+
+
 class FormfeedConversionException(Exception):
     pass
 

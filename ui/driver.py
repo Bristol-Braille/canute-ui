@@ -1,7 +1,6 @@
 import logging
 import abc
 from . import comms_codes as comms
-from . import utility
 
 
 log = logging.getLogger(__name__)
