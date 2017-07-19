@@ -70,4 +70,4 @@ class LibraryReducers():
 
 
 def sort_books(books):
-    return sorted(books, key=lambda book: book['data'].filename)
+    return sorted(books, key=lambda book: utility.get_title(book))
