@@ -23,11 +23,9 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         e.g. 001 / 003.
     '''
     # hack - leave space at the beginning for the uppercase symbols
-    uppercase = ''
     if capitalize:
-        uppercase = '  '
+        title = ',,' + title
 
-    title = '%s%s' % (uppercase, title)
     current_page = ' %03d / %03d' % (page_number + 1, total_pages + 1)
 
     available_title_space = width - len(current_page)
@@ -41,10 +39,6 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         title += ' ' * (available_title_space - len(title))
 
     title_pins = to_braille(title + current_page)
-
-    # replace first 2 chars with the uppercase symbols
-    if capitalize:
-        title_pins[0:2] = [32, 32]
 
     return title_pins
 
