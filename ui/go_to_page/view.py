@@ -21,19 +21,18 @@ def render(width, height, state):
         title_text = book.title
 
 
-    if (total_pages > 9999):
-        log.warning('books exceeding 9999 pages are currently not supported')
+    total_pages_width = len(str(total_pages))
 
-    data.append(utility.format_title(title_text, width, page, total_pages))
+    data.append(utility.format_title(title_text, width, page + 1, total_pages + 1))
 
     selection = state['go_to_page_selection']
     if selection == '':
         selection = 0
     else:
         selection = int(selection)
-    t = ('go to page number' + ' ' * 100)[0:width - (2 * 3) - 3 - 1]
-    go_to = '{} {:0>3} / {:0>3}'.format(t, selection, total_pages + 1)
-    data.append(to_braille(go_to))
+
+    t = utility.format_title('go to page number', width, selection, total_pages + 1, capitalize=False)
+    data.append(t)
 
     data.append(to_braille('please confirm by pressing forward'))
     data.append(to_braille('undo by pressing back'))

@@ -2,8 +2,8 @@ from ..actions import actions
 
 library_buttons = {
     'single': {
-        '>': actions.next_page,
-        '<': actions.previous_page,
+        '>': actions.next_page(),
+        '<': actions.previous_page(),
         '2': actions.go_to_book(0),
         '3': actions.go_to_book(1),
         '4': actions.go_to_book(2),

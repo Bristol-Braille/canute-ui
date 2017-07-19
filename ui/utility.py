@@ -26,7 +26,16 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     if capitalize:
         title = ',,' + title
 
-    current_page = ' %03d / %03d' % (page_number + 1, total_pages + 1)
+    if total_pages == 0:
+        return to_braille(title)
+
+    total_pages = str(total_pages)
+    num_width = len(total_pages)
+
+    #left pad number with required amount of zeros
+    page_number = '{:0>100}'.format(page_number)[-num_width:]
+
+    current_page = ' {} / {}'.format(page_number, total_pages)
 
     available_title_space = width - len(current_page)
 
@@ -38,9 +47,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         # pad
         title += ' ' * (available_title_space - len(title))
 
-    title_pins = to_braille(title + current_page)
-
-    return title_pins
+    return to_braille(title + current_page)
 
 
 class FormfeedConversionException(Exception):
