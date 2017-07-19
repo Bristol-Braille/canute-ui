@@ -19,7 +19,7 @@ class LibraryReducers():
         except:
             log.warning('no book at {}'.format(number))
             return state
-        return state.copy(location=line_number + number)
+        return state.copy(location='book', book=line_number + number, page_menu=False)
 
     def set_books(self, state, books):
         width, height = utility.dimensions(state)

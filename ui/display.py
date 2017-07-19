@@ -27,9 +27,10 @@ class Display():
         elif location == 'page_menu':
             page_data = page_menu_view.render(width, height, state)
             self._set_buffer(page_data)
-        elif type(location) == int:
-            page = state['books'][location]['page']
-            data = state['books'][location]['data']
+        elif location == 'book':
+            book = state['book']
+            page = state['books'][book]['page']
+            data = state['books'][book]['data']
             n = page * height
             data = data[n: n + height]
             self._set_buffer(data)

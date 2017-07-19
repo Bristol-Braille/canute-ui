@@ -31,11 +31,12 @@ class AppReducers():
             page = state['library']['page'] + 1
             library = utility.set_page(library, page, (height - 1))
             return state.copy(library=library)
-        elif type(location) == int:
-            book = state['books'][location]
+        elif location == 'book':
+            book_n = state['book']
+            book = state['books'][book_n]
             page = book['page'] + 1
             books = list(state['books'])
-            books[location] = utility.set_page(book, page, height)
+            books[book_n] = utility.set_page(book, page, height)
             return state.copy(books=tuple(books))
         return state
 
@@ -47,11 +48,12 @@ class AppReducers():
             page = library['page'] - 1
             library = utility.set_page(library, page, (height - 1))
             return state.copy(library=library)
-        elif type(location) == int:
-            book = state['books'][location]
+        elif location == 'book':
+            book_n = state['book']
+            book = state['books'][book_n]
             page = book['page'] - 1
             books = list(state['books'])
-            books[location] = utility.set_page(book, page, height)
+            books[book_n] = utility.set_page(book, page, height)
             return state.copy(books=tuple(books))
         return state
 
