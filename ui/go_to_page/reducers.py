@@ -8,6 +8,8 @@ class GoToPageReducers():
         selection = state['go_to_page_selection'] + str(value)
         if len(selection) > 3:
             return state
+        if selection == '0':
+            return state
         return state.copy(go_to_page_selection=selection)
 
     def go_to_page_confirm(self, state, value):
