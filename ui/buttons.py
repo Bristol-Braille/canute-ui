@@ -19,7 +19,7 @@ bindings = {
         'single': {
             '>': actions.next_page,
             '<': actions.previous_page,
-            'L': actions.go_to_library,
+            'L': actions.go_to_book,
             'R': partial(actions.reset_display, 'start')
         }
     }

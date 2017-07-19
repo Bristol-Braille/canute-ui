@@ -14,7 +14,7 @@ library_buttons = {
         '7': partial(actions.go_to_book, 5),
         '8': partial(actions.go_to_book, 6),
         '9': partial(actions.go_to_book, 7),
-        'L': actions.go_to_system_menu,
+        'L': actions.go_to_book,
         'R': partial(actions.reset_display, 'start')
     }
 }

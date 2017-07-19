@@ -16,5 +16,6 @@ go_to_page_buttons = {
         'X': partial(actions.go_to_page_enter_number, 0),
         '<': actions.go_to_page_delete,
         '>': actions.go_to_page_confirm,
+        'R': partial(actions.reset_display, 'start'),
     },
 }
