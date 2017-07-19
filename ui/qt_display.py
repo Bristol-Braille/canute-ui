@@ -149,7 +149,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         except Empty:
             pass
         except:
-            print('check_msg ERROR')
+            log.error('check_msg ERROR')
 
 
 if __name__ == '__main__':

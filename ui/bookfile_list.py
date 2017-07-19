@@ -45,7 +45,3 @@ class BookFile_List(list):
 
             return lines
 
-
-if __name__ == '__main__':
-    book = BookFile_List('./bookfile_list.py', 32)
-    print((book[2:8]))

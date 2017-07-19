@@ -15,4 +15,3 @@ system_menu = OrderedDict([
 ])
 
 menu_titles = list(map(utility.to_braille, system_menu))
-print(menu_titles)
