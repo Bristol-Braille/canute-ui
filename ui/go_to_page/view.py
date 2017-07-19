@@ -2,9 +2,9 @@ from .. import utility
 
 to_braille = utility.to_braille
 
+
 def render(width, height, state):
     data = [to_braille('enter page number using the side buttons')]
-
 
     try:
         book = state['books'][state['book']]
@@ -20,10 +20,8 @@ def render(width, height, state):
         page = book.page
         title_text = book.title
 
-
-    total_pages_width = len(str(total_pages))
-
-    data.append(utility.format_title(title_text, width, page + 1, total_pages + 1))
+    data.append(utility.format_title(
+        title_text, width, page + 1, total_pages + 1))
 
     selection = state['go_to_page_selection']
     if selection == '':
@@ -31,7 +29,8 @@ def render(width, height, state):
     else:
         selection = int(selection)
 
-    t = utility.format_title('go to page number', width, selection, total_pages + 1, capitalize=False)
+    t = utility.format_title('go to page number', width,
+                             selection, total_pages + 1, capitalize=False)
     data.append(t)
 
     data.append(to_braille('please confirm by pressing forward'))

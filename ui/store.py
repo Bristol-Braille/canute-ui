@@ -36,7 +36,8 @@ def makeReducer(key, clss):
 
 
 combined = pydux.combine_reducers({
-    'app': makeReducer('app', [AppReducers, LibraryReducers, BookReducers, GoToPageReducers]),
+    'app': makeReducer('app', [AppReducers, LibraryReducers,
+                               BookReducers, GoToPageReducers]),
     'hardware': makeReducer('hardware', [HardwareReducers]),
 })
 

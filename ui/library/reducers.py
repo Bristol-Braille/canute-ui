@@ -1,7 +1,6 @@
 from frozendict import frozendict
 import logging
 from functools import partial
-import os
 
 from .. import utility
 
@@ -19,7 +18,8 @@ class LibraryReducers():
         except:
             log.warning('no book at {}'.format(number))
             return state
-        return state.copy(location='book', book=line_number + number, home_menu_visible=False)
+        return state.copy(location='book', book=line_number + number,
+                          home_menu_visible=False)
 
     def set_books(self, state, books):
         width, height = utility.dimensions(state)

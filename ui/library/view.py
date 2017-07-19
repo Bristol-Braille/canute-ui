@@ -12,5 +12,6 @@ def render(width, height, state):
     # pad page with empty rows
     while len(data) < data_height:
         data += ((0,) * width,)
-    title = utility.format_title('library menu', width, page + 1, max_pages + 1)
+    title = utility.format_title(
+        'library menu', width, page + 1, max_pages + 1)
     return tuple([title]) + tuple(data)

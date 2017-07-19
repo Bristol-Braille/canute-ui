@@ -32,7 +32,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     total_pages = str(total_pages)
     num_width = len(total_pages)
 
-    #left pad number with required amount of zeros
+    # left pad number with required amount of zeros
     page_number = '{:0>100}'.format(page_number)[-num_width:]
 
     current_page = ' {} / {}'.format(page_number, total_pages)
@@ -61,6 +61,7 @@ class LinefeedConversionException(Exception):
 def get_max_pages(data, height):
     return (len(data) - 1) // height
 
+
 def set_page(book, page, height):
     if page < 0:
         return 0
@@ -70,7 +71,6 @@ def set_page(book, page, height):
         return max_pages
 
     return page
-
 
 
 def dimensions(state):

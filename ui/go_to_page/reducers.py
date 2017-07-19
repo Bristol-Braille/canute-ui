@@ -1,7 +1,7 @@
-from .. import utility
 from ..book.reducers import BookReducers
 
 print(dir(BookReducers()))
+
 
 class GoToPageReducers():
     def go_to_page_enter_number(self, state, value):
@@ -19,7 +19,6 @@ class GoToPageReducers():
         page = int(selection) - 1
         go_to_page = (BookReducers()).go_to_page
         return go_to_page(state.copy(go_to_page_selection=''), page)
-
 
     def go_to_page_delete(self, state, value):
         selection = state['go_to_page_selection']
