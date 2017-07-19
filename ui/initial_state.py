@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 initial_state = utility.freeze({
     'app': {
-        'location': 'library',
+        'location': 'book',
         'library': {'data': [], 'page': 0},
         'book': 0,
         'books': [],
@@ -50,10 +50,7 @@ def write(state):
     log.debug('writing state file')
     write_state = utility.unfreeze(state)
     write_state['app']['library'] = state['app']['library'].copy(page=0)
-    location = state['app']['location']
-    if location == 'system_menu':
-        location = 'library'
-    write_state['app']['location'] = location
+    write_state['app']['location'] = 'book'
     write_state['app']['backing_up_log'] = False
     write_state['app']['replacing_library'] = False
     write_state['hardware']['resetting_display'] = False
