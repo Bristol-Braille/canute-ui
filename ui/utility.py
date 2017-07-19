@@ -61,11 +61,15 @@ def get_max_pages(data, height):
     return (len(data) - 1) // height
 
 def set_page(book, page, height):
-    if page < 0 or page > get_max_pages(book, height):
-        return book
-    else:
-        book.page = page
-        return book
+    if page < 0:
+        return 0
+
+    max_pages = get_max_pages(book, height)
+    if page > max_pages:
+        return max_pages
+
+    return page
+
 
 
 def dimensions(state):

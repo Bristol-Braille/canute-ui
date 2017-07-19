@@ -17,7 +17,7 @@ class BookReducers():
         book = state['books'][book_n]
         page = value
         books = list(state['books'])
-        books[book_n] = utility.set_page(book, page, height)
+        books[book_n].page = utility.set_page(book, page, height)
         return state.copy(books=tuple(books), location='book', home_menu_visible=False)
 
 

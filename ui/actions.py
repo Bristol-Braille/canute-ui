@@ -33,14 +33,16 @@ class AppReducers():
         if location == 'library':
             library = state['library']
             page = state['library']['page'] + 1
-            library = utility.set_page(library, page, (height - 1))
+            page = utility.set_page(library['data'], page, height - 1)
+            library = frozendict({'data': library['data'], 'page': page})
             return state.copy(library=library)
         elif location == 'book':
             book_n = state['book']
             book = state['books'][book_n]
             page = book.page + 1
             books = list(state['books'])
-            books[book_n] = utility.set_page(book, page, height)
+            book.page = utility.set_page(book, page, height)
+            books[book_n] = book
             return state.copy(books=tuple(books))
         return state
 
@@ -50,14 +52,16 @@ class AppReducers():
         if location == 'library':
             library = state['library']
             page = library['page'] - 1
-            library = utility.set_page(library, page, (height - 1))
+            page = utility.set_page(library['data'], page, height - 1)
+            library = frozendict({'data': library['data'], 'page': page})
             return state.copy(library=library)
         elif location == 'book':
             book_n = state['book']
             book = state['books'][book_n]
             page = book.page - 1
             books = list(state['books'])
-            books[book_n] = utility.set_page(book, page, height)
+            book.page = utility.set_page(book, page, height)
+            books[book_n] = book
             return state.copy(books=tuple(books))
         return state
 
