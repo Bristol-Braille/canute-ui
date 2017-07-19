@@ -38,7 +38,7 @@ def render(width, height, state):
     data.append(to_braille('undo by pressing back'))
     data.append(to_braille('to go back to book press middle button'))
 
-    for _ in range(height - 5):
+    for _ in range(height - 6):
         data.append((0,) * width)
 
     return tuple(data)
