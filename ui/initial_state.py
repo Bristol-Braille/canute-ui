@@ -18,7 +18,7 @@ initial_state = utility.freeze({
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
         },
-        'page_menu': {
+        'go_to_page': {
             'selection': '',
         },
         'replacing_library': False,

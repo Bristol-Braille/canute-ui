@@ -1,6 +1,6 @@
 from ..actions import actions
 
-page_menu_buttons = {
+go_to_page_buttons = {
     'single': {
         'L': actions.close_menu,
     },

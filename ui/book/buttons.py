@@ -4,7 +4,7 @@ from ..actions import actions
 
 book_buttons = {
     'single': {
-        '2': actions.enter_page_menu,
+        '2': actions.enter_go_to_page,
         '3': actions.go_to_start,
         # '4': actions.go_to_end,
         # '5': actions.insert_bookmark,
