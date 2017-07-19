@@ -52,6 +52,7 @@ def write(state):
     write_state['app']['home_menu_visible'] = False
     write_state['app']['backing_up_log'] = False
     write_state['app']['replacing_library'] = False
+    write_state['app']['go_to_page_selection'] = ''
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
