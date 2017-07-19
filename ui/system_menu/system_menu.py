@@ -15,5 +15,5 @@ system_menu = OrderedDict([
     ('update UI from USB stick', partial(actions.update_ui, 'start')),
 ])
 
-menu_titles = list(map(utility.alphas_to_pin_nums, system_menu))
+menu_titles = list(map(utility.to_braille, system_menu))
 print(menu_titles)

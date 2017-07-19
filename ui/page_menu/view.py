@@ -1,8 +1,6 @@
 from .. import utility
 
-def to_braille(s):
-    return utility.alphas_to_pin_nums(s)
-
+to_braille = utility.to_braille
 
 def render(width, height, state):
     data = [to_braille('enter page number using the side buttons')]

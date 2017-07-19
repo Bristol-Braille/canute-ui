@@ -37,7 +37,7 @@ def format_title(title, width, page_number, total_pages):
         # pad
         title += ' ' * (available_title_space - len(title))
 
-    title_pins = alphas_to_pin_nums(title + current_page)
+    title_pins = to_braille(title + current_page)
     # replace first 2 chars with the uppercase symbols
     title_pins[0:2] = [32, 32]
     return title_pins
@@ -190,7 +190,7 @@ def alpha_to_pin_num(alpha):
         return 0
 
 
-def alphas_to_pin_nums(alphas):
+def to_braille(alphas):
     '''
     convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`
     form feed and line feed characters are supressed
