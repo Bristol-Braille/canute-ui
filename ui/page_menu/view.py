@@ -24,10 +24,7 @@ def render(width, height, state):
     if (total_pages > 9999):
         log.warning('books exceeding 9999 pages are currently not supported')
 
-
-    t = (title_text + ' ' * 100)[0:width - 11] + ' '
-    title = '{} {:>4}/{:>4}'.format(t, str(page), str(total_pages))
-    data.append(to_braille(title))
+    data.append(utility.format_title(title_text, width, page, total_pages))
 
     t = ('go to page number' + ' ' * 100)[0:width - 10]
     go_to = '{} {:>4}/{:>4}'.format(t, state['page_menu']['selection'], total_pages)
@@ -36,5 +33,8 @@ def render(width, height, state):
     data.append(to_braille('please confirm by pressing forward'))
     data.append(to_braille('delete character by pressing back'))
     data.append(to_braille('to go back to book press middle button'))
+
+    for _ in range(height - 5):
+        data.append((0,) * width)
 
     return tuple(data)

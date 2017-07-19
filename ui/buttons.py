@@ -5,6 +5,7 @@ from .actions import actions
 from .system_menu.system_menu import system_menu
 from .library.buttons import library_buttons
 from .book.buttons import book_buttons
+from .page_menu.buttons import page_menu_buttons
 
 
 log = logging.getLogger(__name__)
@@ -13,6 +14,7 @@ log = logging.getLogger(__name__)
 bindings = {
     'library': library_buttons,
     'book': book_buttons,
+    'page_menu': page_menu_buttons,
     'system_menu': {
         'single': {
             '>': actions.next_page,
