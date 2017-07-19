@@ -1,5 +1,4 @@
 import logging
-from functools import partial
 from .store import store
 from .actions import actions
 from .system_menu.system_menu import system_menu
@@ -17,10 +16,10 @@ bindings = {
     'go_to_page': go_to_page_buttons,
     'system_menu': {
         'single': {
-            '>': actions.next_page,
-            '<': actions.previous_page,
-            'L': actions.go_to_book,
-            'R': partial(actions.reset_display, 'start')
+            '>': actions.next_page(),
+            '<': actions.previous_page(),
+            'L': actions.close_menu(),
+            'R': actions.reset_display('start')
         }
     }
 }
@@ -39,6 +38,6 @@ def check(driver, state):
     for _id in buttons:
         _type = buttons[_id]
         try:
-            store.dispatch(bindings[location][_type][_id]())
+            store.dispatch(bindings[location][_type][_id])
         except KeyError:
             log.debug('no binding for key {}, {} press'.format(_id, _type))

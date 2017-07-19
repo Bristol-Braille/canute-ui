@@ -1,20 +1,18 @@
-from functools import partial
-
 from ..actions import actions
 
 library_buttons = {
     'single': {
         '>': actions.next_page,
         '<': actions.previous_page,
-        '2': partial(actions.go_to_book, 0),
-        '3': partial(actions.go_to_book, 1),
-        '4': partial(actions.go_to_book, 2),
-        '5': partial(actions.go_to_book, 3),
-        '6': partial(actions.go_to_book, 4),
-        '7': partial(actions.go_to_book, 5),
-        '8': partial(actions.go_to_book, 6),
-        '9': partial(actions.go_to_book, 7),
-        'L': actions.go_to_book,
-        'R': partial(actions.reset_display, 'start')
+        '2': actions.go_to_book(0),
+        '3': actions.go_to_book(1),
+        '4': actions.go_to_book(2),
+        '5': actions.go_to_book(3),
+        '6': actions.go_to_book(4),
+        '7': actions.go_to_book(5),
+        '8': actions.go_to_book(6),
+        '9': actions.go_to_book(7),
+        'L': actions.close_menu(),
+        'R': actions.reset_display('start')
     }
 }
