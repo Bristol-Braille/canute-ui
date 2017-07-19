@@ -23,24 +23,22 @@ class LibraryReducers():
 
     def set_books(self, state, books):
         width, height = utility.dimensions(state)
-        books = [{'data': b, 'page': 0} for b in books]
         books = tuple(sort_books(books))
-        data = list(map(lambda b: utility.to_braille(utility.get_title(b)), books))
+        data = list(map(lambda b: utility.to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location='library', books=books, library=library)
 
     def add_books(self, state, books_to_add):
         width, height = utility.dimensions(state)
-        book_filenames = [b['data'].filename for b in state['books']]
+        book_filenames = [b.filename for b in state['books']]
         books_to_add = [
             d for d in books_to_add if d.filename not in book_filenames
         ]
-        books_to_add = [{'data': b, 'page': 0} for b in books_to_add]
         books = list(state['books'])
         books += list(books_to_add)
         books = sort_books(books)
-        data = list(map(lambda b: utility.to_braille(utility.get_title(b)), books))
+        data = list(map(lambda b: utility.to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({
             'data': tuple(data),
@@ -51,9 +49,9 @@ class LibraryReducers():
     def remove_books(self, state, filenames):
         width, height = utility.dimensions(state)
         books = [
-            b for b in state['books'] if b['data'].filename not in filenames
+            b for b in state['books'] if b.filename not in filenames
         ]
-        data = list(map(lambda b: utility.to_braille(utility.get_title(b)), books))
+        data = list(map(lambda b: utility.to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         maximum = utility.get_max_pages(data, height)
         page = state['library']['page']
@@ -70,4 +68,4 @@ class LibraryReducers():
 
 
 def sort_books(books):
-    return sorted(books, key=lambda book: utility.get_title(book))
+    return sorted(books, key=lambda book: book.title)

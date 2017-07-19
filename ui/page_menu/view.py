@@ -16,9 +16,9 @@ def render(width, height, state):
         page = 0
         title_text = 'no book'
     else:
-        total_pages = utility.get_max_pages(book['data'], height)
-        page = book['page']
-        title_text = utility.get_title(book)
+        total_pages = utility.get_max_pages(book, height)
+        page = book.page
+        title_text = book.title
 
 
     if (total_pages > 9999):

@@ -14,7 +14,7 @@ def render(width, height, state):
     if home_menu:
         return render_home_menu(width, height, book)
     else:
-        page = book['page']
-        data = book['data']
+        page = book.page
+        data = book
         n = page * height
         return data[n: n + height]

@@ -54,18 +54,12 @@ class LinefeedConversionException(Exception):
 def get_max_pages(data, height):
     return (len(data) - 1) // height
 
-def get_title(book):
-    basename = os.path.basename(book['data'].filename)
-    title = os.path.splitext(basename)[0].replace('_', ' ')
-    return title
-
-
 def set_page(book, page, height):
-    data = book['data']
-    if page < 0 or page > get_max_pages(data, height):
+    if page < 0 or page > get_max_pages(book, height):
         return book
     else:
-        return frozendict({'data': data, 'page': page})
+        book.page = page
+        return book
 
 
 def dimensions(state):

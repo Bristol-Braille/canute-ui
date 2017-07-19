@@ -15,7 +15,7 @@ class BookReducers():
         width, height = utility.dimensions(state)
         location = state['location']
         book = state['books'][location]
-        page = book['page'] + value
+        page = book.page + value
         books = list(state['books'])
         books[location] = utility.set_page(book, page, height)
         return state.copy(books=tuple(books))

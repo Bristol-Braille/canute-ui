@@ -34,7 +34,7 @@ class AppReducers():
         elif location == 'book':
             book_n = state['book']
             book = state['books'][book_n]
-            page = book['page'] + 1
+            page = book.page + 1
             books = list(state['books'])
             books[book_n] = utility.set_page(book, page, height)
             return state.copy(books=tuple(books))
@@ -51,7 +51,7 @@ class AppReducers():
         elif location == 'book':
             book_n = state['book']
             book = state['books'][book_n]
-            page = book['page'] - 1
+            page = book.page - 1
             books = list(state['books'])
             books[book_n] = utility.set_page(book, page, height)
             return state.copy(books=tuple(books))
