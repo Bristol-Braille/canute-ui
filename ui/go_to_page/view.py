@@ -27,7 +27,7 @@ def render(width, height, state):
     data.append(utility.format_title(title_text, width, page, total_pages))
 
     t = ('go to page number' + ' ' * 100)[0:width - 10]
-    go_to = '{} {:>4}/{:>4}'.format(t, state['go_to_page']['selection'], total_pages)
+    go_to = '{} {:>4}/{:>4}'.format(t, state['go_to_page_selection'], total_pages)
     data.append(to_braille(go_to))
 
     data.append(to_braille('please confirm by pressing forward'))

@@ -3,6 +3,7 @@ from frozendict import frozendict
 from . import utility
 from .library.reducers import LibraryReducers
 from .book.reducers import BookReducers
+from .go_to_page.reducers import GoToPageReducers
 
 
 log = logging.getLogger(__name__)
@@ -97,6 +98,7 @@ def make_action_method(name):
 action_types = utility.get_methods(AppReducers)
 action_types.extend(utility.get_methods(LibraryReducers))
 action_types.extend(utility.get_methods(BookReducers))
+action_types.extend(utility.get_methods(GoToPageReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
 
 # just an empty object

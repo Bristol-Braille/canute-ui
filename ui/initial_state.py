@@ -18,9 +18,7 @@ initial_state = utility.freeze({
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
         },
-        'go_to_page': {
-            'selection': '',
-        },
+        'go_to_page_selection': '',
         'replacing_library': False,
         'backing_up_log': False,
         'update_ui': False,
@@ -51,6 +49,7 @@ def write(state):
     write_state = utility.unfreeze(state)
     write_state['app']['library'] = state['app']['library'].copy(page=0)
     write_state['app']['location'] = 'book'
+    write_state['app']['home_menu_visible'] = False
     write_state['app']['backing_up_log'] = False
     write_state['app']['replacing_library'] = False
     write_state['hardware']['resetting_display'] = False
