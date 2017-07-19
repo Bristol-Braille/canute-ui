@@ -26,12 +26,17 @@ def render(width, height, state):
 
     data.append(utility.format_title(title_text, width, page, total_pages))
 
-    t = ('go to page number' + ' ' * 100)[0:width - 10]
-    go_to = '{} {:>4}/{:>4}'.format(t, state['go_to_page_selection'], total_pages)
+    selection =  state['go_to_page_selection']
+    if selection == '':
+        selection = 0
+    else:
+        selection = int(selection) + 1
+    t = ('go to page number' + ' ' * 100)[0:width - (2 * 3) - 3 - 1]
+    go_to = '{} {:0>3} / {:0>3}'.format(t, selection, total_pages + 1)
     data.append(to_braille(go_to))
 
     data.append(to_braille('please confirm by pressing forward'))
-    data.append(to_braille('delete character by pressing back'))
+    data.append(to_braille('undo by pressing back'))
     data.append(to_braille('to go back to book press middle button'))
 
     for _ in range(height - 5):

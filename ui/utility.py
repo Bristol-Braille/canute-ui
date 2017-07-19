@@ -14,7 +14,7 @@ import collections
 log = logging.getLogger(__name__)
 
 
-def format_title(title, width, page_number, total_pages):
+def format_title(title, width, page_number, total_pages, capitalize=True):
     '''
     format a title like this:
         * title on the top line.
@@ -23,7 +23,10 @@ def format_title(title, width, page_number, total_pages):
         e.g. 001 / 003.
     '''
     # hack - leave space at the beginning for the uppercase symbols
-    uppercase = '  '
+    uppercase = ''
+    if capitalize:
+        uppercase = '  '
+
     title = '%s%s' % (uppercase, title)
     current_page = ' %03d / %03d' % (page_number + 1, total_pages + 1)
 
@@ -38,8 +41,11 @@ def format_title(title, width, page_number, total_pages):
         title += ' ' * (available_title_space - len(title))
 
     title_pins = to_braille(title + current_page)
+
     # replace first 2 chars with the uppercase symbols
-    title_pins[0:2] = [32, 32]
+    if capitalize:
+        title_pins[0:2] = [32, 32]
+
     return title_pins
 
 

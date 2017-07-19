@@ -10,8 +10,11 @@ class GoToPageReducers():
 
     def go_to_page_confirm(self, state, value):
         selection = state['go_to_page_selection']
+        if selection == '':
+            return state
         page = int(selection)
-        return (BookReducers()).go_to_page(state.copy(go_to_page_selection=''), page)
+        go_to_page = (BookReducers()).go_to_page
+        return go_to_page(state.copy(go_to_page_selection=''), page)
 
 
     def go_to_page_delete(self, state, value):
