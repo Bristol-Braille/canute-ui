@@ -26,11 +26,11 @@ def render(width, height, state):
 
     data.append(utility.format_title(title_text, width, page, total_pages))
 
-    selection =  state['go_to_page_selection']
+    selection = state['go_to_page_selection']
     if selection == '':
         selection = 0
     else:
-        selection = int(selection) + 1
+        selection = int(selection)
     t = ('go to page number' + ' ' * 100)[0:width - (2 * 3) - 3 - 1]
     go_to = '{} {:0>3} / {:0>3}'.format(t, selection, total_pages + 1)
     data.append(to_braille(go_to))
