@@ -3,6 +3,7 @@ from . import utility
 from .library import view as library_view
 from .system_menu import view as system_menu_view
 from .page_menu import view as page_menu_view
+from .book import view as book_view
 
 
 log = logging.getLogger(__name__)
@@ -28,12 +29,8 @@ class Display():
             page_data = page_menu_view.render(width, height, state)
             self._set_buffer(page_data)
         elif location == 'book':
-            book = state['book']
-            page = state['books'][book]['page']
-            data = state['books'][book]['data']
-            n = page * height
-            data = data[n: n + height]
-            self._set_buffer(data)
+            page_data = book_view.render(width, height, state)
+            self._set_buffer(page_data)
 
     def send_line(self, driver):
         row = self.row
