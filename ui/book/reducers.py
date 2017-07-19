@@ -21,7 +21,7 @@ class BookReducers():
         return state.copy(books=tuple(books))
 
     def enter_page_menu(self, state, value):
-        return state.copy(home_menu=False, page_menu=True)
+        return state.copy(home_menu=False, location='page_menu')
 
     def toggle_home_menu(self, state, value):
-        return state.copy(home_menu=not state['home_menu'], page_menu=False)
+        return state.copy(home_menu=not state['home_menu'])

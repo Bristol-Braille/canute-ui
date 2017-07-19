@@ -25,7 +25,7 @@ class LibraryReducers():
         width, height = utility.dimensions(state)
         books = [{'data': b, 'page': 0} for b in books]
         books = tuple(sort_books(books))
-        data = list(map(get_title, books))
+        data = list(map(lambda b: utility.alphas_to_pin_nums(utility.get_title(b)), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location='library', books=books, library=library)
@@ -40,7 +40,7 @@ class LibraryReducers():
         books = list(state['books'])
         books += list(books_to_add)
         books = sort_books(books)
-        data = list(map(get_title, books))
+        data = list(map(lambda b: utility.alphas_to_pin_nums(utility.get_title(b)), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({
             'data': tuple(data),
@@ -53,7 +53,7 @@ class LibraryReducers():
         books = [
             b for b in state['books'] if b['data'].filename not in filenames
         ]
-        data = list(map(get_title, books))
+        data = list(map(lambda b: utility.alphas_to_pin_nums(utility.get_title(b)), books))
         data = list(map(partial(utility.pad_line, width), data))
         maximum = utility.get_max_pages(data, height)
         page = state['library']['page']
@@ -71,9 +71,3 @@ class LibraryReducers():
 
 def sort_books(books):
     return sorted(books, key=lambda book: book['data'].filename)
-
-
-def get_title(book):
-    basename = os.path.basename(book['data'].filename)
-    title = os.path.splitext(basename)[0].replace('_', ' ')
-    return utility.alphas_to_pin_nums(title)

@@ -2,6 +2,7 @@ import logging
 from . import utility
 from .library import view as library_view
 from .system_menu import view as system_menu_view
+from .page_menu import view as page_menu_view
 
 
 log = logging.getLogger(__name__)
@@ -20,7 +21,11 @@ class Display():
             page_data = library_view.render(width, height, state['library'])
             self._set_buffer(page_data)
         elif location == 'system_menu':
-            page_data = system_menu_view.render(width, height, state['system_menu'])
+            page_data = system_menu_view.render(
+                width, height, state['system_menu'])
+            self._set_buffer(page_data)
+        elif location == 'page_menu':
+            page_data = page_menu_view.render(width, height, state)
             self._set_buffer(page_data)
         elif type(location) == int:
             page = state['books'][location]['page']

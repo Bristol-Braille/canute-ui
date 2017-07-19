@@ -10,12 +10,16 @@ log = logging.getLogger(__name__)
 
 initial_state = utility.freeze({
     'app': {
-        'location': 'library',
+        'location': 'page_menu',
         'library': {'data': [], 'page': 0},
+        'book': 0,
         'books': [],
         'system_menu': {
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
+        },
+        'page_menu': {
+            'selection': '',
         },
         'replacing_library': False,
         'backing_up_log': False,
@@ -23,7 +27,6 @@ initial_state = utility.freeze({
         'shutting_down': False,
         'dimensions': {'width': 40, 'height': 9},
         'home_menu': False,
-        'page_menu': False,
     },
     'hardware': {
         'warming_up': False,
