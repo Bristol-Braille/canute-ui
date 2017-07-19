@@ -58,20 +58,20 @@ class TestActions(unittest.TestCase):
         state = rl.add_books(initial, [bookfile])
         state = rl.go_to_book(state, 0)
 
-        self.assertEqual(state['location'], 0)
-        self.assertEqual(state['books'][0]['page'], 0)
+        self.assertEqual(state['location'], 'book')
+        self.assertEqual(state['books'][0].page, 0)
 
         # check we can't go backwards from page 0
         state = ra.previous_page(state, None)
-        self.assertEqual(state['books'][0]['page'], 0)
+        self.assertEqual(state['books'][0].page, 0)
 
         # check we can go forwards from page 0
         state = ra.next_page(state, None)
-        self.assertEqual(state['books'][0]['page'], 1)
+        self.assertEqual(state['books'][0].page, 1)
 
         # go fowards too many times
         for i in range(10):
             state = ra.next_page(state, None)
 
         # and check we're on the last page
-        self.assertEqual(state['books'][0]['page'], 7)
+        self.assertEqual(state['books'][0].page, 7)
