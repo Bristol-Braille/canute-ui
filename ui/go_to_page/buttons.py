@@ -2,6 +2,7 @@ import asyncio
 from ..actions import actions
 from .. import utility
 
+
 def queue_key_press(key):
     @asyncio.coroutine
     def thunk(dispatch, get_state):
@@ -10,7 +11,7 @@ def queue_key_press(key):
         selection = state['go_to_page']['selection']
         keys_pressed = state['go_to_page']['keys_pressed']
 
-        #ignore any initial zero presses or deletes
+        # ignore any initial zero presses or deletes
         if (key == 0 or key == '<') and selection + keys_pressed == '':
             return
 

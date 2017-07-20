@@ -54,8 +54,10 @@ def main():
                 timeout=timeout) as driver:
             run(driver, config)
 
+
 def run(driver, config):
     asyncio.get_event_loop().run_until_complete(run_async(driver, config))
+
 
 @asyncio.coroutine
 def run_async(driver, config):
@@ -66,7 +68,8 @@ def run_async(driver, config):
         display=frozendict({'width': width, 'height': height})))
 
     thunk_middleware = aioredux.middleware.thunk_middleware
-    create_store = aioredux.apply_middleware(thunk_middleware)(aioredux.create_store)
+    create_store = aioredux.apply_middleware(
+        thunk_middleware)(aioredux.create_store)
     store = yield from create_store(main_reducer, state)
 
     yield from library.sync(state, config.get('files', 'library_dir'), store)
@@ -96,17 +99,19 @@ def run_async(driver, config):
 def handle_changes(driver, config, store):
     state = store.state
     display.render_to_buffer(state['app'])
-    change_files(config, state['app'])
+    change_files(config, state['app'], store)
     initial_state.write(state)
 
 
-def change_files(config, state):
+def change_files(config, state, store):
     if state['replacing_library'] == 'start':
         store.dispatch(actions.replace_library('in progress'))
         library.replace(config, state)
+        store.dispatch(actions.replace_library('done'))
     if state['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
+        store.dispatch(actions.backup_log('done'))
     if state['update_ui'] == 'start':
         log.info('update ui = start')
         if utility.find_ui_update(config):
@@ -149,7 +154,6 @@ def backup_log(config):
         shutil.copyfile(log_file, backup_file)
     except IOError as e:
         log.warning("couldn't backup log file: {}".format(e))
-    store.dispatch(actions.backup_log('done'))
 
 
 if __name__ == '__main__':

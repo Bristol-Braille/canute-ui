@@ -2,14 +2,15 @@ import re
 from ..book.reducers import BookReducers
 from .. import utility
 
+
 class GoToPageReducers():
     def go_to_page_set_selection(self, state, _):
         go_to_page = state['go_to_page']
         selection = go_to_page['selection'] + go_to_page['keys_pressed']
 
-        #i handle delete ('<') characters
+        # handle delete ('<') characters
         r = re.compile('\d<')
-        while r.search(selection) != None:
+        while r.search(selection) is not None:
             selection = r.sub('', selection)
         # any left over delete characters no after numbers are ignored
         selection = ''.join([c for c in selection if c != '<'])
@@ -24,7 +25,8 @@ class GoToPageReducers():
     def go_to_page_key_press(self, state, value):
         go_to_page = state['go_to_page']
         keys_pressed = go_to_page['keys_pressed'] + str(value)
-        return state.copy(go_to_page=go_to_page.copy(keys_pressed=keys_pressed))
+        go_to_page = go_to_page.copy(keys_pressed=keys_pressed)
+        return state.copy(go_to_page=go_to_page)
 
     def go_to_page_confirm(self, state, value):
         state = self.go_to_page_set_selection(state, None)

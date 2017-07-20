@@ -72,4 +72,3 @@ def replace(config, state):
             new_path, uid, gid))
         os.chown(new_path, uid, gid)
     sync(state, library_dir)
-    store.dispatch(actions.replace_library('done'))
