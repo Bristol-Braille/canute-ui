@@ -44,3 +44,4 @@ class BookFile_List(list):
                     lines.append(line)
 
             return lines
+

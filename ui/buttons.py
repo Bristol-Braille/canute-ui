@@ -16,10 +16,10 @@ bindings = {
     'go_to_page': go_to_page_buttons,
     'system_menu': {
         'single': {
-            '>': actions.next_page,
-            '<': actions.previous_page,
-            'L': actions.close_menu,
-            'R': lambda: actions.reset_display('start'),
+            '>': actions.next_page(),
+            '<': actions.previous_page(),
+            'L': actions.close_menu(),
+            'R': actions.reset_display('start')
         }
     }
 }
@@ -39,6 +39,6 @@ def check(driver, state, store):
     for _id in buttons:
         _type = buttons[_id]
         try:
-            yield from store.dispatch(bindings[location][_type][_id]())
+            yield from store.dispatch(bindings[location][_type][_id])
         except KeyError:
             log.debug('no binding for key {}, {} press'.format(_id, _type))
