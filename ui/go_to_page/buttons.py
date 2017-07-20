@@ -2,9 +2,7 @@ import asyncio
 from ..actions import actions
 from .. import utility
 
-n = ''
-
-def enter_number(num):
+def queue_key_press(key):
     @asyncio.coroutine
     def thunk(dispatch, get_state):
         state = get_state()['app']
@@ -12,16 +10,15 @@ def enter_number(num):
         selection = state['go_to_page']['selection']
         keys_pressed = state['go_to_page']['keys_pressed']
 
-        #ignore any initial zero presses
-        if num == 0 and selection + keys_pressed == '':
+        #ignore any initial zero presses or deletes
+        if (key == 0 or key == '<') and selection + keys_pressed == '':
             return
 
-        yield from dispatch(actions.go_to_page_key_press(num))
+        yield from dispatch(actions.go_to_page_key_press(key))
 
         num_width = utility.get_page_num_width(state)
-
         if len(keys_pressed) < num_width:
-            yield from asyncio.sleep(0.8)
+            yield from asyncio.sleep(0.5)
 
         keys_pressed = get_state()['app']['go_to_page']['keys_pressed']
         if keys_pressed != '':
@@ -33,17 +30,17 @@ def enter_number(num):
 go_to_page_buttons = {
     'single': {
         'L': actions.close_menu(),
-        '1': enter_number(1),
-        '2': enter_number(2),
-        '3': enter_number(3),
-        '4': enter_number(4),
-        '5': enter_number(5),
-        '6': enter_number(6),
-        '7': enter_number(7),
-        '8': enter_number(8),
-        '9': enter_number(9),
-        'X': enter_number(0),
-        '<': actions.go_to_page_delete(),
+        '1': queue_key_press(1),
+        '2': queue_key_press(2),
+        '3': queue_key_press(3),
+        '4': queue_key_press(4),
+        '5': queue_key_press(5),
+        '6': queue_key_press(6),
+        '7': queue_key_press(7),
+        '8': queue_key_press(8),
+        '9': queue_key_press(9),
+        'X': queue_key_press(0),
+        '<': queue_key_press('<'),
         '>': actions.go_to_page_confirm(),
         'R': actions.reset_display('start'),
     },
