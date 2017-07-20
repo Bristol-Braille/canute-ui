@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from . import utility
 from .library import view as library_view
 from .system_menu import view as system_menu_view
@@ -32,6 +33,7 @@ class Display():
             page_data = book_view.render(width, height, state)
             self._set_buffer(page_data)
 
+    @asyncio.coroutine
     def send_line(self, driver):
         row = self.row
         if row >= len(self.buffer):

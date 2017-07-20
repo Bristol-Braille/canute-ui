@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from .store import store
 from .actions import actions
 from .system_menu.system_menu import system_menu
@@ -30,6 +31,7 @@ for i, item in enumerate(system_menu):
     bindings['system_menu']['single'][str(i + 2)] = action
 
 
+@asyncio.coroutine
 def check(driver, state):
     buttons = driver.get_buttons()
     location = state['app']['location']

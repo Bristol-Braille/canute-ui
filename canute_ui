@@ -5,6 +5,7 @@ from functools import partial
 import time
 import shutil
 import logging
+import asyncio
 
 from ui.driver_pi import Pi
 import ui.utility as utility
@@ -73,14 +74,21 @@ def run(driver, config):
     # guarantee of the subscription triggering if subscribed before that.
     store.dispatch(actions.trigger())
     quit = False
-    while not quit:
-        state = store.get_state()
-        if handle_hardware(driver, state):
-            quit = True
-            break
-        buttons.check(driver, state)
-        display.send_line(driver)
 
+    @asyncio.coroutine
+    def loop():
+        while 1:
+            state = store.get_state()
+            if (yield from handle_hardware(driver, state)):
+                break
+            yield from buttons.check(driver, state)
+            yield from display.send_line(driver)
+
+
+    ioloop = asyncio.get_event_loop()
+    tasks = [ioloop.create_task(loop())]
+    ioloop.run_until_complete(asyncio.wait(tasks))
+    ioloop.close()
 
 def handle_changes(driver, config):
     state = store.get_state()
@@ -105,6 +113,7 @@ def change_files(config, state):
             store.dispatch(actions.update_ui('failed'))
 
 
+@asyncio.coroutine
 def handle_hardware(driver, state):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
