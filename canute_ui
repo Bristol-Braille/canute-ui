@@ -72,7 +72,8 @@ def run_async(driver, config):
         thunk_middleware)(aioredux.create_store)
     store = yield from create_store(main_reducer, state)
 
-    yield from library.sync(state['app'], config.get('files', 'library_dir'), store)
+    library_dir = config.get('files', 'library_dir')
+    yield from library.sync(state['app'], library_dir, store)
 
     store.subscribe(partial(handle_changes, driver, config, store))
 
@@ -99,7 +100,8 @@ def run_async(driver, config):
 def handle_changes(driver, config, store):
     state = store.state
     display.render_to_buffer(state['app'])
-    asyncio.new_event_loop().run_until_complete(change_files(config, state['app'], store))
+    ioloop = asyncio.new_event_loop()
+    ioloop.run_until_complete(change_files(config, state['app'], store))
     initial_state.write(state)
 
 

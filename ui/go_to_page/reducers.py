@@ -12,7 +12,7 @@ class GoToPageReducers():
         r = re.compile('\d<')
         while r.search(selection) is not None:
             selection = r.sub('', selection)
-        # any left over delete characters no after numbers are ignored
+        # any left over delete characters after numbers are ignored
         selection = ''.join([c for c in selection if c != '<'])
 
         # overwrite characters when exceeding max page num width
@@ -36,7 +36,7 @@ class GoToPageReducers():
             return state
         go_to_page = go_to_page.copy(selection='')
         page = int(selection) - 1
-        go_to_page_reducer = (BookReducers()).go_to_page
+        go_to_page_reducer = BookReducers().go_to_page
         return go_to_page_reducer(state.copy(go_to_page=go_to_page), page)
 
     def go_to_page_delete(self, state, value):
