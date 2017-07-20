@@ -106,7 +106,7 @@ def handle_changes(driver, config, store):
 def change_files(config, state, store):
     if state['replacing_library'] == 'start':
         store.dispatch(actions.replace_library('in progress'))
-        library.replace(config, state)
+        library.replace(config, state, store)
         store.dispatch(actions.replace_library('done'))
     if state['backing_up_log'] == 'start':
         store.dispatch(actions.backup_log('in progress'))

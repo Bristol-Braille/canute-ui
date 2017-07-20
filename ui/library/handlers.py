@@ -53,7 +53,7 @@ def wipe(library_dir):
         os.remove(book)
 
 
-def replace(config, state):
+def replace(config, state, store):
     library_dir = config.get('files', 'library_dir')
     usb_dir = config.get('files', 'usb_dir')
     owner = config.get('user', 'user_name')
@@ -71,4 +71,4 @@ def replace(config, state):
         log.debug('changing ownership of {} from {} to {}'.format(
             new_path, uid, gid))
         os.chown(new_path, uid, gid)
-    sync(state, library_dir)
+    sync(state, library_dir, store)
