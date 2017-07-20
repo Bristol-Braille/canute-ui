@@ -1,7 +1,7 @@
 import pickle
 import logging
 from . import utility
-from .menu import menu_titles_braille
+from .system_menu.system_menu import menu_titles
 
 STATE_FILE = 'state.pkl'
 
@@ -10,18 +10,24 @@ log = logging.getLogger(__name__)
 
 initial_state = utility.freeze({
     'app': {
-        'location': 'library',
+        'location': 'book',
         'library': {'data': [], 'page': 0},
+        'book': 0,
         'books': [],
-        'menu': {
-            'data': [utility.pad_line(40, l) for l in menu_titles_braille],
+        'system_menu': {
+            'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
+        },
+        'go_to_page': {
+            'selection': '',
+            'keys_pressed': '',
         },
         'replacing_library': False,
         'backing_up_log': False,
         'update_ui': False,
         'shutting_down': False,
         'dimensions': {'width': 40, 'height': 9},
+        'home_menu_visible': False,
     },
     'hardware': {
         'warming_up': False,
@@ -45,12 +51,12 @@ def write(state):
     log.debug('writing state file')
     write_state = utility.unfreeze(state)
     write_state['app']['library'] = state['app']['library'].copy(page=0)
-    location = state['app']['location']
-    if location == 'menu':
-        location = 'library'
-    write_state['app']['location'] = location
+    write_state['app']['location'] = 'book'
+    write_state['app']['home_menu_visible'] = False
     write_state['app']['backing_up_log'] = False
     write_state['app']['replacing_library'] = False
+    write_state['app']['go_to_page']['selection'] = ''
+    write_state['app']['go_to_page']['keys_pressed'] = ''
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False

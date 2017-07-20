@@ -1,6 +1,7 @@
 from .driver import Driver
 import time
 import logging
+import sys
 from multiprocessing import Process, Queue
 from queue import Empty
 from . import comms_codes as comms
@@ -25,6 +26,8 @@ class Emulated(Driver):
 
     message passing is done with queues
     '''
+
+    prev_data = [(0,) * 40] * 9
 
     def __init__(self, delay=0, display_text=False):
         super(Emulated, self).__init__()
@@ -102,23 +105,18 @@ class Emulated(Driver):
         elif cmd == comms.CMD_GET_ROWS:
             self.data = Emulated.ROWS
         elif cmd == comms.CMD_SEND_PAGE:
-            self.data = 0
-            log.debug('received data for emulator %s' % data)
-            log.debug('delaying %s milliseconds to emulate hardware' %
-                      self.delay)
-            time.sleep(self.delay / 1000.0)
-            self.send_queue.put_nowait([comms.CMD_SEND_PAGE] + data)
+            log.error('CMD_SEND_PAGE is no longer supported')
+            sys.exit(1)
         elif cmd == comms.CMD_SEND_ERROR:
             log.error('making error sound!')
         elif cmd == comms.CMD_SEND_OK:
             log.error('making OK sound!')
         elif cmd == comms.CMD_SEND_LINE:
             self.data = 0
-            log.debug('received row data for emulator %s' % data)
-            log.debug('delaying %s milliseconds to emulate hardware' %
-                      self.delay)
-            time.sleep(self.delay / 1000.0)
+            if self.prev_data[data[0]] != tuple(data[1:]):
+                time.sleep(self.delay / 1000.0)
             self.send_queue.put_nowait([comms.CMD_SEND_LINE] + data)
+            self.prev_data[data[0]] = tuple(data[1:])
         elif cmd == comms.CMD_RESET:
             self.data = 0
 

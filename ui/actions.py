@@ -2,12 +2,18 @@ import logging
 from frozendict import frozendict
 from . import utility
 from .library.reducers import LibraryReducers
+from .book.reducers import BookReducers
+from .go_to_page.reducers import GoToPageReducers
 
 
 log = logging.getLogger(__name__)
 
 
 class AppReducers():
+    def trigger(self, state, value):
+        '''bit ugly but gives the ability to trigger any state subscribers'''
+        return state.copy()
+
     def set_dimensions(self, state, value):
         dimensions = frozendict({'width': value[0], 'height': value[1]})
         return state.copy(dimensions=dimensions)
@@ -15,8 +21,11 @@ class AppReducers():
     def go_to_library(self, state, value):
         return state.copy(location='library')
 
-    def go_to_menu(self, state, value):
-        return state.copy(location='menu')
+    def go_to_system_menu(self, state, value):
+        return state.copy(location='system_menu')
+
+    def close_menu(self, state, value):
+        return state.copy(location='book', go_to_page_selection='')
 
     def next_page(self, state, value):
         width, height = utility.dimensions(state)
@@ -24,13 +33,16 @@ class AppReducers():
         if location == 'library':
             library = state['library']
             page = state['library']['page'] + 1
-            library = set_page(library, page, (height - 1))
+            page = utility.set_page(library['data'], page, height - 1)
+            library = frozendict({'data': library['data'], 'page': page})
             return state.copy(library=library)
-        elif type(location) == int:
-            book = state['books'][location]
-            page = book['page'] + 1
+        elif location == 'book':
+            book_n = state['book']
+            book = state['books'][book_n]
+            page = book.page + 1
             books = list(state['books'])
-            books[location] = set_page(book, page, height)
+            book.page = utility.set_page(book, page, height)
+            books[book_n] = book
             return state.copy(books=tuple(books))
         return state
 
@@ -40,39 +52,18 @@ class AppReducers():
         if location == 'library':
             library = state['library']
             page = library['page'] - 1
-            library = set_page(library, page, (height - 1))
+            page = utility.set_page(library['data'], page, height - 1)
+            library = frozendict({'data': library['data'], 'page': page})
             return state.copy(library=library)
-        elif type(location) == int:
-            book = state['books'][location]
-            page = book['page'] - 1
+        elif location == 'book':
+            book_n = state['book']
+            book = state['books'][book_n]
+            page = book.page - 1
             books = list(state['books'])
-            books[location] = set_page(book, page, height)
+            book.page = utility.set_page(book, page, height)
+            books[book_n] = book
             return state.copy(books=tuple(books))
         return state
-
-    def go_to_start(self, state, value):
-        width, height = utility.dimensions(state)
-        location = state['location']
-        book = state['books'][location]
-        page = 0
-        books = list(state['books'])
-        books[location] = set_page(book, page, height)
-        return state.copy(books=tuple(books))
-
-    def skip_pages(self, state, value):
-        width, height = utility.dimensions(state)
-        location = state['location']
-        book = state['books'][location]
-        page = book['page'] + value
-        books = list(state['books'])
-        books[location] = set_page(book, page, height)
-        return state.copy(books=tuple(books))
-
-    def replace_library(self, state, value):
-        if state['replacing_library'] == 'in progress' and value != 'done':
-            return state
-        else:
-            return state.copy(replacing_library=value)
 
     def backup_log(self, state, value):
         if state['backing_up_log'] == 'in progress' and value != 'done':
@@ -101,14 +92,6 @@ class HardwareReducers():
             return state.copy(resetting_display=value)
 
 
-def set_page(book, page, height):
-    data = book['data']
-    if page < 0 or page > utility.get_max_pages(data, height):
-        return book
-    else:
-        return frozendict({'data': data, 'page': page})
-
-
 def make_action_method(name):
     '''Returns a method that returns a dict to be passed to dispatch'''
     def action_method(value=None):
@@ -118,6 +101,8 @@ def make_action_method(name):
 
 action_types = utility.get_methods(AppReducers)
 action_types.extend(utility.get_methods(LibraryReducers))
+action_types.extend(utility.get_methods(BookReducers))
+action_types.extend(utility.get_methods(GoToPageReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
 
 # just an empty object

@@ -11,12 +11,20 @@ class BookFile_List(list):
     :param dimensions: display dimensions tuple
     '''
 
+    page = 0
+
     def __init__(self, filename, cells):
         list.__init__(self)
         self.cells = cells
         self.filename = filename
         statinfo = os.stat(filename)
         self.num_lines = statinfo.st_size // self.cells
+
+    @property
+    def title(self):
+        basename = os.path.basename(self.filename)
+        title = os.path.splitext(basename)[0].replace('_', ' ')
+        return title
 
     def __len__(self):
         return self.num_lines
@@ -36,8 +44,3 @@ class BookFile_List(list):
                     lines.append(line)
 
             return lines
-
-
-if __name__ == '__main__':
-    book = BookFile_List('./bookfile_list.py', 32)
-    print((book[2:8]))

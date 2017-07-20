@@ -1,7 +1,9 @@
-import pydux
+import aioredux
 import logging
 from .actions import AppReducers, HardwareReducers
 from .library.reducers import LibraryReducers
+from .book.reducers import BookReducers
+from .go_to_page.reducers import GoToPageReducers
 from .initial_state import initial_state
 
 
@@ -33,20 +35,16 @@ def makeReducer(key, clss):
     return reducer
 
 
-combined = pydux.combine_reducers({
-    'app': makeReducer('app', [AppReducers, LibraryReducers]),
+combined = aioredux.combine_reducers({
+    'app': makeReducer('app', [AppReducers, LibraryReducers,
+                               BookReducers, GoToPageReducers]),
     'hardware': makeReducer('hardware', [HardwareReducers]),
 })
 
 
 def main_reducer(state, action):
-    if action['type'] == '@@redux/INIT':
-        return initial_state
-    if action['type'] == 'set_initial_state':
-        return action['value']
-    if state is None:
-        state = initial_state
+    if 'value' in action:
+        log.debug('dispatching {}:{}'.format(action['type'], action['value']))
+    else:
+        log.debug('dispatching {}'.format(action['type']))
     return combined(state, action)
-
-
-store = pydux.create_store(main_reducer)

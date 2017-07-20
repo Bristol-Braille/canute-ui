@@ -14,6 +14,49 @@ import collections
 log = logging.getLogger(__name__)
 
 
+def get_page_num_width(state):
+    width, height = dimensions(state)
+    book = state['books'][state['book']]
+    max_pages = get_max_pages(book, height)
+    return len(str(max_pages))
+
+
+def format_title(title, width, page_number, total_pages, capitalize=True):
+    '''
+    format a title like this:
+        * title on the top line.
+        * use two dot-six characters to indicate all uppercase for the title.
+        * page numbers all the way at the right with 3 digits out of total,
+        e.g. 001 / 003.
+    '''
+    # hack - leave space at the beginning for the uppercase symbols
+    if capitalize:
+        title = ',,' + title
+
+    if total_pages == 0:
+        return to_braille(title)
+
+    total_pages = str(total_pages)
+    num_width = len(total_pages)
+
+    # left pad number with required amount of zeros
+    page_number = '{:0>100}'.format(page_number)[-num_width:]
+
+    current_page = ' {} / {}'.format(page_number, total_pages)
+
+    available_title_space = width - len(current_page)
+
+    # make title right length
+    if len(title) > available_title_space:
+        # truncate
+        title = title[0:available_title_space]
+    else:
+        # pad
+        title += ' ' * (available_title_space - len(title))
+
+    return to_braille(title + current_page)
+
+
 class FormfeedConversionException(Exception):
     pass
 
@@ -24,6 +67,17 @@ class LinefeedConversionException(Exception):
 
 def get_max_pages(data, height):
     return (len(data) - 1) // height
+
+
+def set_page(book, page, height):
+    if page < 0:
+        return 0
+
+    max_pages = get_max_pages(book, height)
+    if page > max_pages:
+        return max_pages
+
+    return page
 
 
 def dimensions(state):
@@ -148,7 +202,7 @@ def alpha_to_pin_num(alpha):
         return 0
 
 
-def alphas_to_pin_nums(alphas):
+def to_braille(alphas):
     '''
     convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`
     form feed and line feed characters are supressed

@@ -1,7 +1,6 @@
 import logging
 import abc
 from . import comms_codes as comms
-from . import utility
 
 
 log = logging.getLogger(__name__)
@@ -143,10 +142,6 @@ class Driver(object, metaclass=abc.ABCMeta):
             log.warning('row data too long, length %d, truncating to %d' %
                         (len(data), self.chars))
             data = data[0:self.chars]
-
-        log.debug('setting row of braille:')
-        log.debug('row %i: |%s|' %
-                  (row, '|'.join(map(utility.pin_num_to_unicode, data))))
 
         self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
 

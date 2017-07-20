@@ -1,58 +1,37 @@
 import logging
-from functools import partial
-from .store import store
+import asyncio
 from .actions import actions
-from .menu import menu
+from .system_menu.system_menu import system_menu
+from .library.buttons import library_buttons
+from .book.buttons import book_buttons
+from .go_to_page.buttons import go_to_page_buttons
 
 
 log = logging.getLogger(__name__)
 
 
 bindings = {
-    'library': {
+    'library': library_buttons,
+    'book': book_buttons,
+    'go_to_page': go_to_page_buttons,
+    'system_menu': {
         'single': {
-            '>': actions.next_page,
-            '<': actions.previous_page,
-            '2': partial(actions.go_to_book, 0),
-            '3': partial(actions.go_to_book, 1),
-            '4': partial(actions.go_to_book, 2),
-            '5': partial(actions.go_to_book, 3),
-            '6': partial(actions.go_to_book, 4),
-            '7': partial(actions.go_to_book, 5),
-            '8': partial(actions.go_to_book, 6),
-            '9': partial(actions.go_to_book, 7),
-            'L': actions.go_to_menu,
-            'R': partial(actions.reset_display, 'start')
-        }
-    },
-    'book': {
-        'single': {
-            '1': actions.go_to_start,
-            '2': partial(actions.skip_pages, -10),
-            '3': partial(actions.skip_pages, 10),
-            '>': actions.next_page,
-            '<': actions.previous_page,
-            'L': actions.go_to_library,
-            'R': partial(actions.reset_display, 'start')
-        }
-    },
-    'menu': {
-        'single': {
-            '>': actions.next_page,
-            '<': actions.previous_page,
-            'L': actions.go_to_library,
-            'R': partial(actions.reset_display, 'start')
+            '>': actions.next_page(),
+            '<': actions.previous_page(),
+            'L': actions.close_menu(),
+            'R': actions.reset_display('start')
         }
     }
 }
 
 
-for i, item in enumerate(menu):
-    action = menu[item]
-    bindings['menu']['single'][str(i + 2)] = action
+for i, item in enumerate(system_menu):
+    action = system_menu[item]
+    bindings['system_menu']['single'][str(i + 2)] = action
 
 
-def check(driver, state):
+@asyncio.coroutine
+def check(driver, state, store):
     buttons = driver.get_buttons()
     location = state['app']['location']
     if type(location) == int:
@@ -60,6 +39,8 @@ def check(driver, state):
     for _id in buttons:
         _type = buttons[_id]
         try:
-            store.dispatch(bindings[location][_type][_id]())
+            action = bindings[location][_type][_id]
         except KeyError:
             log.debug('no binding for key {}, {} press'.format(_id, _type))
+        else:
+            yield from store.dispatch(action)

@@ -20,11 +20,8 @@ class TestDriverEmulated(unittest.TestCase):
         self._driver.send_data(comms.CMD_GET_ROWS)
         self.assertEqual(self._driver.get_data(None), Emulated.ROWS)
 
-        self._driver.send_data(comms.CMD_SEND_PAGE)
-        self.assertEqual(self._driver.get_data(None), 0)
-
     def test_rxtx_row(self):
-        self._driver.send_data(comms.CMD_SEND_LINE)
+        self._driver.send_data(comms.CMD_SEND_LINE, [0] * 40)
         self.assertEqual(self._driver.get_data(None), 0)
 
     @classmethod
