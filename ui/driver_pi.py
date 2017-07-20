@@ -37,7 +37,7 @@ class Pi(Driver):
         if port is None:
             ports = serial.tools.list_ports.comports()
             for p in ports:
-                if p[2] == 'USB VID:PID=2341:8036 SNR=HIDPC':
+                if p[2].startswith('USB VID:PID=2341'):
                     port = p[0]
                     log.info('autoselecting serial port {}'.format(port))
                     break
