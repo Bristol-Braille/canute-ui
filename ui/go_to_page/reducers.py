@@ -1,5 +1,6 @@
 from ..book.reducers import BookReducers
 
+
 class GoToPageReducers():
     def go_to_page_enter_number(self, state, value):
         selection = state['go_to_page_selection'] + str(value)
