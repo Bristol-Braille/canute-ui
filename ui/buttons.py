@@ -39,6 +39,8 @@ def check(driver, state, store):
     for _id in buttons:
         _type = buttons[_id]
         try:
-            yield from store.dispatch(bindings[location][_type][_id])
+            action = bindings[location][_type][_id]
         except KeyError:
             log.debug('no binding for key {}, {} press'.format(_id, _type))
+        else:
+            yield from store.dispatch(action)

@@ -20,6 +20,7 @@ initial_state = utility.freeze({
         },
         'go_to_page': {
             'selection': '',
+            'keys_pressed': '',
         },
         'replacing_library': False,
         'backing_up_log': False,
@@ -55,6 +56,7 @@ def write(state):
     write_state['app']['backing_up_log'] = False
     write_state['app']['replacing_library'] = False
     write_state['app']['go_to_page']['selection'] = ''
+    write_state['app']['go_to_page']['keys_pressed'] = ''
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False

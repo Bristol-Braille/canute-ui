@@ -7,6 +7,7 @@ import shutil
 import logging
 import asyncio
 import aioredux
+import aioredux.middleware
 
 from ui.driver_pi import Pi
 import ui.utility as utility
@@ -64,7 +65,9 @@ def run_async(driver, config):
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
 
-    store = yield from aioredux.create_store(main_reducer, state)
+    thunk_middleware = aioredux.middleware.thunk_middleware
+    create_store = aioredux.apply_middleware(thunk_middleware)(aioredux.create_store)
+    store = yield from create_store(main_reducer, state)
 
     yield from library.sync(state, config.get('files', 'library_dir'), store)
 

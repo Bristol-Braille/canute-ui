@@ -1,14 +1,26 @@
 from ..book.reducers import BookReducers
+from .. import utility
 
 class GoToPageReducers():
-    def go_to_page_enter_number(self, state, value):
+    def go_to_page_set_selection(self, state, _):
         go_to_page = state['go_to_page']
-        selection = go_to_page['selection'] + str(value)
-        if len(selection) > 3:
-            return state
-        if selection == '0':
-            return state
-        return state.copy(go_to_page=go_to_page.copy(selection=selection))
+        selection = go_to_page['selection'] + go_to_page['keys_pressed']
+
+        #overwrite characters when exceeding max pages
+        width, height = utility.dimensions(state)
+        book = state['books'][state['book']]
+        max_pages = utility.get_max_pages(book, height)
+        num_width = len(str(max_pages))
+        selection = selection[-num_width:]
+
+        go_to_page = go_to_page.copy(selection=selection, keys_pressed='')
+        return state.copy(go_to_page=go_to_page)
+
+    def go_to_page_key_press(self, state, value):
+        go_to_page = state['go_to_page']
+        keys_pressed = go_to_page['keys_pressed'] + str(value)
+        return state.copy(go_to_page=go_to_page.copy(keys_pressed=keys_pressed))
+
 
     def go_to_page_confirm(self, state, value):
         go_to_page = state['go_to_page']
