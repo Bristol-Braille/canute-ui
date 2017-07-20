@@ -1,4 +1,4 @@
-import pydux
+import aioredux
 import logging
 from .actions import AppReducers, HardwareReducers
 from .library.reducers import LibraryReducers
@@ -35,7 +35,7 @@ def makeReducer(key, clss):
     return reducer
 
 
-combined = pydux.combine_reducers({
+combined = aioredux.combine_reducers({
     'app': makeReducer('app', [AppReducers, LibraryReducers,
                                BookReducers, GoToPageReducers]),
     'hardware': makeReducer('hardware', [HardwareReducers]),
@@ -56,4 +56,3 @@ def main_reducer(state, action):
     return combined(state, action)
 
 
-store = pydux.create_store(main_reducer)

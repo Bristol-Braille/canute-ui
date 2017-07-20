@@ -6,13 +6,14 @@ import time
 import shutil
 import logging
 import asyncio
+import aioredux
 
 from ui.driver_pi import Pi
 import ui.utility as utility
 import ui.argparser as argparser
 import ui.config_loader as config_loader
 from ui.setup_logs import setup_logs
-from ui.store import store
+from ui.store import main_reducer
 from ui.actions import actions
 import ui.initial_state as initial_state
 import ui.library.handlers as library
@@ -52,46 +53,46 @@ def main():
                 timeout=timeout) as driver:
             run(driver, config)
 
-
 def run(driver, config):
+    asyncio.get_event_loop().run_until_complete(run_async(driver, config))
+
+@asyncio.coroutine
+def run_async(driver, config):
+
     state = initial_state.read()
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
-    store.dispatch({'type': 'init', 'value': state})
-    library.sync(state, config.get('files', 'library_dir'))
-    store.subscribe(partial(handle_changes, driver, config))
+
+    store = yield from aioredux.create_store(main_reducer)
+    yield from store.dispatch({'type': 'init', 'value': state})
+
+    yield from library.sync(state, config.get('files', 'library_dir'), store)
+
+    store.subscribe(partial(handle_changes, driver, config, store))
 
     # if we startup and update_ui is still 'in progress' then we are using the
     # old state file and update has failed
     if state['app']['update_ui'] == 'in progress':
-        store.dispatch(actions.update_ui('failed'))
+        yield from store.dispatch(actions.update_ui('failed'))
 
     # since handle_changes subscription happens after init and library.sync it
     # may not have triggered. so we trigger it here. if we put it before init
     # it will start of by rendering a possibly invalid state. library.sync
     # won't dispatch if the library is already in sync so there would be no
     # guarantee of the subscription triggering if subscribed before that.
-    store.dispatch(actions.trigger())
-    quit = False
+    yield from store.dispatch(actions.trigger())
 
-    @asyncio.coroutine
-    def loop():
-        while 1:
-            state = store.get_state()
-            if (yield from handle_hardware(driver, state)):
-                break
-            yield from buttons.check(driver, state)
-            yield from display.send_line(driver)
+    while 1:
+        state = store.state
+        if (yield from handle_hardware(driver, state, store)):
+            break
+        yield from buttons.check(driver, state, store)
+        yield from display.send_line(driver)
 
 
-    ioloop = asyncio.get_event_loop()
-    tasks = [ioloop.create_task(loop())]
-    ioloop.run_until_complete(asyncio.wait(tasks))
-    ioloop.close()
-
-def handle_changes(driver, config):
-    state = store.get_state()
+def handle_changes(driver, config, store):
+    state = store.state
     display.render_to_buffer(state['app'])
     change_files(config, state['app'])
     initial_state.write(state)
@@ -114,11 +115,11 @@ def change_files(config, state):
 
 
 @asyncio.coroutine
-def handle_hardware(driver, state):
+def handle_hardware(driver, state, store):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         initial_state.write(state)
-        store.dispatch(actions.shutdown())
+        yield from store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
             driver.clear_page()
@@ -129,11 +130,11 @@ def handle_hardware(driver, state):
         store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
         display.hardware_state = []
-        store.dispatch(actions.reset_display('done'))
+        yield from store.dispatch(actions.reset_display('done'))
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
-        store.dispatch(actions.warm_up(False))
+        yield from store.dispatch(actions.warm_up(False))
 
 
 def backup_log(config):

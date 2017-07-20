@@ -11,8 +11,8 @@ log = logging.getLogger(__name__)
 
 class AppReducers():
     def trigger(self, state, value):
-        '''bit ugly but gives the abiliy to trigger any state subscribers'''
-        return state
+        '''bit ugly but gives the ability to trigger any state subscribers'''
+        return state.copy()
 
     def set_dimensions(self, state, value):
         dimensions = frozendict({'width': value[0], 'height': value[1]})

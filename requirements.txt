@@ -4,4 +4,4 @@ flake8-quotes
 autopep8
 pyserial==2.7
 frozendict==1.2
-git+git://github.com/kasbah/pydux.git@fix-python3#egg=pydux
+aioredux==1.1.0

@@ -1,6 +1,5 @@
 import logging
 import asyncio
-from .store import store
 from .actions import actions
 from .system_menu.system_menu import system_menu
 from .library.buttons import library_buttons
@@ -32,7 +31,7 @@ for i, item in enumerate(system_menu):
 
 
 @asyncio.coroutine
-def check(driver, state):
+def check(driver, state, store):
     buttons = driver.get_buttons()
     location = state['app']['location']
     if type(location) == int:
@@ -40,6 +39,6 @@ def check(driver, state):
     for _id in buttons:
         _type = buttons[_id]
         try:
-            store.dispatch(bindings[location][_type][_id]())
+            yield from store.dispatch(bindings[location][_type][_id]())
         except KeyError:
             log.debug('no binding for key {}, {} press'.format(_id, _type))
