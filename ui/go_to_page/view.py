@@ -23,7 +23,7 @@ def render(width, height, state):
     data.append(utility.format_title(
         title_text, width, page + 1, total_pages + 1))
 
-    selection = state['go_to_page_selection']
+    selection = state['go_to_page']['selection']
     if selection == '':
         selection = 0
     else:
