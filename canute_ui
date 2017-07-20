@@ -64,8 +64,7 @@ def run_async(driver, config):
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
 
-    store = yield from aioredux.create_store(main_reducer)
-    yield from store.dispatch({'type': 'init', 'value': state})
+    store = yield from aioredux.create_store(main_reducer, state)
 
     yield from library.sync(state, config.get('files', 'library_dir'), store)
 

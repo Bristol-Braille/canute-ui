@@ -47,12 +47,4 @@ def main_reducer(state, action):
         log.debug('dispatching {}:{}'.format(action['type'], action['value']))
     else:
         log.debug('dispatching {}'.format(action['type']))
-    if action['type'] == '@@redux/INIT':
-        return initial_state
-    if action['type'] == 'init':
-        return action['value']
-    if state is None:
-        state = initial_state
     return combined(state, action)
-
-
