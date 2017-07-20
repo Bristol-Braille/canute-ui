@@ -18,12 +18,17 @@ def enter_number(num):
 
         yield from dispatch(actions.go_to_page_key_press(num))
 
-        yield from asyncio.sleep(1)
+        num_width = utility.get_page_num_width(state)
+
+        if len(keys_pressed) < num_width:
+            yield from asyncio.sleep(0.8)
 
         keys_pressed = get_state()['app']['go_to_page']['keys_pressed']
         if keys_pressed != '':
             yield from dispatch(actions.go_to_page_set_selection())
+
     return thunk
+
 
 go_to_page_buttons = {
     'single': {

@@ -14,6 +14,13 @@ import collections
 log = logging.getLogger(__name__)
 
 
+def get_page_num_width(state):
+    width, height = dimensions(state)
+    book = state['books'][state['book']]
+    max_pages = get_max_pages(book, height)
+    return len(str(max_pages))
+
+
 def format_title(title, width, page_number, total_pages, capitalize=True):
     '''
     format a title like this:

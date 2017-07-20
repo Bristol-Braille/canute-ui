@@ -7,10 +7,7 @@ class GoToPageReducers():
         selection = go_to_page['selection'] + go_to_page['keys_pressed']
 
         #overwrite characters when exceeding max pages
-        width, height = utility.dimensions(state)
-        book = state['books'][state['book']]
-        max_pages = utility.get_max_pages(book, height)
-        num_width = len(str(max_pages))
+        num_width = utility.get_page_num_width(state)
         selection = selection[-num_width:]
 
         go_to_page = go_to_page.copy(selection=selection, keys_pressed='')
