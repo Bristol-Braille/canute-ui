@@ -72,7 +72,7 @@ def run_async(driver, config):
         thunk_middleware)(aioredux.create_store)
     store = yield from create_store(main_reducer, state)
 
-    yield from library.sync(state, config.get('files', 'library_dir'), store)
+    yield from library.sync(state['app'], config.get('files', 'library_dir'), store)
 
     store.subscribe(partial(handle_changes, driver, config, store))
 
@@ -99,26 +99,27 @@ def run_async(driver, config):
 def handle_changes(driver, config, store):
     state = store.state
     display.render_to_buffer(state['app'])
-    change_files(config, state['app'], store)
+    asyncio.new_event_loop().run_until_complete(change_files(config, state['app'], store))
     initial_state.write(state)
 
 
+@asyncio.coroutine
 def change_files(config, state, store):
     if state['replacing_library'] == 'start':
-        store.dispatch(actions.replace_library('in progress'))
-        library.replace(config, state, store)
-        store.dispatch(actions.replace_library('done'))
+        yield from store.dispatch(actions.replace_library('in progress'))
+        yield from library.replace(config, state, store)
+        yield from store.dispatch(actions.replace_library('done'))
     if state['backing_up_log'] == 'start':
-        store.dispatch(actions.backup_log('in progress'))
+        yield from store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
-        store.dispatch(actions.backup_log('done'))
+        yield from store.dispatch(actions.backup_log('done'))
     if state['update_ui'] == 'start':
         log.info('update ui = start')
         if utility.find_ui_update(config):
-            store.dispatch(actions.update_ui('in progress'))
+            yield from store.dispatch(actions.update_ui('in progress'))
         else:
             log.info('update not found')
-            store.dispatch(actions.update_ui('failed'))
+            yield from store.dispatch(actions.update_ui('failed'))
 
 
 @asyncio.coroutine

@@ -64,7 +64,7 @@ class LibraryReducers():
         if state['replacing_library'] == 'in progress' and value != 'done':
             return state
         else:
-            return state.copy(replacing_library=value)
+            return state.copy(replacing_library=value, location='library')
 
 
 def sort_books(books):

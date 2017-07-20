@@ -21,9 +21,9 @@ BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
 
 @asyncio.coroutine
 def sync(state, library_dir, store):
-    width, height = utility.dimensions(state['app'])
+    width, height = utility.dimensions(state)
     convert_books(width, height, library_dir)
-    library_files = [b.filename for b in state['app']['books']]
+    library_files = [b.filename for b in state['books']]
     disk_files = utility.find_files(library_dir, (NATIVE_EXTENSION,))
     not_added = [f for f in disk_files if f not in library_files]
     if not_added != []:
@@ -53,6 +53,7 @@ def wipe(library_dir):
         os.remove(book)
 
 
+@asyncio.coroutine
 def replace(config, state, store):
     library_dir = config.get('files', 'library_dir')
     usb_dir = config.get('files', 'usb_dir')
@@ -71,4 +72,4 @@ def replace(config, state, store):
         log.debug('changing ownership of {} from {} to {}'.format(
             new_path, uid, gid))
         os.chown(new_path, uid, gid)
-    sync(state, library_dir, store)
+    yield from sync(state, library_dir, store)
