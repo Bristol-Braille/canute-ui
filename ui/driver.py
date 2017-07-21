@@ -138,6 +138,9 @@ class Driver(object, metaclass=abc.ABCMeta):
             self.set_braille_row(row, row_braille)
 
     def set_braille_row(self, row, data):
+        if len(data) < self.chars:
+            data = data + ([0] * (self.chars - len(data)))
+
         if len(data) > self.chars:
             log.warning('row data too long, length %d, truncating to %d' %
                         (len(data), self.chars))
