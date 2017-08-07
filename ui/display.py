@@ -33,7 +33,7 @@ class Display():
         elif location == 'book':
             page_data = book_view.render(width, height, state)
             self._set_buffer(page_data)
-        elif location == 'bookmarks':
+        elif location == 'bookmarks_menu':
             page_data = bookmarks_view.render(width, height, state)
             self._set_buffer(page_data)
 

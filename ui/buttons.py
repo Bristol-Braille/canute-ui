@@ -15,7 +15,7 @@ bindings = {
     'library': library_buttons,
     'book': book_buttons,
     'go_to_page': go_to_page_buttons,
-    'bookmarks': bookmarks_buttons,
+    'bookmarks_menu': bookmarks_buttons,
     'system_menu': {
         'single': {
             '>': actions.next_page(),

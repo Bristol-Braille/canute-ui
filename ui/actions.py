@@ -26,7 +26,7 @@ class AppReducers():
         return state.copy(location='system_menu')
 
     def go_to_bookmarks_menu(self, state, value):
-        return state.copy(location='bookmarks')
+        return state.copy(location='bookmarks_menu')
 
     def close_menu(self, state, value):
         return state.copy(location='book',
@@ -47,7 +47,7 @@ class AppReducers():
             book.page = utility.set_page(book, page, height)
             books[book_n] = book
             return state.copy(books=tuple(books))
-        elif location == 'bookmarks':
+        elif location == 'bookmarks_menu':
             book_n = state['book']
             book = state['books'][book_n]
             bookmarks_data = book.bookmarks
@@ -69,7 +69,7 @@ class AppReducers():
             book_n = state['book']
             page = state['books'][book_n].page + 1
             return self.go_to_page(state, page)
-        elif location == 'bookmarks':
+        elif location == 'bookmarks_menu':
             page = state['bookmarks_menu']['page'] + 1
             return self.go_to_page(state, page)
         return state
@@ -83,7 +83,7 @@ class AppReducers():
             book_n = state['book']
             page = state['books'][book_n].page - 1
             return self.go_to_page(state, page)
-        elif location == 'bookmarks':
+        elif location == 'bookmarks_menu':
             page = state['bookmarks_menu']['page'] - 1
             return self.go_to_page(state, page)
         return state
