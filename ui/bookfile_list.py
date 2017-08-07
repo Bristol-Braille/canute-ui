@@ -12,6 +12,7 @@ class BookFile_List(list):
     '''
 
     page = 0
+    bookmarks = tuple()
 
     def __init__(self, filename, cells):
         list.__init__(self)

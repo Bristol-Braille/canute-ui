@@ -26,3 +26,14 @@ class BookReducers():
 
     def toggle_home_menu(self, state, value):
         return state.copy(home_menu_visible=not state['home_menu_visible'])
+
+    def insert_bookmark(self, state, _):
+        number = state['book']
+        books = list(state['books'])
+        book = books[number]
+        page = book.page
+        if page not in book.bookmarks:
+            book.bookmarks += tuple([page])
+            books[number] = book
+            return state.copy(books=tuple(books))
+        return state

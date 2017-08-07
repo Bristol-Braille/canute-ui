@@ -6,7 +6,7 @@ book_buttons = {
         '2': actions.enter_go_to_page(),
         '3': actions.go_to_start(),
         # '4': actions.go_to_end(),
-        # '5': actions.insert_bookmark(),
+        '5': actions.insert_bookmark(),
         # '6': actions.enter_bookmark_menu(),
         '8': actions.go_to_library(),
         '9': actions.go_to_system_menu(),
