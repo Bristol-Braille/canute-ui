@@ -24,8 +24,12 @@ class AppReducers():
     def go_to_system_menu(self, state, value):
         return state.copy(location='system_menu')
 
+    def go_to_bookmarks(self, state, value):
+        return state.copy(location='bookmarks')
+
     def close_menu(self, state, value):
-        return state.copy(location='book', go_to_page_selection='')
+        return state.copy(location='book',
+                          home_menu_visible=False, go_to_page_selection='')
 
     def next_page(self, state, value):
         width, height = utility.dimensions(state)

@@ -154,29 +154,23 @@ def unicode_to_pin_num(uni_char):
     return pin_num
 
 
-'''
-used by the gui to display braille
-'''
-
-
 def pin_num_to_unicode(pin_num):
+    '''
+    used by the gui to display braille
+    '''
     return chr(pin_num + 10240)
 
 
-''' for sorting & debugging '''
-
-
 def pin_num_to_alpha(numeric):
+    ''' for sorting & debugging '''
     mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
     mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     return mapping[numeric]
 
 
 def pin_nums_to_alphas(numerics):
+    ''' used to convert plain text to pin pattern numbers '''
     return list(map(pin_num_to_alpha, numerics))
-
-
-''' used to convert plain text to pin pattern numbers '''
 
 
 def alpha_to_pin_num(alpha):

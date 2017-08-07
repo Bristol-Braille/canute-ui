@@ -7,7 +7,7 @@ book_buttons = {
         '3': actions.go_to_start(),
         # '4': actions.go_to_end(),
         '5': actions.insert_bookmark(),
-        # '6': actions.enter_bookmark_menu(),
+        '6': actions.go_to_bookmarks(),
         '8': actions.go_to_library(),
         '9': actions.go_to_system_menu(),
         'R': actions.reset_display('start'),
