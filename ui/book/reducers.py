@@ -3,7 +3,7 @@ from .. import utility
 
 class BookReducers():
     def go_to_start(self, state, value):
-        return self.go_to_page(state, 0)
+        return self.set_book_page(state, 0)
 
     def skip_pages(self, state, value):
         book_n = state['book']
@@ -11,7 +11,7 @@ class BookReducers():
         page = book.page + value
         return self.go_to_page(state, page)
 
-    def go_to_page(self, state, value):
+    def set_book_page(self, state, value):
         width, height = utility.dimensions(state)
         book_n = state['book']
         book = state['books'][book_n]

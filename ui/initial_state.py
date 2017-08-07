@@ -18,6 +18,9 @@ initial_state = utility.freeze({
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
         },
+        'bookmarks_menu': {
+            'page': 0
+        },
         'go_to_page': {
             'selection': '',
             'keys_pressed': '',

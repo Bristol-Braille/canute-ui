@@ -4,6 +4,7 @@ from . import utility
 from .library.reducers import LibraryReducers
 from .book.reducers import BookReducers
 from .go_to_page.reducers import GoToPageReducers
+from .bookmarks.reducers import BookmarksReducers
 
 
 log = logging.getLogger(__name__)
@@ -31,43 +32,63 @@ class AppReducers():
         return state.copy(location='book',
                           home_menu_visible=False, go_to_page_selection='')
 
-    def next_page(self, state, value):
+    def go_to_page(self, state, page):
         width, height = utility.dimensions(state)
         location = state['location']
         if location == 'library':
             library = state['library']
-            page = state['library']['page'] + 1
             page = utility.set_page(library['data'], page, height - 1)
             library = frozendict({'data': library['data'], 'page': page})
             return state.copy(library=library)
         elif location == 'book':
             book_n = state['book']
             book = state['books'][book_n]
-            page = book.page + 1
             books = list(state['books'])
             book.page = utility.set_page(book, page, height)
             books[book_n] = book
             return state.copy(books=tuple(books))
+        elif location == 'bookmarks':
+            book_n = state['book']
+            book = state['books'][book_n]
+            bookmarks_data = book.bookmarks
+            max_pages = utility.get_max_pages(bookmarks_data, height)
+            if page < 0:
+                page = 0
+            elif page > max_pages:
+                page = max_pages
+            bookmarks_menu = state['bookmarks_menu'].copy(page=value)
+            return state.copy(bookmarks_menu=bookmarks_menu)
         return state
 
-    def previous_page(self, state, value):
-        width, height = utility.dimensions(state)
+
+    def next_page(self, state, _):
         location = state['location']
         if location == 'library':
-            library = state['library']
-            page = library['page'] - 1
-            page = utility.set_page(library['data'], page, height - 1)
-            library = frozendict({'data': library['data'], 'page': page})
-            return state.copy(library=library)
+            page = state['library']['page'] + 1
+            return self.go_to_page(state, page)
         elif location == 'book':
             book_n = state['book']
-            book = state['books'][book_n]
-            page = book.page - 1
-            books = list(state['books'])
-            book.page = utility.set_page(book, page, height)
-            books[book_n] = book
-            return state.copy(books=tuple(books))
+            page = state['books'][book_n].page + 1
+            return self.go_to_page(state, page)
+        elif location == 'bookmarks':
+            page = state['bookmarks']['page'] + 1
+            return self.go_to_page(state, page)
         return state
+
+    def previous_page(self, state, _):
+        location = state['location']
+        if location == 'library':
+            page = state['library']['page'] - 1
+            return self.go_to_page(state, page)
+        elif location == 'book':
+            book_n = state['book']
+            page = state['books'][book_n].page - 1
+            return self.go_to_page(state, page)
+        elif location == 'bookmarks':
+            page = state['bookmarks']['page'] - 1
+            return self.go_to_page(state, page)
+        return state
+
 
     def backup_log(self, state, value):
         if state['backing_up_log'] == 'in progress' and value != 'done':
@@ -108,6 +129,7 @@ action_types.extend(utility.get_methods(LibraryReducers))
 action_types.extend(utility.get_methods(BookReducers))
 action_types.extend(utility.get_methods(GoToPageReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
+action_types.extend(utility.get_methods(BookmarksReducers))
 
 # just an empty object
 
