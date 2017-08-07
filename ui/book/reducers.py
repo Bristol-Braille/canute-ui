@@ -5,6 +5,12 @@ class BookReducers():
     def go_to_start(self, state, value):
         return self.set_book_page(state, 0)
 
+    def go_to_end(self, state, value):
+        book_n = state['book']
+        book = state['books'][book_n]
+        last_page = utility.get_max_pages(book, height)
+        return self.set_book_page(state, last_page)
+
     def skip_pages(self, state, value):
         book_n = state['book']
         book = state['books'][book_n]
