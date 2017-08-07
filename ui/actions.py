@@ -25,7 +25,7 @@ class AppReducers():
     def go_to_system_menu(self, state, value):
         return state.copy(location='system_menu')
 
-    def go_to_bookmarks(self, state, value):
+    def go_to_bookmarks_menu(self, state, value):
         return state.copy(location='bookmarks')
 
     def close_menu(self, state, value):
@@ -60,7 +60,6 @@ class AppReducers():
             return state.copy(bookmarks_menu=bookmarks_menu)
         return state
 
-
     def next_page(self, state, _):
         location = state['location']
         if location == 'library':
@@ -88,7 +87,6 @@ class AppReducers():
             page = state['bookmarks_menu']['page'] - 1
             return self.go_to_page(state, page)
         return state
-
 
     def backup_log(self, state, value):
         if state['backing_up_log'] == 'in progress' and value != 'done':

@@ -18,11 +18,10 @@ class BookReducers():
         page = book.page + value
         return self.go_to_page(state, page)
 
-    def set_book_page(self, state, value):
+    def set_book_page(self, state, page):
         width, height = utility.dimensions(state)
         book_n = state['book']
         book = state['books'][book_n]
-        page = value
         books = list(state['books'])
         books[book_n].page = utility.set_page(book, page, height)
         return state.copy(books=tuple(books),
