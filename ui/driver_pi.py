@@ -142,6 +142,8 @@ class Pi(Driver):
                         buttons['L'] = 'single'
                     elif (event.code == e.KEY_R):
                         buttons['R'] = 'single'
+                    elif (event.code == e.KEY_X):
+                        buttons['X'] = 'single'
         return buttons
 
     def send_error_sound(self):

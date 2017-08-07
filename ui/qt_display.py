@@ -72,10 +72,6 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         for button in button_widgets:
             button.setFocusPolicy(QtCore.Qt.NoFocus)
             button_id = button.text()
-            if button_id == 'Library':
-                button_id = 'L'
-            elif button_id == 'Reset':
-                button_id = 'R'
             button.clicked.connect(self.make_slot(button_id))
             self.buttons[button_id] = button
 
