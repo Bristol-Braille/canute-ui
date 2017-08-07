@@ -5,7 +5,8 @@ to_braille = utility.to_braille
 
 def render(width, height, state):
     book = state['books'][state['book']]
-    bookmarks = book.bookmarks
+    page = state['bookmarks_menu']['page']
+    bookmarks = book.bookmarks[page * height:(page * height) + height]
     data = []
     for page in bookmarks:
         line = book[page * height:(page * height) + 1][0]

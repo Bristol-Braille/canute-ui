@@ -13,8 +13,8 @@ bookmarks_buttons = {
         # '8': queue_key_press(8),
         # '9': queue_key_press(9),
         # 'X': queue_key_press(0),
-        # '<': queue_key_press('<'),
-        # '>': actions.go_to_page_confirm(),
+         '<': actions.previous_page(),
+         '>': actions.next_page(),
         'R': actions.reset_display('start'),
     },
 }

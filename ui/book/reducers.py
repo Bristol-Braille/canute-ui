@@ -6,6 +6,7 @@ class BookReducers():
         return self.set_book_page(state, 0)
 
     def go_to_end(self, state, value):
+        width, height = utility.dimensions(state)
         book_n = state['book']
         book = state['books'][book_n]
         last_page = utility.get_max_pages(book, height)
