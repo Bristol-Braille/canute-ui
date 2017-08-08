@@ -24,6 +24,7 @@ class BookReducers():
         book = state['books'][book_n]
         books = list(state['books'])
         books[book_n].page = utility.set_page(book, page, height)
+        books[book_n].bookmarks = tuple(bm for bm in books[book_n].bookmarks if bm != 'deleted')
         return state.copy(books=tuple(books),
                           location='book', home_menu_visible=False)
 

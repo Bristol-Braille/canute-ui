@@ -1,4 +1,5 @@
 import pickle
+from copy import copy
 import logging
 from . import utility
 from .system_menu.system_menu import menu_titles
@@ -60,6 +61,15 @@ def write(state):
     write_state['app']['replacing_library'] = False
     write_state['app']['go_to_page']['selection'] = ''
     write_state['app']['go_to_page']['keys_pressed'] = ''
+    write_state['app']['bookmarks_menu']['page'] = 0
+    books = write_state['app']['books']
+    #make sure deleted bookmarks are fully deleted
+    changed_books = []
+    for book in books:
+        book = copy(book)
+        book.bookmarks = [bm for bm in book.bookmarks if bm != 'deleted']
+        changed_books.append(book)
+    write_state['app']['books'] = changed_books
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False

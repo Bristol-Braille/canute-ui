@@ -1,4 +1,5 @@
 import logging
+from copy import copy
 from frozendict import frozendict
 from . import utility
 from .library.reducers import LibraryReducers
@@ -29,8 +30,18 @@ class AppReducers():
         return state.copy(location='bookmarks_menu')
 
     def close_menu(self, state, value):
+        books = state['books']
+        # fully delete deleted bookmarks
+        changed_books = []
+        for book in books:
+            book = copy(book)
+            book.bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+            changed_books.append(book)
+        bookmarks_menu = state['bookmarks_menu']
         return state.copy(location='book',
-                          home_menu_visible=False, go_to_page_selection='')
+                          bookmarks_menu=bookmarks_menu.copy(page=0),
+                          home_menu_visible=False, go_to_page_selection='',
+                          books=tuple(changed_books))
 
     def go_to_page(self, state, page):
         width, height = utility.dimensions(state)
