@@ -1,5 +1,6 @@
 import logging
 import asyncio
+from datetime import datetime
 from .actions import actions
 from .system_menu.system_menu import system_menu
 from .library.buttons import library_buttons
@@ -32,17 +33,27 @@ for i, item in enumerate(system_menu):
     bindings['system_menu']['single'][str(i + 2)] = action
 
 
+prev_buttons = {}
 @asyncio.coroutine
 def check(driver, state, store):
+    global prev_buttons
     buttons = driver.get_buttons()
     location = state['app']['location']
-    if type(location) == int:
-        location = 'book'
-    for _id in buttons:
-        _type = buttons[_id]
-        try:
-            action = bindings[location][_type][_id]
-        except KeyError:
-            log.debug('no binding for key {}, {} press'.format(_id, _type))
-        else:
-            yield from store.dispatch(action)
+    for key in buttons:
+        up_or_down = buttons[key]
+        if up_or_down == 'down':
+            prev_buttons[key] = datetime.now()
+        elif up_or_down == 'up' and key in prev_buttons:
+            diff = (datetime.now() - prev_buttons[key]).total_seconds()
+            del prev_buttons[key]
+
+            press_type = 'single'
+            if diff > 1:
+                press_type = 'long'
+
+            try:
+                action = bindings[location][press_type][key]
+            except KeyError:
+                log.debug('no binding for key {}, {} press'.format(key, press_type))
+            else:
+                yield from store.dispatch(action)
