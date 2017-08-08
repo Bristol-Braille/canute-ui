@@ -9,6 +9,8 @@ class BookmarksReducers():
         book_n = state['book']
         book = state['books'][book_n]
         bookmarks = book.bookmarks[page * height:(page * height) + height]
+        if n >= len(bookmarks):
+            return state
         bookmark = bookmarks[n]
         set_book_page = BookReducers().set_book_page
         return set_book_page(state, bookmark)
