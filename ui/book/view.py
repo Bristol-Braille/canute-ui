@@ -11,11 +11,11 @@ def render_home_menu(width, height, book):
     data.append(to_braille('go to page'))
     data.append(to_braille('go to start of book'))
     data.append(to_braille('go to end of book'))
-    data.append(to_braille('insert bookmark for current page'))
-    data.append(to_braille('go to bookmark'))
+    data.append(to_braille('insert bookmark at current page'))
+    data.append(to_braille('choose from existing bookmarks'))
     data.append((0,) * width)
-    data.append(to_braille('go to library menu'))
-    data.append(to_braille('go to system menu'))
+    data.append(to_braille('view library menu'))
+    data.append(to_braille('view system menu'))
     return tuple(data)
 
 

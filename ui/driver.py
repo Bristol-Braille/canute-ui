@@ -142,8 +142,6 @@ class Driver(object, metaclass=abc.ABCMeta):
             data = data + ([0] * (self.chars - len(data)))
 
         if len(data) > self.chars:
-            log.warning('row data too long, length %d, truncating to %d' %
-                        (len(data), self.chars))
             data = data[0:self.chars]
 
         self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
