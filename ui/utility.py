@@ -26,15 +26,17 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     format a title like this:
         * title on the top line.
         * use two dot-six characters to indicate all uppercase for the title.
-        * page numbers all the way at the right with 3 digits out of total,
-        e.g. 001 / 003.
+        * page numbers all the way at the right,
+        e.g. ',,library menu               1 / 3'.
     '''
-    print(page_number, total_pages)
+    page_number += 1
+    total_pages += 1
+
     # ',, indicates all uppercase'
     if capitalize:
         title = ',,' + title
 
-    if total_pages == 0:
+    if total_pages == 1:
         return to_braille(title)
 
     total_pages = str(total_pages)

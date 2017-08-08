@@ -13,5 +13,5 @@ def render(width, height, state):
     while len(data) < data_height:
         data += ((0,) * width,)
     title = utility.format_title(
-        'library menu', width, page + 1, max_pages + 1)
+        'library menu', width, page, max_pages)
     return tuple([title]) + tuple(data)

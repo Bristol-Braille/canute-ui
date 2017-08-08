@@ -21,16 +21,16 @@ def render(width, height, state):
         title_text = book.title
 
     data.append(utility.format_title(
-        title_text, width, page + 1, total_pages + 1))
+        title_text, width, page, total_pages))
 
     selection = state['go_to_page']['selection']
     if selection == '':
-        selection = 0
+        selection = -1
     else:
-        selection = int(selection)
+        selection = int(selection) - 1
 
     t = utility.format_title('go to page number', width,
-                             selection, total_pages + 1, capitalize=False)
+                             selection, total_pages, capitalize=False)
     data.append(t)
 
     data.append(to_braille('please confirm by pressing forward'))

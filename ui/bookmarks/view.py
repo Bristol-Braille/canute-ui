@@ -13,7 +13,7 @@ def render(width, height, state):
     max_pages = utility.get_max_pages(book.bookmarks, height - 1)
     title = utility.format_title(
         'bookmarks: {}'.format(book.title),
-        width, page + 1, max_pages + 1)
+        width, page, max_pages)
     data = [title]
 
     for bm in bookmarks:
