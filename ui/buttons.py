@@ -23,7 +23,13 @@ bindings = {
             '<': actions.previous_page(),
             'L': actions.close_menu(),
             'R': actions.reset_display('start')
-        }
+        },
+        'long': {
+            '>': actions.next_page(),
+            '<': actions.previous_page(),
+            'L': actions.close_menu(),
+            'R': actions.reset_display('start')
+        },
     }
 }
 

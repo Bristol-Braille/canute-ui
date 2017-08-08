@@ -27,8 +27,8 @@ bookmarks_buttons = {
         '7': actions.delete_bookmark(6),
         '8': actions.delete_bookmark(7),
         '9': actions.delete_bookmark(8),
-        '<': actions.previous_page(),
-        '>': actions.next_page(),
+        '<': actions.skip_pages(-5),
+        '>': actions.skip_pages(5),
         'R': actions.reset_display('start'),
     },
 }

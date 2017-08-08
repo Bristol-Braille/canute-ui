@@ -71,6 +71,21 @@ class AppReducers():
             return state.copy(bookmarks_menu=bookmarks_menu)
         return state
 
+
+    def skip_pages(self, state, value):
+        location = state['location']
+        if location == 'library':
+            page = state['library']['page'] + value
+            return self.go_to_page(state, page)
+        elif location == 'book':
+            book_n = state['book']
+            page = state['books'][book_n].page + value
+            return self.go_to_page(state, page)
+        elif location == 'bookmarks_menu':
+            page = state['bookmarks_menu']['page'] + value
+            return self.go_to_page(state, page)
+        return state
+
     def next_page(self, state, _):
         location = state['location']
         if location == 'library':
