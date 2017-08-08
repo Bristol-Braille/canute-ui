@@ -29,7 +29,8 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         * page numbers all the way at the right with 3 digits out of total,
         e.g. 001 / 003.
     '''
-    # hack - leave space at the beginning for the uppercase symbols
+    print(page_number, total_pages)
+    # ',, indicates all uppercase'
     if capitalize:
         title = ',,' + title
 

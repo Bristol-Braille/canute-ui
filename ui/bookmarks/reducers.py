@@ -6,6 +6,8 @@ from .. import utility
 class BookmarksReducers():
     def delete_bookmark(self, state, n):
         width, height = utility.dimensions(state)
+        # adjust for title
+        height -= 1
         page = state['bookmarks_menu']['page']
         book_n = state['book']
         books = list(state['books'])
@@ -24,6 +26,8 @@ class BookmarksReducers():
 
     def go_to_bookmark(self, state, n):
         width, height = utility.dimensions(state)
+        # adjust for title
+        height -= 1
         page = state['bookmarks_menu']['page']
         book_n = state['book']
         book = state['books'][book_n]
