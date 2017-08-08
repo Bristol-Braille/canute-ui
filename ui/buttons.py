@@ -33,27 +33,37 @@ for i, item in enumerate(system_menu):
     bindings['system_menu']['single'][str(i + 2)] = action
 
 
+@asyncio.coroutine
+def dispatch_button(key, press_type, state, store):
+    location = state['app']['location']
+    try:
+        action = bindings[location][press_type][key]
+    except KeyError:
+        log.debug('no binding for key {}, {} press'.format(key, press_type))
+    else:
+        yield from store.dispatch(action)
+
+
 prev_buttons = {}
+long_buttons = {}
 @asyncio.coroutine
 def check(driver, state, store):
-    global prev_buttons
     buttons = driver.get_buttons()
-    location = state['app']['location']
     for key in buttons:
         up_or_down = buttons[key]
         if up_or_down == 'down':
             prev_buttons[key] = datetime.now()
-        elif up_or_down == 'up' and key in prev_buttons:
-            diff = (datetime.now() - prev_buttons[key]).total_seconds()
-            del prev_buttons[key]
+        elif up_or_down == 'up':
+            if key in long_buttons:
+                del long_buttons[key]
+                del prev_buttons[key]
+            elif key in prev_buttons:
+                del prev_buttons[key]
+                yield from dispatch_button(key, 'single', state, store)
 
-            press_type = 'single'
-            if diff > 1:
-                press_type = 'long'
-
-            try:
-                action = bindings[location][press_type][key]
-            except KeyError:
-                log.debug('no binding for key {}, {} press'.format(key, press_type))
-            else:
-                yield from store.dispatch(action)
+    for key in prev_buttons:
+        diff = (datetime.now() - prev_buttons[key]).total_seconds()
+        if diff > 0.5:
+            prev_buttons[key] = datetime.now()
+            long_buttons[key] = True
+            yield from dispatch_button(key, 'long', state, store)
