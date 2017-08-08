@@ -66,7 +66,7 @@ def write(state):
     write_state['app']['go_to_page']['selection'] = ''
     write_state['app']['go_to_page']['keys_pressed'] = ''
     write_state['app']['bookmarks_menu']['page'] = 0
-    write_state['help_menu'] = {'visible': False, 'page': 0}
+    write_state['app']['help_menu'] = {'visible': False, 'page': 0}
     books = write_state['app']['books']
     # make sure deleted bookmarks are fully deleted
     changed_books = []
