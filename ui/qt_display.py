@@ -21,9 +21,6 @@ MSG_INTERVAL_MS = 10
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
-    log = logging.getLogger(__name__)
-    log.info('display GUI')
 
     parser = argparse.ArgumentParser(description='Canute Emulator')
     parser.add_argument('--text', action='store_const', dest='text',
@@ -41,7 +38,6 @@ class HardwareError(Exception):
 
 
 def start(to_display_queue, from_display_queue, display_text):
-    log.info('display GUI')
 
     app = QtGui.QApplication(sys.argv)
     Display(to_display_queue=to_display_queue,
@@ -72,11 +68,8 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         for button in button_widgets:
             button.setFocusPolicy(QtCore.Qt.NoFocus)
             button_id = button.text()
-            if button_id == 'Library':
-                button_id = 'L'
-            elif button_id == 'Reset':
-                button_id = 'R'
-            button.clicked.connect(self.make_slot(button_id))
+            button.pressed.connect(self.make_slot(button_id, 'down'))
+            button.released.connect(self.make_slot(button_id, 'up'))
             self.buttons[button_id] = button
 
         self.label_rows = []
@@ -91,26 +84,32 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
         self.show()
 
-    def make_slot(self, button_id):
+    def make_slot(self, button_id, direction):
         def slot():
-            self.send_button_msg(button_id, 'single')
+            self.send_button_msg(button_id, direction)
         return slot
 
-    def keyPressEvent(self, e):
+    def sendKeys(self, e, direction):
         if e.key() == QtCore.Qt.Key_Left:
-            self.send_button_msg('<', 'single')
+            self.send_button_msg('<', direction)
         elif e.key() == QtCore.Qt.Key_Right:
-            self.send_button_msg('>', 'single')
+            self.send_button_msg('>', direction)
         elif e.key() == QtCore.Qt.Key_Down:
-            self.send_button_msg('L', 'single')
+            self.send_button_msg('L', direction)
         elif e.key() == QtCore.Qt.Key_R:
-            self.send_button_msg('R', 'single')
+            self.send_button_msg('R', direction)
         elif (e.key() >= 49 and e.key() <= 56):
-            self.send_button_msg('%i' % (e.key() - 48,), 'single')
+            self.send_button_msg('%i' % (e.key() - 48,), direction)
+
+    def keyPressEvent(self, e):
+        self.sendKeys(e, 'down')
+
+    def keyReleaseEvent(self, e):
+        self.sendKeys(e, 'up')
 
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''
-        log.info('sending %s button = %s' % (button_type, button_id))
+        log.debug('sending %s button = %s' % (button_type, button_id))
         self.send_queue.put_nowait({'id': button_id, 'type': button_type})
 
     def print_braille(self, data):

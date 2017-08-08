@@ -5,6 +5,7 @@ from .library import view as library_view
 from .system_menu import view as system_menu_view
 from .go_to_page import view as go_to_page_view
 from .book import view as book_view
+from .bookmarks import view as bookmarks_view
 
 
 log = logging.getLogger(__name__)
@@ -31,6 +32,9 @@ class Display():
             self._set_buffer(page_data)
         elif location == 'book':
             page_data = book_view.render(width, height, state)
+            self._set_buffer(page_data)
+        elif location == 'bookmarks_menu':
+            page_data = bookmarks_view.render(width, height, state)
             self._set_buffer(page_data)
 
     @asyncio.coroutine

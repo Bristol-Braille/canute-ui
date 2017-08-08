@@ -7,18 +7,15 @@ def render_home_menu(width, height, book):
     data = []
     max_pages = utility.get_max_pages(book, height)
     data.append(utility.format_title(
-        book.title, width, book.page + 1, max_pages + 1))
+        book.title, width, book.page, max_pages))
     data.append(to_braille('go to page'))
     data.append(to_braille('go to start of book'))
+    data.append(to_braille('go to end of book'))
+    data.append(to_braille('insert bookmark at current page'))
+    data.append(to_braille('choose from existing bookmarks'))
     data.append((0,) * width)
-    # data.append(to_braille('go to end of book'))
-    data.append((0,) * width)
-    # data.append(to_braille('insert bookmark for current page'))
-    data.append((0,) * width)
-    # data.append(to_braille('go to bookmark'))
-    data.append((0,) * width)
-    data.append(to_braille('go to library menu'))
-    data.append(to_braille('go to system menu'))
+    data.append(to_braille('view library menu'))
+    data.append(to_braille('view system menu'))
     return tuple(data)
 
 

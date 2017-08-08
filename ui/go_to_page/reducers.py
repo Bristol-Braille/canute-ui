@@ -36,8 +36,8 @@ class GoToPageReducers():
             return state
         go_to_page = go_to_page.copy(selection='')
         page = int(selection) - 1
-        go_to_page_reducer = BookReducers().go_to_page
-        return go_to_page_reducer(state.copy(go_to_page=go_to_page), page)
+        set_book_page = BookReducers().set_book_page
+        return set_book_page(state.copy(go_to_page=go_to_page), page)
 
     def go_to_page_delete(self, state, value):
         go_to_page = state['go_to_page']

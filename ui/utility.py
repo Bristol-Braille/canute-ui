@@ -26,14 +26,17 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     format a title like this:
         * title on the top line.
         * use two dot-six characters to indicate all uppercase for the title.
-        * page numbers all the way at the right with 3 digits out of total,
-        e.g. 001 / 003.
+        * page numbers all the way at the right,
+        e.g. ',,library menu               1 / 3'.
     '''
-    # hack - leave space at the beginning for the uppercase symbols
+    page_number += 1
+    total_pages += 1
+
+    # ',, indicates all uppercase'
     if capitalize:
         title = ',,' + title
 
-    if total_pages == 0:
+    if total_pages == 1:
         return to_braille(title)
 
     total_pages = str(total_pages)
@@ -154,29 +157,23 @@ def unicode_to_pin_num(uni_char):
     return pin_num
 
 
-'''
-used by the gui to display braille
-'''
-
-
 def pin_num_to_unicode(pin_num):
+    '''
+    used by the gui to display braille
+    '''
     return chr(pin_num + 10240)
 
 
-''' for sorting & debugging '''
-
-
 def pin_num_to_alpha(numeric):
+    ''' for sorting & debugging '''
     mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
     mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     return mapping[numeric]
 
 
 def pin_nums_to_alphas(numerics):
+    ''' used to convert plain text to pin pattern numbers '''
     return list(map(pin_num_to_alpha, numerics))
-
-
-''' used to convert plain text to pin pattern numbers '''
 
 
 def alpha_to_pin_num(alpha):

@@ -102,8 +102,7 @@ class Pi(Driver):
     def get_buttons(self):
         '''get button states
 
-        :rtype: list of elements either set to False (unpressed) or one of
-        single, double, long
+        :rtype: dict of elements either set to 'down' or 'up'
         '''
         buttons = {}
         if hasattr(self, 'button_queue'):
@@ -112,36 +111,43 @@ class Pi(Driver):
                     event = self.button_queue.get(timeout=0.001)
                     key = event.type == evdev.ecodes.EV_KEY
                     down = event.value == evdev.KeyEvent.key_down
+                    up = event.value == evdev.KeyEvent.key_up
                 except queue.Empty:
                     event = None
-                if event is not None and key and down:
+                if event is not None and key and (down or up):
                     e = evdev.ecodes
+                    if up:
+                        t = 'up'
+                    elif down:
+                        t = 'down'
                     if (event.code == e.KEY_1):
-                        buttons['1'] = 'single'
+                        buttons['1'] = t
                     elif (event.code == e.KEY_2):
-                        buttons['2'] = 'single'
+                        buttons['2'] = t
                     elif (event.code == e.KEY_3):
-                        buttons['3'] = 'single'
+                        buttons['3'] = t
                     elif (event.code == e.KEY_4):
-                        buttons['4'] = 'single'
+                        buttons['4'] = t
                     elif (event.code == e.KEY_5):
-                        buttons['5'] = 'single'
+                        buttons['5'] = t
                     elif (event.code == e.KEY_6):
-                        buttons['6'] = 'single'
+                        buttons['6'] = t
                     elif (event.code == e.KEY_7):
-                        buttons['7'] = 'single'
+                        buttons['7'] = t
                     elif (event.code == e.KEY_8):
-                        buttons['8'] = 'single'
+                        buttons['8'] = t
                     elif (event.code == e.KEY_9):
-                        buttons['9'] = 'single'
+                        buttons['9'] = t
                     elif (event.code == e.KEY_LEFT):
-                        buttons['<'] = 'single'
+                        buttons['<'] = t
                     elif (event.code == e.KEY_RIGHT):
-                        buttons['>'] = 'single'
+                        buttons['>'] = t
                     elif (event.code == e.KEY_DOWN):
-                        buttons['L'] = 'single'
+                        buttons['L'] = t
                     elif (event.code == e.KEY_R):
-                        buttons['R'] = 'single'
+                        buttons['R'] = t
+                    elif (event.code == e.KEY_X):
+                        buttons['X'] = t
         return buttons
 
     def send_error_sound(self):
