@@ -43,7 +43,6 @@ go_to_page_buttons = {
         'X': queue_key_press(0),
         '<': queue_key_press('<'),
         '>': actions.go_to_page_confirm(),
-        'R': actions.reset_display('start'),
     },
     'long': {
         'L': actions.close_menu(),
@@ -59,6 +58,5 @@ go_to_page_buttons = {
         'X': queue_key_press(0),
         '<': queue_key_press('<'),
         '>': actions.go_to_page_confirm(),
-        'R': actions.reset_display('start'),
     },
 }

@@ -93,7 +93,7 @@ def run_async(driver, config):
         state = store.state
         if (yield from handle_hardware(driver, state, store)):
             break
-        yield from buttons.check(driver, state['app']['location'],
+        yield from buttons.check(driver, state['app'],
                                  store.dispatch)
         yield from display.send_line(driver)
 

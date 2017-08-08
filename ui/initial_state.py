@@ -26,6 +26,10 @@ initial_state = utility.freeze({
             'selection': '',
             'keys_pressed': '',
         },
+        'help_menu': {
+            'visible': False,
+            'page': 0,
+        },
         'replacing_library': False,
         'backing_up_log': False,
         'update_ui': False,
@@ -62,6 +66,7 @@ def write(state):
     write_state['app']['go_to_page']['selection'] = ''
     write_state['app']['go_to_page']['keys_pressed'] = ''
     write_state['app']['bookmarks_menu']['page'] = 0
+    write_state['app']['help_menu'] = {'visible': False, 'page': 0}
     books = write_state['app']['books']
     # make sure deleted bookmarks are fully deleted
     changed_books = []

@@ -20,14 +20,19 @@ class AppReducers():
         dimensions = frozendict({'width': value[0], 'height': value[1]})
         return state.copy(dimensions=dimensions)
 
-    def go_to_library(self, state, value):
+    def go_to_library(self, state, _):
         return state.copy(location='library')
 
-    def go_to_system_menu(self, state, value):
+    def go_to_system_menu(self, state, _):
         return state.copy(location='system_menu')
 
-    def go_to_bookmarks_menu(self, state, value):
+    def go_to_bookmarks_menu(self, state, _):
         return state.copy(location='bookmarks_menu')
+
+    def toggle_help_menu(self, state, _):
+        visible = state['help_menu']['visible']
+        help_menu = utility.freeze(dict(visible=not visible, page=0))
+        return state.copy(help_menu=help_menu)
 
     def close_menu(self, state, value):
         books = state['books']
@@ -42,11 +47,21 @@ class AppReducers():
         return state.copy(location='book',
                           bookmarks_menu=bookmarks_menu.copy(page=0),
                           home_menu_visible=False, go_to_page_selection='',
+                          help_menu=utility.freeze(
+                              {'visible': False, 'page': 0}),
                           books=tuple(changed_books))
 
     def go_to_page(self, state, page):
         width, height = utility.dimensions(state)
-        location = state['location']
+
+        if page < 0:
+            page = 0
+
+        if state['help_menu']['visible']:
+            location = 'help_menu'
+        else:
+            location = state['location']
+
         if location == 'library':
             library = state['library']
             page = utility.set_page(library['data'], page, height - 1)
@@ -64,16 +79,29 @@ class AppReducers():
             book = state['books'][book_n]
             bookmarks_data = book.bookmarks
             max_pages = utility.get_max_pages(bookmarks_data, height)
-            if page < 0:
-                page = 0
-            elif page > max_pages:
+            if page > max_pages:
                 page = max_pages
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
+        elif location == 'help_menu':
+            l = state['location']
+            if l == 'book':
+                max_pages = 1
+            elif l == 'library':
+                max_pages = 2
+
+            if page >= max_pages:
+                page = max_pages - 1
+
+            return state.copy(help_menu=state['help_menu'].copy(page=page))
         return state
 
     def skip_pages(self, state, value):
-        location = state['location']
+        if state['help_menu']['visible']:
+            location = 'help_menu'
+        else:
+            location = state['location']
+
         if location == 'library':
             page = state['library']['page'] + value
             return self.go_to_page(state, page)
@@ -84,35 +112,16 @@ class AppReducers():
         elif location == 'bookmarks_menu':
             page = state['bookmarks_menu']['page'] + value
             return self.go_to_page(state, page)
+        elif location == 'help_menu':
+            page = state['help_menu']['page'] + value
+            return self.go_to_page(state, page)
         return state
 
     def next_page(self, state, _):
-        location = state['location']
-        if location == 'library':
-            page = state['library']['page'] + 1
-            return self.go_to_page(state, page)
-        elif location == 'book':
-            book_n = state['book']
-            page = state['books'][book_n].page + 1
-            return self.go_to_page(state, page)
-        elif location == 'bookmarks_menu':
-            page = state['bookmarks_menu']['page'] + 1
-            return self.go_to_page(state, page)
-        return state
+        return self.skip_pages(state, 1)
 
     def previous_page(self, state, _):
-        location = state['location']
-        if location == 'library':
-            page = state['library']['page'] - 1
-            return self.go_to_page(state, page)
-        elif location == 'book':
-            book_n = state['book']
-            page = state['books'][book_n].page - 1
-            return self.go_to_page(state, page)
-        elif location == 'bookmarks_menu':
-            page = state['bookmarks_menu']['page'] - 1
-            return self.go_to_page(state, page)
-        return state
+        return self.skip_pages(state, -1)
 
     def backup_log(self, state, value):
         if state['backing_up_log'] == 'in progress' and value != 'done':
