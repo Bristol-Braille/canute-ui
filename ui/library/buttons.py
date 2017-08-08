@@ -13,7 +13,7 @@ library_buttons = {
         '>': actions.next_page(),
         '<': actions.previous_page(),
         'L': actions.close_menu(),
-        'R': actions.reset_display('start')
+        'R': actions.toggle_help_menu(),
     },
     'long': {
         '2': actions.go_to_book(0),
@@ -27,6 +27,7 @@ library_buttons = {
         '<': actions.skip_pages(-5),
         '>': actions.skip_pages(5),
         'L': actions.close_menu(),
-        'R': actions.reset_display('start')
+        'R': actions.toggle_help_menu(),
+        'X': actions.reset_display('start')
     },
 }

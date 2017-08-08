@@ -29,9 +29,10 @@ class AppReducers():
     def go_to_bookmarks_menu(self, state, _):
         return state.copy(location='bookmarks_menu')
 
-    def open_help_menu(self, state, _):
-        return state.copy(help_menu=state['help_menu'].copy(visible=True))
-
+    def toggle_help_menu(self, state, _):
+        visible = state['help_menu']['visible']
+        help_menu = utility.freeze(dict(visible=not visible, page=0))
+        return state.copy(help_menu=help_menu)
 
     def close_menu(self, state, value):
         books = state['books']
@@ -46,7 +47,8 @@ class AppReducers():
         return state.copy(location='book',
                           bookmarks_menu=bookmarks_menu.copy(page=0),
                           home_menu_visible=False, go_to_page_selection='',
-                          help_menu=utility.freeze({'visible': False, 'page': 0}),
+                          help_menu=utility.freeze(
+                              {'visible': False, 'page': 0}),
                           books=tuple(changed_books))
 
     def go_to_page(self, state, page):

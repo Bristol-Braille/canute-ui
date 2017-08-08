@@ -18,6 +18,7 @@ def render_home_menu(width, height, book):
     data.append(to_braille('view system menu'))
     return tuple(data)
 
+
 def render_help_menu(width, height):
     data = []
 

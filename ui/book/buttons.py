@@ -12,7 +12,7 @@ book_buttons = {
         '>': actions.next_page(),
         '<': actions.previous_page(),
         'L': actions.toggle_home_menu(),
-        'R': actions.open_help_menu(),
+        'R': actions.toggle_help_menu(),
     },
     'long': {
         '2': actions.enter_go_to_page(),
@@ -25,6 +25,7 @@ book_buttons = {
         '<': actions.skip_pages(-5),
         '>': actions.skip_pages(5),
         'L': actions.toggle_home_menu(),
-        'R': actions.reset_display('start')
+        'R': actions.toggle_help_menu(),
+        'X': actions.reset_display('start')
     },
 }

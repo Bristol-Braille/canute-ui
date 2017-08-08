@@ -21,7 +21,7 @@ class Display():
         width, height = utility.dimensions(state)
         location = state['location']
         if location == 'library':
-            page_data = library_view.render(width, height, state['library'])
+            page_data = library_view.render(width, height, state)
             self._set_buffer(page_data)
         elif location == 'system_menu':
             page_data = system_menu_view.render(

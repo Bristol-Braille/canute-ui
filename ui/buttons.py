@@ -22,13 +22,14 @@ bindings = {
             'L': actions.close_menu(),
             '>': actions.next_page(),
             '<': actions.previous_page(),
-            'R': actions.close_menu(),
+            'R': actions.toggle_help_menu(),
         },
         'long': {
             'L': actions.close_menu(),
             '>': actions.next_page(),
             '<': actions.previous_page(),
-            'R': actions.close_menu(),
+            'R': actions.toggle_help_menu(),
+            'X': actions.reset_display('start'),
         },
     },
     'system_menu': {
@@ -36,13 +37,12 @@ bindings = {
             '>': actions.next_page(),
             '<': actions.previous_page(),
             'L': actions.close_menu(),
-            'R': actions.reset_display('start')
         },
         'long': {
             '>': actions.next_page(),
             '<': actions.previous_page(),
             'L': actions.close_menu(),
-            'R': actions.reset_display('start')
+            'X': actions.reset_display('start'),
         },
     }
 }
