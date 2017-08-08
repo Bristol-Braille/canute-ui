@@ -72,7 +72,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         for button in button_widgets:
             button.setFocusPolicy(QtCore.Qt.NoFocus)
             button_id = button.text()
-            button.clicked.connect(self.make_slot(button_id, 'down'))
+            button.pressed.connect(self.make_slot(button_id, 'down'))
             button.released.connect(self.make_slot(button_id, 'up'))
             self.buttons[button_id] = button
 
