@@ -51,6 +51,8 @@ def dispatch_button(key, press_type, location, dispatch):
 
 prev_buttons = {}
 long_buttons = {}
+
+
 @asyncio.coroutine
 def check(driver, location, dispatch):
     buttons = driver.get_buttons()

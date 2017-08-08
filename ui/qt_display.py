@@ -21,8 +21,6 @@ MSG_INTERVAL_MS = 10
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
-    log = logging.getLogger(__name__)
 
     parser = argparse.ArgumentParser(description='Canute Emulator')
     parser.add_argument('--text', action='store_const', dest='text',
@@ -103,13 +101,11 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
         elif (e.key() >= 49 and e.key() <= 56):
             self.send_button_msg('%i' % (e.key() - 48,), direction)
 
-
     def keyPressEvent(self, e):
         self.sendKeys(e, 'down')
 
     def keyReleaseEvent(self, e):
         self.sendKeys(e, 'up')
-
 
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''

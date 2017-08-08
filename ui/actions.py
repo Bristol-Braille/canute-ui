@@ -35,7 +35,8 @@ class AppReducers():
         changed_books = []
         for book in books:
             book = copy(book)
-            book.bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+            book.bookmarks = tuple(
+                bm for bm in book.bookmarks if bm != 'deleted')
             changed_books.append(book)
         bookmarks_menu = state['bookmarks_menu']
         return state.copy(location='book',
@@ -70,7 +71,6 @@ class AppReducers():
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
         return state
-
 
     def skip_pages(self, state, value):
         location = state['location']

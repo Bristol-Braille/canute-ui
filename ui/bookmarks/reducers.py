@@ -21,6 +21,7 @@ class BookmarksReducers():
         book.bookmarks += bookmarks[line + height: len(bookmarks)]
         books[book_n] = book
         return state.copy(books=tuple(books))
+
     def go_to_bookmark(self, state, n):
         width, height = utility.dimensions(state)
         page = state['bookmarks_menu']['page']
