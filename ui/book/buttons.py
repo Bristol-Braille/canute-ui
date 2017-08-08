@@ -12,7 +12,7 @@ book_buttons = {
         '>': actions.next_page(),
         '<': actions.previous_page(),
         'L': actions.toggle_home_menu(),
-        'R': actions.reset_display('start')
+        'R': actions.open_help_menu(),
     },
     'long': {
         '2': actions.enter_go_to_page(),

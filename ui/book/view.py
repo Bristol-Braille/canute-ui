@@ -18,8 +18,26 @@ def render_home_menu(width, height, book):
     data.append(to_braille('view system menu'))
     return tuple(data)
 
+def render_help_menu(width, height):
+    data = []
+
+    data.append(to_braille('Access to Home menu is gained by:'))
+    data.append(to_braille('Pressing menu button (Has Letter M on it.'))
+    data.append(to_braille('central button from the front buttons)'))
+    data.append(to_braille('Pressing menu button again goes back to'))
+    data.append(to_braille('the current book.'))
+
+    # pad page with empty rows
+    while len(data) < height:
+        data.append((0,) * width)
+
+    return tuple(data)
+
 
 def render(width, height, state):
+    help_menu = state['help_menu']['visible']
+    if help_menu:
+        return render_help_menu(width, height)
     home_menu = state['home_menu_visible']
     book_n = state['book']
     book = state['books'][book_n]

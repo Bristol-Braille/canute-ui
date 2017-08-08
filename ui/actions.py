@@ -20,14 +20,18 @@ class AppReducers():
         dimensions = frozendict({'width': value[0], 'height': value[1]})
         return state.copy(dimensions=dimensions)
 
-    def go_to_library(self, state, value):
+    def go_to_library(self, state, _):
         return state.copy(location='library')
 
-    def go_to_system_menu(self, state, value):
+    def go_to_system_menu(self, state, _):
         return state.copy(location='system_menu')
 
-    def go_to_bookmarks_menu(self, state, value):
+    def go_to_bookmarks_menu(self, state, _):
         return state.copy(location='bookmarks_menu')
+
+    def open_help_menu(self, state, _):
+        return state.copy(help_menu=state['help_menu'].copy(visible=True))
+
 
     def close_menu(self, state, value):
         books = state['books']
@@ -42,11 +46,17 @@ class AppReducers():
         return state.copy(location='book',
                           bookmarks_menu=bookmarks_menu.copy(page=0),
                           home_menu_visible=False, go_to_page_selection='',
+                          help_menu=utility.freeze({'visible': False, 'page': 0}),
                           books=tuple(changed_books))
 
     def go_to_page(self, state, page):
         width, height = utility.dimensions(state)
-        location = state['location']
+
+        if state['help_menu']['visible']:
+            location = 'help_menu'
+        else:
+            location = state['location']
+
         if location == 'library':
             library = state['library']
             page = utility.set_page(library['data'], page, height - 1)
@@ -73,7 +83,11 @@ class AppReducers():
         return state
 
     def skip_pages(self, state, value):
-        location = state['location']
+        if state['help_menu']['visible']:
+            location = 'help_menu'
+        else:
+            location = state['location']
+
         if location == 'library':
             page = state['library']['page'] + value
             return self.go_to_page(state, page)
@@ -87,7 +101,11 @@ class AppReducers():
         return state
 
     def next_page(self, state, _):
-        location = state['location']
+        if state['help_menu']['visible']:
+            location = 'help_menu'
+        else:
+            location = state['location']
+
         if location == 'library':
             page = state['library']['page'] + 1
             return self.go_to_page(state, page)
@@ -101,7 +119,11 @@ class AppReducers():
         return state
 
     def previous_page(self, state, _):
-        location = state['location']
+        if state['help_menu']['visible']:
+            location = 'help_menu'
+        else:
+            location = state['location']
+
         if location == 'library':
             page = state['library']['page'] - 1
             return self.go_to_page(state, page)
