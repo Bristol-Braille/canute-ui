@@ -23,7 +23,6 @@ MSG_INTERVAL_MS = 10
 def main():
     logging.basicConfig(level=logging.INFO)
     log = logging.getLogger(__name__)
-    log.info('display GUI')
 
     parser = argparse.ArgumentParser(description='Canute Emulator')
     parser.add_argument('--text', action='store_const', dest='text',
@@ -41,7 +40,6 @@ class HardwareError(Exception):
 
 
 def start(to_display_queue, from_display_queue, display_text):
-    log.info('display GUI')
 
     app = QtGui.QApplication(sys.argv)
     Display(to_display_queue=to_display_queue,
@@ -115,7 +113,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
     def send_button_msg(self, button_id, button_type):
         '''send the button number to the parent via the queue'''
-        log.info('sending %s button = %s' % (button_type, button_id))
+        log.debug('sending %s button = %s' % (button_type, button_id))
         self.send_queue.put_nowait({'id': button_id, 'type': button_type})
 
     def print_braille(self, data):
