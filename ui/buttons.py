@@ -82,8 +82,9 @@ def check(driver, state, dispatch):
             if key in long_buttons:
                 del long_buttons[key]
                 del prev_buttons[key]
-            elif key in prev_buttons:
-                del prev_buttons[key]
+            else:
+                if key in prev_buttons:
+                    del prev_buttons[key]
                 yield from dispatch_button(key, 'single', state, dispatch)
 
     for key in prev_buttons:
