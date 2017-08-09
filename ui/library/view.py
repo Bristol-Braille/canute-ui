@@ -24,7 +24,30 @@ def render_help_menu(width, height, page):
         data.append(to_braille('top" or "In alphabetical order"'))
 
     while len(data) < height:
-        data += ((0,) * width,)
+        data.append((0,) * width)
+
+    return tuple(data)
+
+
+def render_library(width, height, state):
+    page = state['library']['page']
+    books = state['books']
+    # subtract title from page height
+    data_height = height - 1
+    max_pages = utility.get_max_pages(books, data_height)
+    title = utility.format_title('library menu', width, page, max_pages)
+    data = [title]
+    n = page * data_height
+    for book in books[n:n + data_height]:
+        max_pages = utility.get_max_pages(book, height)
+        data.append(utility.format_title(book.title, width, book.page,
+                                         max_pages, capitalize=False))
+
+    # pad page with empty rows
+    while len(data) < height:
+        data.append((0,) * width)
+
+    print(data)
 
     return tuple(data)
 
@@ -32,17 +55,5 @@ def render_help_menu(width, height, page):
 def render(width, height, state):
     if state['help_menu']['visible']:
         return render_help_menu(width, height, state['help_menu']['page'])
-
-    page = state['library']['page']
-    data = state['library']['data']
-    # subtract title from page height
-    data_height = height - 1
-    max_pages = utility.get_max_pages(data, data_height)
-    n = page * data_height
-    data = data[n: n + data_height]
-    # pad page with empty rows
-    while len(data) < data_height:
-        data += ((0,) * width,)
-    title = utility.format_title(
-        'library menu', width, page, max_pages)
-    return tuple([title]) + tuple(data)
+    else:
+        return render_library(width, height, state)

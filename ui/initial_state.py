@@ -12,7 +12,9 @@ log = logging.getLogger(__name__)
 initial_state = utility.freeze({
     'app': {
         'location': 'book',
-        'library': {'data': [], 'page': 0},
+        'library': {
+            'page': 0,
+        },
         'book': 0,
         'books': [],
         'system_menu': {
