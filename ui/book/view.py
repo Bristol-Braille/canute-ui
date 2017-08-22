@@ -22,11 +22,15 @@ def render_home_menu(width, height, book):
 def render_help_menu(width, height):
     data = []
 
-    data.append(to_braille('Access to Home menu is gained by:'))
-    data.append(to_braille('Pressing menu button (Has Letter M on it.'))
-    data.append(to_braille('central button from the front buttons)'))
-    data.append(to_braille('Pressing menu button again goes back to'))
-    data.append(to_braille('the current book.'))
+    data.append(to_braille('Move through the book by pressing the'))
+    data.append(to_braille('arrow buttons on the front of the'))
+    data.append(to_braille('machine. Hold them down to move 5 pages'))
+    data.append(to_braille('at a time. The home menu shows you what'))
+    data.append(to_braille('you can do with the side buttons from'))
+    data.append(to_braille('the home menu or the book. View this by'))
+    data.append(to_braille('pressing the middle button on the front.'))
+    data.append(to_braille('Pressing the menu button again will'))
+    data.append(to_braille('always return you to the book.'))
 
     # pad page with empty rows
     while len(data) < height:

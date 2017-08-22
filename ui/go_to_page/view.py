@@ -3,7 +3,30 @@ from .. import utility
 to_braille = utility.to_braille
 
 
+def render_help_menu(width, height, page):
+    data = [
+        'Go to a page number by keying it in with',
+        'the side number buttons and pressing',
+        'forward. Pages are numbered based on the',
+        '9 line page height of the Canute. You',
+        'can delete entered numbers by pressing',
+        'or holding the back button. As always'
+        'you can go back to your current page by',
+        'pressing the menu button.',
+    ]
+
+    data = [to_braille(line) for line in data]
+
+    while len(data) < height:
+        data.append((0,) * width)
+
+    return tuple(data)
+
+
 def render(width, height, state):
+    if state['help_menu']['visible']:
+        return render_help_menu(width, height, state['help_menu']['page'])
+
     data = [to_braille('enter page number using the side buttons')]
 
     try:

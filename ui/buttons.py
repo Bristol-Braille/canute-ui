@@ -34,11 +34,13 @@ bindings = {
     },
     'system_menu': {
         'single': {
+            'R': actions.toggle_help_menu(),
             '>': actions.next_page(),
             '<': actions.previous_page(),
             'L': actions.close_menu(),
         },
         'long': {
+            'R': actions.toggle_help_menu(),
             '>': actions.next_page(),
             '<': actions.previous_page(),
             'L': actions.close_menu(),

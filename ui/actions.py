@@ -84,15 +84,9 @@ class AppReducers():
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
         elif location == 'help_menu':
-            l = state['location']
-            if l == 'book':
-                max_pages = 1
-            elif l == 'library':
-                max_pages = 2
-
+            max_pages = 1
             if page >= max_pages:
                 page = max_pages - 1
-
             return state.copy(help_menu=state['help_menu'].copy(page=page))
         return state
 
