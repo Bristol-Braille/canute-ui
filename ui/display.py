@@ -24,8 +24,7 @@ class Display():
             page_data = library_view.render(width, height, state)
             self._set_buffer(page_data)
         elif location == 'system_menu':
-            page_data = system_menu_view.render(
-                width, height, state['system_menu'])
+            page_data = system_menu_view.render(width, height, state)
             self._set_buffer(page_data)
         elif location == 'go_to_page':
             page_data = go_to_page_view.render(width, height, state)
