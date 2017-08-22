@@ -14,8 +14,8 @@ def render_home_menu(width, height, book):
     data.append(to_braille('insert bookmark at current page'))
     data.append(to_braille('choose from existing bookmarks'))
     data.append((0,) * width)
-    data.append(to_braille('view library menu'))
     data.append(to_braille('view system menu'))
+    data.append(to_braille('view library menu'))
     return tuple(data)
 
 
