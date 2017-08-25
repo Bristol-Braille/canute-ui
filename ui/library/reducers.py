@@ -3,7 +3,7 @@ import logging
 from functools import partial
 
 from .. import utility
-
+from ..manual import manual
 
 log = logging.getLogger(__name__)
 
@@ -47,6 +47,7 @@ class LibraryReducers():
         return state.copy(books=tuple(books), library=library)
 
     def remove_books(self, state, filenames):
+        filenames = [f for f in filenames if f != manual.filename]
         width, height = utility.dimensions(state)
         books = [
             b for b in state['books'] if b.filename not in filenames
