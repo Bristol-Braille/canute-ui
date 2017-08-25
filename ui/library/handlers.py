@@ -58,18 +58,19 @@ def replace(config, state, store):
     library_dir = config.get('files', 'library_dir')
     usb_dir = config.get('files', 'usb_dir')
     owner = config.get('user', 'user_name')
-    wipe(library_dir)
     new_books = utility.find_files(usb_dir, BOOK_EXTENSIONS)
-    uid = pwd.getpwnam(owner).pw_uid
-    gid = grp.getgrnam(owner).gr_gid
-    for filename in new_books:
-        log.info('copying {} to {}'.format(filename, library_dir))
-        shutil.copy(filename, library_dir)
+    if len(new_books) > 0:
+        wipe(library_dir)
+        uid = pwd.getpwnam(owner).pw_uid
+        gid = grp.getgrnam(owner).gr_gid
+        for filename in new_books:
+            log.info('copying {} to {}'.format(filename, library_dir))
+            shutil.copy(filename, library_dir)
 
-        # change ownership
-        basename = os.path.basename(filename)
-        new_path = library_dir + basename
-        log.debug('changing ownership of {} from {} to {}'.format(
-            new_path, uid, gid))
-        os.chown(new_path, uid, gid)
-    yield from sync(state, library_dir, store)
+            # change ownership
+            basename = os.path.basename(filename)
+            new_path = library_dir + basename
+            log.debug('changing ownership of {} from {} to {}'.format(
+                new_path, uid, gid))
+            os.chown(new_path, uid, gid)
+        yield from sync(state, library_dir, store)
