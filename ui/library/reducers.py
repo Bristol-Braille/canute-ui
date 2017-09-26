@@ -21,13 +21,17 @@ class LibraryReducers():
         return state.copy(location='book', book=line_number + number,
                           home_menu_visible=False)
 
+    def set_book(self, state, n):
+        return state.copy(book=n)
+
     def set_books(self, state, books):
         width, height = utility.dimensions(state)
         books = tuple(sort_books(books))
         data = list(map(lambda b: utility.to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
-        return state.copy(location='library', books=books, library=library)
+        return state.copy(location='library',
+                          book=0, books=books, library=library)
 
     def add_books(self, state, books_to_add):
         width, height = utility.dimensions(state)
