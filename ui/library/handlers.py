@@ -31,6 +31,7 @@ def sync(state, library_dir, store):
         yield from store.dispatch(actions.add_books(not_added_data))
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
+        yield from store.dispatch(actions.set_book(0))
         yield from store.dispatch(actions.remove_books(non_existent))
 
 
