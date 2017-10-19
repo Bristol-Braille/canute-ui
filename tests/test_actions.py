@@ -15,10 +15,11 @@ class TestActions(unittest.TestCase):
         self.assertEqual(len(initial['books']), 1)
         r = LibraryReducers()
         data = mock.MagicMock()
+        data.title = 'foo'
         data.filename = 'foo'
         state = r.add_books(initial, [data])
-        self.assertEqual(len(initial['books']), 0)
-        self.assertEqual(len(state['books']), 1)
+        self.assertEqual(len(initial['books']), 1)
+        self.assertEqual(len(state['books']), 2)
 
     def test_add_books2(self):
         '''cannot add the same book twice'''
@@ -26,6 +27,7 @@ class TestActions(unittest.TestCase):
         r = LibraryReducers()
         data = mock.MagicMock()
         data.filename = 'test'
+        data.title = 'test'
         state = r.add_books(initial, [data])
         self.assertEqual(len(initial['books']), 1)
         self.assertEqual(len(state['books']), 2)
@@ -38,6 +40,7 @@ class TestActions(unittest.TestCase):
         r = LibraryReducers()
         data = mock.MagicMock()
         data.filename = 'test'
+        data.title = 'test'
         state = r.add_books(initial, [data])
         self.assertEqual(len(initial['books']), 1)
         self.assertEqual(len(state['books']), 2)
