@@ -1,7 +1,9 @@
 import os
 import re
-import grp
-import pwd
+import platform
+if platform.system != 'Windows':
+    import grp
+    import pwd
 import logging
 import shutil
 import asyncio
@@ -56,6 +58,9 @@ def wipe(library_dir):
 
 @asyncio.coroutine
 def replace(config, state, store):
+    if platform.system() == 'Windows':
+        log.warning('Replace library is not supported on Windows')
+        return
     library_dir = config.get('files', 'library_dir')
     usb_dir = config.get('files', 'usb_dir')
     owner = config.get('user', 'user_name')
