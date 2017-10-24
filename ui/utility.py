@@ -27,7 +27,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         * title on the top line.
         * use two dot-six characters to indicate all uppercase for the title.
         * page numbers all the way at the right,
-        e.g. ',,library menu               1 / 3'.
+        e.g. ',,library menu               #1/#3'.
     '''
     page_number += 1
     total_pages += 1
@@ -45,7 +45,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     # left pad number with required amount of zeros
     page_number = '{:0>100}'.format(page_number)[-num_width:]
 
-    current_page = ' {} / {}'.format(page_number, total_pages)
+    current_page = '#{}/#{}'.format(page_number, total_pages)
 
     available_title_space = width - len(current_page)
 
@@ -55,7 +55,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         title = title[0:available_title_space]
     else:
         # pad
-        title += ' ' * (available_title_space - len(title))
+        title += '-' * (available_title_space - len(title))
 
     return to_braille(title + current_page)
 
