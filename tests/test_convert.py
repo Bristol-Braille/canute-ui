@@ -2,6 +2,7 @@ import unittest
 import os
 import math
 import ui.utility as utility
+import ui.braille as braille
 import ui.convert as convert
 from ui.bookfile_list import BookFile_List
 
@@ -32,7 +33,7 @@ class TestConvert(unittest.TestCase):
         self.assertEqual(pages, 25)
         content = content[0:40]
         content = utility.flatten(content)
-        alphas = utility.pin_nums_to_alphas(content)
+        alphas = braille.pin_nums_to_alphas(content)
         alphas = ''.join(alphas).lower()
         self.assertEqual(
             alphas[0:40], 'the quickbrownfoxjumpedoverlazydog.000  ')
@@ -49,7 +50,7 @@ class TestConvert(unittest.TestCase):
         self.assertEqual(pages, 248)
         content = utility.flatten(content[0:4])
 
-        alphas = utility.pin_nums_to_alphas(content)
+        alphas = braille.pin_nums_to_alphas(content)
         alphas = ''.join(alphas).lower()
 
         with open(brf_file) as fh:

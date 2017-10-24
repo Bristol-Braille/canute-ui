@@ -1,11 +1,11 @@
-from ..braille import to_braille
+from ..braille import to_braille, format_title
 from .. import utility
 
 
 def render_home_menu(width, height, book):
     data = []
     max_pages = utility.get_max_pages(book, height)
-    data.append(utility.format_title(
+    data.append(format_title(
         book.title, width, book.page, max_pages))
     data.append(to_braille('go to page'))
     data.append(to_braille('go to start of book'))

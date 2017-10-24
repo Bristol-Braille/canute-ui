@@ -1,36 +1,20 @@
 #!/usr/bin/env python
 
-import argparse
 import logging
 from . import comms_codes as comms
-from multiprocessing import Queue
 from queue import Empty
 import sys
 from PySide import QtGui, QtCore
 from .qt.main_window import Ui_MainWindow
-from ui.utility import pin_num_to_unicode, pin_num_to_alpha
+from .braille import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
 
 # hardware defs
-BUTTONS = 9
 CHARS = 40
 ROWS = 9
 
 MSG_INTERVAL_MS = 10
-
-
-def main():
-
-    parser = argparse.ArgumentParser(description='Canute Emulator')
-    parser.add_argument('--text', action='store_const', dest='text',
-                        const=True, help='show text instead of braille')
-    args = parser.parse_args()
-
-    app = QtGui.QApplication(sys.argv)
-    Display(to_display_queue=Queue(), from_display_queue=Queue(),
-            display_text=args.text)
-    sys.exit(app.exec_())
 
 
 class HardwareError(Exception):
@@ -149,7 +133,3 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
             pass
         except:
             log.error('check_msg ERROR')
-
-
-if __name__ == '__main__':
-    main()

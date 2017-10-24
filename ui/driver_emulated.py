@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 class Emulated(Driver):
 
     # hardware defs
-    BUTTONS = 9
     CHARS = 40
     ROWS = 9
 

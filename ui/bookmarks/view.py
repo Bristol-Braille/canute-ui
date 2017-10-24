@@ -1,4 +1,4 @@
-from ..braille import to_braille
+from ..braille import to_braille, format_title
 from .. import utility
 
 
@@ -33,7 +33,7 @@ def render(width, height, state):
     bookmarks = book.bookmarks[line_n:line_n + (height - 1)]
 
     max_pages = utility.get_max_pages(book.bookmarks, height - 1)
-    title = utility.format_title(
+    title = format_title(
         'bookmarks: {}'.format(book.title),
         width, page, max_pages)
     data = [title]
@@ -43,7 +43,7 @@ def render(width, height, state):
             data.append((0,) * width)
             continue
         line = book[bm * height:(bm * height) + 1][0]
-        data.append(tuple(to_braille(str(bm + 1))) + (0,) + line)
+        data.append(tuple(to_braille(str(bm + 1))) + (0,) + tuple(line))
 
     # pad page with empty rows
     while len(data) < height:

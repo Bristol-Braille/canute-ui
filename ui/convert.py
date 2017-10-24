@@ -1,7 +1,7 @@
 import logging
 import os
 import xml.dom.minidom as minidom
-from . import utility
+from . import braille
 
 
 log = logging.getLogger(__name__)
@@ -26,13 +26,13 @@ def convert_brf(width, height, brf_file, native_file, remove=True):
             converted = []
             for char in line:
                 try:
-                    converted.append(utility.alpha_to_pin_num(char))
-                except utility.LinefeedConversionException:
+                    converted.append(braille.alpha_to_pin_num(char))
+                except braille.LinefeedConversionException:
                     if len(converted):
                         pad_line(converted)
                         book.append(converted)
                         converted = []
-                except utility.FormfeedConversionException:
+                except braille.FormfeedConversionException:
                     if len(converted):
                         pad_line(converted)
                         book.append(converted)
@@ -101,7 +101,7 @@ def convert_pef(width, height, pef_file, native_file, remove=True):
                 data = row.childNodes[0].data.rstrip()
                 line = []
                 for uni_char in data:
-                    pin_num = utility.unicode_to_pin_num(uni_char)
+                    pin_num = braille.unicode_to_pin_num(uni_char)
                     line.append(pin_num)
             except IndexError:
                 # empty row element
