@@ -64,20 +64,23 @@ def main():
 
 
 def run(driver, config):
-    asyncio.get_event_loop().run_until_complete(run_async(driver, config))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run_async(driver, config, loop))
+    pending = asyncio.Task.all_tasks()
+    loop.run_until_complete(asyncio.gather(*pending))
 
 
 @asyncio.coroutine
 def run_async_timeout(driver, config, duration, loop):
     try:
         with async_timeout.timeout(duration, loop=loop):
-            yield from run_async(driver, config)
+            yield from run_async(driver, config, loop)
     except asyncio.TimeoutError:
         return
 
 
 @asyncio.coroutine
-def run_async(driver, config):
+def run_async(driver, config, loop):
 
     state = initial_state.read()
     width, height = driver.get_dimensions()
@@ -92,7 +95,7 @@ def run_async(driver, config):
     library_dir = config.get('files', 'library_dir')
     yield from library.sync(state['app'], library_dir, store)
 
-    store.subscribe(partial(handle_changes, driver, config, store))
+    store.subscribe(partial(handle_changes, driver, config, store, loop))
 
     # if we startup and update_ui is still 'in progress' then we are using the
     # old state file and update has failed
@@ -116,11 +119,11 @@ def run_async(driver, config):
         yield from asyncio.sleep(0.01)
 
 
-def handle_changes(driver, config, store):
+def handle_changes(driver, config, store, loop):
     state = store.state
     display.render_to_buffer(state['app'])
-    ioloop = asyncio.new_event_loop()
-    ioloop.run_until_complete(change_files(config, state['app'], store))
+    asyncio.run_coroutine_threadsafe(
+        change_files(config, state['app'], store), loop)
     initial_state.write(state)
 
 
