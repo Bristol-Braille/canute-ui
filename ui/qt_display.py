@@ -20,19 +20,6 @@ ROWS = 9
 MSG_INTERVAL_MS = 10
 
 
-def main():
-
-    parser = argparse.ArgumentParser(description='Canute Emulator')
-    parser.add_argument('--text', action='store_const', dest='text',
-                        const=True, help='show text instead of braille')
-    args = parser.parse_args()
-
-    app = QtGui.QApplication(sys.argv)
-    Display(to_display_queue=Queue(), from_display_queue=Queue(),
-            display_text=args.text)
-    sys.exit(app.exec_())
-
-
 class HardwareError(Exception):
     pass
 
@@ -149,7 +136,3 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
             pass
         except:
             log.error('check_msg ERROR')
-
-
-if __name__ == '__main__':
-    main()
