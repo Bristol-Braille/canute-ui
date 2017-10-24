@@ -58,3 +58,11 @@ parser.add_argument(
     default=False,
     help='run both the emulator and the real hardware at the same time'
 )
+parser.add_argument(
+    '--fuzz',
+    action='store',
+    dest='fuzz_duration',
+    help='run with dummy display (emulated but without any graphics) ' +
+    'and press random buttons for duration (in seconds)',
+    type=float,
+)

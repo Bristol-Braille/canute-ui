@@ -4,13 +4,13 @@ log_file = canute.log
 # book directory
 library_dir = ~/books/
 # where usb sticks will be automounted
-usb_dir = /media/
+usb_dir = /home/travis/build/Bristol-Braille/canute-ui/books/
 # where the software is - needed for ui updates
-install_dir = ~/canute-ui/
+install_dir = ~/build/Bristol-Braille/canute-ui/
 archive_dir = ~/
 
 [user]
-user_name = pi
+user_name = travis
 
 [comms]
 # serial timeout in seconds

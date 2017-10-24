@@ -8,6 +8,7 @@ import logging
 import asyncio
 import aioredux
 import aioredux.middleware
+import async_timeout
 
 from ui.driver_pi import Pi
 import ui.utility as utility
@@ -20,6 +21,7 @@ import ui.initial_state as initial_state
 import ui.library.handlers as library
 import ui.buttons as buttons
 from ui.display import Display
+from ui.driver_dummy import Dummy
 
 display = Display()
 
@@ -33,7 +35,13 @@ def main():
     log = setup_logs(config, args.loglevel)
     timeout = config.get('comms', 'timeout')
 
-    if args.emulated and not args.both:
+    if args.fuzz_duration:
+        log.info('running fuzz test')
+        with Dummy() as driver:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(run_async_timeout(
+                driver, config, args.fuzz_duration, loop))
+    elif args.emulated and not args.both:
         log.info('running with emulated hardware')
         from ui.driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
@@ -57,6 +65,15 @@ def main():
 
 def run(driver, config):
     asyncio.get_event_loop().run_until_complete(run_async(driver, config))
+
+
+@asyncio.coroutine
+def run_async_timeout(driver, config, duration, loop):
+    try:
+        with async_timeout.timeout(duration, loop=loop):
+            yield from run_async(driver, config)
+    except asyncio.TimeoutError:
+        return
 
 
 @asyncio.coroutine
@@ -136,6 +153,9 @@ def handle_hardware(driver, state, store):
             driver.clear_page()
             driver.lower_rods()
             os.system('sudo shutdown -h now')
+        # never exit from Dummy driver
+        elif isinstance(driver, Dummy):
+            return False
         return True
     elif state['hardware']['resetting_display'] == 'start':
         store.dispatch(actions.reset_display('in progress'))

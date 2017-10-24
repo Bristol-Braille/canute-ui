@@ -52,7 +52,7 @@ def render(width, height, state):
         selection = int(selection) - 1
 
     t = format_title('go to page number', width,
-                             selection, total_pages, capitalize=False)
+                     selection, total_pages, capitalize=False)
     data.append(t)
 
     data.append(to_braille('please confirm by pressing forward'))

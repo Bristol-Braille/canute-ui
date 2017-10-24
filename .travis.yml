@@ -9,3 +9,5 @@ install: "pip3 install -r requirements.txt"
 script:
   - ./test
   - ./lint
+  - cp -r books ~/ && cp config.rc.travis config.rc
+  - ./canute_ui --fuzz 600 --debug

@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
-import argparse
 import logging
 from . import comms_codes as comms
-from multiprocessing import Queue
 from queue import Empty
 import sys
 from PySide import QtGui, QtCore
@@ -13,7 +11,6 @@ from .braille import pin_num_to_unicode, pin_num_to_alpha
 log = logging.getLogger(__name__)
 
 # hardware defs
-BUTTONS = 9
 CHARS = 40
 ROWS = 9
 
