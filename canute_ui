@@ -41,6 +41,8 @@ def main():
             loop = asyncio.get_event_loop()
             loop.run_until_complete(run_async_timeout(
                 driver, config, args.fuzz_duration, loop))
+            pending = asyncio.Task.all_tasks()
+            loop.run_until_complete(asyncio.gather(*pending))
     elif args.emulated and not args.both:
         log.info('running with emulated hardware')
         from ui.driver_emulated import Emulated
