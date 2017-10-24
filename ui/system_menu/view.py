@@ -1,4 +1,4 @@
-from ..braille import to_braille
+from ..braille import to_braille, format_title
 from .. import utility
 
 
@@ -29,7 +29,7 @@ def render(width, height, state):
     # subtract title from page height
     data_height = height - 1
     max_pages = utility.get_max_pages(data, data_height)
-    title = utility.format_title('system menu', width, page, max_pages)
+    title = format_title('system menu', width, page, max_pages)
     n = page * data_height
     data = data[n: n + data_height]
     # pad page with empty rows

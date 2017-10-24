@@ -8,7 +8,7 @@ from queue import Empty
 import sys
 from PySide import QtGui, QtCore
 from .qt.main_window import Ui_MainWindow
-from ui.utility import pin_num_to_unicode, pin_num_to_alpha
+from .braille import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
 

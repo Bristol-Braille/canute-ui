@@ -1,4 +1,4 @@
-from ..braille import to_braille
+from ..braille import to_braille, format_title
 from .. import utility
 
 
@@ -42,7 +42,7 @@ def render(width, height, state):
         page = book.page
         title_text = book.title
 
-    data.append(utility.format_title(
+    data.append(format_title(
         title_text, width, page, total_pages))
 
     selection = state['go_to_page']['selection']
@@ -51,7 +51,7 @@ def render(width, height, state):
     else:
         selection = int(selection) - 1
 
-    t = utility.format_title('go to page number', width,
+    t = format_title('go to page number', width,
                              selection, total_pages, capitalize=False)
     data.append(t)
 
