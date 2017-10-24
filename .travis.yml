@@ -10,4 +10,4 @@ script:
   - ./test
   - ./lint
   - cp -r books ~/ && cp config.rc.travis config.rc
-  - ./canute_ui --fuzz 600 --debug
+  - ./canute_ui --fuzz 600
