@@ -1,6 +1,5 @@
+from ..braille import to_braille
 from .. import utility
-
-to_braille = utility.to_braille
 
 
 def render_help_menu(width, height, page):

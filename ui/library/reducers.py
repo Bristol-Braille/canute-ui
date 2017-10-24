@@ -3,6 +3,7 @@ import logging
 from functools import partial
 
 from .. import utility
+from ..braille import to_braille
 from ..manual import manual
 
 log = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class LibraryReducers():
     def set_books(self, state, books):
         width, height = utility.dimensions(state)
         books = tuple(sort_books(books))
-        data = list(map(lambda b: utility.to_braille(b.title), books))
+        data = list(map(lambda b: to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location='library',
@@ -42,7 +43,7 @@ class LibraryReducers():
         books = list(state['books'])
         books += list(books_to_add)
         books = sort_books(books)
-        data = list(map(lambda b: utility.to_braille(b.title), books))
+        data = list(map(lambda b: to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({
             'data': tuple(data),
@@ -56,7 +57,7 @@ class LibraryReducers():
         books = [
             b for b in state['books'] if b.filename not in filenames
         ]
-        data = list(map(lambda b: utility.to_braille(b.title), books))
+        data = list(map(lambda b: to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         maximum = utility.get_max_pages(data, height)
         page = state['library']['page']

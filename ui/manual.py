@@ -1,4 +1,4 @@
-from .utility import to_braille
+from .braille import to_braille
 
 contents = (
     '         canute quick help',

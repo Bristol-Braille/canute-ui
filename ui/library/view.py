@@ -1,6 +1,5 @@
+from ..braille import to_braille, format_title
 from .. import utility
-
-to_braille = utility.to_braille
 
 
 def render_help_menu(width, height, page):
@@ -27,13 +26,13 @@ def render_library(width, height, state):
     # subtract title from page height
     data_height = height - 1
     max_pages = utility.get_max_pages(books, data_height)
-    title = utility.format_title('library menu', width, page, max_pages)
+    title = format_title('library menu', width, page, max_pages)
     data = [title]
     n = page * data_height
     for book in books[n:n + data_height]:
         max_pages = utility.get_max_pages(book, height)
-        data.append(utility.format_title(book.title, width, book.page,
-                                         max_pages, capitalize=False))
+        data.append(format_title(book.title, width, book.page,
+                                 max_pages, capitalize=False))
 
     # pad page with empty rows
     while len(data) < height:
