@@ -1,6 +1,7 @@
 import os
 
-class Book(list):
+
+class BookFile(list):
     def __init__(self, filename, cells):
         list.__init__(self)
         self.filename = filename
