@@ -1,4 +1,5 @@
 import os
+import xml.dom.minidom as minidom
 
 from . import braille
 
@@ -14,6 +15,23 @@ class BookFile(list):
         if ext == '.brf':
             with open(filename) as f:
                 self.lines = tuple(line for line in f)
+        elif ext == '.pef':
+            xml_doc = minidom.parse(filename)
+            pages = xml_doc.getElementsByTagName('page')
+            lines = []
+            for page in pages:
+                for row in page.getElementsByTagName('row'):
+                    try:
+                        data = row.childNodes[0].data.rstrip()
+                        line = []
+                        for uni_char in data:
+                            pin_num = braille.unicode_to_pin_num(uni_char)
+                            line.append(pin_num)
+                    except IndexError:
+                        # empty row element
+                        line = [0] * cells
+                    lines.append(line)
+            self.lines = tuple(lines)
         else:
             raise Exception(ext)
 
