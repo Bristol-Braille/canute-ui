@@ -1,7 +1,12 @@
 import os
 
+from . import braille
+
 
 class BookFile(list):
+    page = 0
+    bookmarks = tuple()
+
     def __init__(self, filename, cells):
         list.__init__(self)
         self.filename = filename
@@ -9,6 +14,8 @@ class BookFile(list):
         if ext == '.brf':
             with open(filename) as f:
                 self.lines = tuple(line for line in f)
+        else:
+            raise Exception(ext)
 
     @property
     def title(self):
@@ -20,4 +27,17 @@ class BookFile(list):
         return len(self.lines)
 
     def __getitem__(self, i):
-        return self.lines.__getitem__(i)
+        if type(i) is slice:
+            return tuple(convert(l) for l in self.lines.__getitem__(i))
+        else:
+            return convert(self.lines[i])
+
+
+def convert(line):
+    converted = []
+    for char in line:
+        try:
+            converted.append(braille.alpha_to_pin_num(char))
+        except:
+            pass
+    return converted
