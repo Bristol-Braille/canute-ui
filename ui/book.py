@@ -6,7 +6,8 @@ class Book(list):
         self.filename = filename
         ext = os.path.splitext(filename)[-1].lower()
         if ext == '.brf':
-            self.num_lines = sum(1 for line in open(filename))
+            with open(filename) as f:
+                self.lines = tuple(line for line in f)
 
     @property
     def title(self):
@@ -15,4 +16,7 @@ class Book(list):
         return title
 
     def __len__(self):
-        return self.num_lines
+        return len(self.lines)
+
+    def __getitem__(self, i):
+        return self.lines.__getitem__(i)

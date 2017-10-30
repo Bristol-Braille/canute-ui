@@ -18,6 +18,10 @@ class TestBookBrf(unittest.TestCase):
     def test_has_len(self):
         self.assertGreater(len(self.book), 0)
 
+    def test_get_line(self):
+        self.assertIsNotNone(self.book[0])
+
+
 
     @classmethod
     def tearDownClass(self):
