@@ -1,6 +1,6 @@
 import unittest
 import os
-import ui.utility as utility
+from . import utility
 from ui.bookfile_list import BookFile_List
 
 

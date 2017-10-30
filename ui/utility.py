@@ -91,31 +91,6 @@ def get_methods(cls):
     return [x for x in methods if not x.startswith('__')]
 
 
-def test_book(dimensions, content=None):
-    '''
-    returns a book of 8 pages with each page showing all possible combinations
-    of the 8 rotor positions
-    '''
-    text = []
-    for i in range(8):
-        char = i + (i << 3)
-        for j in range(dimensions[1]):
-            if content is not None:
-                text.append([content] * dimensions[0])
-            else:
-                text.append([char] * dimensions[0])
-    return text
-
-
-def test_pattern(dimensions):
-    '''creates a repeating pattern of all possible dot patterns'''
-    cols, rows = dimensions
-    text = []
-    for i in range(cols * rows):
-        text.append(i % 64)
-    return text
-
-
 def unfreeze(frozen):
     if type(frozen) is tuple or type(frozen) is list:
         return list(unfreeze(x) for x in frozen)

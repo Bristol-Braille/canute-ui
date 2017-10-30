@@ -1,11 +1,12 @@
 import unittest
 import mock
+
 import ui.actions as actions
 from ui.library.reducers import LibraryReducers
 from ui.initial_state import initial_state
-import ui.utility as utility
 from ui.bookfile_list import BookFile_List
 
+from . import utility
 
 initial = initial_state['app']
 
