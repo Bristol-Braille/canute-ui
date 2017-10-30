@@ -45,28 +45,9 @@ class Dummy(Driver):
             'L',
             'R',
             'X',
-            # make some button presses more likely
-            # so we don't get stuck on go to page menu
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            '>',
-            '>',
-            '>',
-            '>',
-            '>',
-            '>',
         ]
 
+        # raise any previously held keys
         for button in self.buttons.keys():
             if self.buttons[button] == 'down':
                 self.buttons[button] = 'up'
@@ -74,7 +55,6 @@ class Dummy(Driver):
                 self.buttons[button]
 
         n = random.randint(0, len(button_map) - 1)
-
         self.buttons[button_map[n]] = 'down'
 
         return self.buttons

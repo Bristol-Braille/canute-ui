@@ -24,7 +24,7 @@ def sync(state, library_dir, store):
     disk_files = utility.find_files(library_dir, ('brf',))
     not_added = [f for f in disk_files if f not in library_files]
     if not_added != []:
-        not_added_data = [BookFile(f, width) for f in not_added]
+        not_added_data = [BookFile(f, width, height) for f in not_added]
         yield from store.dispatch(actions.add_books(not_added_data))
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:

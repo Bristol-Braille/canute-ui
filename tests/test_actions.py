@@ -53,7 +53,7 @@ class TestActions(unittest.TestCase):
         rl = LibraryReducers()
         filename = ('books/A_balance_between_technology_and_Braille_Addin'
                     + 'g_Value_and_Creating_a_Love_of_Reading.BRF')
-        bookfile = BookFile(filename, 40)
+        bookfile = BookFile(filename, 40, 9)
         state = rl.add_books(initial, [bookfile])
         state = rl.go_to_book(state, 0)
 
