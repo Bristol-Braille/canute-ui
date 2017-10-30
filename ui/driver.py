@@ -139,7 +139,7 @@ class Driver(object, metaclass=abc.ABCMeta):
 
     def set_braille_row(self, row, data):
         if len(data) < self.chars:
-            data = data + ([0] * (self.chars - len(data)))
+            data = tuple(data) + ((0,) * (self.chars - len(data)))
 
         if len(data) > self.chars:
             data = data[0:self.chars]
