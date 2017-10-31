@@ -72,7 +72,7 @@ class BookFile():
         return title
 
     @property
-    def page_text(self):
+    def current_page_text(self):
         line_number = self.page_number * self.height
         return self.lines[line_number:line_number + self.height]
 
