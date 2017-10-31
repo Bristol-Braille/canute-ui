@@ -2,7 +2,6 @@ import os
 import re
 import xml.dom.minidom as minidom
 
-from . import utility
 from . import braille
 
 FORM_FEED = re.compile('\f')
@@ -35,20 +34,19 @@ class BookFile():
                     if len(page) == height:
                         pages.append(tuple(page))
                         page = []
-                    page.append(line)
+                    page.append(braille.to_braille(line))
             # pad the last page if it has at least one line
             if len(page) > 0:
                 while len(page) < height:
                     page.append('')
                 pages.append(tuple(page))
-            lines = utility.flatten(pages)
-            self.lines = tuple(braille.to_braille(l) for l in lines)
+            self.pages = tuple(pages)
 
         elif ext == '.pef':
             xml_doc = minidom.parse(filename)
-            pages = xml_doc.getElementsByTagName('page')
+            xml_pages = xml_doc.getElementsByTagName('page')
             lines = []
-            for page in pages:
+            for page in xml_pages:
                 for row in page.getElementsByTagName('row'):
                     try:
                         data = row.childNodes[0].data.rstrip()
@@ -60,7 +58,11 @@ class BookFile():
                         # empty row element
                         line = tuple()
                     lines.append(tuple(line))
-            self.lines = tuple(lines)
+            pages = []
+            for i in range(len(lines))[::height]:
+                page = lines[i:i + height]
+                pages.append(tuple(page))
+            self.pages = tuple(pages)
 
         else:
             raise Exception('Unexpected extension: {}'.format(ext))
@@ -73,12 +75,11 @@ class BookFile():
 
     @property
     def current_page_text(self):
-        line_number = self.page_number * self.height
-        return self.lines[line_number:line_number + self.height]
+        return self.pages[self.page_number]
 
     @property
     def max_pages(self):
-        return (len(self.lines) - 1) // self.height
+        return len(self.pages) - 1
 
     def set_page(self, page):
         if page < 0:
