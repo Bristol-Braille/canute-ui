@@ -84,9 +84,11 @@ class Manual(list):
     def __len__(self):
         return self.lines.__len__()
 
-    def __getitem__(self, i):
-        return self.lines.__getitem__(i)
-
     @property
     def max_pages(self):
         return (len(self.lines) - 1) // self.height
+
+    @property
+    def page_text(self):
+        line_number = self.page_number * self.height
+        return self.lines[line_number:line_number + self.height]

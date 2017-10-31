@@ -83,6 +83,3 @@ class BookFile(list):
 
     def __len__(self):
         return len(self.lines)
-
-    def __getitem__(self, i):
-        return self.lines.__getitem__(i)

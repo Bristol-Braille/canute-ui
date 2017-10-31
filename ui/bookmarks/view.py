@@ -41,7 +41,7 @@ def render(width, height, state):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        line = book[bm * height:(bm * height) + 1][0]
+        line = book.page_text[0]
         data.append(tuple(to_braille(str(bm + 1))) + (0,) + tuple(line))
 
     # pad page with empty rows
