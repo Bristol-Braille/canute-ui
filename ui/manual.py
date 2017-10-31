@@ -69,7 +69,7 @@ contents = (
 manual_filename = '@@__canute_manual__@@'
 
 
-class Manual(list):
+class Manual():
     page_number = 0
     bookmarks = tuple()
     filename = manual_filename
@@ -79,10 +79,6 @@ class Manual(list):
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        list.__init__(self)
-
-    def __len__(self):
-        return self.lines.__len__()
 
     @property
     def max_pages(self):

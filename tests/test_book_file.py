@@ -16,7 +16,7 @@ class TestBookFileBrf(unittest.TestCase):
         self.assertIsNotNone(self.book.title)
 
     def test_has_len(self):
-        self.assertGreater(len(self.book), 0)
+        self.assertGreater(len(self.book.lines), 0)
 
     def test_get_line(self):
         self.assertIsNotNone(self.book.page_text[0])
@@ -45,7 +45,7 @@ class TestBookFilePef(unittest.TestCase):
         self.assertIsNotNone(self.book.title)
 
     def test_has_len(self):
-        self.assertGreater(len(self.book), 0)
+        self.assertGreater(len(self.book.lines), 0)
 
     def test_get_line(self):
         self.assertIsNotNone(self.book.page_text[0])

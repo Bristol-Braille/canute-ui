@@ -8,12 +8,11 @@ from . import braille
 FORM_FEED = re.compile('\f')
 
 
-class BookFile(list):
+class BookFile():
     page_number = 0
     bookmarks = tuple()
 
     def __init__(self, filename, width, height):
-        list.__init__(self)
         self.filename = filename
         self.width = width
         self.height = height
@@ -81,5 +80,10 @@ class BookFile(list):
     def max_pages(self):
         return (len(self.lines) - 1) // self.height
 
-    def __len__(self):
-        return len(self.lines)
+    def set_page(self, page):
+        if page < 0:
+            self.page_number = 0
+        elif page > self.max_pages:
+            self.page_number = self.max_pages
+        else:
+            self.page_number = page
