@@ -132,10 +132,5 @@ def to_braille(alphas):
     '''
     pin_nums = []
     for alpha in alphas:
-        try:
-            pin_nums.append(alpha_to_pin_num(alpha))
-        except FormfeedConversionException():
-            pass
-        except LinefeedConversionException():
-            pass
+        pin_nums.append(alpha_to_pin_num(alpha))
     return pin_nums

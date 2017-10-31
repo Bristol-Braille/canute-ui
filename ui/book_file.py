@@ -43,7 +43,7 @@ class BookFile(list):
                     page.append(' ' * width)
                 pages.append(tuple(page))
             lines = utility.flatten(pages)
-            self.lines = tuple(convert(l) for l in lines)
+            self.lines = tuple(braille.to_braille(l) for l in lines)
 
         elif ext == '.pef':
             xml_doc = minidom.parse(filename)
@@ -81,10 +81,3 @@ class BookFile(list):
 
     def __getitem__(self, i):
         return self.lines.__getitem__(i)
-
-
-def convert(line):
-    converted = []
-    for char in line:
-        converted.append(braille.alpha_to_pin_num(char))
-    return converted
