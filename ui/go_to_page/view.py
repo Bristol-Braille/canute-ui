@@ -16,7 +16,7 @@ def render_help_menu(width, height, page):
     data = [to_braille(line) for line in data]
 
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 
@@ -59,6 +59,6 @@ def render(width, height, state):
     data.append(to_braille('to go back to book press middle button'))
 
     for _ in range(height - 6):
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)

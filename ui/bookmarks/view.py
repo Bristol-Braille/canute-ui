@@ -15,7 +15,7 @@ def render_help_menu(width, height):
 
     # pad page with empty rows
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 
@@ -39,13 +39,13 @@ def render(width, height, state):
 
     for bm in bookmarks:
         if bm == 'deleted':
-            data.append((0,) * width)
+            data.append(tuple())
             continue
         line = book[bm * height:(bm * height) + 1][0]
         data.append(tuple(to_braille(str(bm + 1))) + (0,) + tuple(line))
 
     # pad page with empty rows
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)

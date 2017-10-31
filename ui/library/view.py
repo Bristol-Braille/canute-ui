@@ -14,7 +14,7 @@ def render_help_menu(width, height, page):
     data = [to_braille(line) for line in data]
 
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 
@@ -35,7 +35,7 @@ def render_library(width, height, state):
 
     # pad page with empty rows
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 

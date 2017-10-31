@@ -28,7 +28,7 @@ class BookFile(list):
                     if FORM_FEED.match(line):
                         # pad up to the next page and ignore this line
                         while len(page) < height:
-                            page.append(' ' * width)
+                            page.append('')
                         if line == '\f':
                             continue
                         else:
@@ -40,7 +40,7 @@ class BookFile(list):
             # pad the last page if it has at least one line
             if len(page) > 0:
                 while len(page) < height:
-                    page.append(' ' * width)
+                    page.append('')
                 pages.append(tuple(page))
             lines = utility.flatten(pages)
             self.lines = tuple(braille.to_braille(l) for l in lines)
@@ -59,7 +59,7 @@ class BookFile(list):
                             line.append(pin_num)
                     except IndexError:
                         # empty row element
-                        line = (0,) * width
+                        line = tuple()
                     lines.append(tuple(line))
             self.lines = tuple(lines)
 
