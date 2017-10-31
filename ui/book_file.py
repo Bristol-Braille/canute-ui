@@ -16,24 +16,26 @@ class BookFile(list):
         list.__init__(self)
         self.filename = filename
         ext = os.path.splitext(filename)[-1].lower()
+
         if ext == '.brf':
             pages = []
             page = []
-            with open(filename) as f:
-                for line in f:
+            with open(filename) as file:
+                for line in file:
                     line = line.replace('\n', '')
-                    page.append(line)
                     if FORM_FEED.match(line):
-                        page[-1] = page[-1].replace('\f', '')
+                        line = line.replace('\f', '')
                         # pad up to the next page
-                        while len(page) < (height - 1):
+                        while len(page) < height:
                             page.append(' ' * width)
-                    if len(page) == (height - 1):
+                        continue
+                    if len(page) == height:
                         pages.append(tuple(page))
                         page = []
-            # pad the last page
+                    page.append(line)
+            # pad the last page if it has at least one line
             if len(page) > 0:
-                while len(page) < (height - 1):
+                while len(page) < height:
                     page.append(' ' * width)
                 pages.append(tuple(page))
             lines = utility.flatten(pages)
@@ -54,11 +56,11 @@ class BookFile(list):
                     except IndexError:
                         # empty row element
                         line = (0,) * width
-                    lines.append(line)
+                    lines.append(tuple(line))
             self.lines = tuple(lines)
 
         else:
-            raise Exception(ext)
+            raise Exception('Unexpected extension: {}'.format(ext))
 
     @property
     def title(self):
