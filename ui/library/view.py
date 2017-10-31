@@ -30,7 +30,7 @@ def render_library(width, height, state):
     n = page * data_height
     for book in books[n:n + data_height]:
         max_pages = book.max_pages
-        data.append(format_title(book.title, width, book.page,
+        data.append(format_title(book.title, width, book.page_number,
                                  max_pages, capitalize=False))
 
     # pad page with empty rows

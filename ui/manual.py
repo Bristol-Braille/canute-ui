@@ -70,7 +70,7 @@ manual_filename = '@@__canute_manual__@@'
 
 
 class Manual(list):
-    page = 0
+    page_number = 0
     bookmarks = tuple()
     filename = manual_filename
     title = 'canute manual'

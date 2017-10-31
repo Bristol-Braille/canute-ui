@@ -33,7 +33,7 @@ class BookReducers():
         number = state['book']
         books = list(state['books'])
         book = books[number]
-        page = book.page
+        page = book.page_number
         if page not in book.bookmarks:
             book.bookmarks += tuple([page])
             books[number] = book

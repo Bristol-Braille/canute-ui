@@ -9,7 +9,7 @@ FORM_FEED = re.compile('\f')
 
 
 class BookFile(list):
-    page = 0
+    page_number = 0
     bookmarks = tuple()
 
     def __init__(self, filename, width, height):
@@ -74,7 +74,8 @@ class BookFile(list):
 
     @property
     def page_text(self):
-        return self.lines[self.page * self.height:(self.page + 1) * self.height]
+        line_number = self.page_number * self.height
+        return self.lines[line_number:line_number + self.height]
 
     @property
     def max_pages(self):

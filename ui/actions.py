@@ -71,7 +71,7 @@ class AppReducers():
             book_n = state['book']
             book = state['books'][book_n]
             books = list(state['books'])
-            book.page = utility.set_page(book, page, height)
+            book.page_number = utility.set_page(book, page, height)
             books[book_n] = book
             return state.copy(books=tuple(books))
         elif location == 'bookmarks_menu':
@@ -102,7 +102,7 @@ class AppReducers():
             return self.go_to_page(state, page)
         elif location == 'book':
             book_n = state['book']
-            page = state['books'][book_n].page + value
+            page = state['books'][book_n].page_number + value
             return self.go_to_page(state, page)
         elif location == 'bookmarks_menu':
             page = state['bookmarks_menu']['page'] + value

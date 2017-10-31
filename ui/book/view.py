@@ -4,7 +4,7 @@ from ..braille import to_braille, format_title
 def render_home_menu(width, height, book):
     data = []
     data.append(format_title(
-        book.title, width, book.page, book.max_pages))
+        book.title, width, book.page_number, book.max_pages))
     data.append(to_braille('go to page'))
     data.append(to_braille('go to start of book'))
     data.append(to_braille('go to end of book'))
@@ -46,7 +46,7 @@ def render(width, height, state):
     if home_menu:
         return render_home_menu(width, height, book)
     else:
-        page = book.page
+        page = book.page_number
         data = book
         n = page * height
         return data[n: n + height]
