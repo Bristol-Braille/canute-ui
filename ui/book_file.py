@@ -73,6 +73,10 @@ class BookFile(list):
         return title
 
     @property
+    def page_text(self):
+        return self.lines[self.page * self.height:(self.page + 1) * self.height]
+
+    @property
     def max_pages(self):
         return (len(self.lines) - 1) // self.height
 
