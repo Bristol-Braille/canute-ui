@@ -78,7 +78,7 @@ class AppReducers():
             book_n = state['book']
             book = state['books'][book_n]
             bookmarks_data = book.bookmarks
-            max_pages = utility.get_max_pages(bookmarks_data, height)
+            max_pages = (len(bookmarks_data) - 1) // height
             if page > max_pages:
                 page = max_pages
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
@@ -87,6 +87,7 @@ class AppReducers():
             max_pages = 1
             if page >= max_pages:
                 page = max_pages - 1
+
             return state.copy(help_menu=state['help_menu'].copy(page=page))
         return state
 

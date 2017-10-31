@@ -15,6 +15,8 @@ class BookFile(list):
     def __init__(self, filename, width, height):
         list.__init__(self)
         self.filename = filename
+        self.width = width
+        self.height = height
         ext = os.path.splitext(filename)[-1].lower()
 
         if ext == '.brf':
@@ -67,6 +69,10 @@ class BookFile(list):
         basename = os.path.basename(self.filename)
         title = os.path.splitext(basename)[0].replace('_', ' ')
         return title
+
+    @property
+    def max_pages(self):
+        return (len(self.lines) - 1) // self.height
 
     def __len__(self):
         return len(self.lines)

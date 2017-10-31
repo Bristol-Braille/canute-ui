@@ -3,7 +3,7 @@ from copy import copy
 import logging
 from . import utility
 from .system_menu.system_menu import menu_titles
-from .manual import manual
+from .manual import Manual
 
 STATE_FILE = 'state.pkl'
 
@@ -17,7 +17,7 @@ initial_state = utility.freeze({
             'page': 0,
         },
         'book': 0,
-        'books': [manual],
+        'books': [Manual(40, 9)],
         'system_menu': {
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0

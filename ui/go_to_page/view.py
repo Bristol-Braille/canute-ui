@@ -1,5 +1,4 @@
 from ..braille import to_braille, format_title
-from .. import utility
 
 
 def render_help_menu(width, height, page):
@@ -38,7 +37,7 @@ def render(width, height, state):
         page = 0
         title_text = 'no book'
     else:
-        total_pages = utility.get_max_pages(book, height)
+        total_pages = book.max_pages
         page = book.page
         title_text = book.title
 

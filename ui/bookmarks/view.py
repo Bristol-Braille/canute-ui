@@ -1,5 +1,4 @@
 from ..braille import to_braille, format_title
-from .. import utility
 
 
 def render_help_menu(width, height):
@@ -32,7 +31,7 @@ def render(width, height, state):
     line_n = page * (height - 1)
     bookmarks = book.bookmarks[line_n:line_n + (height - 1)]
 
-    max_pages = utility.get_max_pages(book.bookmarks, height - 1)
+    max_pages = (len(book.bookmarks) - 1) // (height - 1)
     title = format_title(
         'bookmarks: {}'.format(book.title),
         width, page, max_pages)
