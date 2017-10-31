@@ -26,11 +26,13 @@ class BookFile(list):
                 for line in file:
                     line = line.replace('\n', '')
                     if FORM_FEED.match(line):
-                        line = line.replace('\f', '')
-                        # pad up to the next page
+                        # pad up to the next page and ignore this line
                         while len(page) < height:
                             page.append(' ' * width)
-                        continue
+                        if line == '\f':
+                            continue
+                        else:
+                            line = line.replace('\f', '')
                     if len(page) == height:
                         pages.append(tuple(page))
                         page = []
