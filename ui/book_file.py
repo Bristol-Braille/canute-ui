@@ -1,10 +1,16 @@
 import os
 import re
 import xml.dom.minidom as minidom
+import logging
 
 from . import braille
 
+log = logging.getLogger(__name__)
 FORM_FEED = re.compile('\f')
+
+
+class BookFileError(Exception):
+    pass
 
 
 class BookFile():
@@ -18,6 +24,7 @@ class BookFile():
         ext = os.path.splitext(filename)[-1].lower()
 
         if ext == '.brf':
+            self.type = 'brf'
             pages = []
             page = []
             with open(filename) as file:
@@ -43,6 +50,7 @@ class BookFile():
             self.pages = tuple(pages)
 
         elif ext == '.pef':
+            self.type = 'pef'
             xml_doc = minidom.parse(filename)
             xml_pages = xml_doc.getElementsByTagName('page')
             lines = []
@@ -65,7 +73,7 @@ class BookFile():
             self.pages = tuple(pages)
 
         else:
-            raise Exception('Unexpected extension: {}'.format(ext))
+            raise BookFileError('Unexpected extension: {}'.format(ext))
 
     @property
     def title(self):

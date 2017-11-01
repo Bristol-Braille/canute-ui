@@ -1,4 +1,5 @@
 import os
+import sys
 import grp
 import pwd
 import logging
@@ -13,19 +14,26 @@ from ..book_file import BookFile
 log = logging.getLogger(__name__)
 
 
-NATIVE_EXTENSION = 'canute'
-BOOK_EXTENSIONS = (NATIVE_EXTENSION, 'pef', 'brf')
+BOOK_EXTENSIONS = ('pef', 'brf')
 
 
 @asyncio.coroutine
 def sync(state, library_dir, store):
     width, height = utility.dimensions(state)
     library_files = [b.filename for b in state['books']]
-    disk_files = utility.find_files(library_dir, ('brf',))
+    disk_files = utility.find_files(library_dir, BOOK_EXTENSIONS)
     not_added = [f for f in disk_files if f not in library_files]
     if not_added != []:
-        not_added_data = [BookFile(f, width, height) for f in not_added]
-        yield from store.dispatch(actions.add_books(not_added_data))
+        not_added_books = []
+        for f in not_added:
+            try:
+                book = BookFile(f, width, height)
+            except:
+                e = sys.exc_info()[0]
+                log.warn('could not convert book file: "{}". {}'.format(f, e))
+            else:
+                not_added_books.append(book)
+        yield from store.dispatch(actions.add_books(not_added_books))
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
         yield from store.dispatch(actions.set_book(0))
