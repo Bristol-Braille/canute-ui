@@ -20,27 +20,31 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     if total_pages == 1:
         return to_braille(title)
 
-    current_page = '#{}/#{}'.format(page_number, total_pages)
+    current_page = ' {}/{}'.format(to_ueb_number(page_number),
+                                   to_ueb_number(total_pages))
 
     available_title_space = width - len(current_page)
 
     # make title right length
-    if len(title) > available_title_space:
+    title_length = len(title)
+    if title_length > available_title_space:
         # truncate
         title = title[0:available_title_space]
     else:
         # pad
-        title += '-' * (available_title_space - len(title))
+        title += ' '
+        if (title_length - 1) <= available_title_space:
+            title += '-' * (available_title_space - title_length - 1)
 
     return to_braille(title + current_page)
 
 
-class FormfeedConversionException(Exception):
-    pass
-
-
-class LinefeedConversionException(Exception):
-    pass
+def to_ueb_number(n):
+    mapping = 'JABCDEFGHI'
+    ueb_number = '#'
+    for c in str(n):
+        ueb_number += mapping[int(c)]
+    return ueb_number
 
 
 def unicode_to_pin_num(uni_char):
