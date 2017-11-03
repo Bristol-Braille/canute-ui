@@ -88,3 +88,11 @@ class Manual():
     def current_page_text(self):
         line_number = self.page_number * self.height
         return self.lines[line_number:line_number + self.height]
+
+    def set_page(self, page):
+        if page < 0:
+            self.page_number = 0
+        elif page > self.max_pages:
+            self.page_number = self.max_pages
+        else:
+            self.page_number = page
