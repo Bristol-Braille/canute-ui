@@ -17,19 +17,15 @@ log = logging.getLogger(__name__)
 def get_page_num_width(state):
     width, height = dimensions(state)
     book = state['books'][state['book']]
-    max_pages = get_max_pages(book, height)
+    max_pages = book.max_pages
     return len(str(max_pages))
 
 
-def get_max_pages(data, height):
-    return (len(data) - 1) // height
-
-
-def set_page(book, page, height):
+def set_page(data, page, height):
     if page < 0:
         return 0
 
-    max_pages = get_max_pages(book, height)
+    max_pages = (len(data) - 1) // height
     if page > max_pages:
         return max_pages
 
@@ -89,31 +85,6 @@ def get_methods(cls):
         if isinstance(getattr(cls, x), collections.Callable)
     ]
     return [x for x in methods if not x.startswith('__')]
-
-
-def test_book(dimensions, content=None):
-    '''
-    returns a book of 8 pages with each page showing all possible combinations
-    of the 8 rotor positions
-    '''
-    text = []
-    for i in range(8):
-        char = i + (i << 3)
-        for j in range(dimensions[1]):
-            if content is not None:
-                text.append([content] * dimensions[0])
-            else:
-                text.append([char] * dimensions[0])
-    return text
-
-
-def test_pattern(dimensions):
-    '''creates a repeating pattern of all possible dot patterns'''
-    cols, rows = dimensions
-    text = []
-    for i in range(cols * rows):
-        text.append(i % 64)
-    return text
 
 
 def unfreeze(frozen):

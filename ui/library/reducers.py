@@ -4,7 +4,7 @@ from functools import partial
 
 from .. import utility
 from ..braille import to_braille
-from ..manual import manual
+from ..manual import manual_filename
 
 log = logging.getLogger(__name__)
 
@@ -52,14 +52,14 @@ class LibraryReducers():
         return state.copy(books=tuple(books), library=library)
 
     def remove_books(self, state, filenames):
-        filenames = [f for f in filenames if f != manual.filename]
+        filenames = [f for f in filenames if f != manual_filename]
         width, height = utility.dimensions(state)
         books = [
             b for b in state['books'] if b.filename not in filenames
         ]
         data = list(map(lambda b: to_braille(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
-        maximum = utility.get_max_pages(data, height)
+        maximum = (len(data) - 1) // (height - 1)
         page = state['library']['page']
         if page > maximum:
             page = maximum

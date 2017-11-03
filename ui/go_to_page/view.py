@@ -1,5 +1,4 @@
 from ..braille import to_braille, format_title
-from .. import utility
 
 
 def render_help_menu(width, height, page):
@@ -17,7 +16,7 @@ def render_help_menu(width, height, page):
     data = [to_braille(line) for line in data]
 
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 
@@ -38,8 +37,8 @@ def render(width, height, state):
         page = 0
         title_text = 'no book'
     else:
-        total_pages = utility.get_max_pages(book, height)
-        page = book.page
+        total_pages = book.max_pages
+        page = book.page_number
         title_text = book.title
 
     data.append(format_title(
@@ -60,6 +59,6 @@ def render(width, height, state):
     data.append(to_braille('to go back to book press middle button'))
 
     for _ in range(height - 6):
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)

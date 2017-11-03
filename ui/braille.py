@@ -20,12 +20,6 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     if total_pages == 1:
         return to_braille(title)
 
-    total_pages = str(total_pages)
-    num_width = len(total_pages)
-
-    # left pad number with required amount of zeros
-    page_number = '{:0>100}'.format(page_number)[-num_width:]
-
     current_page = '#{}/#{}'.format(page_number, total_pages)
 
     available_title_space = width - len(current_page)
@@ -121,11 +115,6 @@ def alpha_to_pin_num(alpha):
     try:
         return mapping.index(alpha)
     except ValueError:
-        # form feed
-        if ord(alpha) == 12:
-            raise FormfeedConversionException()
-        if ord(alpha) == 10:
-            raise LinefeedConversionException()
         log.warning('problem converting char #[%s] to pin number' % ord(alpha))
         return 0
 
@@ -137,10 +126,5 @@ def to_braille(alphas):
     '''
     pin_nums = []
     for alpha in alphas:
-        try:
-            pin_nums.append(alpha_to_pin_num(alpha))
-        except FormfeedConversionException():
-            pass
-        except LinefeedConversionException():
-            pass
+        pin_nums.append(alpha_to_pin_num(alpha))
     return pin_nums

@@ -1,5 +1,4 @@
 from ..braille import to_braille, format_title
-from .. import utility
 
 
 def render_help_menu(width, height, page):
@@ -15,7 +14,7 @@ def render_help_menu(width, height, page):
     data = [to_braille(line) for line in data]
 
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 
@@ -28,11 +27,11 @@ def render(width, height, state):
     data = state['system_menu']['data']
     # subtract title from page height
     data_height = height - 1
-    max_pages = utility.get_max_pages(data, data_height)
+    max_pages = 1
     title = format_title('system menu', width, page, max_pages)
     n = page * data_height
     data = data[n: n + data_height]
     # pad page with empty rows
     while len(data) < data_height:
-        data += ((0,) * width,)
+        data += (tuple(),)
     return tuple([title]) + tuple(data)

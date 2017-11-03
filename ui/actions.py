@@ -71,14 +71,14 @@ class AppReducers():
             book_n = state['book']
             book = state['books'][book_n]
             books = list(state['books'])
-            book.page = utility.set_page(book, page, height)
+            book.set_page(page)
             books[book_n] = book
             return state.copy(books=tuple(books))
         elif location == 'bookmarks_menu':
             book_n = state['book']
             book = state['books'][book_n]
             bookmarks_data = book.bookmarks
-            max_pages = utility.get_max_pages(bookmarks_data, height)
+            max_pages = (len(bookmarks_data) - 1) // height
             if page > max_pages:
                 page = max_pages
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
@@ -87,6 +87,7 @@ class AppReducers():
             max_pages = 1
             if page >= max_pages:
                 page = max_pages - 1
+
             return state.copy(help_menu=state['help_menu'].copy(page=page))
         return state
 
@@ -101,7 +102,7 @@ class AppReducers():
             return self.go_to_page(state, page)
         elif location == 'book':
             book_n = state['book']
-            page = state['books'][book_n].page + value
+            page = state['books'][book_n].page_number + value
             return self.go_to_page(state, page)
         elif location == 'bookmarks_menu':
             page = state['bookmarks_menu']['page'] + value

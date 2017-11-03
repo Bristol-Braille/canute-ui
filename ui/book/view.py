@@ -1,18 +1,16 @@
 from ..braille import to_braille, format_title
-from .. import utility
 
 
 def render_home_menu(width, height, book):
     data = []
-    max_pages = utility.get_max_pages(book, height)
     data.append(format_title(
-        book.title, width, book.page, max_pages))
+        book.title, width, book.page_number, book.max_pages))
     data.append(to_braille('go to page'))
     data.append(to_braille('go to start of book'))
     data.append(to_braille('go to end of book'))
     data.append(to_braille('insert bookmark at current page'))
     data.append(to_braille('choose from existing bookmarks'))
-    data.append((0,) * width)
+    data.append(tuple())
     data.append(to_braille('view system menu'))
     data.append(to_braille('view library menu'))
     return tuple(data)
@@ -33,7 +31,7 @@ def render_help_menu(width, height):
 
     # pad page with empty rows
     while len(data) < height:
-        data.append((0,) * width)
+        data.append(tuple())
 
     return tuple(data)
 
@@ -48,7 +46,4 @@ def render(width, height, state):
     if home_menu:
         return render_home_menu(width, height, book)
     else:
-        page = book.page
-        data = book
-        n = page * height
-        return data[n: n + height]
+        return book.current_page_text

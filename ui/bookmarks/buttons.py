@@ -13,6 +13,7 @@ bookmarks_buttons = {
         '9': actions.go_to_bookmark(7),
         '<': actions.previous_page(),
         '>': actions.next_page(),
+        'R': actions.toggle_help_menu(),
     },
     'long': {
         'L': actions.close_menu(),
@@ -27,5 +28,6 @@ bookmarks_buttons = {
         '<': actions.skip_pages(-5),
         '>': actions.skip_pages(5),
         'X': actions.reset_display('start'),
+        'R': actions.toggle_help_menu(),
     },
 }

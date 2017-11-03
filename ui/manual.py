@@ -66,22 +66,33 @@ contents = (
     'before unplugging it.',
 )
 
+manual_filename = '@@__canute_manual__@@'
 
-class Manual(list):
-    page = 0
+
+class Manual():
+    page_number = 0
     bookmarks = tuple()
-    filename = '@@__canute_manual__@@'
+    filename = manual_filename
     title = 'canute manual'
-    contents = tuple(to_braille(line) for line in contents)
+    lines = tuple(to_braille(line) for line in contents)
 
-    def __init__(self):
-        list.__init__(self)
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
 
-    def __len__(self):
-        return self.contents.__len__()
+    @property
+    def max_pages(self):
+        return (len(self.lines) - 1) // self.height
 
-    def __getitem__(self, i):
-        return self.contents.__getitem__(i)
+    @property
+    def current_page_text(self):
+        line_number = self.page_number * self.height
+        return self.lines[line_number:line_number + self.height]
 
-
-manual = Manual()
+    def set_page(self, page):
+        if page < 0:
+            self.page_number = 0
+        elif page > self.max_pages:
+            self.page_number = self.max_pages
+        else:
+            self.page_number = page

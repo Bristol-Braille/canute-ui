@@ -59,9 +59,3 @@ Copy the test books to the home directory (or wherever you specified in config.r
 Run the UI using the emulator:
 
     ./canute_ui
-
-
-## API
-
-Automatically generated documentation is available at
-[http://ui.readthedocs.org/en/latest/](http://ui.readthedocs.org/en/latest/)

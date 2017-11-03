@@ -17,6 +17,23 @@ class Dummy(Driver):
     ROWS = 9
 
     buttons = {}
+    button_map = (
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '<',
+        '>',
+        'L',
+        'R',
+        'X',
+    )
+    button_choice = list(button_map)
 
     def __init__(self):
         super(Dummy, self).__init__()
@@ -24,58 +41,29 @@ class Dummy(Driver):
     def is_ok(self):
         return True
 
+    def _get_random_button(self):
+        ''' get buttons in random order but always go through entire list
+        before repeating any buttons'''
+        if len(self.button_choice) == 0:
+            self.button_choice = list(self.button_map)
+
+        n = random.randint(0, len(self.button_choice) - 1)
+        return self.button_choice.pop(n)
+
     def get_buttons(self):
         '''get button states
 
         :rtype: dict of elements either set to 'down' or 'up'
         '''
 
-        button_map = [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '<',
-            '>',
-            'L',
-            'R',
-            'X',
-            # make some button presses more likely
-            # so we don't get stuck on go to page menu
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            'L',
-            '>',
-            '>',
-            '>',
-            '>',
-            '>',
-            '>',
-        ]
-
+        # raise any previously held keys
         for button in self.buttons.keys():
             if self.buttons[button] == 'down':
                 self.buttons[button] = 'up'
             else:
                 self.buttons[button]
 
-        n = random.randint(0, len(button_map) - 1)
-
-        self.buttons[button_map[n]] = 'down'
+        self.buttons[self._get_random_button()] = 'down'
 
         return self.buttons
 
