@@ -48,7 +48,7 @@ Copy the test books to the home directory:
 
 Copy the config file:
 
-    cp config.rc config.rc.in 
+    cp config.rc.in config.rc 
 
 Run the UI software without the emulator and read the buttons through evdev:
 
