@@ -11,7 +11,7 @@ system_menu = OrderedDict([
     ('shutdown', actions.shutdown()),
     ('backup log to USB stick', actions.backup_log('start')),
     ('reset display', actions.reset_display('start')),
-    ('update UI from USB stick', actions.update_ui('start')),
+    ('update system from USB stick', actions.update_ui('start')),
 ])
 
 menu_titles = list(map(to_braille, system_menu))
