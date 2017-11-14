@@ -18,6 +18,7 @@ class BookFile():
     bookmarks = tuple()
 
     def __init__(self, filename, width, height):
+        log.debug('initialiazing {}'.format(filename))
         self.filename = filename
         self.width = width
         self.height = height
@@ -30,6 +31,7 @@ class BookFile():
 
     def open(self):
         if not self.is_open:
+            log.debug('opening {}'.format(self.filename))
             if self.ext == '.brf':
                 pages = []
                 page = []
