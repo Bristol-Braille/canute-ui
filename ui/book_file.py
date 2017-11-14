@@ -26,35 +26,33 @@ class BookFile():
         self.is_open = False
         if self.ext == '.brf':
             with open(self.filename) as file:
+                page = []
+                pages = []
                 for line in file:
-                    number_lines = sum(1 for line in file)
+                    line = line.replace('\n', '')
+                    if FORM_FEED.match(line):
+                        # pad up to the next page and ignore this line
+                        while len(page) < self.height:
+                            page.append('')
+                        if line == '\f':
+                            continue
+                        else:
+                            line = line.replace('\f', '')
+                    if len(page) == self.height:
+                        pages.append(tuple(page))
+                        page = []
+                    page.append(line)
+                self.unconverted_pages = tuple(pages)
 
     def open(self):
         if not self.is_open:
             log.debug('opening {}'.format(self.filename))
+
             if self.ext == '.brf':
                 pages = []
-                page = []
-                with open(self.filename) as file:
-                    for line in file:
-                        line = line.replace('\n', '')
-                        if FORM_FEED.match(line):
-                            # pad up to the next page and ignore this line
-                            while len(page) < self.height:
-                                page.append('')
-                            if line == '\f':
-                                continue
-                            else:
-                                line = line.replace('\f', '')
-                        if len(page) == self.height:
-                            pages.append(tuple(page))
-                            page = []
-                        page.append(braille.to_braille(line))
-                # pad the last page if it has at least one line
-                if len(page) > 0:
-                    while len(page) < self.height:
-                        page.append('')
-                    pages.append(tuple(page))
+                for page in self.unconverted_pages:
+                    pages.append(tuple((braille.to_braille(line)
+                                        for line in page)))
                 self.pages = tuple(pages)
 
             elif self.ext == '.pef':
@@ -79,10 +77,10 @@ class BookFile():
                     pages.append(tuple(page))
                 self.pages = tuple(pages)
             else:
-                raise BookFileError('Unexpected extension: {}'.format(ext))
+                raise BookFileError(
+                    'Unexpected extension: {}'.format(self.ext))
 
             self.is_open = True
-
 
     @property
     def title(self):
@@ -92,15 +90,16 @@ class BookFile():
 
     @property
     def current_page_text(self):
-        if not self.is_open:
-            self.open()
+        self.open()
         return self.pages[self.page_number]
 
     @property
     def max_pages(self):
-        if not self.is_open:
+        if self.ext == '.brf':
+            return len(self.unconverted_pages) - 1
+        else:
             self.open()
-        return len(self.pages) - 1
+            return len(self.pages) - 1
 
     def set_page(self, page):
         if not self.is_open:

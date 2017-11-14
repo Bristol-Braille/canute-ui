@@ -38,7 +38,9 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
 
     return to_braille(title + current_page)
 
+
 ueb_number_mapping = 'JABCDEFGHI'
+
 
 def to_ueb_number(n):
     ueb_number = '#'
@@ -92,9 +94,11 @@ def pin_num_to_unicode(pin_num):
     '''
     return chr(pin_num + 10240)
 
+
 # mapping from
 # http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
 mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
+
 
 def pin_num_to_alpha(numeric):
     ''' for sorting & debugging '''
