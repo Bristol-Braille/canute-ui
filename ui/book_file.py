@@ -23,6 +23,10 @@ class BookFile():
         self.height = height
         self.ext = os.path.splitext(filename)[-1].lower()
         self.is_open = False
+        if self.ext == '.brf':
+            with open(self.filename) as file:
+                for line in file:
+                    number_lines = sum(1 for line in file)
 
     def open(self):
         if not self.is_open:
