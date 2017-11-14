@@ -38,12 +38,12 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
 
     return to_braille(title + current_page)
 
+ueb_number_mapping = 'JABCDEFGHI'
 
 def to_ueb_number(n):
-    mapping = 'JABCDEFGHI'
     ueb_number = '#'
     for c in str(n):
-        ueb_number += mapping[int(c)]
+        ueb_number += ueb_number_mapping[int(c)]
     return ueb_number
 
 
@@ -92,11 +92,12 @@ def pin_num_to_unicode(pin_num):
     '''
     return chr(pin_num + 10240)
 
+# mapping from
+# http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
+mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
 
 def pin_num_to_alpha(numeric):
     ''' for sorting & debugging '''
-    mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
-    mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     return mapping[numeric]
 
 
@@ -108,13 +109,8 @@ def pin_nums_to_alphas(numerics):
 def alpha_to_pin_num(alpha):
     '''
     convert a single alpha, digit or some punctuation to 6 pin braille
-    will raise Formfeed or Linefeed ConversionExceptions if they are found
-    other unknown characters will be logged and a space will be returned.
+    unknown characters will be logged and a space will be returned.
     '''
-    # mapping from
-    # http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
-    mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
-    mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     alpha = alpha.upper()
     try:
         return mapping.index(alpha)
