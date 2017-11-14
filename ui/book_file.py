@@ -86,13 +86,19 @@ class BookFile():
 
     @property
     def current_page_text(self):
+        if not self.is_open:
+            self.open()
         return self.pages[self.page_number]
 
     @property
     def max_pages(self):
+        if not self.is_open:
+            self.open()
         return len(self.pages) - 1
 
     def set_page(self, page):
+        if not self.is_open:
+            self.open()
         if page < 0:
             self.page_number = 0
         elif page > self.max_pages:
