@@ -12,24 +12,30 @@ how the machine will look, and provides the buttons.
 
 ```
 usage: canute_ui [-h] [--pi-buttons] [--debug] [--text] [--tty TTY]
-               [--delay DELAY] [--disable-emulator] [--both]
+                 [--delay DELAY] [--real] [--both] [--fuzz FUZZ_DURATION]
+                 [--dummy]
 
 Canute UI
 
 optional arguments:
-  -h, --help          show this help message and exit
-  --pi-buttons        use evdev to process button presses more
-                      directly(recommended for embedded usage on the Raspberry
-                      Pi)
-  --debug             debugging content
-  --text              show text instead of braille
-  --tty TTY           serial port for the display and button board
-  --delay DELAY       simulate mechanical delay in milliseconds in the
-                      emulator
-  --disable-emulator  do not run the graphical emulator, run with real
-                      hardware
-  --both              run both the emulator and the real hardware at the same
-                      time
+  -h, --help            show this help message and exit
+  --pi-buttons          use evdev to process button presses more
+                        directly(recommended for embedded usage on the
+                        Raspberry Pi)
+  --debug               debugging content
+  --text                show text instead of braille
+  --tty TTY             serial port for the display and button board
+  --delay DELAY         simulate mechanical delay in milliseconds in the
+                        emulator
+  --real                do not run the graphical emulator, run with real
+                        hardware
+  --both                run both the emulator and the real hardware at the
+                        same time
+  --fuzz FUZZ_DURATION  run with dummy display (emulated but without any
+                        graphics) and press random buttons for duration (in
+                        seconds), for debugging
+  --dummy               run with the dummy display but without fuzz testing
+                        button presses, for debugging
 ```
 
 ## Getting started

@@ -37,12 +37,15 @@ def main():
 
     if args.fuzz_duration:
         log.info('running fuzz test')
-        with Dummy() as driver:
+        with Dummy(fuzz=True) as driver:
             loop = asyncio.get_event_loop()
             loop.run_until_complete(run_async_timeout(
                 driver, config, args.fuzz_duration, loop))
             pending = asyncio.Task.all_tasks()
             loop.run_until_complete(asyncio.gather(*pending))
+    elif args.dummy:
+        with Dummy(fuzz=False) as driver:
+            run(driver, config)
     elif args.emulated and not args.both:
         log.info('running with emulated hardware')
         from ui.driver_emulated import Emulated

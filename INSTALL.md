@@ -52,4 +52,4 @@ Copy the config file:
 
 Run the UI software without the emulator and read the buttons through evdev:
 
-    ./canute_ui --disable-emulator --pi-buttons
+    ./canute_ui --real --pi-buttons

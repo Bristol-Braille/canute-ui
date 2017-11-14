@@ -9,7 +9,7 @@ parser.add_argument(
     dest='pi_buttons',
     const=True,
     default=False,
-    help='use evdev to process button presses more directly'
+    help='use evdev to process button presses more directly '
     + '(recommended for embedded usage on the Raspberry Pi)'
 )
 parser.add_argument(
@@ -43,7 +43,7 @@ parser.add_argument(
     type=int
 )
 parser.add_argument(
-    '--disable-emulator',
+    '--real',
     action='store_const',
     dest='emulated',
     const=False,
@@ -62,7 +62,17 @@ parser.add_argument(
     '--fuzz',
     action='store',
     dest='fuzz_duration',
+    default=None,
     help='run with dummy display (emulated but without any graphics) ' +
-    'and press random buttons for duration (in seconds)',
+    'and press random buttons for duration (in seconds), for debugging',
     type=float,
+)
+parser.add_argument(
+    '--dummy',
+    action='store_const',
+    dest='dummy',
+    const=True,
+    default=False,
+    help='run with the dummy display but without fuzz testing button ' +
+    'presses, for debugging'
 )

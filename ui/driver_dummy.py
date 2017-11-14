@@ -35,8 +35,9 @@ class Dummy(Driver):
     )
     button_choice = list(button_map)
 
-    def __init__(self):
+    def __init__(self, fuzz=True):
         super(Dummy, self).__init__()
+        self.fuzz = fuzz
 
     def is_ok(self):
         return True
@@ -55,15 +56,16 @@ class Dummy(Driver):
 
         :rtype: dict of elements either set to 'down' or 'up'
         '''
+        if self.fuzz:
 
-        # raise any previously held keys
-        for button in self.buttons.keys():
-            if self.buttons[button] == 'down':
-                self.buttons[button] = 'up'
-            else:
-                self.buttons[button]
+            # raise any previously held keys
+            for button in self.buttons.keys():
+                if self.buttons[button] == 'down':
+                    self.buttons[button] = 'up'
+                else:
+                    self.buttons[button]
 
-        self.buttons[self._get_random_button()] = 'down'
+            self.buttons[self._get_random_button()] = 'down'
 
         return self.buttons
 
