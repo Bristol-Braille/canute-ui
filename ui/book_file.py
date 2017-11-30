@@ -31,7 +31,7 @@ class BookFile():
                 for line in file:
                     line = line.replace('\n', '')
                     if FORM_FEED.match(line):
-                        # pad up to the next page and ignore this line
+                        # pad up to the next page
                         while len(page) < self.height:
                             page.append('')
                         if line == '\f':
@@ -43,40 +43,35 @@ class BookFile():
                         page = []
                     page.append(line)
                 self.unconverted_pages = tuple(pages)
+        elif self.ext == '.pef':
+            xml_doc = minidom.parse(self.filename)
+            xml_pages = xml_doc.getElementsByTagName('page')
+            lines = []
+            for page in xml_pages:
+                for row in page.getElementsByTagName('row'):
+                    try:
+                        line = row.childNodes[0].data.rstrip()
+                    except IndexError:
+                        # empty row element
+                        line = tuple()
+                    lines.append(tuple(line))
+            pages = []
+            for i in range(len(lines))[::self.height]:
+                page = lines[i:i + self.height]
+                pages.append(tuple(page))
+            self.unconverted_pages = tuple(pages)
+        else:
+            raise BookFileError(
+                'Unexpected extension: {}'.format(self.ext))
 
     def open(self):
         if not self.is_open:
             log.debug('opening {}'.format(self.filename))
-
-            if self.ext == '.brf':
-                pages = []
-                for page in self.unconverted_pages:
-                    converted = (braille.to_braille(line) for line in page)
-                    pages.append(tuple(converted))
-                self.pages = tuple(pages)
-
-            elif self.ext == '.pef':
-                xml_doc = minidom.parse(self.filename)
-                xml_pages = xml_doc.getElementsByTagName('page')
-                lines = []
-                for page in xml_pages:
-                    for row in page.getElementsByTagName('row'):
-                        try:
-                            line = row.childNodes[0].data.rstrip()
-                            converted = braille.to_braille(line)
-                        except IndexError:
-                            # empty row element
-                            converted = tuple()
-                        lines.append(tuple(converted))
-                pages = []
-                for i in range(len(lines))[::self.height]:
-                    page = lines[i:i + self.height]
-                    pages.append(tuple(page))
-                self.pages = tuple(pages)
-            else:
-                raise BookFileError(
-                    'Unexpected extension: {}'.format(self.ext))
-
+            pages = []
+            for page in self.unconverted_pages:
+                converted = (braille.to_braille(line) for line in page)
+                pages.append(tuple(converted))
+            self.pages = tuple(pages)
             self.is_open = True
 
     @property
@@ -99,7 +94,6 @@ class BookFile():
             return len(self.pages) - 1
 
     def set_page(self, page):
-        self.open()
         if page < 0:
             self.page_number = 0
         elif page > self.max_pages:

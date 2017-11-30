@@ -119,7 +119,6 @@ def alpha_to_pin_num(alpha):
     try:
         return mapping.index(alpha)
     except ValueError:
-        log.warning('problem converting char #[%s] to pin number' % ord(alpha))
         return 0
 
 

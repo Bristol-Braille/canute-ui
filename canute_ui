@@ -121,7 +121,7 @@ def run_async(driver, config, loop):
         yield from buttons.check(driver, state['app'],
                                  store.dispatch)
         yield from display.send_line(driver)
-        yield from asyncio.sleep(0.01)
+        yield from asyncio.sleep(0.001)
 
 
 def handle_changes(driver, config, store, loop):
