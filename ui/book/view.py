@@ -46,5 +46,4 @@ def render(width, height, state):
     if home_menu:
         return render_home_menu(width, height, book)
     else:
-        book.open()
         return book.current_page_text
