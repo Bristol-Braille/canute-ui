@@ -100,7 +100,7 @@ def run_async(driver, config, loop):
     library_dir = config.get('files', 'library_dir')
     yield from library.sync(state['app'], library_dir, store)
 
-    store.subscribe(partial(handle_changes, driver, config, store, loop))
+    store.subscribe(handle_changes(driver, config, store, loop))
 
     # if we startup and update_ui is still 'in progress' then we are using the
     # old state file and update has failed
@@ -125,10 +125,13 @@ def run_async(driver, config, loop):
 
 
 def handle_changes(driver, config, store, loop):
-    state = store.state
-    display.render_to_buffer(state['app'])
-    asyncio.ensure_future(change_files(config, state['app'], store))
-    initial_state.write(state)
+    @asyncio.coroutine
+    def listener():
+        state = store.state
+        display.render_to_buffer(state['app'])
+        asyncio.ensure_future(change_files(config, state['app'], store))
+        initial_state.write(state)
+    return listener
 
 
 @asyncio.coroutine

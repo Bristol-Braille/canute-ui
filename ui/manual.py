@@ -89,6 +89,9 @@ class Manual():
         line_number = self.page_number * self.height
         return self.lines[line_number:line_number + self.height]
 
+    def open(self):
+        return
+
     def set_page(self, page):
         if page < 0:
             self.page_number = 0

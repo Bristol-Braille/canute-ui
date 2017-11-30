@@ -51,8 +51,7 @@ def read():
     log.debug('reading initial state from %s' % STATE_FILE)
     try:
         with open(STATE_FILE, 'rb') as fh:
-            state = pickle.load(fh)
-            return state
+            return utility.freeze(pickle.load(fh))
     except:
         log.debug('error reading state file, using hard-coded initial state')
         return initial_state
@@ -82,4 +81,4 @@ def write(state):
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
     with open(STATE_FILE, 'wb') as fh:
-        pickle.dump(utility.freeze(write_state), fh)
+        pickle.dump(write_state, fh)
