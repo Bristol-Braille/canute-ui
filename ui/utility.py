@@ -75,8 +75,7 @@ def flatten(l):
 
 
 def pad_line(w, line):
-    line.extend([0] * (w - len(line)))
-    return line
+    return line + ((0,) * (w - len(line)))
 
 
 def get_methods(cls):
