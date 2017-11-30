@@ -1,5 +1,7 @@
 import pickle
 from copy import copy
+import asyncio
+import aiofiles
 import logging
 from . import utility
 from .system_menu.system_menu import menu_titles
@@ -57,6 +59,7 @@ def read():
         return initial_state
 
 
+@asyncio.coroutine
 def write(state):
     log.debug('writing state file')
     write_state = utility.unfreeze(state)
@@ -80,5 +83,11 @@ def write(state):
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
-    with open(STATE_FILE, 'wb') as fh:
-        pickle.dump(write_state, fh)
+    pickle_data = pickle.dumps(write_state)
+    fh = yield from aiofiles.open(STATE_FILE, 'wb')
+    try:
+        yield from fh.write(pickle_data)
+    except:
+        log.error('could not write state file {}')
+    finally:
+        fh.close()
