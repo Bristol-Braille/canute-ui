@@ -51,8 +51,8 @@ class BookFile():
             if self.ext == '.brf':
                 pages = []
                 for page in self.unconverted_pages:
-                    pages.append(tuple((braille.to_braille(line)
-                                        for line in page)))
+                    converted = (braille.to_braille(line) for line in page)
+                    pages.append(tuple(converted))
                 self.pages = tuple(pages)
 
             elif self.ext == '.pef':
@@ -62,15 +62,12 @@ class BookFile():
                 for page in xml_pages:
                     for row in page.getElementsByTagName('row'):
                         try:
-                            data = row.childNodes[0].data.rstrip()
-                            line = []
-                            for uni_char in data:
-                                pin_num = braille.unicode_to_pin_num(uni_char)
-                                line.append(pin_num)
+                            line = row.childNodes[0].data.rstrip()
+                            converted = braille.to_braille(line)
                         except IndexError:
                             # empty row element
-                            line = tuple()
-                        lines.append(tuple(line))
+                            converted = tuple()
+                        lines.append(tuple(converted))
                 pages = []
                 for i in range(len(lines))[::self.height]:
                     page = lines[i:i + self.height]
@@ -102,8 +99,7 @@ class BookFile():
             return len(self.pages) - 1
 
     def set_page(self, page):
-        if not self.is_open:
-            self.open()
+        self.open()
         if page < 0:
             self.page_number = 0
         elif page > self.max_pages:
