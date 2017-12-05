@@ -38,6 +38,8 @@ class BookFile(BookData):
                             line = line.replace('\f', '')
                     if len(page) == self.height:
                         pages.append(tuple(page))
+                        if self.page_number < len(pages):
+                            break
                         page = []
                     page.append(line)
         elif self.ext == '.pef':
