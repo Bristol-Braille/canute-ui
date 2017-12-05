@@ -45,8 +45,4 @@ combined = aioredux.combine_reducers({
 
 
 def main_reducer(state, action):
-    if 'value' in action:
-        log.debug('dispatching {}:{}'.format(action['type'], action['value']))
-    else:
-        log.debug('dispatching {}'.format(action['type']))
     return combined(state, action)

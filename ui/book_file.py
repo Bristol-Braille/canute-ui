@@ -3,6 +3,8 @@ import re
 import xml.dom.minidom as minidom
 from collections import namedtuple
 import logging
+import asyncio
+import aiofiles
 
 from . import braille
 
@@ -18,13 +20,18 @@ BookData.__new__.__defaults__ = (None, None, None, 0, tuple(), None)
 
 
 class BookFile(BookData):
+    @asyncio.coroutine
     def init(self):
         log.debug('initialiazing {}'.format(self.filename))
         if self.ext == '.brf':
-            with open(self.filename) as file:
+            file = yield from aiofiles.open(self.filename)
+            try:
                 page = []
                 pages = []
-                for line in file:
+                while True:
+                    line = yield from file.readline()
+                    if not line:
+                        break
                     line = line.replace('\n', '')
                     if FORM_FEED.match(line):
                         # pad up to the next page
@@ -38,8 +45,12 @@ class BookFile(BookData):
                         pages.append(tuple(page))
                         page = []
                     page.append(line)
+            finally:
+                file.close()
         elif self.ext == '.pef':
-            xml_doc = minidom.parse(self.filename)
+            file = yield from aiofiles.open(self.filename)
+            contents = yield from file.read()
+            xml_doc = minidom.parseString(contents)
             xml_pages = xml_doc.getElementsByTagName('page')
             lines = []
             for page in xml_pages:
