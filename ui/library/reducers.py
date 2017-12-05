@@ -34,22 +34,21 @@ class LibraryReducers():
         return state.copy(location='library',
                           book=0, books=books, library=library)
 
-    def add_books(self, state, books_to_add):
+    def add_book(self, state, book):
+        book_filenames = (b.filename for b in state['books'])
+        if book.filename in book_filenames:
+            return state
         width, height = utility.dimensions(state)
-        book_filenames = [b.filename for b in state['books']]
-        books_to_add = [
-            d for d in books_to_add if d.filename not in book_filenames
-        ]
         books = list(state['books'])
-        books += list(books_to_add)
+        books.append(book)
         books = sort_books(books)
-        data = list(map(lambda b: to_braille(b.title), books))
-        data = list(map(partial(utility.pad_line, width), data))
-        library = frozendict({
-            'data': tuple(data),
-            'page': state['library']['page']
-        })
-        return state.copy(books=tuple(books), library=library)
+        return state.copy(books=tuple(books))
+
+
+    def add_books(self, state, books_to_add):
+        for book in books_to_add:
+            state = self.add_book(state, book)
+        return state
 
     def remove_books(self, state, filenames):
         filenames = [f for f in filenames if f != manual_filename]
@@ -57,13 +56,10 @@ class LibraryReducers():
         books = [
             b for b in state['books'] if b.filename not in filenames
         ]
-        data = list(map(lambda b: to_braille(b.title), books))
-        data = list(map(partial(utility.pad_line, width), data))
-        maximum = (len(data) - 1) // (height - 1)
-        page = state['library']['page']
-        if page > maximum:
-            page = maximum
-        library = frozendict({'data': data, 'page': page})
+        maximum = (len(books) - 1) // (height - 1)
+        library = state['library']
+        if library['page'] > maximum:
+            library = library.copy(page=maximum)
         return state.copy(books=tuple(books), library=library)
 
     def replace_library(self, state, value):
@@ -74,4 +70,4 @@ class LibraryReducers():
 
 
 def sort_books(books):
-    return sorted(books, key=lambda book: book.title)
+    return sorted(books, key=lambda book: book.title.lower())
