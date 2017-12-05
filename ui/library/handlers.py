@@ -19,23 +19,25 @@ BOOK_EXTENSIONS = ('pef', 'brf')
 
 async def sync(state, library_dir, store):
     width, height = utility.dimensions(state)
-    library_files = [b.filename for b in state['books']]
+    books = state['books']
+    library_files = [b.filename for b in books]
     disk_files = utility.find_files(library_dir, BOOK_EXTENSIONS)
-    not_added = [f for f in disk_files if f not in library_files]
-    if not_added != []:
-        not_added_books = []
-        for f in not_added:
-            book = BookFile(f, width, height)
-            try:
-                book = await book.init()
-            except:
-                log.warning(f'could not convert {f}')
-            else:
-                await store.dispatch(actions.add_book(book))
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
         await store.dispatch(actions.set_book(0))
         await store.dispatch(actions.remove_books(non_existent))
+    books = [b for b in books if b.filename not in non_existent]
+    not_added = (f for f in disk_files if f not in library_files)
+    not_added_books = [BookFile(f, width, height) for f in not_added]
+    books += not_added_books
+    for book in books:
+        try:
+            book = await book.init()
+        except:
+            log.warning('could not open {}'.format(book.filename))
+        else:
+            await store.dispatch(actions.add_or_replace(book))
+
 
 
 def wipe(library_dir):

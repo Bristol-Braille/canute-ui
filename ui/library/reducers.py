@@ -50,6 +50,13 @@ class LibraryReducers():
             state = self.add_book(state, book)
         return state
 
+    def add_or_replace(self, state, book):
+        books = state['books']
+        books = list(filter(lambda b: b.filename != book.filename, books))
+        books.append(book)
+        books = sort_books(books)
+        return state.copy(books=tuple(books))
+
     def remove_books(self, state, filenames):
         filenames = [f for f in filenames if f != manual_filename]
         width, height = utility.dimensions(state)
