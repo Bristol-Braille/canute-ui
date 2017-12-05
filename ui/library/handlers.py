@@ -17,8 +17,7 @@ log = logging.getLogger(__name__)
 BOOK_EXTENSIONS = ('pef', 'brf')
 
 
-@asyncio.coroutine
-def sync(state, library_dir, store):
+async def sync(state, library_dir, store):
     width, height = utility.dimensions(state)
     library_files = [b.filename for b in state['books']]
     disk_files = utility.find_files(library_dir, BOOK_EXTENSIONS)
@@ -27,12 +26,16 @@ def sync(state, library_dir, store):
         not_added_books = []
         for f in not_added:
             book = BookFile(f, width, height)
-            book = yield from book.init()
-            yield from store.dispatch(actions.add_book(book))
+            try:
+                book = await book.init()
+            except:
+                log.warning(f'could not convert {f}')
+            else:
+                await store.dispatch(actions.add_book(book))
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
-        yield from store.dispatch(actions.set_book(0))
-        yield from store.dispatch(actions.remove_books(non_existent))
+        await store.dispatch(actions.set_book(0))
+        await store.dispatch(actions.remove_books(non_existent))
 
 
 def wipe(library_dir):
@@ -40,8 +43,7 @@ def wipe(library_dir):
         os.remove(book)
 
 
-@asyncio.coroutine
-def replace(config, state, store):
+async def replace(config, state, store):
     library_dir = config.get('files', 'library_dir')
     usb_dir = config.get('files', 'usb_dir')
     owner = config.get('user', 'user_name')
@@ -60,4 +62,4 @@ def replace(config, state, store):
             log.debug('changing ownership of {} from {} to {}'.format(
                 new_path, uid, gid))
             os.chown(new_path, uid, gid)
-        yield from sync(state, library_dir, store)
+        await sync(state, library_dir, store)

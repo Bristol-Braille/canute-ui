@@ -20,16 +20,15 @@ BookData.__new__.__defaults__ = (None, None, None, 0, tuple(), None)
 
 
 class BookFile(BookData):
-    @asyncio.coroutine
-    def init(self):
+    async def init(self):
         log.debug('initialiazing {}'.format(self.filename))
         if self.ext == '.brf':
-            file = yield from aiofiles.open(self.filename)
+            file = await aiofiles.open(self.filename)
             try:
                 page = []
                 pages = []
                 while True:
-                    line = yield from file.readline()
+                    line = await file.readline()
                     if not line:
                         break
                     line = line.replace('\n', '')
@@ -48,8 +47,8 @@ class BookFile(BookData):
             finally:
                 file.close()
         elif self.ext == '.pef':
-            file = yield from aiofiles.open(self.filename)
-            contents = yield from file.read()
+            file = await aiofiles.open(self.filename)
+            contents = await file.read()
             xml_doc = minidom.parseString(contents)
             xml_pages = xml_doc.getElementsByTagName('page')
             lines = []

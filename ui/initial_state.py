@@ -59,8 +59,7 @@ def read():
         return initial_state
 
 
-@asyncio.coroutine
-def write(state):
+async def write(state):
     log.debug('writing state file')
     write_state = utility.unfreeze(state)
     write_state['app']['library'] = state['app']['library'].copy(page=0)
@@ -85,9 +84,9 @@ def write(state):
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
     pickle_data = pickle.dumps(write_state)
-    fh = yield from aiofiles.open(STATE_FILE, 'wb')
+    fh = await aiofiles.open(STATE_FILE, 'wb')
     try:
-        yield from fh.write(pickle_data)
+        await fh.write(pickle_data)
     except:
         log.error('could not write state file {}')
     finally:
