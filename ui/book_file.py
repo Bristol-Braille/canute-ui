@@ -23,14 +23,10 @@ class BookFile(BookData):
     async def init(self):
         log.debug('initialiazing {}'.format(self.filename))
         if self.ext == '.brf':
-            file = await aiofiles.open(self.filename)
-            try:
+            async with aiofiles.open(self.filename) as file:
                 page = []
                 pages = []
-                while True:
-                    line = await file.readline()
-                    if not line:
-                        break
+                async for line in file:
                     line = line.replace('\n', '')
                     if FORM_FEED.match(line):
                         # pad up to the next page
@@ -44,11 +40,9 @@ class BookFile(BookData):
                         pages.append(tuple(page))
                         page = []
                     page.append(line)
-            finally:
-                file.close()
         elif self.ext == '.pef':
-            file = await aiofiles.open(self.filename)
-            contents = await file.read()
+            async with aiofiles.open(self.filename) as file:
+                contents = await file.read()
             xml_doc = minidom.parseString(contents)
             xml_pages = xml_doc.getElementsByTagName('page')
             lines = []

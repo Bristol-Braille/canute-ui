@@ -72,9 +72,9 @@ async def write(state):
     write_state['app']['bookmarks_menu']['page'] = 0
     write_state['app']['help_menu'] = {'visible': False, 'page': 0}
     books = write_state['app']['books']
-    # make sure deleted bookmarks are fully deleted
     changed_books = []
     for book in books:
+        # make sure deleted bookmarks are fully deleted
         bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
         #also delete actual book data
         book = book._replace(unconverted_pages=None, bookmarks=bookmarks)
@@ -84,10 +84,8 @@ async def write(state):
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False
     pickle_data = pickle.dumps(write_state)
-    fh = await aiofiles.open(STATE_FILE, 'wb')
-    try:
-        await fh.write(pickle_data)
-    except:
-        log.error('could not write state file {}')
-    finally:
-        fh.close()
+    async with aiofiles.open(STATE_FILE, 'wb') as fh:
+        try:
+            await fh.write(pickle_data)
+        except:
+            log.error('could not write state file {}')
