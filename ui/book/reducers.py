@@ -16,9 +16,10 @@ class BookReducers():
         width, height = utility.dimensions(state)
         book_n = state['book']
         books = list(state['books'])
-        books[book_n].set_page(page)
-        books[book_n].bookmarks = tuple(
-            bm for bm in books[book_n].bookmarks if bm != 'deleted')
+        book = books[book_n].set_page(page)
+        bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+        book = book._replace(bookmarks=bookmarks)
+        books[book_n] = book
         return state.copy(books=tuple(books),
                           location='book', home_menu_visible=False)
 
@@ -34,7 +35,7 @@ class BookReducers():
         book = books[number]
         page = book.page_number
         if page not in book.bookmarks:
-            book.bookmarks += tuple([page])
+            book = book._replace(bookmarks=book.bookmarks + tuple([page]))
             books[number] = book
             return state.copy(books=tuple(books))
         return state

@@ -26,13 +26,9 @@ def sync(state, library_dir, store):
     if not_added != []:
         not_added_books = []
         for f in not_added:
-            try:
-                book = BookFile(f, width, height)
-            except:
-                e = sys.exc_info()[0]
-                log.warn('could not convert book file: "{}". {}'.format(f, e))
-            else:
-                not_added_books.append(book)
+            book = BookFile(f, width, height)
+            book = book.init()
+            not_added_books.append(book)
         yield from store.dispatch(actions.add_books(not_added_books))
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:

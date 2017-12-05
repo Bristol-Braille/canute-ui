@@ -1,6 +1,7 @@
 import os
 import re
 import xml.dom.minidom as minidom
+from collections import namedtuple
 import logging
 
 from . import braille
@@ -12,18 +13,13 @@ FORM_FEED = re.compile('\f')
 class BookFileError(Exception):
     pass
 
+BookData = namedtuple('BookData', 'filename width height page_number bookmarks unconverted_pages')
+BookData.__new__.__defaults__ = (None, None, None, 0, tuple(), None)
 
-class BookFile():
-    page_number = 0
-    bookmarks = tuple()
 
-    def __init__(self, filename, width, height):
-        log.debug('initialiazing {}'.format(filename))
-        self.filename = filename
-        self.width = width
-        self.height = height
-        self.ext = os.path.splitext(filename)[-1].lower()
-        self.is_open = False
+class BookFile(BookData):
+    def init(self):
+        log.debug('initialiazing {}'.format(self.filename))
         if self.ext == '.brf':
             with open(self.filename) as file:
                 page = []
@@ -42,7 +38,6 @@ class BookFile():
                         pages.append(tuple(page))
                         page = []
                     page.append(line)
-                self.unconverted_pages = tuple(pages)
         elif self.ext == '.pef':
             xml_doc = minidom.parse(self.filename)
             xml_pages = xml_doc.getElementsByTagName('page')
@@ -59,20 +54,14 @@ class BookFile():
             for i in range(len(lines))[::self.height]:
                 page = lines[i:i + self.height]
                 pages.append(tuple(page))
-            self.unconverted_pages = tuple(pages)
         else:
             raise BookFileError(
                 'Unexpected extension: {}'.format(self.ext))
+        return self._replace(unconverted_pages=tuple(pages))
 
-    def open(self):
-        if not self.is_open:
-            log.debug('opening {}'.format(self.filename))
-            pages = []
-            for page in self.unconverted_pages:
-                converted = (braille.to_braille(line) for line in page)
-                pages.append(tuple(converted))
-            self.pages = tuple(pages)
-            self.is_open = True
+    @property
+    def ext(self):
+        return os.path.splitext(self.filename)[-1].lower()
 
     @property
     def title(self):
@@ -82,21 +71,17 @@ class BookFile():
 
     @property
     def current_page_text(self):
-        self.open()
-        return self.pages[self.page_number]
+        page = self.unconverted_pages[self.page_number]
+        return tuple((braille.to_braille(line) for line in page))
 
     @property
     def max_pages(self):
-        if self.ext == '.brf':
-            return len(self.unconverted_pages) - 1
-        else:
-            self.open()
-            return len(self.pages) - 1
+        return len(self.unconverted_pages) - 1
 
     def set_page(self, page):
         if page < 0:
-            self.page_number = 0
+            page = 0
         elif page > self.max_pages:
-            self.page_number = self.max_pages
-        else:
-            self.page_number = page
+            page = self.max_pages
+        book = self._replace(page_number=page)
+        return book

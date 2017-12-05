@@ -76,8 +76,9 @@ def write(state):
     # make sure deleted bookmarks are fully deleted
     changed_books = []
     for book in books:
-        book = copy(book)
-        book.bookmarks = [bm for bm in book.bookmarks if bm != 'deleted']
+        bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+        #also delete actual book data
+        book = book._replace(unconverted_pages=None, bookmarks=bookmarks)
         changed_books.append(book)
     write_state['app']['books'] = changed_books
     write_state['hardware']['resetting_display'] = False
