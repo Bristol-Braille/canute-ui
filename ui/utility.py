@@ -21,17 +21,6 @@ def get_page_num_width(state):
     return len(str(max_pages))
 
 
-def set_page(data, page, height):
-    if page < 0:
-        return 0
-
-    max_pages = (len(data) - 1) // height
-    if page > max_pages:
-        return max_pages
-
-    return page
-
-
 def dimensions(state):
     width = state['dimensions']['width']
     height = state['dimensions']['height']

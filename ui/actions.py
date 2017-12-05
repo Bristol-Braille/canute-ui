@@ -62,9 +62,13 @@ class AppReducers():
             location = state['location']
 
         if location == 'library':
-            library = state['library']
-            page = utility.set_page(library['data'], page, height - 1)
-            library = frozendict({'data': library['data'], 'page': page})
+            books = state['books']
+            max_pages = (len(books) - 1) // (height - 1)
+            if page > max_pages:
+                page = max_pages
+            elif page < 0:
+                page = 0
+            library = frozendict({'page': page})
             return state.copy(library=library)
         elif location == 'book':
             book_n = state['book']
