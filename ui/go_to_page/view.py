@@ -28,7 +28,7 @@ def render(width, height, state):
     data = [to_braille('enter page number using the side buttons')]
 
     try:
-        book = state['books'][state['book']]
+        book = state['user']['books'][state['user']['book']]
     except IndexError:
         book = None
 

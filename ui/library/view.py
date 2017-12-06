@@ -21,7 +21,7 @@ def render_help_menu(width, height, page):
 
 def render_library(width, height, state):
     page = state['library']['page']
-    books = state['books']
+    books = state['user']['books']
     # subtract title from page height
     data_height = height - 1
     max_pages = (len(books) - 1) // data_height

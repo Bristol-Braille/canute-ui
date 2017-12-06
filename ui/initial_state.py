@@ -14,13 +14,15 @@ log = logging.getLogger(__name__)
 
 initial_state = utility.freeze({
     'app': {
+        'user': {
+            'book': 0,
+            'books': [Manual(40, 9)],
+        },
         'location': 'book',
         'library': {
             'page': 0,
         },
-        'book': 0,
         'load_books': False,
-        'books': [Manual(40, 9)],
         'system_menu': {
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
@@ -73,7 +75,7 @@ async def write(state):
     write_state['app']['load_books'] = False
     write_state['app']['bookmarks_menu']['page'] = 0
     write_state['app']['help_menu'] = {'visible': False, 'page': 0}
-    books = write_state['app']['books']
+    books = write_state['app']['user']['books']
     changed_books = []
     for book in books:
         # make sure deleted bookmarks are fully deleted
@@ -82,7 +84,7 @@ async def write(state):
         book = book._replace(unconverted_pages=None,
                              file_contents=None, bookmarks=bookmarks)
         changed_books.append(book)
-    write_state['app']['books'] = changed_books
+    write_state['app']['user']['books'] = changed_books
     write_state['hardware']['resetting_display'] = False
     write_state['hardware']['warming_up'] = False
     write_state['app']['shutting_down'] = False

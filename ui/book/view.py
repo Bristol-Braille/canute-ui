@@ -41,8 +41,8 @@ async def render(width, height, state, store):
     if help_menu:
         return render_help_menu(width, height)
     home_menu = state['home_menu_visible']
-    book_n = state['book']
-    book = state['books'][book_n]
+    book_n = state['user']['book']
+    book = state['user']['books'][book_n]
     if home_menu:
         return render_home_menu(width, height, book)
     else:

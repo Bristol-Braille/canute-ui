@@ -132,9 +132,8 @@ def handle_changes(driver, config, store):
 
 async def fully_load_books(state, store):
     if state['load_books'] == 'start' and not state['replacing_library']:
-        print('replace_library', state['replacing_library'])
         await store.dispatch(actions.load_books('loading'))
-        for book in state['books']:
+        for book in state['user']['books']:
             if not book.unconverted_pages and not book.loading:
                 await store.dispatch(actions.set_book_loading(book))
                 book = book.read_pages()

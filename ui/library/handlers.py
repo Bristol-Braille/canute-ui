@@ -19,7 +19,7 @@ BOOK_EXTENSIONS = ('pef', 'brf')
 
 async def sync(state, library_dir, store):
     width, height = utility.dimensions(state)
-    books = state['books']
+    books = state['user']['books']
     library_files = [b.filename for b in books]
     disk_files = utility.find_files(library_dir, BOOK_EXTENSIONS)
     disk_files.sort(key=str.lower)

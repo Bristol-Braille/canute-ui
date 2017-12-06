@@ -15,7 +15,7 @@ class LibraryReducers():
         page = state['library']['page']
         line_number = page * (height - 1)
         try:
-            state['books'][line_number + number]
+            state['user']['books'][line_number + number]
         except:
             log.warning('no book at {}'.format(number))
             return state
@@ -32,17 +32,17 @@ class LibraryReducers():
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location='library',
-                          book=0, books=books, library=library)
+                          user=state['user'].copy(book=0, books=books), library=library)
 
     def add_book(self, state, book):
-        book_filenames = (b.filename for b in state['books'])
+        book_filenames = (b.filename for b in state['user']['books'])
         if book.filename in book_filenames:
             return state
         width, height = utility.dimensions(state)
-        books = list(state['books'])
+        books = list(state['user']['books'])
         books.append(book)
         books = sort_books(books)
-        return state.copy(books=tuple(books))
+        return state.copy(user=state['user'].copy(books=tuple(books)))
 
     def add_books(self, state, books_to_add):
         for book in books_to_add:
@@ -50,11 +50,11 @@ class LibraryReducers():
         return state
 
     def add_or_replace(self, state, book):
-        books = state['books']
+        books = state['user']['books']
         books = list(filter(lambda b: b.filename != book.filename, books))
         books.append(book)
         books = sort_books(books)
-        return state.copy(books=tuple(books))
+        return state.copy(user=state['user'].copy(books=tuple(books)))
 
     def set_book_loading(self, state, book):
         book = book._replace(loading=True)
@@ -64,13 +64,13 @@ class LibraryReducers():
         filenames = [f for f in filenames if f != manual_filename]
         width, height = utility.dimensions(state)
         books = [
-            b for b in state['books'] if b.filename not in filenames
+            b for b in state['user']['books'] if b.filename not in filenames
         ]
         maximum = (len(books) - 1) // (height - 1)
         library = state['library']
         if library['page'] > maximum:
             library = library.copy(page=maximum)
-        return state.copy(books=tuple(books), library=library)
+        return state.copy(user=state['user'].copy(books=tuple(books)), library=library)
 
     def replace_library(self, state, value):
         if state['replacing_library'] == 'in progress' and value != 'done':
