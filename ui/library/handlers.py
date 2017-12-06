@@ -18,6 +18,7 @@ BOOK_EXTENSIONS = ('pef', 'brf')
 
 
 async def sync(state, library_dir, store):
+    log.info('syncing library')
     width, height = utility.dimensions(state)
     books = state['user']['books']
     library_files = [b.filename for b in books]
@@ -47,6 +48,7 @@ def wipe(library_dir):
 
 
 async def replace(config, state, store):
+    log.info('replacing library')
     library_dir = config.get('files', 'library_dir')
     usb_dir = config.get('files', 'usb_dir')
     owner = config.get('user', 'user_name')
@@ -56,7 +58,7 @@ async def replace(config, state, store):
         uid = pwd.getpwnam(owner).pw_uid
         gid = grp.getgrnam(owner).gr_gid
         for filename in new_books:
-            log.info('copying {} to {}'.format(filename, library_dir))
+            log.debug('copying {} to {}'.format(filename, library_dir))
             shutil.copy(filename, library_dir)
 
             # change ownership
@@ -65,4 +67,5 @@ async def replace(config, state, store):
             log.debug('changing ownership of {} from {} to {}'.format(
                 new_path, uid, gid))
             os.chown(new_path, uid, gid)
+            asyncio.sleep(0.1)
         await sync(state, library_dir, store)

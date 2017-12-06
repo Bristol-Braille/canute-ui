@@ -82,7 +82,15 @@ class BookFile(BookData):
     async def current_page_text(self, store):
         if self.unconverted_pages:
             book = self
+        elif self.loading:
+            book = self
+            while book.loading:
+                books = store.state['app']['user']['books']
+                book = tuple(filter(lambda b: b.filename ==
+                                    book.filename, books))[0]
+                await asyncio.sleep(1)
         else:
+            await store.dispatch(actions.set_book_loading(self))
             book = self.read_pages()
             await store.dispatch(actions.add_or_replace(book))
         page = book.unconverted_pages[self.page_number]

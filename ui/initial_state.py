@@ -74,7 +74,7 @@ async def write(state):
         bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
         # also delete actual book data as it's too much for constantly saving
         book = book._replace(unconverted_pages=None,
-                             file_contents=None, bookmarks=bookmarks)
+                             file_contents=None, bookmarks=bookmarks, loading=False)
         changed_books.append(book)
     write_state['books'] = changed_books
     pickle_data = pickle.dumps(write_state)

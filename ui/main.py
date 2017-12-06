@@ -131,26 +131,40 @@ def handle_changes(driver, config, store):
 
 
 async def fully_load_books(state, store):
-    if state['load_books'] == 'start' and not state['replacing_library']:
+    state = store.state['app']
+    if state['load_books'] == 'start':
         await store.dispatch(actions.load_books('loading'))
-        for book in state['user']['books']:
-            if not book.unconverted_pages and not book.loading:
-                state = store.state
-                if state['app']['replacing_library']:
+        books = state['user']['books']
+        log.info('loading {} books'.format(len(books)))
+        for book in books:
+            if not book.unconverted_pages:
+                state = store.state['app']
+                if state['load_books'] == 'cancel':
+                    log.info('cancelling loading books')
                     break
+                try:
+                    book = tuple(filter(lambda b: b.filename ==
+                                        book.filename, state['user']['books']))[0]
+                except IndexError:
+                    continue
+                if book.loading:
+                    log.info('already loading {}, cancelling'.format(book.title))
+                    continue
                 await store.dispatch(actions.set_book_loading(book))
                 book = book.read_pages()
                 await store.dispatch(actions.add_or_replace(book))
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(1)
         await store.dispatch(actions.load_books(False))
+        log.info('loading books done')
 
 
 async def change_files(config, state, store):
-    if state['replacing_library'] == 'start' and not state['load_books']:
+    state = store.state['app']
+    if state['replacing_library'] == 'start':
+        await store.dispatch(actions.load_books('cancel'))
         await store.dispatch(actions.replace_library('in progress'))
         await library.replace(config, state, store)
         await store.dispatch(actions.replace_library(False))
-        await store.dispatch(actions.load_books('start'))
     if state['backing_up_log'] == 'start':
         await store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
@@ -167,6 +181,7 @@ async def change_files(config, state, store):
 async def handle_hardware(driver, state, store):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
+        await store.dispatch(actions.load_books('cancel'))
         await initial_state.write(state)
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
