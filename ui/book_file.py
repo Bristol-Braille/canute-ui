@@ -19,7 +19,8 @@ class BookFileError(Exception):
 
 BookData = namedtuple(
     'BookData', 'filename width height page_number bookmarks file_contents unconverted_pages loading')
-BookData.__new__.__defaults__ = (None, None, None, 0, tuple(), None, None, False)
+BookData.__new__.__defaults__ = (
+    None, None, None, 0, tuple(), None, None, False)
 
 
 class BookFile(BookData):

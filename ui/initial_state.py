@@ -63,7 +63,6 @@ def read():
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
-
 async def write(state):
     log.debug('writing state file')
     user_state = state['app']['user']
