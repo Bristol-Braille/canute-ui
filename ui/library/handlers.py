@@ -22,6 +22,7 @@ async def sync(state, library_dir, store):
     books = state['books']
     library_files = [b.filename for b in books]
     disk_files = utility.find_files(library_dir, BOOK_EXTENSIONS)
+    disk_files.sort(key=str.lower)
     non_existent = [f for f in library_files if f not in disk_files]
     if non_existent != []:
         await store.dispatch(actions.set_book(0))
