@@ -7,6 +7,7 @@ import asyncio
 import aiofiles
 
 from . import braille
+from .actions import actions
 
 log = logging.getLogger(__name__)
 FORM_FEED = re.compile('\f')
@@ -77,12 +78,12 @@ class BookFile(BookData):
         title = os.path.splitext(basename)[0].replace('_', ' ')
         return title
 
-    @property
-    def current_page_text(self):
+    async def current_page_text(self, store):
         if self.unconverted_pages:
             book = self
         else:
             book = self.read_pages()
+            await store.dispatch(actions.add_or_replace(book))
         page = book.unconverted_pages[self.page_number]
         return tuple((braille.to_braille(line) for line in page))
 

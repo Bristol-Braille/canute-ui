@@ -20,7 +20,7 @@ def render_help_menu(width, height):
     return tuple(data)
 
 
-def render(width, height, state):
+async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
         return render_help_menu(width, height)
@@ -41,7 +41,8 @@ def render(width, height, state):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        line = book.current_page_text[0]
+        lines = await book.current_page_text(store)
+        line = lines[0]
         data.append(tuple(to_braille(str(bm + 1))) + (0,) + tuple(line))
 
     # pad page with empty rows

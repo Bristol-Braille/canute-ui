@@ -124,7 +124,7 @@ async def run_async(driver, config, loop):
 def handle_changes(driver, config, store):
     def listener():
         state = store.state
-        display.render_to_buffer(state['app'])
+        asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(fully_load_books(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
         asyncio.ensure_future(initial_state.write(state))

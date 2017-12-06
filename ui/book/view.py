@@ -36,7 +36,7 @@ def render_help_menu(width, height):
     return tuple(data)
 
 
-def render(width, height, state):
+async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
         return render_help_menu(width, height)
@@ -46,4 +46,4 @@ def render(width, height, state):
     if home_menu:
         return render_home_menu(width, height, book)
     else:
-        return book.current_page_text
+        return await book.current_page_text(store)

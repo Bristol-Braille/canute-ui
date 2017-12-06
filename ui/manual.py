@@ -75,6 +75,7 @@ class Manual():
     filename = manual_filename
     title = 'canute manual'
     unconverted_pages = tuple(to_braille(line) for line in contents)
+    loading = False
 
     def __init__(self, width, height):
         self.width = width
@@ -84,8 +85,7 @@ class Manual():
     def max_pages(self):
         return (len(self.unconverted_pages) - 1) // self.height
 
-    @property
-    def current_page_text(self):
+    async def current_page_text(self, store):
         line_number = self.page_number * self.height
         return self.unconverted_pages[line_number:line_number + self.height]
 
