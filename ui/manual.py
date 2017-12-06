@@ -1,4 +1,4 @@
-from .braille import to_braille
+from .braille import from_ascii
 
 contents = (
     '         canute quick help',
@@ -74,7 +74,7 @@ class Manual():
     bookmarks = tuple()
     filename = manual_filename
     title = 'canute manual'
-    unconverted_pages = tuple(to_braille(line) for line in contents)
+    unconverted_pages = tuple(from_ascii(line) for line in contents)
     loading = False
 
     def __init__(self, width, height):

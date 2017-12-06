@@ -94,7 +94,7 @@ class BookFile(BookData):
             book = self.read_pages()
             await store.dispatch(actions.add_or_replace(book))
         page = book.unconverted_pages[self.page_number]
-        return tuple((braille.to_braille(line) for line in page))
+        return tuple((braille.from_ascii(line) for line in page))
 
     @property
     def max_pages(self):

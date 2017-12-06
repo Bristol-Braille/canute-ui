@@ -3,7 +3,7 @@ import logging
 from functools import partial
 
 from .. import utility
-from ..braille import to_braille
+from ..braille import from_ascii
 from ..manual import manual_filename
 
 log = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class LibraryReducers():
     def set_books(self, state, books):
         width, height = utility.dimensions(state)
         books = tuple(sort_books(books))
-        data = list(map(lambda b: to_braille(b.title), books))
+        data = list(map(lambda b: from_ascii(b.title), books))
         data = list(map(partial(utility.pad_line, width), data))
         library = frozendict({'data': tuple(data), 'page': 0})
         return state.copy(location='library',

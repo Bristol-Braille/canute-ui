@@ -1,4 +1,4 @@
-from ..braille import to_braille, format_title
+from ..braille import from_ascii, format_title
 
 
 def render_help_menu(width, height, page):
@@ -13,7 +13,7 @@ def render_help_menu(width, height, page):
         'pressing the menu button.',
     ]
 
-    data = [to_braille(line) for line in data]
+    data = [from_ascii(line) for line in data]
 
     while len(data) < height:
         data.append(tuple())
@@ -25,7 +25,7 @@ def render(width, height, state):
     if state['help_menu']['visible']:
         return render_help_menu(width, height, state['help_menu']['page'])
 
-    data = [to_braille('enter page number using the side buttons')]
+    data = [from_ascii('enter page number using the side buttons')]
 
     try:
         book = state['user']['books'][state['user']['book']]
@@ -54,9 +54,9 @@ def render(width, height, state):
                      selection, total_pages, capitalize=False)
     data.append(t)
 
-    data.append(to_braille('please confirm by pressing forward'))
-    data.append(to_braille('undo by pressing back'))
-    data.append(to_braille('to go back to book press middle button'))
+    data.append(from_ascii('please confirm by pressing forward'))
+    data.append(from_ascii('undo by pressing back'))
+    data.append(from_ascii('to go back to book press middle button'))
 
     for _ in range(height - 6):
         data.append(tuple())

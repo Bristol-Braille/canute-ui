@@ -18,7 +18,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         title = ',,' + title
 
     if total_pages == 1:
-        return to_braille(title)
+        return from_ascii(title)
 
     current_page = ' {}/{}'.format(to_ueb_number(page_number),
                                    to_ueb_number(total_pages))
@@ -36,7 +36,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         if (title_length - 1) <= available_title_space:
             title += '-' * (available_title_space - title_length - 1)
 
-    return to_braille(title + current_page)
+    return from_ascii(title + current_page)
 
 
 ueb_number_mapping = 'JABCDEFGHI'
@@ -122,7 +122,7 @@ def alpha_to_pin_num(alpha):
         return 0
 
 
-def to_braille(alphas):
+def from_ascii(alphas):
     '''
     convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`
     form feed and line feed characters are supressed

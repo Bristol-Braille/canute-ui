@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from ..braille import to_braille
+from ..braille import from_ascii
 from ..actions import actions
 
 system_menu = OrderedDict([
@@ -14,4 +14,4 @@ system_menu = OrderedDict([
     ('update system from USB stick', actions.update_ui('start')),
 ])
 
-menu_titles = list(map(to_braille, system_menu))
+menu_titles = list(map(from_ascii, system_menu))

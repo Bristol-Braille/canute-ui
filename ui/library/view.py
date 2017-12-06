@@ -1,4 +1,4 @@
-from ..braille import to_braille, format_title
+from ..braille import from_ascii, format_title
 
 
 def render_help_menu(width, height, page):
@@ -11,7 +11,7 @@ def render_help_menu(width, height, page):
         'menu.',
     ]
 
-    data = [to_braille(line) for line in data]
+    data = [from_ascii(line) for line in data]
 
     while len(data) < height:
         data.append(tuple())
