@@ -135,5 +135,3 @@ def from_unicode(alphas):
     :meth:`unicode_to_pin_num` form feed and line feed characters are supressed
     '''
     return tuple(unicode_to_pin_num(a) for a in alphas)
-
-

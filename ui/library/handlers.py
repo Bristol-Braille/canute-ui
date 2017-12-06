@@ -1,5 +1,4 @@
 import os
-import sys
 import grp
 import pwd
 import logging

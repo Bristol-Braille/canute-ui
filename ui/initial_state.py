@@ -1,6 +1,4 @@
 import pickle
-from copy import copy
-import asyncio
 import aiofiles
 import logging
 from . import utility
@@ -64,6 +62,8 @@ def read():
 
 
 prev = {}
+
+
 async def write(store):
     global prev
     state = store.state

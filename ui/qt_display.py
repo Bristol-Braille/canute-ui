@@ -4,7 +4,7 @@ import logging
 from . import comms_codes as comms
 from queue import Empty
 import sys
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from .qt.main_window import Ui_MainWindow
 from .braille import pin_num_to_unicode, pin_num_to_alpha
 

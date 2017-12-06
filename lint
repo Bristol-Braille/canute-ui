@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 flake8 --filename='./canute_ui,*.py' \
     --exclude='doc,ui/qt/main_window.py,venv,venv2,venv3' \
+    --max-line-length=100 \
     --multiline-quotes="'" && echo 'Lint OK'

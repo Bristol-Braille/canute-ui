@@ -1,5 +1,4 @@
 import logging
-from copy import copy
 from frozendict import frozendict
 from . import utility
 from .library.reducers import LibraryReducers
