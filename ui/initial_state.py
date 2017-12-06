@@ -63,8 +63,10 @@ def read():
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
-async def write(state):
-    log.debug('writing state file')
+prev = {}
+async def write(store):
+    global prev
+    state = store.state
     user_state = state['app']['user']
     write_state = utility.unfreeze(user_state)
     books = write_state['books']
@@ -77,9 +79,12 @@ async def write(state):
                              file_contents=None, bookmarks=bookmarks, loading=False)
         changed_books.append(book)
     write_state['books'] = changed_books
-    pickle_data = pickle.dumps(write_state)
-    async with aiofiles.open(STATE_FILE, 'wb') as fh:
-        try:
-            await fh.write(pickle_data)
-        except:
-            log.error('could not write state file {}')
+    if write_state != prev:
+        log.debug('writing state file')
+        prev = write_state
+        pickle_data = pickle.dumps(write_state)
+        async with aiofiles.open(STATE_FILE, 'wb') as fh:
+            try:
+                await fh.write(pickle_data)
+            except:
+                log.error('could not write state file {}')

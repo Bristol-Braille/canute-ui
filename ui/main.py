@@ -126,7 +126,7 @@ def handle_changes(driver, config, store):
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(fully_load_books(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
-        asyncio.ensure_future(initial_state.write(state))
+        asyncio.ensure_future(initial_state.write(store))
     return listener
 
 
@@ -182,7 +182,7 @@ async def handle_hardware(driver, state, store):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         await store.dispatch(actions.load_books('cancel'))
-        await initial_state.write(state)
+        await initial_state.write(store)
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
