@@ -153,7 +153,7 @@ async def fully_load_books(state, store):
                 await store.dispatch(actions.set_book_loading(book))
                 book = book.read_pages()
                 await store.dispatch(actions.add_or_replace(book))
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.1)
         await store.dispatch(actions.load_books(False))
         log.info('loading books done')
 
