@@ -56,26 +56,19 @@ def read():
     log.debug('reading initial state from %s' % STATE_FILE)
     try:
         with open(STATE_FILE, 'rb') as fh:
-            return utility.freeze(pickle.load(fh))
+            user_state = utility.freeze(pickle.load(fh))
     except:
         log.debug('error reading state file, using hard-coded initial state')
-        return initial_state
+        user_state = initial_state['app']['user']
+    return initial_state.copy(app=initial_state['app'].copy(user=user_state))
+
 
 
 async def write(state):
     log.debug('writing state file')
-    write_state = utility.unfreeze(state)
-    write_state['app']['library'] = state['app']['library'].copy(page=0)
-    write_state['app']['location'] = 'book'
-    write_state['app']['home_menu_visible'] = False
-    write_state['app']['backing_up_log'] = False
-    write_state['app']['replacing_library'] = False
-    write_state['app']['go_to_page']['selection'] = ''
-    write_state['app']['go_to_page']['keys_pressed'] = ''
-    write_state['app']['load_books'] = False
-    write_state['app']['bookmarks_menu']['page'] = 0
-    write_state['app']['help_menu'] = {'visible': False, 'page': 0}
-    books = write_state['app']['user']['books']
+    user_state = state['app']['user']
+    write_state = utility.unfreeze(user_state)
+    books = write_state['books']
     changed_books = []
     for book in books:
         # make sure deleted bookmarks are fully deleted
@@ -84,10 +77,7 @@ async def write(state):
         book = book._replace(unconverted_pages=None,
                              file_contents=None, bookmarks=bookmarks)
         changed_books.append(book)
-    write_state['app']['user']['books'] = changed_books
-    write_state['hardware']['resetting_display'] = False
-    write_state['hardware']['warming_up'] = False
-    write_state['app']['shutting_down'] = False
+    write_state['books'] = changed_books
     pickle_data = pickle.dumps(write_state)
     async with aiofiles.open(STATE_FILE, 'wb') as fh:
         try:
