@@ -19,8 +19,8 @@ class LibraryReducers():
         except:
             log.warning('no book at {}'.format(number))
             return state
-        return state.copy(location='book', book=line_number + number,
-                          home_menu_visible=False)
+        user = state['user'].copy(book=line_number + number)
+        return state.copy(location='book', user=user, home_menu_visible=False)
 
     def set_book(self, state, n):
         return state.copy(book=n)
