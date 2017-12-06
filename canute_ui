@@ -135,7 +135,8 @@ async def fully_load_books(state, store):
     if state['load_books'] == 'start':
         await store.dispatch(actions.load_books('loading'))
         for book in state['books']:
-            if not book.unconverted_pages:
+            if not book.unconverted_pages and not book.loading:
+                await store.dispatch(actions.set_book_loading(book))
                 book = book.read_pages()
                 await store.dispatch(actions.add_or_replace(book))
                 await asyncio.sleep(0.1)

@@ -56,6 +56,10 @@ class LibraryReducers():
         books = sort_books(books)
         return state.copy(books=tuple(books))
 
+    def set_book_loading(self, state, book):
+        book = book._replace(loading=True)
+        return self.add_or_replace(state, book)
+
     def remove_books(self, state, filenames):
         filenames = [f for f in filenames if f != manual_filename]
         width, height = utility.dimensions(state)
