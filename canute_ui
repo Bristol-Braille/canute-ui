@@ -132,7 +132,8 @@ def handle_changes(driver, config, store):
 
 
 async def fully_load_books(state, store):
-    if state['load_books'] == 'start':
+    if state['load_books'] == 'start' and not state['replacing_library']:
+        print('replace_library', state['replacing_library'])
         await store.dispatch(actions.load_books('loading'))
         for book in state['books']:
             if not book.unconverted_pages and not book.loading:
@@ -147,7 +148,7 @@ async def change_files(config, state, store):
     if state['replacing_library'] == 'start':
         await store.dispatch(actions.replace_library('in progress'))
         await library.replace(config, state, store)
-        await store.dispatch(actions.replace_library('done'))
+        await store.dispatch(actions.replace_library(False))
     if state['backing_up_log'] == 'start':
         await store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
@@ -164,7 +165,7 @@ async def change_files(config, state, store):
 async def handle_hardware(driver, state, store):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
-        initial_state.write(state)
+        await initial_state.write(state)
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
