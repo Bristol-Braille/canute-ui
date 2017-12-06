@@ -44,7 +44,6 @@ class LibraryReducers():
         books = sort_books(books)
         return state.copy(books=tuple(books))
 
-
     def add_books(self, state, books_to_add):
         for book in books_to_add:
             state = self.add_book(state, book)

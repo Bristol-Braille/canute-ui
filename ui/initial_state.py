@@ -76,8 +76,9 @@ async def write(state):
     for book in books:
         # make sure deleted bookmarks are fully deleted
         bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
-        #also delete actual book data
-        book = book._replace(unconverted_pages=None, bookmarks=bookmarks)
+        # also delete actual book data as it's too much for constantly saving
+        book = book._replace(unconverted_pages=None,
+                             file_contents=None, bookmarks=bookmarks)
         changed_books.append(book)
     write_state['app']['books'] = changed_books
     write_state['hardware']['resetting_display'] = False

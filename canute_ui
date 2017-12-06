@@ -116,7 +116,7 @@ async def run_async(driver, config, loop):
         if (await handle_hardware(driver, state, store)):
             break
         await buttons.check(driver, state['app'],
-                                 store.dispatch)
+                            store.dispatch)
         await display.send_line(driver)
         await asyncio.sleep(0.001)
 

@@ -15,37 +15,41 @@ FORM_FEED = re.compile('\f')
 class BookFileError(Exception):
     pass
 
-BookData = namedtuple('BookData', 'filename width height page_number bookmarks unconverted_pages')
-BookData.__new__.__defaults__ = (None, None, None, 0, tuple(), None)
+
+BookData = namedtuple(
+    'BookData', 'filename width height page_number bookmarks file_contents unconverted_pages')
+BookData.__new__.__defaults__ = (None, None, None, 0, tuple(), None, None)
 
 
 class BookFile(BookData):
     async def init(self):
         log.debug('initialiazing {}'.format(self.filename))
+        async with aiofiles.open(self.filename) as f:
+            file_contents = await f.read()
+        return self._replace(file_contents=file_contents)
+
+    def read_pages(self, up_to_current_page=False):
+        log.debug('reading pages {}'.format(self.filename))
         if self.ext == '.brf':
-            async with aiofiles.open(self.filename) as file:
-                page = []
-                pages = []
-                async for line in file:
-                    line = line.replace('\n', '')
-                    if FORM_FEED.match(line):
-                        # pad up to the next page
-                        while len(page) < self.height:
-                            page.append('')
-                        if line == '\f':
-                            continue
-                        else:
-                            line = line.replace('\f', '')
-                    if len(page) == self.height:
-                        pages.append(tuple(page))
-                        if self.page_number < len(pages):
-                            break
-                        page = []
-                    page.append(line)
+            page = []
+            pages = []
+            for line in self.file_contents.split('\n'):
+                if FORM_FEED.match(line):
+                    # pad up to the next page
+                    while len(page) < self.height:
+                        page.append('')
+                    if line == '\f':
+                        continue
+                    else:
+                        line = line.replace('\f', '')
+                if len(page) == self.height:
+                    pages.append(tuple(page))
+                    if up_to_current_page and (len(pages) - 1) == self.page_number:
+                        break
+                    page = []
+                page.append(line)
         elif self.ext == '.pef':
-            async with aiofiles.open(self.filename) as file:
-                contents = await file.read()
-            xml_doc = minidom.parseString(contents)
+            xml_doc = minidom.parseString(self.file_contents)
             xml_pages = xml_doc.getElementsByTagName('page')
             lines = []
             for page in xml_pages:
@@ -77,12 +81,17 @@ class BookFile(BookData):
 
     @property
     def current_page_text(self):
-        page = self.unconverted_pages[self.page_number]
+        book = self.read_pages(up_to_current_page=True)
+        page = book.unconverted_pages[self.page_number]
         return tuple((braille.to_braille(line) for line in page))
 
     @property
     def max_pages(self):
-        return len(self.unconverted_pages) - 1
+        if self.unconverted_pages:
+            book = self
+        else:
+            book = self.read_pages()
+        return len(book.unconverted_pages) - 1
 
     def set_page(self, page):
         if page < 0:

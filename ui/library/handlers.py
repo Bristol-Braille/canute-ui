@@ -39,7 +39,6 @@ async def sync(state, library_dir, store):
             await store.dispatch(actions.add_or_replace(book))
 
 
-
 def wipe(library_dir):
     for book in utility.find_files(library_dir, BOOK_EXTENSIONS):
         os.remove(book)
