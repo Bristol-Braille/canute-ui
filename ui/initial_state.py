@@ -19,6 +19,7 @@ initial_state = utility.freeze({
             'page': 0,
         },
         'book': 0,
+        'load_books': False,
         'books': [Manual(40, 9)],
         'system_menu': {
             'data': [utility.pad_line(40, l) for l in menu_titles],
@@ -69,6 +70,7 @@ async def write(state):
     write_state['app']['replacing_library'] = False
     write_state['app']['go_to_page']['selection'] = ''
     write_state['app']['go_to_page']['keys_pressed'] = ''
+    write_state['app']['load_books'] = False
     write_state['app']['bookmarks_menu']['page'] = 0
     write_state['app']['help_menu'] = {'visible': False, 'page': 0}
     books = write_state['app']['books']

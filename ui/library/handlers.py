@@ -37,6 +37,7 @@ async def sync(state, library_dir, store):
             log.warning('could not open {}'.format(book.filename))
         else:
             await store.dispatch(actions.add_or_replace(book))
+    await store.dispatch(actions.load_books('start'))
 
 
 def wipe(library_dir):

@@ -28,7 +28,7 @@ class BookFile(BookData):
             file_contents = await f.read()
         return self._replace(file_contents=file_contents)
 
-    def read_pages(self, up_to_current_page=False):
+    def read_pages(self):
         log.debug('reading pages {}'.format(self.filename))
         if self.ext == '.brf':
             page = []
@@ -44,8 +44,6 @@ class BookFile(BookData):
                         line = line.replace('\f', '')
                 if len(page) == self.height:
                     pages.append(tuple(page))
-                    if up_to_current_page and (len(pages) - 1) == self.page_number:
-                        break
                     page = []
                 page.append(line)
         elif self.ext == '.pef':
@@ -81,7 +79,10 @@ class BookFile(BookData):
 
     @property
     def current_page_text(self):
-        book = self.read_pages(up_to_current_page=True)
+        if self.unconverted_pages:
+            book = self
+        else:
+            book = self.read_pages()
         page = book.unconverted_pages[self.page_number]
         return tuple((braille.to_braille(line) for line in page))
 

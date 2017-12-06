@@ -133,6 +133,9 @@ class AppReducers():
     def shutdown(self, state, value):
         return state.copy(shutting_down=True)
 
+    def load_books(self, state, value):
+        return state.copy(load_books=value)
+
 
 class HardwareReducers():
     def warm_up(self, state, value):
