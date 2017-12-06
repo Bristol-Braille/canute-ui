@@ -74,7 +74,7 @@ class Manual():
     bookmarks = tuple()
     filename = manual_filename
     title = 'canute manual'
-    unconverted_pages = tuple(from_ascii(line) for line in contents)
+    pages = tuple(from_ascii(line) for line in contents)
     loading = False
 
     def __init__(self, width, height):
@@ -83,11 +83,11 @@ class Manual():
 
     @property
     def max_pages(self):
-        return (len(self.unconverted_pages) - 1) // self.height
+        return (len(self.pages) - 1) // self.height
 
     async def current_page_text(self, store):
         line_number = self.page_number * self.height
-        return self.unconverted_pages[line_number:line_number + self.height]
+        return self.pages[line_number:line_number + self.height]
 
     def _replace(self, *args, **kwargs):
         return self

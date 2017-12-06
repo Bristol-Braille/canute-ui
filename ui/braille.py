@@ -51,8 +51,7 @@ def to_ueb_number(n):
 
 def unicode_to_pin_num(uni_char):
     '''
-    converts a unicode braille character to a decimal number that can then be
-    used to load a picture to display the character
+    converts a unicode braille character to a decimal number
 
     used to convert PEF format to CANUTE format
     http://en.wikipedia.org/wiki/Braille_Patterns
@@ -124,10 +123,17 @@ def alpha_to_pin_num(alpha):
 
 def from_ascii(alphas):
     '''
-    convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`
-    form feed and line feed characters are supressed
+    convert a list or string of alphas to pin numbers using
+    :meth:`alpha_to_pin_num` form feed and line feed characters are supressed
     '''
-    pin_nums = []
-    for alpha in alphas:
-        pin_nums.append(alpha_to_pin_num(alpha))
-    return tuple(pin_nums)
+    return tuple(alpha_to_pin_num(a) for a in alphas)
+
+
+def from_unicode(alphas):
+    '''
+    convert a list or string of unicode chars to pin numbers using
+    :meth:`unicode_to_pin_num` form feed and line feed characters are supressed
+    '''
+    return tuple(unicode_to_pin_num(a) for a in alphas)
+
+

@@ -73,7 +73,7 @@ async def write(state):
         # make sure deleted bookmarks are fully deleted
         bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
         # also delete actual book data as it's too much for constantly saving
-        book = book._replace(unconverted_pages=None,
+        book = book._replace(pages=None,
                              file_contents=None, bookmarks=bookmarks, loading=False)
         changed_books.append(book)
     write_state['books'] = changed_books

@@ -18,7 +18,7 @@ class BookFileError(Exception):
 
 
 BookData = namedtuple(
-    'BookData', 'filename width height page_number bookmarks file_contents unconverted_pages loading')
+    'BookData', 'filename width height page_number bookmarks file_contents pages loading')
 BookData.__new__.__defaults__ = (
     None, None, None, 0, tuple(), None, None, False)
 
@@ -47,7 +47,7 @@ class BookFile(BookData):
                 if len(page) == self.height:
                     pages.append(tuple(page))
                     page = []
-                page.append(line)
+                page.append(braille.from_ascii(line))
         elif self.ext == '.pef':
             xml_doc = minidom.parseString(self.file_contents)
             xml_pages = xml_doc.getElementsByTagName('page')
@@ -58,8 +58,8 @@ class BookFile(BookData):
                         line = row.childNodes[0].data.rstrip()
                     except IndexError:
                         # empty row element
-                        line = tuple()
-                    lines.append(tuple(line))
+                        line = ''
+                    lines.append(braille.from_unicode(line))
             pages = []
             for i in range(len(lines))[::self.height]:
                 page = lines[i:i + self.height]
@@ -67,7 +67,7 @@ class BookFile(BookData):
         else:
             raise BookFileError(
                 'Unexpected extension: {}'.format(self.ext))
-        return self._replace(unconverted_pages=tuple(pages))
+        return self._replace(pages=tuple(pages))
 
     @property
     def ext(self):
@@ -80,7 +80,7 @@ class BookFile(BookData):
         return title
 
     async def current_page_text(self, store):
-        if self.unconverted_pages:
+        if self.pages:
             book = self
         elif self.loading:
             book = self
@@ -93,16 +93,15 @@ class BookFile(BookData):
             await store.dispatch(actions.set_book_loading(self))
             book = self.read_pages()
             await store.dispatch(actions.add_or_replace(book))
-        page = book.unconverted_pages[self.page_number]
-        return tuple((braille.from_ascii(line) for line in page))
+        return book.pages[self.page_number]
 
     @property
     def max_pages(self):
-        if self.unconverted_pages:
+        if self.pages:
             book = self
         else:
             book = self.read_pages()
-        return len(book.unconverted_pages) - 1
+        return len(book.pages) - 1
 
     def set_page(self, page):
         if page < 0:
