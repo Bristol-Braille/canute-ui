@@ -38,15 +38,14 @@ class AppReducers():
         # fully delete deleted bookmarks
         changed_books = []
         for book in books:
-            book = book._replace(bookmarks=tuple(
-                bm for bm in book.bookmarks if bm != 'deleted'))
+            bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+            book = book._replace(bookmarks=bookmarks)
             changed_books.append(book)
         bookmarks_menu = state['bookmarks_menu']
         return state.copy(location='book',
                           bookmarks_menu=bookmarks_menu.copy(page=0),
                           home_menu_visible=False, go_to_page_selection='',
-                          help_menu=utility.freeze(
-                              {'visible': False, 'page': 0}),
+                          help_menu=frozendict({'visible': False, 'page': 0}),
                           user=state['user'].copy(books=tuple(changed_books)))
 
     def go_to_page(self, state, page):
@@ -164,11 +163,10 @@ action_types.extend(utility.get_methods(GoToPageReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
 action_types.extend(utility.get_methods(BookmarksReducers))
 
-# just an empty object
 
-
-def actions(): pass
-
+def actions():
+    '''just an empty object'''
+    pass
 
 # then we give it a method for each action
 for action in action_types:
