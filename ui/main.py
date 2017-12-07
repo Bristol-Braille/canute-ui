@@ -21,8 +21,6 @@ from .library import handlers as library
 from .display import Display
 from .book.handlers import read_pages
 from .driver_dummy import Dummy
-from .driver_emulated import Emulated
-from .driver_both import DriverBoth
 
 display = Display()
 
@@ -50,11 +48,13 @@ def main():
             run(driver, config)
     elif args.emulated and not args.both:
         log.info('running with emulated hardware')
+        from .driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
     elif args.emulated and args.both:
         log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
+        from .driver_both import DriverBoth
         with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
                         delay=args.delay, display_text=args.text,
                         timeout=timeout) as driver:
