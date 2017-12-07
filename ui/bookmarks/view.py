@@ -1,4 +1,5 @@
 from ..braille import from_ascii, format_title
+from ..book.handlers import get_page_data
 
 
 def render_help_menu(width, height):
@@ -41,7 +42,7 @@ async def render(width, height, state, store):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        lines = await book.current_page_text(store)
+        lines = await get_page_data(book, store)
         line = lines[0]
         data.append(tuple(from_ascii(str(bm + 1))) + (0,) + tuple(line))
 

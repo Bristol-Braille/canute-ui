@@ -5,6 +5,7 @@ from .system_menu import view as system_menu_view
 from .go_to_page import view as go_to_page_view
 from .book import view as book_view
 from .bookmarks import view as bookmarks_view
+from .book.handlers import get_page_data
 
 
 log = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ class Display():
             page_data = await book_view.render(width, height, state, store)
             self._set_buffer(page_data)
         elif location == 'bookmarks_menu':
-            page_data = await bookmarks_view.render(width, height, state)
+            page_data = await bookmarks_view.render(width, height, state, store)
             self._set_buffer(page_data)
 
     async def send_line(self, driver):
