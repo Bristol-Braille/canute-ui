@@ -45,6 +45,11 @@ def read_pages(book):
                 pages.append(tuple(page))
                 page = []
             page.append(braille.from_ascii(line))
+        if len(page) > 0:
+            # pad up to the end
+            while len(page) < book.height:
+                page.append(tuple())
+            pages.append(tuple(page))
     elif book.ext == '.pef':
         xml_doc = minidom.parseString(book.file_contents)
         xml_pages = xml_doc.getElementsByTagName('page')
