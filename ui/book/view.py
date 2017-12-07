@@ -1,4 +1,5 @@
 from ..braille import from_ascii, format_title
+from .handlers import get_page_data
 
 
 def render_home_menu(width, height, book):
@@ -46,4 +47,4 @@ async def render(width, height, state, store):
     if home_menu:
         return render_home_menu(width, height, book)
     else:
-        return await book.current_page_text(store)
+        return await get_page_data(book, store)

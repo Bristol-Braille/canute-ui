@@ -7,6 +7,7 @@ import asyncio
 
 from ..actions import actions
 from .. import utility
+from ..book.handlers import init
 from ..book_file import BookFile
 
 
@@ -33,7 +34,7 @@ async def sync(state, library_dir, store):
     books += not_added_books
     for book in books:
         try:
-            book = await book.init()
+            book = await init(book)
         except:
             log.warning('could not open {}'.format(book.filename))
         else:

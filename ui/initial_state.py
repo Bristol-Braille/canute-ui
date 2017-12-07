@@ -3,7 +3,7 @@ import aiofiles
 import logging
 from . import utility
 from .system_menu.system_menu import menu_titles
-from .manual import Manual
+from .manual import manual
 
 STATE_FILE = 'state.pkl'
 
@@ -14,7 +14,7 @@ initial_state = utility.freeze({
     'app': {
         'user': {
             'book': 0,
-            'books': [Manual(40, 9)],
+            'books': [manual],
         },
         'location': 'book',
         'library': {

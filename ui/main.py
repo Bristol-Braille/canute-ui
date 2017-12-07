@@ -20,6 +20,7 @@ import ui.library.handlers as library
 import ui.buttons as buttons
 from ui.display import Display
 from ui.driver_dummy import Dummy
+from ui.book.handlers import read_pages
 
 display = Display()
 
@@ -151,7 +152,7 @@ async def fully_load_books(state, store):
                     log.info('already loading {}, cancelling'.format(book.title))
                     continue
                 await store.dispatch(actions.set_book_loading(book))
-                book = book.read_pages()
+                book = read_pages(book)
                 await store.dispatch(actions.add_or_replace(book))
                 await asyncio.sleep(0.1)
         await store.dispatch(actions.load_books(False))
