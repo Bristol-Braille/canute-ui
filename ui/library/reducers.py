@@ -73,7 +73,7 @@ class LibraryReducers():
         return state.copy(user=state['user'].copy(books=tuple(books)), library=library)
 
     def replace_library(self, state, value):
-        if state['replacing_library'] == 'in progress' and value != 'done':
+        if state['replacing_library'] == 'in progress' and value != False:
             return state
         else:
             return state.copy(replacing_library=value, location='library')
