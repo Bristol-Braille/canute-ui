@@ -138,11 +138,12 @@ async def fully_load_books(state, store):
         await store.dispatch(actions.load_books('loading'))
         books = state['user']['books']
         log.info('loading {} books'.format(len(books)))
+        aborted = False
         for book in books:
             if len(book.pages) == 0:
                 state = store.state['app']
                 if state['load_books'] == 'cancel':
-                    log.info('cancelling loading books')
+                    aborted = True
                     break
                 try:
                     book = tuple(filter(lambda b: b.filename ==
@@ -150,14 +151,17 @@ async def fully_load_books(state, store):
                 except IndexError:
                     continue
                 if book.loading:
-                    log.info('already loading {}, cancelling'.format(book.title))
+                    log.info('already loading {}, skipping'.format(book.title))
                     continue
                 await store.dispatch(actions.set_book_loading(book))
                 book = read_pages(book)
                 await store.dispatch(actions.add_or_replace(book))
                 await asyncio.sleep(0.1)
         await store.dispatch(actions.load_books(False))
-        log.info('loading books done')
+        if aborted:
+            log.info('loading books aborted')
+        else:
+            log.info('loading books done')
 
 
 async def change_files(config, state, store):
