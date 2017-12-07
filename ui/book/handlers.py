@@ -20,6 +20,8 @@ async def init(book):
     log.debug('initialiazing {}'.format(book.filename))
     async with aiofiles.open(book.filename) as f:
         file_contents = await f.read()
+    if len(file_contents) == 0:
+        raise BookFileError('File is empty: {}'.format(book.filename))
     return book._replace(file_contents=file_contents)
 
 
