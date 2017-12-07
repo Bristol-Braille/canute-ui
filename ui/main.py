@@ -8,19 +8,21 @@ import aioredux
 import aioredux.middleware
 import async_timeout
 
-from ui.driver_pi import Pi
-import ui.utility as utility
-import ui.argparser as argparser
-import ui.config_loader as config_loader
-from ui.setup_logs import setup_logs
-from ui.store import main_reducer
-from ui.actions import actions
-import ui.initial_state as initial_state
-import ui.library.handlers as library
-import ui.buttons as buttons
-from ui.display import Display
-from ui.driver_dummy import Dummy
-from ui.book.handlers import read_pages
+from . import utility
+from . import argparser
+from . import config_loader
+from . import initial_state
+from . import buttons
+from .driver_pi import Pi
+from .setup_logs import setup_logs
+from .store import main_reducer
+from .actions import actions
+from .library import handlers as library
+from .display import Display
+from .book.handlers import read_pages
+from .driver_dummy import Dummy
+from .driver_emulated import Emulated
+from .driver_both import DriverBoth
 
 display = Display()
 
@@ -43,17 +45,16 @@ def main():
             pending = asyncio.Task.all_tasks()
             loop.run_until_complete(asyncio.gather(*pending))
     elif args.dummy:
+        log.info('running with dummy hardware')
         with Dummy(fuzz=False) as driver:
             run(driver, config)
     elif args.emulated and not args.both:
         log.info('running with emulated hardware')
-        from ui.driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
     elif args.emulated and args.both:
         log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
-        from ui.driver_both import DriverBoth
         with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
                         delay=args.delay, display_text=args.text,
                         timeout=timeout) as driver:
