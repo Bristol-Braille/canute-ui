@@ -90,6 +90,37 @@ async def get_page_data(book, store):
 
     return book.pages[book.page_number]
 
+async def fully_load_books(state, store):
+    state = store.state['app']
+    if state['load_books'] == 'start':
+        await store.dispatch(actions.load_books('loading'))
+        books = state['user']['books']
+        log.info('loading {} books'.format(len(books)))
+        aborted = False
+        for book in books:
+            if len(book.pages) == 0:
+                state = store.state['app']
+                if state['load_books'] == 'cancel':
+                    aborted = True
+                    break
+                try:
+                    book = tuple(filter(lambda b: b.filename ==
+                                        book.filename, state['user']['books']))[0]
+                except IndexError:
+                    continue
+                if book.loading:
+                    log.info('already loading {}, skipping'.format(book.title))
+                    continue
+                await store.dispatch(actions.set_book_loading(book))
+                book = read_pages(book)
+                await store.dispatch(actions.add_or_replace(book))
+                await asyncio.sleep(0.1)
+        await store.dispatch(actions.load_books(False))
+        if aborted:
+            log.info('loading books aborted')
+        else:
+            log.info('loading books done')
+
 
 class BookFileError(Exception):
     pass
