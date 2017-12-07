@@ -4,7 +4,7 @@
 
 Install python, pip and other dependencies:
 
-    sudo apt install python3-pip python3-pyside python3-dev
+    sudo apt install python3-pip python3-pyqt5 python3-dev
 
 Install other requirements: 
 
@@ -21,13 +21,13 @@ Evdev is for Linux only so the `--pi-buttons` option will not be usable on Mac.
 
 For MacPorts:
 
-    sudo port install py36-pip py36-pyside
+    sudo port install py36-pip py36-pyqt5
     pip-3.6 install --user -r requirements.txt
 
 For Homebrew:
 
     brew install python3
-    pip3 install python-pyside
+    pip3 install pyqt5
     pip3 install -r requirements.txt
 
 
