@@ -17,12 +17,15 @@ FORM_FEED = re.compile('\f')
 async def init(book):
     if book.filename == manual.filename:
         return manual
+
     log.debug('initialiazing {}'.format(book.filename))
+
     async with aiofiles.open(book.filename) as f:
         file_contents = await f.read()
     if len(file_contents) == 0:
         raise BookFileError('File is empty: {}'.format(book.filename))
-    return book._replace(file_contents=file_contents)
+
+    return book._replace(file_contents=file_contents, pages=tuple())
 
 
 def read_pages(book):

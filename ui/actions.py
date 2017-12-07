@@ -168,6 +168,7 @@ def actions():
     '''just an empty object'''
     pass
 
+
 # then we give it a method for each action
 for action in action_types:
     setattr(actions, action, make_action_method(action))
