@@ -139,7 +139,7 @@ async def fully_load_books(state, store):
         books = state['user']['books']
         log.info('loading {} books'.format(len(books)))
         for book in books:
-            if not book.pages:
+            if len(book.pages) == 0:
                 state = store.state['app']
                 if state['load_books'] == 'cancel':
                     log.info('cancelling loading books')

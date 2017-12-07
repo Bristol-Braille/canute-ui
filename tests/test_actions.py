@@ -5,6 +5,9 @@ import ui.actions as actions
 from ui.library.reducers import LibraryReducers
 from ui.initial_state import initial_state
 from ui.book_file import BookFile
+from ui.book.handlers import init, read_pages
+
+from .util import async_test
 
 initial = initial_state['app']
 
@@ -47,13 +50,16 @@ class TestActions(unittest.TestCase):
         self.assertEqual(len(initial['user']['books']), 1)
         self.assertEqual(len(state['user']['books']), 1)
 
-    def test_book_navigation(self):
+    @async_test
+    async def test_book_navigation(self):
         self.assertEqual(len(initial['user']['books']), 1)
         ra = actions.AppReducers()
         rl = LibraryReducers()
         filename = ('books/A_balance_between_technology_and_Braille_Addin'
                     + 'g_Value_and_Creating_a_Love_of_Reading.BRF')
         bookfile = BookFile(filename, 40, 9)
+        bookfile = await init(bookfile)
+        bookfile = read_pages(bookfile)
         state = rl.add_books(initial, [bookfile])
         state = rl.go_to_book(state, 0)
 

@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 BookData = namedtuple(
     'BookData', 'filename width height page_number bookmarks file_contents pages loading')
 BookData.__new__.__defaults__ = (
-    None, None, None, 0, tuple(), None, None, False)
+    None, None, None, 0, tuple(), None, tuple(), False)
 
 
 class BookFile(BookData):

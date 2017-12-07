@@ -66,7 +66,7 @@ def read_pages(book):
 
 
 async def get_page_data(book, store):
-    if not book.pages:
+    if len(book.pages) == 0:
         if book.loading:
             while book.loading:
                 books = store.state['app']['user']['books']

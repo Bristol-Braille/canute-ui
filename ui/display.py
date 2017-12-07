@@ -5,7 +5,6 @@ from .system_menu import view as system_menu_view
 from .go_to_page import view as go_to_page_view
 from .book import view as book_view
 from .bookmarks import view as bookmarks_view
-from .book.handlers import get_page_data
 
 
 log = logging.getLogger(__name__)
