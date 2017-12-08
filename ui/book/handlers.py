@@ -90,6 +90,7 @@ async def get_page_data(book, store):
 
     return book.pages[book.page_number]
 
+
 async def fully_load_books(state, store):
     state = store.state['app']
     if state['load_books'] == 'start':
