@@ -29,7 +29,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
     title_length = len(title)
     if title_length > available_title_space:
         # truncate
-        title = title[0:available_title_space]
+        title = truncate_middle(title, available_title_space)
     else:
         # pad
         title += ' '
@@ -37,6 +37,22 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
             title += '-' * (available_title_space - title_length - 1)
 
     return from_ascii(title + current_page)
+
+
+def truncate_middle(string, width):
+    if len(string) <= width:
+        return string
+
+    half = width // 2
+    extra = width % 2
+
+    if half >= width or half <= 3:
+        return string[0:width]
+
+    ret = string[0:half - 3] + '...'
+    # append the end of the string up to the half-way
+    end = reversed(tuple(reversed(string))[0:half + extra])
+    return ret + ''.join(end)
 
 
 ueb_number_mapping = 'JABCDEFGHI'
