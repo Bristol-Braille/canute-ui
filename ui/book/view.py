@@ -22,13 +22,13 @@ def render_help_menu(width, height):
 
     data.append(from_ascii('Move through the book by pressing the'))
     data.append(from_ascii('arrow buttons on the front of the'))
-    data.append(from_ascii('machine. Hold them down to move 5 pages'))
-    data.append(from_ascii('at a time. The home menu shows you what'))
-    data.append(from_ascii('you can do with the side buttons from'))
-    data.append(from_ascii('the home menu or the book. View this by'))
-    data.append(from_ascii('pressing the middle button on the front.'))
-    data.append(from_ascii('Pressing the menu button again will'))
-    data.append(from_ascii('always return you to the book.'))
+    data.append(from_ascii('machine. Hold them down to move #e'))
+    data.append(from_ascii('pages at a time. The home menu shows'))
+    data.append(from_ascii('what you can do with the side buttons'))
+    data.append(from_ascii('from the home menu or the book. View'))
+    data.append(from_ascii('this by pressing the middle button on'))
+    data.append(from_ascii('the front. Pressing this button again'))
+    data.append(from_ascii('will always return you to your book.'))
 
     # pad page with empty rows
     while len(data) < height:

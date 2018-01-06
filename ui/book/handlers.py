@@ -75,7 +75,9 @@ def read_pages(book):
     return book._replace(pages=tuple(pages))
 
 
-async def get_page_data(book, store):
+async def get_page_data(book, store, page_number=None):
+    if page_number is None:
+        page_number = book.page_number
     if len(book.pages) == 0:
         if book.loading:
             while book.loading:
@@ -88,7 +90,7 @@ async def get_page_data(book, store):
             book = read_pages(book)
             await store.dispatch(actions.add_or_replace(book))
 
-    return book.pages[book.page_number]
+    return book.pages[page_number]
 
 
 async def fully_load_books(state, store):

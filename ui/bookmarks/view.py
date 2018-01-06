@@ -1,15 +1,15 @@
-from ..braille import from_ascii, format_title
+from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
 
 
 def render_help_menu(width, height):
     data = []
 
-    data.append(from_ascii('Add a bookmark by pressing button 5'))
+    data.append(from_ascii('Add a bookmark by pressing button #e'))
     data.append(from_ascii('while in a book. Bookmarks are listed'))
     data.append(from_ascii('here in the bookmark menu. Each bookmark'))
     data.append(from_ascii('starts with the Canute page number based'))
-    data.append(from_ascii('on its 9 line page. Go to the page by'))
+    data.append(from_ascii('on its #i line page. Go to the page by'))
     data.append(from_ascii('selecting a bookmark by pressing one of'))
     data.append(from_ascii('the side buttons. Holding the button'))
     data.append(from_ascii('down will delete the bookmark.'))
@@ -42,9 +42,10 @@ async def render(width, height, state, store):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        lines = await get_page_data(book, store)
+        lines = await get_page_data(book, store, page_number=bm)
         line = lines[0]
-        data.append(tuple(from_ascii(str(bm + 1))) + (0,) + tuple(line))
+        n = from_ascii(to_ueb_number(bm + 1) + ' ')
+        data.append(n + tuple(line))
 
     # pad page with empty rows
     while len(data) < height:
