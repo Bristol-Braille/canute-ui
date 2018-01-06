@@ -29,3 +29,9 @@ class TestBraille(unittest.TestCase):
             len(utility.find_files(test_books_dir, ('brf', 'pef'))),
             3
         )
+
+    def test_truncate_middle(self):
+        inp = '123456789abcdefghi'
+        width = 9
+        truncated = braille.truncate_middle(inp, width)
+        self.assertEqual(len(truncated), width)
