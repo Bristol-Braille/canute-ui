@@ -7,8 +7,8 @@ def render_help_menu(width, height, page):
         'order of books in the library and',
         'bookmarks through the menu options. To',
         'shutdown the Canute safely, select the',
-        'shutdown option and wait for 30 seconds',
-        'before unplugging it.',
+        'shutdown option and wait for #cj',
+        'seconds before unplugging it.',
     ]
 
     data = [from_ascii(line) for line in data]

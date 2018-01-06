@@ -2,16 +2,16 @@ from ..braille import from_ascii, format_title
 
 
 def render_help_menu(width, height, page):
-    data = [
+    data = (
         'Go to a page number by keying it in with',
         'the side number buttons and pressing',
         'forward. Pages are numbered based on the',
-        '9 line page height of the Canute. You',
+        '#i line page height of the Canute. You',
         'can delete entered numbers by pressing',
         'or holding the back button. As always'
         'you can go back to your current page by',
         'pressing the menu button.',
-    ]
+    )
 
     data = [from_ascii(line) for line in data]
 
