@@ -1,4 +1,4 @@
-from ..braille import from_ascii, format_title
+from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
 
 
@@ -42,9 +42,10 @@ async def render(width, height, state, store):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        lines = await get_page_data(book, store)
+        lines = await get_page_data(book, store, page_number=bm)
         line = lines[0]
-        data.append(tuple(from_ascii(str(bm + 1))) + (0,) + tuple(line))
+        n = from_ascii(to_ueb_number(bm + 1) + ' ')
+        data.append(n + tuple(line))
 
     # pad page with empty rows
     while len(data) < height:
