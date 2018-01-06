@@ -9,8 +9,8 @@ class BookmarksReducers():
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['book']
-        books = list(state['books'])
+        book_n = state['user']['book']
+        books = list(state['user']['books'])
         book = copy(books[book_n])
         bookmarks = book.bookmarks
         line = page * height
@@ -22,15 +22,15 @@ class BookmarksReducers():
         book.bookmarks += tuple(changed_bookmarks)
         book.bookmarks += bookmarks[line + height: len(bookmarks)]
         books[book_n] = book
-        return state.copy(books=tuple(books))
+        return state.copy(user=state['user'].copy(books=tuple(books)))
 
     def go_to_bookmark(self, state, n):
         width, height = utility.dimensions(state)
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['book']
-        book = state['books'][book_n]
+        book_n = state['user']['book']
+        book = state['user']['books'][book_n]
         bookmarks = book.bookmarks[page * height:(page * height) + height]
         if n >= len(bookmarks):
             return state

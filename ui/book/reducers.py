@@ -7,19 +7,20 @@ class BookReducers():
 
     def go_to_end(self, state, value):
         width, height = utility.dimensions(state)
-        book_n = state['book']
-        book = state['books'][book_n]
+        book_n = state['user']['book']
+        book = state['user']['books'][book_n]
         last_page = book.max_pages
         return self.set_book_page(state, last_page)
 
     def set_book_page(self, state, page):
         width, height = utility.dimensions(state)
-        book_n = state['book']
-        books = list(state['books'])
-        books[book_n].set_page(page)
-        books[book_n].bookmarks = tuple(
-            bm for bm in books[book_n].bookmarks if bm != 'deleted')
-        return state.copy(books=tuple(books),
+        book_n = state['user']['book']
+        books = list(state['user']['books'])
+        book = books[book_n].set_page(page)
+        bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+        book = book._replace(bookmarks=bookmarks)
+        books[book_n] = book
+        return state.copy(user=state['user'].copy(books=tuple(books)),
                           location='book', home_menu_visible=False)
 
     def enter_go_to_page(self, state, value):
@@ -29,12 +30,12 @@ class BookReducers():
         return state.copy(home_menu_visible=not state['home_menu_visible'])
 
     def insert_bookmark(self, state, _):
-        number = state['book']
-        books = list(state['books'])
+        number = state['user']['book']
+        books = list(state['user']['books'])
         book = books[number]
         page = book.page_number
         if page not in book.bookmarks:
-            book.bookmarks += tuple([page])
+            book = book._replace(bookmarks=book.bookmarks + tuple([page]))
             books[number] = book
-            return state.copy(books=tuple(books))
+            return state.copy(user=state['user'].copy(books=tuple(books)))
         return state

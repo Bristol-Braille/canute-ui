@@ -1,9 +1,9 @@
 import pickle
-from copy import copy
+import aiofiles
 import logging
 from . import utility
 from .system_menu.system_menu import menu_titles
-from .manual import Manual
+from .manual import manual
 
 STATE_FILE = 'state.pkl'
 
@@ -12,12 +12,15 @@ log = logging.getLogger(__name__)
 
 initial_state = utility.freeze({
     'app': {
+        'user': {
+            'book': 0,
+            'books': [manual],
+        },
         'location': 'book',
         'library': {
             'page': 0,
         },
-        'book': 0,
-        'books': [Manual(40, 9)],
+        'load_books': False,
         'system_menu': {
             'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
@@ -51,35 +54,37 @@ def read():
     log.debug('reading initial state from %s' % STATE_FILE)
     try:
         with open(STATE_FILE, 'rb') as fh:
-            state = pickle.load(fh)
-            return state
+            user_state = utility.freeze(pickle.load(fh))
     except:
         log.debug('error reading state file, using hard-coded initial state')
-        return initial_state
+        user_state = initial_state['app']['user']
+    return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
-def write(state):
-    log.debug('writing state file')
-    write_state = utility.unfreeze(state)
-    write_state['app']['library'] = state['app']['library'].copy(page=0)
-    write_state['app']['location'] = 'book'
-    write_state['app']['home_menu_visible'] = False
-    write_state['app']['backing_up_log'] = False
-    write_state['app']['replacing_library'] = False
-    write_state['app']['go_to_page']['selection'] = ''
-    write_state['app']['go_to_page']['keys_pressed'] = ''
-    write_state['app']['bookmarks_menu']['page'] = 0
-    write_state['app']['help_menu'] = {'visible': False, 'page': 0}
-    books = write_state['app']['books']
-    # make sure deleted bookmarks are fully deleted
+prev = {}
+
+
+async def write(store):
+    global prev
+    state = store.state
+    user_state = state['app']['user']
+    write_state = utility.unfreeze(user_state)
+    books = write_state['books']
     changed_books = []
     for book in books:
-        book = copy(book)
-        book.bookmarks = [bm for bm in book.bookmarks if bm != 'deleted']
+        # make sure deleted bookmarks are fully deleted
+        bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
+        # also delete actual book data as it's too much for constantly saving
+        book = book._replace(pages=tuple(),
+                             file_contents=None, bookmarks=bookmarks, loading=False)
         changed_books.append(book)
-    write_state['app']['books'] = changed_books
-    write_state['hardware']['resetting_display'] = False
-    write_state['hardware']['warming_up'] = False
-    write_state['app']['shutting_down'] = False
-    with open(STATE_FILE, 'wb') as fh:
-        pickle.dump(utility.freeze(write_state), fh)
+    write_state['books'] = changed_books
+    if write_state != prev:
+        log.debug('writing state file')
+        prev = write_state
+        pickle_data = pickle.dumps(write_state)
+        async with aiofiles.open(STATE_FILE, 'wb') as fh:
+            try:
+                await fh.write(pickle_data)
+            except:
+                log.error('could not write state file {}')

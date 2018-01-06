@@ -1,17 +1,18 @@
-from ..braille import to_braille, format_title
+from ..braille import from_ascii, format_title
+from ..book.handlers import get_page_data
 
 
 def render_help_menu(width, height):
     data = []
 
-    data.append(to_braille('Add a bookmark by pressing button 5'))
-    data.append(to_braille('while in a book. Bookmarks are listed'))
-    data.append(to_braille('here in the bookmark menu. Each bookmark'))
-    data.append(to_braille('starts with the Canute page number based'))
-    data.append(to_braille('on its 9 line page. Go to the page by'))
-    data.append(to_braille('selecting a bookmark by pressing one of'))
-    data.append(to_braille('the side buttons. Holding the button'))
-    data.append(to_braille('down will delete the bookmark.'))
+    data.append(from_ascii('Add a bookmark by pressing button 5'))
+    data.append(from_ascii('while in a book. Bookmarks are listed'))
+    data.append(from_ascii('here in the bookmark menu. Each bookmark'))
+    data.append(from_ascii('starts with the Canute page number based'))
+    data.append(from_ascii('on its 9 line page. Go to the page by'))
+    data.append(from_ascii('selecting a bookmark by pressing one of'))
+    data.append(from_ascii('the side buttons. Holding the button'))
+    data.append(from_ascii('down will delete the bookmark.'))
 
     # pad page with empty rows
     while len(data) < height:
@@ -20,12 +21,12 @@ def render_help_menu(width, height):
     return tuple(data)
 
 
-def render(width, height, state):
+async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
         return render_help_menu(width, height)
 
-    book = state['books'][state['book']]
+    book = state['user']['books'][state['user']['book']]
     page = state['bookmarks_menu']['page']
 
     line_n = page * (height - 1)
@@ -41,8 +42,9 @@ def render(width, height, state):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        line = book.current_page_text[0]
-        data.append(tuple(to_braille(str(bm + 1))) + (0,) + tuple(line))
+        lines = await get_page_data(book, store)
+        line = lines[0]
+        data.append(tuple(from_ascii(str(bm + 1))) + (0,) + tuple(line))
 
     # pad page with empty rows
     while len(data) < height:

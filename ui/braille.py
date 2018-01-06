@@ -18,7 +18,7 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         title = ',,' + title
 
     if total_pages == 1:
-        return to_braille(title)
+        return from_ascii(title)
 
     current_page = ' {}/{}'.format(to_ueb_number(page_number),
                                    to_ueb_number(total_pages))
@@ -36,21 +36,22 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         if (title_length - 1) <= available_title_space:
             title += '-' * (available_title_space - title_length - 1)
 
-    return to_braille(title + current_page)
+    return from_ascii(title + current_page)
+
+
+ueb_number_mapping = 'JABCDEFGHI'
 
 
 def to_ueb_number(n):
-    mapping = 'JABCDEFGHI'
     ueb_number = '#'
     for c in str(n):
-        ueb_number += mapping[int(c)]
+        ueb_number += ueb_number_mapping[int(c)]
     return ueb_number
 
 
 def unicode_to_pin_num(uni_char):
     '''
-    converts a unicode braille character to a decimal number that can then be
-    used to load a picture to display the character
+    converts a unicode braille character to a decimal number
 
     used to convert PEF format to CANUTE format
     http://en.wikipedia.org/wiki/Braille_Patterns
@@ -93,10 +94,13 @@ def pin_num_to_unicode(pin_num):
     return chr(pin_num + 10240)
 
 
+# mapping from
+# http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
+mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
+
+
 def pin_num_to_alpha(numeric):
     ''' for sorting & debugging '''
-    mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
-    mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     return mapping[numeric]
 
 
@@ -108,27 +112,26 @@ def pin_nums_to_alphas(numerics):
 def alpha_to_pin_num(alpha):
     '''
     convert a single alpha, digit or some punctuation to 6 pin braille
-    will raise Formfeed or Linefeed ConversionExceptions if they are found
-    other unknown characters will be logged and a space will be returned.
+    unknown characters will be logged and a space will be returned.
     '''
-    # mapping from
-    # http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
-    mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,'
-    mapping += '*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
     alpha = alpha.upper()
     try:
         return mapping.index(alpha)
     except ValueError:
-        log.warning('problem converting char #[%s] to pin number' % ord(alpha))
         return 0
 
 
-def to_braille(alphas):
+def from_ascii(alphas):
     '''
-    convert a list of alphas to pin numbers using :meth:`alpha_to_pin_num`
-    form feed and line feed characters are supressed
+    convert a list or string of alphas to pin numbers using
+    :meth:`alpha_to_pin_num` form feed and line feed characters are supressed
     '''
-    pin_nums = []
-    for alpha in alphas:
-        pin_nums.append(alpha_to_pin_num(alpha))
-    return tuple(pin_nums)
+    return tuple(alpha_to_pin_num(a) for a in alphas)
+
+
+def from_unicode(alphas):
+    '''
+    convert a list or string of unicode chars to pin numbers using
+    :meth:`unicode_to_pin_num` form feed and line feed characters are supressed
+    '''
+    return tuple(unicode_to_pin_num(a) for a in alphas)

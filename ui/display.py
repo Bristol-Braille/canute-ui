@@ -1,5 +1,4 @@
 import logging
-import asyncio
 from . import utility
 from .library import view as library_view
 from .system_menu import view as system_menu_view
@@ -17,7 +16,7 @@ class Display():
         self.hardware_state = []
         self.buffer = []
 
-    def render_to_buffer(self, state):
+    async def render_to_buffer(self, state, store):
         width, height = utility.dimensions(state)
         location = state['location']
         if location == 'library':
@@ -30,14 +29,13 @@ class Display():
             page_data = go_to_page_view.render(width, height, state)
             self._set_buffer(page_data)
         elif location == 'book':
-            page_data = book_view.render(width, height, state)
+            page_data = await book_view.render(width, height, state, store)
             self._set_buffer(page_data)
         elif location == 'bookmarks_menu':
-            page_data = bookmarks_view.render(width, height, state)
+            page_data = await bookmarks_view.render(width, height, state, store)
             self._set_buffer(page_data)
 
-    @asyncio.coroutine
-    def send_line(self, driver):
+    async def send_line(self, driver):
         row = self.row
         if row >= len(self.buffer):
             return

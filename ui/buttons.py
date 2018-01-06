@@ -1,5 +1,4 @@
 import logging
-import asyncio
 from datetime import datetime
 from .actions import actions
 from .system_menu.system_menu import system_menu
@@ -55,8 +54,7 @@ for i, item in enumerate(system_menu):
     bindings['system_menu']['single'][str(i + 2)] = action
 
 
-@asyncio.coroutine
-def dispatch_button(key, press_type, state, dispatch):
+async def dispatch_button(key, press_type, state, dispatch):
     if state['help_menu']['visible']:
         location = 'help_menu'
     else:
@@ -66,15 +64,14 @@ def dispatch_button(key, press_type, state, dispatch):
     except KeyError:
         log.debug('no binding for key {}, {} press'.format(key, press_type))
     else:
-        yield from dispatch(action)
+        await dispatch(action)
 
 
 prev_buttons = {}
 long_buttons = {}
 
 
-@asyncio.coroutine
-def check(driver, state, dispatch):
+async def check(driver, state, dispatch):
     buttons = driver.get_buttons()
     for key in buttons:
         up_or_down = buttons[key]
@@ -87,11 +84,11 @@ def check(driver, state, dispatch):
             else:
                 if key in prev_buttons:
                     del prev_buttons[key]
-                yield from dispatch_button(key, 'single', state, dispatch)
+                await dispatch_button(key, 'single', state, dispatch)
 
     for key in prev_buttons:
         diff = (datetime.now() - prev_buttons[key]).total_seconds()
         if diff > 0.5:
             prev_buttons[key] = datetime.now()
             long_buttons[key] = True
-            yield from dispatch_button(key, 'long', state, dispatch)
+            await dispatch_button(key, 'long', state, dispatch)

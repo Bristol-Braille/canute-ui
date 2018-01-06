@@ -16,20 +16,9 @@ log = logging.getLogger(__name__)
 
 def get_page_num_width(state):
     width, height = dimensions(state)
-    book = state['books'][state['book']]
+    book = state['user']['books'][state['user']['book']]
     max_pages = book.max_pages
     return len(str(max_pages))
-
-
-def set_page(data, page, height):
-    if page < 0:
-        return 0
-
-    max_pages = (len(data) - 1) // height
-    if page > max_pages:
-        return max_pages
-
-    return page
 
 
 def dimensions(state):

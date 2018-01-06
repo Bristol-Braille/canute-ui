@@ -4,8 +4,7 @@ from .. import utility
 
 
 def queue_key_press(key):
-    @asyncio.coroutine
-    def thunk(dispatch, get_state):
+    async def thunk(dispatch, get_state):
         state = get_state()['app']
 
         selection = state['go_to_page']['selection']
@@ -15,15 +14,15 @@ def queue_key_press(key):
         if (key == 0 or key == '<') and selection + keys_pressed == '':
             return
 
-        yield from dispatch(actions.go_to_page_key_press(key))
+        await dispatch(actions.go_to_page_key_press(key))
 
         num_width = utility.get_page_num_width(state)
         if len(keys_pressed) < num_width:
-            yield from asyncio.sleep(0.5)
+            await asyncio.sleep(0.5)
 
         keys_pressed = get_state()['app']['go_to_page']['keys_pressed']
         if keys_pressed != '':
-            yield from dispatch(actions.go_to_page_set_selection())
+            await dispatch(actions.go_to_page_set_selection())
 
     return thunk
 

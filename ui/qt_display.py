@@ -4,7 +4,7 @@ import logging
 from . import comms_codes as comms
 from queue import Empty
 import sys
-from PySide import QtGui, QtCore
+from PyQt5 import QtCore, QtWidgets
 from .qt.main_window import Ui_MainWindow
 from .braille import pin_num_to_unicode, pin_num_to_alpha
 
@@ -23,7 +23,7 @@ class HardwareError(Exception):
 
 def start(to_display_queue, from_display_queue, display_text):
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     Display(to_display_queue=to_display_queue,
             from_display_queue=from_display_queue, display_text=display_text)
     sys.exit(app.exec_())
@@ -33,7 +33,7 @@ def get_all(t, cls):
     return [y for x, y in list(cls.__dict__.items()) if type(y) == t]
 
 
-class Display(QtGui.QMainWindow, Ui_MainWindow):
+class Display(QtWidgets.QMainWindow, Ui_MainWindow):
     '''shows an emulation of the braille machine'''
 
     def __init__(self, to_display_queue,
@@ -46,7 +46,7 @@ class Display(QtGui.QMainWindow, Ui_MainWindow):
 
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
-        button_widgets = get_all(QtGui.QPushButton, self)
+        button_widgets = get_all(QtWidgets.QPushButton, self)
 
         self.buttons = {}
         for button in button_widgets:

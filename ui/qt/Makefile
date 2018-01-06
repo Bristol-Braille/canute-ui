@@ -1,2 +1,2 @@
 all: main_window.ui
-	pyside-uic main_window.ui -o main_window.py
+	pyuic5 main_window.ui -o main_window.py
