@@ -13,13 +13,13 @@ from . import argparser
 from . import config_loader
 from . import initial_state
 from . import buttons
-from .driver_pi import Pi
+from .driver.driver_pi import Pi
+from .driver.driver_dummy import Dummy
 from .setup_logs import setup_logs
 from .store import main_reducer
 from .actions import actions
 from .library import handlers as library
 from .display import Display
-from .driver_dummy import Dummy
 from .book.handlers import fully_load_books
 
 display = Display()
@@ -48,13 +48,13 @@ def main():
             run(driver, config)
     elif args.emulated and not args.both:
         log.info('running with emulated hardware')
-        from .driver_emulated import Emulated
+        from .driver.driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
             run(driver, config)
     elif args.emulated and args.both:
         log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
-        from .driver_both import DriverBoth
+        from .driver.driver_both import DriverBoth
         with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
                         delay=args.delay, display_text=args.text,
                         timeout=timeout) as driver:

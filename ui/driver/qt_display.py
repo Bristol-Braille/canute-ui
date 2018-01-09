@@ -6,7 +6,7 @@ from queue import Empty
 import sys
 from PyQt5 import QtCore, QtWidgets
 from .qt.main_window import Ui_MainWindow
-from .braille import pin_num_to_unicode, pin_num_to_alpha
+from ..braille import pin_num_to_unicode, pin_num_to_alpha
 
 log = logging.getLogger(__name__)
 

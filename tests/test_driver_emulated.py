@@ -1,8 +1,10 @@
 import unittest
 import os
-import ui.comms_codes as comms
+import ui.driver.comms_codes as comms
+
+# skip emulated tests in the continious integration environment
 if 'TRAVIS' not in os.environ:
-    from ui.driver_emulated import Emulated
+    from ui.driver.driver_emulated import Emulated
 
 
 class TestDriverEmulated(unittest.TestCase):

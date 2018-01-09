@@ -3,8 +3,8 @@ import unittest
 import os
 import pty
 import struct
-from ui.driver_pi import Pi
-import ui.comms_codes as comms
+from ui.driver.driver_pi import Pi
+import ui.driver.comms_codes as comms
 
 
 class TestDriverPi(unittest.TestCase):
