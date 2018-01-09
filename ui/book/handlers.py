@@ -68,6 +68,9 @@ def read_pages(book):
         pages = []
         for i in range(len(lines))[::book.height]:
             page = lines[i:i + book.height]
+            # pad up to the end
+            while len(page) < book.height:
+                page.append(tuple())
             pages.append(tuple(page))
     else:
         raise BookFileError(
