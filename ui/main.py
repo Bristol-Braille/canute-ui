@@ -85,7 +85,8 @@ async def run_async_timeout(driver, config, duration, loop):
 
 async def run_async(driver, config, loop):
 
-    state = initial_state.read()
+    library_dir = config.get('files', 'library_dir')
+    state = initial_state.read(library_dir)
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
@@ -95,7 +96,6 @@ async def run_async(driver, config, loop):
         thunk_middleware)(aioredux.create_store)
     store = await create_store(main_reducer, state)
 
-    library_dir = config.get('files', 'library_dir')
     await library.sync(state['app'], library_dir, store)
 
     store.subscribe(handle_changes(driver, config, store))
@@ -114,7 +114,7 @@ async def run_async(driver, config, loop):
 
     while 1:
         state = store.state
-        if (await handle_hardware(driver, state, store)):
+        if (await handle_hardware(driver, state, store, library_dir)):
             break
         await buttons.check(driver, state['app'],
                             store.dispatch)
@@ -123,12 +123,14 @@ async def run_async(driver, config, loop):
 
 
 def handle_changes(driver, config, store):
+    library_dir = config.get('files', 'library_dir')
+
     def listener():
         state = store.state
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(fully_load_books(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
-        asyncio.ensure_future(initial_state.write(store))
+        asyncio.ensure_future(initial_state.write(store, library_dir))
     return listener
 
 
@@ -152,11 +154,11 @@ async def change_files(config, state, store):
             await store.dispatch(actions.update_ui('failed'))
 
 
-async def handle_hardware(driver, state, store):
+async def handle_hardware(driver, state, store, library_dir):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         await store.dispatch(actions.load_books('cancel'))
-        await initial_state.write(store)
+        await initial_state.write(store, library_dir)
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):

@@ -8,8 +8,6 @@ import asyncio
 from ..actions import actions
 from .. import utility
 from ..book.handlers import init
-from ..book_file import BookFile
-
 
 log = logging.getLogger(__name__)
 
@@ -21,22 +19,13 @@ async def sync(state, library_dir, store):
     log.info('syncing library')
     width, height = utility.dimensions(state)
     books = state['user']['books']
-    library_files = [b.filename for b in books]
-    disk_files = utility.find_files(library_dir, BOOK_EXTENSIONS)
-    disk_files.sort(key=str.lower)
-    non_existent = [f for f in library_files if f not in disk_files]
-    if non_existent != []:
-        await store.dispatch(actions.set_book(0))
-        await store.dispatch(actions.remove_books(non_existent))
-    books = [b for b in books if b.filename not in non_existent]
-    not_added = (f for f in disk_files if f not in library_files)
-    not_added_books = [BookFile(f, width, height) for f in not_added]
-    books += not_added_books
     for book in books:
         try:
             book = await init(book)
-        except:
+        except Exception as e:
             log.warning('could not open {}'.format(book.filename))
+            log.warning(e)
+            await store.dispatch(actions.remove_books([book.filename]))
         else:
             await store.dispatch(actions.add_or_replace(book))
     await store.dispatch(actions.load_books('start'))
