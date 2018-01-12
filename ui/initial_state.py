@@ -1,4 +1,5 @@
 import logging
+from collections import OrderedDict
 import toml
 import os
 from frozendict import frozendict
@@ -60,6 +61,7 @@ def to_state_file(book_path):
     dirname = os.path.dirname(book_path)
     return os.path.join(dirname, '.canute.' + basename + '.toml')
 
+
 def read_user_state(path):
     global prev
     book_files = utility.find_files(path, ('brf', 'pef'))
@@ -77,10 +79,13 @@ def read_user_state(path):
             t = toml.load(toml_file)
             if 'current_page' in t:
                 book = book._replace(page_number=t['current_page'])
+            if 'bookmarks' in t:
+                book = book._replace(bookmarks=tuple(t['bookmarks']))
         books.append(book)
     user_state = frozendict(books=books, book=book_number)
     prev = user_state
     return user_state
+
 
 def read(path):
     user_state = read_user_state(path)
@@ -97,8 +102,11 @@ async def write(store, library_dir):
         with open(os.path.join(library_dir, USER_STATE_FILE), 'w') as f:
             toml.dump({'current_book': selected_book}, f)
     for i, book in enumerate(books):
-        if book.page_number != prev['books'][i].page_number:
+        prev_book = prev['books'][i]
+        if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
             path = to_state_file(book.filename)
             with open(path, 'w') as f:
-                toml.dump({'current_page': book.page_number}, f)
+                d = OrderedDict([['current_page', book.page_number],
+                                 ['bookmarks', list(book.bookmarks)]])
+                toml.dump(d, f)
     prev = user_state

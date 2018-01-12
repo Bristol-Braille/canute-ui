@@ -3,7 +3,6 @@ import grp
 import pwd
 import logging
 import shutil
-import asyncio
 
 from ..actions import actions
 from .. import utility
