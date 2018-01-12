@@ -7,7 +7,7 @@ electronic Braille reader](http://bristolbraille.co.uk/#canute).
 
 [`./canute_ui`](canute_ui) runs a graphical display to emulate the hardware by
 default. The emulated hardware has the same interface as the real hardware, but
-also runs a graphical program called [qt_display.py](ui/qt_display.py). This shows
+also runs a graphical program called [qt_display.py](ui/driver/qt_display.py). This shows
 how the machine will look, and provides the buttons.
 
 ```
@@ -53,7 +53,7 @@ Run the linter:
 
     ./lint
 
-Copy and amend the config file 
+Copy and amend the config file
 
     cp config.rc.in config.rc
     $EDITOR config.rc
