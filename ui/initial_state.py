@@ -80,7 +80,7 @@ def read_user_state(path):
             if 'bookmarks' in t:
                 book = book._replace(bookmarks=tuple(t['bookmarks']))
         books.append(book)
-    user_state = frozendict(books=books, book=book_number)
+    user_state = frozendict(books=(manual,) + tuple(books), book=book_number)
     prev = user_state
     return user_state
 
