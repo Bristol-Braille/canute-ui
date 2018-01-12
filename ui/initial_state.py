@@ -1,4 +1,5 @@
 import logging
+import aiofiles
 from collections import OrderedDict
 import toml
 import os
@@ -76,7 +77,7 @@ def read_user_state(path):
         if os.path.exists(toml_file):
             t = toml.load(toml_file)
             if 'current_page' in t:
-                book = book._replace(page_number=t['current_page'])
+                book = book._replace(page_number=t['current_page'] - 1)
             if 'bookmarks' in t:
                 book = book._replace(bookmarks=tuple(t['bookmarks']))
         books.append(book)
@@ -97,14 +98,19 @@ async def write(store, library_dir):
     books = user_state['books']
     selected_book = user_state['book']
     if selected_book != prev['book']:
-        with open(os.path.join(library_dir, USER_STATE_FILE), 'w') as f:
-            toml.dump({'current_book': selected_book}, f)
+        s = toml.dumps({'current_book': selected_book})
+        path = os.path.join(library_dir, USER_STATE_FILE)
+        async with aiofiles.open(path, 'w') as f:
+            await f.write(s)
     for i, book in enumerate(books):
         prev_book = prev['books'][i]
         if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
             path = to_state_file(book.filename)
-            with open(path, 'w') as f:
-                d = OrderedDict([['current_page', book.page_number],
-                                 ['bookmarks', list(book.bookmarks)]])
-                toml.dump(d, f)
+            bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
+            # ordered to make sure current_page comes before bookmarks
+            d = OrderedDict([['current_page', book.page_number + 1],
+                             ['bookmarks', bms]])
+            s = toml.dumps(d)
+            async with aiofiles.open(path, 'w') as f:
+                await f.write(s)
     prev = user_state
