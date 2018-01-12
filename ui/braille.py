@@ -43,16 +43,15 @@ def truncate_middle(string, width):
     if len(string) <= width:
         return string
 
-    half = width // 2
-    extra = width % 2
+    words = string.split(' ')
+    last = words[-1]
 
-    if half >= width or half <= 3:
-        return string[0:width]
+    width_available = width - len(last) - 4
 
-    ret = string[0:half - 3] + '...'
-    # append the end of the string up to the half-way
-    end = reversed(tuple(reversed(string))[0:half + extra])
-    return ret + ''.join(end)
+    if width_available < 3:
+        return string[0:width - 3] + '...'
+
+    return string[0:width_available] + '... ' + last
 
 
 ueb_number_mapping = 'JABCDEFGHI'
