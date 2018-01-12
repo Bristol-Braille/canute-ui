@@ -11,6 +11,8 @@ log = logging.getLogger(__name__)
 
 
 class AppReducers():
+    def set_user_state(self, state, value):
+        return state.copy(user=value)
     def trigger(self, state, value):
         '''bit ugly but gives the ability to trigger any state subscribers'''
         return state.copy()

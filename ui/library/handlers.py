@@ -8,11 +8,12 @@ import asyncio
 from ..actions import actions
 from .. import utility
 from ..book.handlers import init
+from .. import initial_state
 
 log = logging.getLogger(__name__)
 
 
-BOOK_EXTENSIONS = ('pef', 'brf')
+BOOK_EXTENSIONS = ('pef', 'brf', 'toml')
 
 
 async def sync(state, library_dir, store):
@@ -56,5 +57,6 @@ async def replace(config, state, store):
             log.debug('changing ownership of {} from {} to {}'.format(
                 new_path, uid, gid))
             os.chown(new_path, uid, gid)
-            asyncio.sleep(0.1)
-        await sync(state, library_dir, store)
+        user_state = initial_state.read_user_state(library_dir)
+        await store.dispatch(actions.set_user_state(user_state))
+        await sync(state.copy(user=user_state), library_dir, store)

@@ -60,8 +60,8 @@ def to_state_file(book_path):
     dirname = os.path.dirname(book_path)
     return os.path.join(dirname, '.canute.' + basename + '.toml')
 
-
-def read(path):
+def read_user_state(path):
+    global prev
     book_files = utility.find_files(path, ('brf', 'pef'))
     main_toml = os.path.join(path, USER_STATE_FILE)
     book_number = 0
@@ -79,8 +79,11 @@ def read(path):
                 book = book._replace(page_number=t['current_page'])
         books.append(book)
     user_state = frozendict(books=books, book=book_number)
-    global prev
     prev = user_state
+    return user_state
+
+def read(path):
+    user_state = read_user_state(path)
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
