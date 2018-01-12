@@ -14,4 +14,4 @@ system_menu = OrderedDict([
     ('update system from USB stick', actions.update_ui('start')),
 ])
 
-menu_titles = list(map(from_ascii, system_menu))
+menu_titles = tuple(map(from_ascii, system_menu))

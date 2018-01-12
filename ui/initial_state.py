@@ -4,7 +4,6 @@ import toml
 import os
 from frozendict import frozendict
 from . import utility
-from .system_menu.system_menu import menu_titles
 from .manual import manual
 from .book_file import BookFile
 
@@ -26,7 +25,6 @@ initial_state = utility.freeze({
         },
         'load_books': False,
         'system_menu': {
-            'data': [utility.pad_line(40, l) for l in menu_titles],
             'page': 0
         },
         'bookmarks_menu': {
