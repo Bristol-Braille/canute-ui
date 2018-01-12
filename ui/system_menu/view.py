@@ -1,4 +1,5 @@
 from ..braille import from_ascii, format_title
+from .system_menu import menu_titles
 
 
 def render_help_menu(width, height, page):
@@ -24,7 +25,7 @@ def render(width, height, state):
         return render_help_menu(width, height, state['help_menu']['page'])
 
     page = state['system_menu']['page']
-    data = state['system_menu']['data']
+    data = list(menu_titles)
     # subtract title from page height
     data_height = height - 1
     max_pages = 1
