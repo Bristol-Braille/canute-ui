@@ -8,6 +8,7 @@ from frozendict import frozendict
 from . import utility
 from .manual import manual, manual_filename
 from .book_file import BookFile
+from .book.handlers import init
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = '.canute_state.toml'
@@ -62,7 +63,7 @@ def to_state_file(book_path):
     return os.path.join(dirname, '.canute.' + basename + '.toml')
 
 
-def read_user_state(path):
+async def read_user_state(path):
     global prev
     global manual
     book_files = utility.find_files(path, ('brf', 'pef'))
@@ -92,14 +93,18 @@ def read_user_state(path):
                 book = book._replace(page_number=t['current_page'] - 1)
             if 'bookmarks' in t:
                 book = book._replace(bookmarks=tuple(t['bookmarks']))
-        books[book_file] = book
+        try:
+            books[book_file] = await init(book)
+        except Exception as e:
+            log.warning('could not open {}'.format(book_file))
+            log.warning(e)
     user_state = frozendict(books=FrozenOrderedDict(books), book=book_filename)
     prev = user_state
     return user_state
 
 
-def read(path):
-    user_state = read_user_state(path)
+async def read(path):
+    user_state = await read_user_state(path)
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
@@ -118,7 +123,10 @@ async def write(store, library_dir):
             await f.write(s)
     for filename in books:
         book = books[filename]
-        prev_book = prev['books'][filename]
+        if filename in prev['books']:
+            prev_book = prev['books'][filename]
+        else:
+            prev_book = BookFile()
         if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
             path = to_state_file(book.filename)
             if book.filename == manual_filename:

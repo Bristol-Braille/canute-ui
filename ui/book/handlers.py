@@ -30,7 +30,7 @@ async def init(book):
 
 def read_pages(book):
     if book.filename == manual.filename:
-        return manual
+        return book
     log.debug('reading pages {}'.format(book.filename))
     if book.ext == '.brf':
         page = []
@@ -92,7 +92,12 @@ async def get_page_data(book, store, page_number=None):
             book = read_pages(book)
             await store.dispatch(actions.add_or_replace(book))
 
-    return book.pages[page_number]
+    try:
+        return book.pages[page_number]
+    except Exception as e:
+        print(e)
+        print(book.filename, book.page_number)
+        return tuple()
 
 
 async def fully_load_books(state, store):

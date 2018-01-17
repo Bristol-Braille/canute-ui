@@ -86,7 +86,7 @@ async def run_async_timeout(driver, config, duration, loop):
 async def run_async(driver, config, loop):
 
     library_dir = config.get('files', 'library_dir')
-    state = initial_state.read(library_dir)
+    state = await initial_state.read(library_dir)
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
@@ -96,7 +96,7 @@ async def run_async(driver, config, loop):
         thunk_middleware)(aioredux.create_store)
     store = await create_store(main_reducer, state)
 
-    await library.sync(state['app'], library_dir, store)
+    await store.dispatch(actions.load_books('start'))
 
     store.subscribe(handle_changes(driver, config, store))
 

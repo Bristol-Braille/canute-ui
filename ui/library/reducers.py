@@ -33,7 +33,8 @@ class LibraryReducers():
 
     def remove_book(self, state, book):
         books = OrderedDict(state['user']['books'])
-        del books[book.filename]
+        if book.filename in books:
+            del books[book.filename]
         books = FrozenOrderedDict(books)
         return state.copy(user=state['user'].copy(books=books))
 
