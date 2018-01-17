@@ -80,7 +80,7 @@ async def read_user_state(path):
     if os.path.exists(manual_toml):
         t = toml.load(manual_toml)
         if 'current_page' in t:
-            manual = manual._replace(page_number=t['current_page'])
+            manual = manual._replace(page_number=t['current_page'] - 1)
         if 'bookmarks' in t:
             manual = manual._replace(bookmarks=tuple(t['bookmarks']))
     books = OrderedDict({manual_filename: manual})
