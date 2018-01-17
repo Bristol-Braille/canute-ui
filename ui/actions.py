@@ -40,18 +40,18 @@ class AppReducers():
     def close_menu(self, state, value):
         books = state['user']['books']
         # fully delete deleted bookmarks
-        changed_books = []
+        changed_books = OrderedDict()
         for filename in books:
             book = books[filename]
             bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
             book = book._replace(bookmarks=bookmarks)
-            changed_books.append(book)
+            changed_books[filename] = book
         bookmarks_menu = state['bookmarks_menu']
         return state.copy(location='book',
                           bookmarks_menu=bookmarks_menu.copy(page=0),
                           home_menu_visible=False, go_to_page_selection='',
                           help_menu=frozendict({'visible': False, 'page': 0}),
-                          user=state['user'].copy(books=tuple(changed_books)))
+                          user=state['user'].copy(books=FrozenOrderedDict(changed_books)))
 
     def go_to_page(self, state, page):
         width, height = utility.dimensions(state)
