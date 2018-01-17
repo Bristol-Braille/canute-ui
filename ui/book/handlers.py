@@ -81,7 +81,7 @@ def read_pages(book):
 async def get_page_data(book, store, page_number=None):
     if page_number is None:
         page_number = book.page_number
-    if len(book.pages) <= page_number:
+    if len(book.pages) == 0:
         if book.loading:
             while book.loading:
                 # accessing store.state will get a fresh state

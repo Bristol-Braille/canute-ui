@@ -42,11 +42,6 @@ async def render(width, height, state, store):
         if bm == 'deleted':
             data.append(tuple())
             continue
-        if book.loading:
-            while book.loading:
-                # accessing store.state will get a fresh state
-                book = store.state['app']['user']['books'][book.filename]
-                await asyncio.sleep(1)
         lines = await get_page_data(book, store, page_number=bm)
         line = lines[0]
         n = from_ascii(to_ueb_number(bm + 1) + ' ')

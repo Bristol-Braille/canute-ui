@@ -82,7 +82,8 @@ async def read_user_state(path):
         if 'current_page' in t:
             manual = manual._replace(page_number=t['current_page'] - 1)
         if 'bookmarks' in t:
-            manual = manual._replace(bookmarks=tuple(t['bookmarks']))
+            manual = manual._replace(bookmarks=tuple(
+                bm - 1 for bm in t['bookmarks']))
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
@@ -92,13 +93,15 @@ async def read_user_state(path):
             if 'current_page' in t:
                 book = book._replace(page_number=t['current_page'] - 1)
             if 'bookmarks' in t:
-                book = book._replace(bookmarks=tuple(t['bookmarks']))
+                book = book._replace(bookmarks=tuple(
+                    bm - 1 for bm in t['bookmarks']))
         try:
             books[book_file] = await init(book)
         except Exception as e:
             log.warning('could not open {}'.format(book_file))
             log.warning(e)
-    user_state = frozendict(books=FrozenOrderedDict(books), current_book=book_filename)
+    user_state = frozendict(books=FrozenOrderedDict(
+        books), current_book=book_filename)
     prev = user_state
     return user_state
 
