@@ -18,7 +18,7 @@ class LibraryReducers():
         except:
             log.warning('no book at {}'.format(number))
             return state
-        user = state['user'].copy(book=book.filename)
+        user = state['user'].copy(current_book=book.filename)
         return state.copy(location='book', user=user, home_menu_visible=False)
 
     def add_or_replace(self, state, book):

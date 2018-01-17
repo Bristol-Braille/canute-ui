@@ -81,7 +81,7 @@ def read_pages(book):
 async def get_page_data(book, store, page_number=None):
     if page_number is None:
         page_number = book.page_number
-    if len(book.pages) == 0:
+    if len(book.pages) <= page_number:
         if book.loading:
             while book.loading:
                 # accessing store.state will get a fresh state
@@ -92,12 +92,10 @@ async def get_page_data(book, store, page_number=None):
             book = read_pages(book)
             await store.dispatch(actions.add_or_replace(book))
 
-    try:
-        return book.pages[page_number]
-    except Exception as e:
-        print(e)
-        print(book.filename, book.page_number)
-        return tuple()
+    if page_number >= len(book.pages):
+        return book.pages[len(book.pages) - 1]
+
+    return book.pages[page_number]
 
 
 async def fully_load_books(state, store):

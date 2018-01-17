@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 initial_state = utility.freeze({
     'app': {
         'user': {
-            'book': manual_filename,
+            'current_book': manual_filename,
             'books': OrderedDict({manual_filename: manual}),
         },
         'location': 'book',
@@ -98,7 +98,7 @@ async def read_user_state(path):
         except Exception as e:
             log.warning('could not open {}'.format(book_file))
             log.warning(e)
-    user_state = frozendict(books=FrozenOrderedDict(books), book=book_filename)
+    user_state = frozendict(books=FrozenOrderedDict(books), current_book=book_filename)
     prev = user_state
     return user_state
 
@@ -113,8 +113,8 @@ async def write(store, library_dir):
     state = store.state
     user_state = state['app']['user']
     books = user_state['books']
-    selected_book = user_state['book']
-    if selected_book != prev['book']:
+    selected_book = user_state['current_book']
+    if selected_book != prev['current_book']:
         if not selected_book == manual_filename:
             selected_book = os.path.relpath(selected_book, library_dir)
         s = toml.dumps({'current_book': selected_book})

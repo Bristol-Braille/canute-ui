@@ -74,14 +74,14 @@ class AppReducers():
             library = frozendict({'page': page})
             return state.copy(library=library)
         elif location == 'book':
-            book_n = state['user']['book']
+            book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
             books = OrderedDict(state['user']['books'])
             book = book.set_page(page)
             books[book_n] = book
             return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
         elif location == 'bookmarks_menu':
-            book_n = state['user']['book']
+            book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
             bookmarks_data = book.bookmarks
             max_pages = (len(bookmarks_data) - 1) // height
@@ -107,7 +107,7 @@ class AppReducers():
             page = state['library']['page'] + value
             return self.go_to_page(state, page)
         elif location == 'book':
-            book_n = state['user']['book']
+            book_n = state['user']['current_book']
             page = state['user']['books'][book_n].page_number + value
             return self.go_to_page(state, page)
         elif location == 'bookmarks_menu':

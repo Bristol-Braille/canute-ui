@@ -10,7 +10,7 @@ class BookmarksReducers():
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['user']['book']
+        book_n = state['user']['current_book']
         books = OrderedDict(state['user']['books'])
         book = books[book_n]
         bookmarks = book.bookmarks
@@ -29,7 +29,7 @@ class BookmarksReducers():
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['user']['book']
+        book_n = state['user']['current_book']
         book = state['user']['books'][book_n]
         bookmarks = book.bookmarks[page * height:(page * height) + height]
         if n >= len(bookmarks):
