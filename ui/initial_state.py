@@ -64,14 +64,25 @@ def to_state_file(book_path):
 
 def read_user_state(path):
     global prev
+    global manual
     book_files = utility.find_files(path, ('brf', 'pef'))
     main_toml = os.path.join(path, USER_STATE_FILE)
-    book_number = manual_filename
+    book_filename = manual_filename
     if os.path.exists(main_toml):
         main_state = toml.load(main_toml)
         if 'current_book' in main_state:
-            book_number = os.path.join(path, main_state['current_book'])
-    books = OrderedDict(initial_state['app']['user']['books'])
+            book_filename = main_state['current_book']
+            if not book_filename == manual_filename:
+                book_filename = os.path.join(path, book_filename)
+
+    manual_toml = os.path.join(path, to_state_file(manual_filename))
+    if os.path.exists(manual_toml):
+        t = toml.load(manual_toml)
+        if 'current_page' in t:
+            manual = manual._replace(page_number=t['current_page'])
+        if 'bookmarks' in t:
+            manual = manual._replace(bookmarks=tuple(t['bookmarks']))
+    books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
         book = BookFile(filename=book_file, width=40, height=9)
@@ -82,7 +93,7 @@ def read_user_state(path):
             if 'bookmarks' in t:
                 book = book._replace(bookmarks=tuple(t['bookmarks']))
         books[book_file] = book
-    user_state = frozendict(books=FrozenOrderedDict(books), book=book_number)
+    user_state = frozendict(books=FrozenOrderedDict(books), book=book_filename)
     prev = user_state
     return user_state
 
@@ -99,8 +110,9 @@ async def write(store, library_dir):
     books = user_state['books']
     selected_book = user_state['book']
     if selected_book != prev['book']:
-        s = toml.dumps(
-            {'current_book': os.path.relpath(selected_book, library_dir)})
+        if not selected_book == manual_filename:
+            selected_book = os.path.relpath(selected_book, library_dir)
+        s = toml.dumps({'current_book': selected_book})
         path = os.path.join(library_dir, USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)
@@ -109,6 +121,8 @@ async def write(store, library_dir):
         prev_book = prev['books'][filename]
         if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
             path = to_state_file(book.filename)
+            if book.filename == manual_filename:
+                path = os.path.join(library_dir, path)
             bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
             # ordered to make sure current_page comes before bookmarks
             d = OrderedDict([['current_page', book.page_number + 1],

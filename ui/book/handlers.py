@@ -16,7 +16,7 @@ FORM_FEED = re.compile('\f')
 
 async def init(book):
     if book.filename == manual.filename:
-        return manual
+        return book
 
     log.debug('initialiazing {}'.format(book.filename))
 
