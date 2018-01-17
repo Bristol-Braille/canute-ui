@@ -1,4 +1,5 @@
-from copy import copy
+from frozendict import FrozenOrderedDict
+from collections import OrderedDict
 from ..book.reducers import BookReducers
 from .. import utility
 
@@ -10,8 +11,8 @@ class BookmarksReducers():
         height -= 1
         page = state['bookmarks_menu']['page']
         book_n = state['user']['book']
-        books = list(state['user']['books'])
-        book = copy(books[book_n])
+        books = OrderedDict(state['user']['books'])
+        book = books[book_n]
         bookmarks = book.bookmarks
         line = page * height
         changed_bookmarks = list(bookmarks[line:line + height])
@@ -22,7 +23,7 @@ class BookmarksReducers():
         book.bookmarks += tuple(changed_bookmarks)
         book.bookmarks += bookmarks[line + height: len(bookmarks)]
         books[book_n] = book
-        return state.copy(user=state['user'].copy(books=tuple(books)))
+        return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
 
     def go_to_bookmark(self, state, n):
         width, height = utility.dimensions(state)

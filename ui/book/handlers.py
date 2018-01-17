@@ -84,9 +84,8 @@ async def get_page_data(book, store, page_number=None):
     if len(book.pages) == 0:
         if book.loading:
             while book.loading:
-                books = store.state['app']['user']['books']
-                book = tuple(filter(lambda b: b.filename ==
-                                    book.filename, books))[0]
+                # accessing store.state will get a fresh state
+                book = store.state['app']['user']['books'][book.filename]
                 await asyncio.sleep(1)
         else:
             await store.dispatch(actions.set_book_loading(book))
@@ -103,15 +102,15 @@ async def fully_load_books(state, store):
         books = state['user']['books']
         log.info('loading {} books'.format(len(books)))
         aborted = False
-        for book in books:
+        for filename in books:
+            book = books[filename]
             if len(book.pages) == 0:
                 state = store.state['app']
                 if state['load_books'] == 'cancel':
                     aborted = True
                     break
                 try:
-                    book = tuple(filter(lambda b: b.filename ==
-                                        book.filename, state['user']['books']))[0]
+                    book = state['user']['books'][filename]
                 except IndexError:
                     continue
                 if book.loading:

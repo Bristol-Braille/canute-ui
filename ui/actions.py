@@ -1,5 +1,6 @@
 import logging
-from frozendict import frozendict
+from frozendict import frozendict, FrozenOrderedDict
+from collections import OrderedDict
 from . import utility
 from .library.reducers import LibraryReducers
 from .book.reducers import BookReducers
@@ -40,7 +41,8 @@ class AppReducers():
         books = state['user']['books']
         # fully delete deleted bookmarks
         changed_books = []
-        for book in books:
+        for filename in books:
+            book = books[filename]
             bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
             book = book._replace(bookmarks=bookmarks)
             changed_books.append(book)
@@ -74,10 +76,10 @@ class AppReducers():
         elif location == 'book':
             book_n = state['user']['book']
             book = state['user']['books'][book_n]
-            books = list(state['user']['books'])
+            books = OrderedDict(state['user']['books'])
             book = book.set_page(page)
             books[book_n] = book
-            return state.copy(user=state['user'].copy(books=tuple(books)))
+            return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
         elif location == 'bookmarks_menu':
             book_n = state['user']['book']
             book = state['user']['books'][book_n]

@@ -19,13 +19,14 @@ async def sync(state, library_dir, store):
     log.info('syncing library')
     width, height = utility.dimensions(state)
     books = state['user']['books']
-    for book in books:
+    for filename in books:
+        book = books[filename]
         try:
             book = await init(book)
         except Exception as e:
             log.warning('could not open {}'.format(book.filename))
             log.warning(e)
-            await store.dispatch(actions.remove_books([book.filename]))
+            await store.dispatch(actions.remove_book(book))
         else:
             await store.dispatch(actions.add_or_replace(book))
     await store.dispatch(actions.load_books('start'))
