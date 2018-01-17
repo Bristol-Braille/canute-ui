@@ -7,7 +7,7 @@ import os
 from frozendict import frozendict
 from . import utility
 from .manual import manual, manual_filename
-from .book_file import BookFile
+from .book.book_file import BookFile
 from .book.handlers import init
 
 STATE_FILE = 'state.pkl'

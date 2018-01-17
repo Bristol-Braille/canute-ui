@@ -1,5 +1,5 @@
 import unittest
-from ui.book_file import BookFile
+from ui.book.book_file import BookFile
 from ui.book.handlers import init, read_pages, get_page_data
 
 from .util import async_test
