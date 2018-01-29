@@ -47,26 +47,10 @@ class Pi(Driver):
         else:
             self.port = None
 
+        self.previous_buttons = tuple()
+
         super(Pi, self).__init__()
 
-        if pi_buttons:
-            self.button_queue = queue.Queue()
-            self.button_thread = threading.Thread(target=self.button_loop)
-            self.button_thread.daemon = True
-            self.button_thread.start()
-
-    def button_loop(self):
-        devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-        device = None
-        for d in devices:
-            if d.name == 'Bristol Braille Canute Buttons':
-                device = d
-                break
-        if device is None:
-            log.error('Arduino not found')
-            return
-        for event in device.read_loop():
-            self.button_queue.put(event)
 
     def setup_serial(self, port):
         '''sets up the serial port with a timeout and flushes it.
@@ -104,50 +88,37 @@ class Pi(Driver):
 
         :rtype: dict of elements either set to 'down' or 'up'
         '''
+        mapping = {
+                '0': 'R',
+                '1': '1',
+                '2': '2',
+                '3': '3',
+                '4': '4',
+                '5': '5',
+                '6': '6',
+                '7': '7',
+                '8': '8',
+                '9': '9',
+                '10': 'X',
+                '11': '<',
+                '12': 'L',
+                '13': '>',
+                }
         buttons = {}
-        if hasattr(self, 'button_queue'):
-            for _ in range(100):
-                try:
-                    event = self.button_queue.get(timeout=0.001)
-                    key = event.type == evdev.ecodes.EV_KEY
-                    down = event.value == evdev.KeyEvent.key_down
-                    up = event.value == evdev.KeyEvent.key_up
-                except queue.Empty:
-                    event = None
-                if event is not None and key and (down or up):
-                    e = evdev.ecodes
-                    if up:
-                        t = 'up'
-                    elif down:
-                        t = 'down'
-                    if (event.code == e.KEY_1):
-                        buttons['1'] = t
-                    elif (event.code == e.KEY_2):
-                        buttons['2'] = t
-                    elif (event.code == e.KEY_3):
-                        buttons['3'] = t
-                    elif (event.code == e.KEY_4):
-                        buttons['4'] = t
-                    elif (event.code == e.KEY_5):
-                        buttons['5'] = t
-                    elif (event.code == e.KEY_6):
-                        buttons['6'] = t
-                    elif (event.code == e.KEY_7):
-                        buttons['7'] = t
-                    elif (event.code == e.KEY_8):
-                        buttons['8'] = t
-                    elif (event.code == e.KEY_9):
-                        buttons['9'] = t
-                    elif (event.code == e.KEY_LEFT):
-                        buttons['<'] = t
-                    elif (event.code == e.KEY_RIGHT):
-                        buttons['>'] = t
-                    elif (event.code == e.KEY_DOWN):
-                        buttons['L'] = t
-                    elif (event.code == e.KEY_R):
-                        buttons['R'] = t
-                    elif (event.code == e.KEY_X):
-                        buttons['X'] = t
+        self.send_data(comms.CMD_SEND_BUTTONS)
+        read_buttons = self.get_data(comms.CMD_SEND_BUTTONS)
+        down = list(self.previous_buttons)
+        for i,n in enumerate(reversed(list('{:0>14b}'.format(read_buttons)))):
+            name = mapping[str(i)]
+            if n == '1' and (not name in self.previous_buttons):
+                buttons[name] = 'down'
+                down.append(name)
+            elif n == '0' and (name in self.previous_buttons):
+                buttons[name] = 'up'
+                down.remove(name)
+
+        self.previous_buttons = tuple(down)
+
         return buttons
 
     def send_error_sound(self):
@@ -167,7 +138,6 @@ class Pi(Driver):
         :param data: list of bytes
         '''
         message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        log.debug('tx cmd [%s]' % binascii.hexlify(message))
         self.port.write(message)
 
     def get_data(self, expected_cmd):
@@ -178,16 +148,14 @@ class Pi(Driver):
 
         :rtype: an integer return value
         '''
-        log.debug('trying to read 2 bytes')
-        message = self.port.read(2)
-        log.debug('rx [%s]' % binascii.hexlify(message))
-        if len(message) != 2:
+        message = self.port.read(3)
+        if len(message) < 2:
             log.warning('unexpected rx data length %d' % len(message))
-        data = struct.unpack('2b', message)
+        data = struct.unpack('3b', message)
         if data[0] != expected_cmd:
             log.warning('unexpected rx command %d, expecting %d' %
                         (data[0], expected_cmd))
-        return data[1]
+        return data[1] | (data[2] << 8)
 
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the port properly'''

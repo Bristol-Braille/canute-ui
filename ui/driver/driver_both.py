@@ -8,7 +8,7 @@ import logging
 from .driver import Driver
 from .driver_emulated import Emulated
 from .driver_pi import Pi
-from . import utility
+from .. import utility
 
 
 log = logging.getLogger(__name__)
@@ -39,7 +39,6 @@ for method_name in utility.get_methods(Driver):
                 emulated_method = self.emulated.__getattribute__(method_name)
                 pi_method = self.pi.__getattribute__(method_name)
                 emulated_return = emulated_method(*args, **kwargs)
-                pi_method(*args, **kwargs)
-                return emulated_return
+                return pi_method(*args, **kwargs)
             return method
         setattr(DriverBoth, method_name, make_method(method_name))
