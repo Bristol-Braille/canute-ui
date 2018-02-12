@@ -63,6 +63,7 @@ class Pi(Driver):
             serial_port = serial.Serial()
             serial_port.port = port
             serial_port.timeout = float(self.timeout)
+            serial_port.baudrate = 115200
             serial_port.open()
             serial_port.flush()
             return serial_port
