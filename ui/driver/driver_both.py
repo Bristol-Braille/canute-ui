@@ -8,7 +8,7 @@ import logging
 from .driver import Driver
 from .driver_emulated import Emulated
 from .driver_pi import Pi
-from . import utility
+from .. import utility
 
 
 log = logging.getLogger(__name__)
