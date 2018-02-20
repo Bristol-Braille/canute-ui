@@ -4,9 +4,6 @@ import time
 import serial
 import logging
 import struct
-import binascii
-import queue
-import threading
 import serial.tools.list_ports
 
 log = logging.getLogger(__name__)
@@ -14,11 +11,6 @@ log = logging.getLogger(__name__)
 long_press = 500.0  # ms
 double_click = 200.0  # ms
 debounce = 20  # ms
-
-try:
-    import evdev
-except ImportError:
-    log.warning('Could not import evdev')
 
 
 class Pi(Driver):
@@ -50,7 +42,6 @@ class Pi(Driver):
         self.previous_buttons = tuple()
 
         super(Pi, self).__init__()
-
 
     def setup_serial(self, port):
         '''sets up the serial port with a timeout and flushes it.
@@ -90,28 +81,28 @@ class Pi(Driver):
         :rtype: dict of elements either set to 'down' or 'up'
         '''
         mapping = {
-                '0': 'R',
-                '1': '1',
-                '2': '2',
-                '3': '3',
-                '4': '4',
-                '5': '5',
-                '6': '6',
-                '7': '7',
-                '8': '8',
-                '9': '9',
-                '10': 'X',
-                '11': '<',
-                '12': 'L',
-                '13': '>',
-                }
+            '0': 'R',
+            '1': '1',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '10': 'X',
+            '11': '<',
+            '12': 'L',
+            '13': '>',
+        }
         buttons = {}
         self.send_data(comms.CMD_SEND_BUTTONS)
         read_buttons = self.get_data(comms.CMD_SEND_BUTTONS)
         down = list(self.previous_buttons)
-        for i,n in enumerate(reversed(list('{:0>14b}'.format(read_buttons)))):
+        for i, n in enumerate(reversed(list('{:0>14b}'.format(read_buttons)))):
             name = mapping[str(i)]
-            if n == '1' and (not name in self.previous_buttons):
+            if n == '1' and (name not in self.previous_buttons):
                 buttons[name] = 'down'
                 down.append(name)
             elif n == '0' and (name in self.previous_buttons):
