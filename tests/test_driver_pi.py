@@ -30,13 +30,13 @@ class TestDriverPi(unittest.TestCase):
         self.assertEqual(self.get_message()[0], comms.CMD_GET_CHARS)
 
         # send chars
-        self.send_message([24], comms.CMD_GET_CHARS)
+        self.send_message([24, 0], comms.CMD_GET_CHARS)
 
         # receive the get rows message
         self.assertEqual(self.get_message()[0], comms.CMD_GET_ROWS)
 
         # send rows
-        self.send_message([4], comms.CMD_GET_ROWS)
+        self.send_message([4, 0], comms.CMD_GET_ROWS)
 
     @classmethod
     def tearDownClass(cls):
