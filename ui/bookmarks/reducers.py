@@ -1,4 +1,5 @@
-from copy import copy
+from frozendict import FrozenOrderedDict
+from collections import OrderedDict
 from ..book.reducers import BookReducers
 from .. import utility
 
@@ -9,27 +10,26 @@ class BookmarksReducers():
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['user']['book']
-        books = list(state['user']['books'])
-        book = copy(books[book_n])
+        book_n = state['user']['current_book']
+        books = OrderedDict(state['user']['books'])
+        book = books[book_n]
         bookmarks = book.bookmarks
         line = page * height
         changed_bookmarks = list(bookmarks[line:line + height])
         if n >= len(changed_bookmarks):
             return state
         changed_bookmarks[n] = 'deleted'
-        book.bookmarks = bookmarks[0:line]
-        book.bookmarks += tuple(changed_bookmarks)
-        book.bookmarks += bookmarks[line + height: len(bookmarks)]
-        books[book_n] = book
-        return state.copy(user=state['user'].copy(books=tuple(books)))
+        bookmarks = bookmarks[0:line] + tuple(changed_bookmarks) \
+            + bookmarks[line + height:len(bookmarks)]
+        books[book_n] = book._replace(bookmarks=bookmarks)
+        return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
 
     def go_to_bookmark(self, state, n):
         width, height = utility.dimensions(state)
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['user']['book']
+        book_n = state['user']['current_book']
         book = state['user']['books'][book_n]
         bookmarks = book.bookmarks[page * height:(page * height) + height]
         if n >= len(bookmarks):

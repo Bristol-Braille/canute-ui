@@ -1,12 +1,14 @@
 import logging
 import aiofiles
 from collections import OrderedDict
+from frozendict import FrozenOrderedDict
 import toml
 import os
 from frozendict import frozendict
 from . import utility
-from .manual import manual
-from .book_file import BookFile
+from .manual import manual, manual_filename
+from .book.book_file import BookFile
+from .book.handlers import init
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = '.canute_state.toml'
@@ -17,8 +19,8 @@ log = logging.getLogger(__name__)
 initial_state = utility.freeze({
     'app': {
         'user': {
-            'book': 0,
-            'books': [manual],
+            'current_book': manual_filename,
+            'books': OrderedDict({manual_filename: manual}),
         },
         'location': 'book',
         'library': {
@@ -61,16 +63,28 @@ def to_state_file(book_path):
     return os.path.join(dirname, '.canute.' + basename + '.toml')
 
 
-def read_user_state(path):
+async def read_user_state(path):
     global prev
+    global manual
     book_files = utility.find_files(path, ('brf', 'pef'))
     main_toml = os.path.join(path, USER_STATE_FILE)
-    book_number = 0
+    book_filename = manual_filename
     if os.path.exists(main_toml):
         main_state = toml.load(main_toml)
         if 'current_book' in main_state:
-            book_number = main_state['current_book']
-    books = []
+            book_filename = main_state['current_book']
+            if not book_filename == manual_filename:
+                book_filename = os.path.join(path, book_filename)
+
+    manual_toml = os.path.join(path, to_state_file(manual_filename))
+    if os.path.exists(manual_toml):
+        t = toml.load(manual_toml)
+        if 'current_page' in t:
+            manual = manual._replace(page_number=t['current_page'] - 1)
+        if 'bookmarks' in t:
+            manual = manual._replace(bookmarks=tuple(
+                bm - 1 for bm in t['bookmarks']))
+    books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
         book = BookFile(filename=book_file, width=40, height=9)
@@ -79,15 +93,21 @@ def read_user_state(path):
             if 'current_page' in t:
                 book = book._replace(page_number=t['current_page'] - 1)
             if 'bookmarks' in t:
-                book = book._replace(bookmarks=tuple(t['bookmarks']))
-        books.append(book)
-    user_state = frozendict(books=(manual,) + tuple(books), book=book_number)
+                book = book._replace(bookmarks=tuple(
+                    bm - 1 for bm in t['bookmarks']))
+        try:
+            books[book_file] = await init(book)
+        except Exception as e:
+            log.warning('could not open {}'.format(book_file))
+            log.warning(e)
+    user_state = frozendict(books=FrozenOrderedDict(
+        books), current_book=book_filename)
     prev = user_state
     return user_state
 
 
-def read(path):
-    user_state = read_user_state(path)
+async def read(path):
+    user_state = await read_user_state(path)
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
@@ -96,16 +116,24 @@ async def write(store, library_dir):
     state = store.state
     user_state = state['app']['user']
     books = user_state['books']
-    selected_book = user_state['book']
-    if selected_book != prev['book']:
+    selected_book = user_state['current_book']
+    if selected_book != prev['current_book']:
+        if not selected_book == manual_filename:
+            selected_book = os.path.relpath(selected_book, library_dir)
         s = toml.dumps({'current_book': selected_book})
         path = os.path.join(library_dir, USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)
-    for i, book in enumerate(books):
-        prev_book = prev['books'][i]
+    for filename in books:
+        book = books[filename]
+        if filename in prev['books']:
+            prev_book = prev['books'][filename]
+        else:
+            prev_book = BookFile()
         if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
             path = to_state_file(book.filename)
+            if book.filename == manual_filename:
+                path = os.path.join(library_dir, path)
             bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
             # ordered to make sure current_page comes before bookmarks
             d = OrderedDict([['current_page', book.page_number + 1],

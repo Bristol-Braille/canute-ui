@@ -27,7 +27,10 @@ class BookFile(BookData):
 
     @property
     def max_pages(self):
-        return len(self.pages) - 1
+        m = len(self.pages) - 1
+        if m < 0:
+            return 0
+        return m
 
     def set_page(self, page):
         if page < 0:

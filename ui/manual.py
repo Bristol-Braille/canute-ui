@@ -1,5 +1,5 @@
 from .braille import from_ascii
-from .book_file import BookFile
+from .book.book_file import BookFile
 
 pages = ((
     '         canute quick help',

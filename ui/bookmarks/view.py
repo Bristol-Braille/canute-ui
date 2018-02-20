@@ -26,7 +26,7 @@ async def render(width, height, state, store):
     if help_menu:
         return render_help_menu(width, height)
 
-    book = state['user']['books'][state['user']['book']]
+    book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']
 
     line_n = page * (height - 1)

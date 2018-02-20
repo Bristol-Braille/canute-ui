@@ -1,5 +1,6 @@
 import logging
-from frozendict import frozendict
+from frozendict import frozendict, FrozenOrderedDict
+from collections import OrderedDict
 from . import utility
 from .library.reducers import LibraryReducers
 from .book.reducers import BookReducers
@@ -39,17 +40,18 @@ class AppReducers():
     def close_menu(self, state, value):
         books = state['user']['books']
         # fully delete deleted bookmarks
-        changed_books = []
-        for book in books:
+        changed_books = OrderedDict()
+        for filename in books:
+            book = books[filename]
             bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
             book = book._replace(bookmarks=bookmarks)
-            changed_books.append(book)
+            changed_books[filename] = book
         bookmarks_menu = state['bookmarks_menu']
         return state.copy(location='book',
                           bookmarks_menu=bookmarks_menu.copy(page=0),
                           home_menu_visible=False, go_to_page_selection='',
                           help_menu=frozendict({'visible': False, 'page': 0}),
-                          user=state['user'].copy(books=tuple(changed_books)))
+                          user=state['user'].copy(books=FrozenOrderedDict(changed_books)))
 
     def go_to_page(self, state, page):
         width, height = utility.dimensions(state)
@@ -72,14 +74,14 @@ class AppReducers():
             library = frozendict({'page': page})
             return state.copy(library=library)
         elif location == 'book':
-            book_n = state['user']['book']
+            book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
-            books = list(state['user']['books'])
+            books = OrderedDict(state['user']['books'])
             book = book.set_page(page)
             books[book_n] = book
-            return state.copy(user=state['user'].copy(books=tuple(books)))
+            return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
         elif location == 'bookmarks_menu':
-            book_n = state['user']['book']
+            book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
             bookmarks_data = book.bookmarks
             max_pages = (len(bookmarks_data) - 1) // height
@@ -105,7 +107,7 @@ class AppReducers():
             page = state['library']['page'] + value
             return self.go_to_page(state, page)
         elif location == 'book':
-            book_n = state['user']['book']
+            book_n = state['user']['current_book']
             page = state['user']['books'][book_n].page_number + value
             return self.go_to_page(state, page)
         elif location == 'bookmarks_menu':

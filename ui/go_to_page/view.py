@@ -28,7 +28,7 @@ def render(width, height, state):
     data = [from_ascii('enter page number using the side buttons')]
 
     try:
-        book = state['user']['books'][state['user']['book']]
+        book = state['user']['books'][state['user']['current_book']]
     except IndexError:
         book = None
 

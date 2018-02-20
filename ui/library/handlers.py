@@ -6,29 +6,12 @@ import shutil
 
 from ..actions import actions
 from .. import utility
-from ..book.handlers import init
 from .. import initial_state
 
 log = logging.getLogger(__name__)
 
 
 BOOK_EXTENSIONS = ('pef', 'brf', 'toml')
-
-
-async def sync(state, library_dir, store):
-    log.info('syncing library')
-    width, height = utility.dimensions(state)
-    books = state['user']['books']
-    for book in books:
-        try:
-            book = await init(book)
-        except Exception as e:
-            log.warning('could not open {}'.format(book.filename))
-            log.warning(e)
-            await store.dispatch(actions.remove_books([book.filename]))
-        else:
-            await store.dispatch(actions.add_or_replace(book))
-    await store.dispatch(actions.load_books('start'))
 
 
 def wipe(library_dir):
@@ -56,6 +39,6 @@ async def replace(config, state, store):
             log.debug('changing ownership of {} from {} to {}'.format(
                 new_path, uid, gid))
             os.chown(new_path, uid, gid)
-        user_state = initial_state.read_user_state(library_dir)
+        user_state = await initial_state.read_user_state(library_dir)
         await store.dispatch(actions.set_user_state(user_state))
-        await sync(state.copy(user=user_state), library_dir, store)
+        await store.dispatch(actions.load_books('start'))
