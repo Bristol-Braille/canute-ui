@@ -38,7 +38,7 @@ for method_name in utility.get_methods(Driver):
             def method(self, *args, **kwargs):
                 emulated_method = self.emulated.__getattribute__(method_name)
                 pi_method = self.pi.__getattribute__(method_name)
-                emulated_method(*args, **kwargs)
-                return pi_method(*args, **kwargs)
+                pi_method(*args, **kwargs)
+                return emulated_method(*args, **kwargs)
             return method
         setattr(DriverBoth, method_name, make_method(method_name))
