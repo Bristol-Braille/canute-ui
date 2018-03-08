@@ -28,8 +28,10 @@ async def init(book):
     return book._replace(file_contents=file_contents, pages=tuple())
 
 
-def read_pages(book):
+async def read_pages(book):
     if book.filename == manual.filename:
+        return book
+    if len(book.pages) > 0:
         return book
     log.debug('reading pages {}'.format(book.filename))
     if book.ext == '.brf':
@@ -54,7 +56,9 @@ def read_pages(book):
                 page.append(tuple())
             pages.append(tuple(page))
     elif book.ext == '.pef':
+        await asyncio.sleep(0)
         xml_doc = minidom.parseString(book.file_contents)
+        await asyncio.sleep(0)
         xml_pages = xml_doc.getElementsByTagName('page')
         lines = []
         for page in xml_pages:
@@ -65,6 +69,7 @@ def read_pages(book):
                     # empty row element
                     line = ''
                 lines.append(braille.from_unicode(line))
+            await asyncio.sleep(0)
         pages = []
         for i in range(len(lines))[::book.height]:
             page = lines[i:i + book.height]
@@ -89,7 +94,7 @@ async def get_page_data(book, store, page_number=None):
                 await asyncio.sleep(1)
         else:
             await store.dispatch(actions.set_book_loading(book))
-            book = read_pages(book)
+            book = await read_pages(book)
             await store.dispatch(actions.add_or_replace(book))
 
     if page_number >= len(book.pages):
@@ -120,7 +125,7 @@ async def fully_load_books(state, store):
                     log.info('already loading {}, skipping'.format(book.title))
                     continue
                 await store.dispatch(actions.set_book_loading(book))
-                book = read_pages(book)
+                book = await read_pages(book)
                 await store.dispatch(actions.add_or_replace(book))
                 await asyncio.sleep(0.1)
         await store.dispatch(actions.load_books(False))
