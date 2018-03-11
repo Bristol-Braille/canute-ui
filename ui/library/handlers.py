@@ -11,7 +11,7 @@ from .. import initial_state
 log = logging.getLogger(__name__)
 
 
-BOOK_EXTENSIONS = ('pef', 'brf', 'toml')
+BOOK_EXTENSIONS = ('pef', 'brf', 'txt')
 
 
 def wipe(library_dir):

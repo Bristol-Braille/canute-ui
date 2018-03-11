@@ -11,7 +11,7 @@ from .book.book_file import BookFile
 from .book.handlers import init
 
 STATE_FILE = 'state.pkl'
-USER_STATE_FILE = '.canute_state.toml'
+USER_STATE_FILE = 'canute_state.txt'
 
 log = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ prev = initial_state['app']['user']
 def to_state_file(book_path):
     basename = os.path.basename(book_path)
     dirname = os.path.dirname(book_path)
-    return os.path.join(dirname, '.canute.' + basename + '.toml')
+    return os.path.join(dirname, 'canute.' + basename + '.txt')
 
 
 async def read_user_state(path):
