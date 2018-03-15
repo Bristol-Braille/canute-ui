@@ -37,7 +37,8 @@ class BookReducers():
         book = books[number]
         page = book.page_number
         if page not in book.bookmarks:
-            book = book._replace(bookmarks=book.bookmarks + tuple([page]))
+            bookmarks = sorted(book.bookmarks + tuple([page]))
+            book = book._replace(bookmarks=tuple(bookmarks))
             books[number] = book
             return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
         return state

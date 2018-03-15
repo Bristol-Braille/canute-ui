@@ -93,8 +93,8 @@ async def read_user_state(path):
             if 'current_page' in t:
                 book = book._replace(page_number=t['current_page'] - 1)
             if 'bookmarks' in t:
-                book = book._replace(bookmarks=tuple(
-                    bm - 1 for bm in t['bookmarks']))
+                book = book._replace(bookmarks=tuple(sorted(
+                    bm - 1 for bm in t['bookmarks'])))
         try:
             books[book_file] = await init(book)
         except Exception as e:
