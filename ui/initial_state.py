@@ -67,14 +67,14 @@ async def read_user_state(path):
     global prev
     global manual
     book_files = utility.find_files(path, ('brf', 'pef'))
-    main_toml = os.path.join(path, USER_STATE_FILE)
-    book_filename = manual_filename
+    main_toml = os.path.join(path, 'sd-card', USER_STATE_FILE)
+    current_book = manual_filename
     if os.path.exists(main_toml):
         main_state = toml.load(main_toml)
         if 'current_book' in main_state:
-            book_filename = main_state['current_book']
-            if not book_filename == manual_filename:
-                book_filename = os.path.join(path, book_filename)
+            current_book = main_state['current_book']
+            if not current_book == manual_filename:
+                current_book = os.path.join(path, current_book)
 
     manual_toml = os.path.join(path, to_state_file(manual_filename))
     if os.path.exists(manual_toml):
@@ -100,8 +100,12 @@ async def read_user_state(path):
         except Exception as e:
             log.warning('could not open {}'.format(book_file))
             log.warning(e)
+
+    if current_book not in books:
+        current_book = manual_filename
+
     user_state = frozendict(books=FrozenOrderedDict(
-        books), current_book=book_filename)
+        books), current_book=current_book)
     prev = user_state
     return user_state
 
@@ -121,7 +125,7 @@ async def write(store, library_dir):
         if not selected_book == manual_filename:
             selected_book = os.path.relpath(selected_book, library_dir)
         s = toml.dumps({'current_book': selected_book})
-        path = os.path.join(library_dir, USER_STATE_FILE)
+        path = os.path.join(library_dir, 'sd-card', USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)
     for filename in books:
