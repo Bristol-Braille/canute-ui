@@ -5,8 +5,6 @@ import re
 import xml.etree.ElementTree as ElementTree
 import threading
 import time
-from concurrent.futures import TimeoutError
-
 
 from ..actions import actions
 from ..manual import manual
@@ -143,14 +141,13 @@ async def fully_load_books(store):
         done = []
         while len(done) < len(futures):
             for future in futures:
-                try:
-                    # check if the result is there, but don't wait very long at all
-                    book = future.result(timeout=0)
+                if future.done():
+                    book = future.result()
                     if book not in done:
                         await store.dispatch(actions.add_or_replace(book))
                         done.append(book)
-                except TimeoutError:
-                    await asyncio.sleep(1)
+                else:
+                    await asyncio.sleep(0.1)
             if (time.time() - start) > LOAD_BOOKS_TIMEOUT:
                 log.warning('loading books timed out')
                 break
