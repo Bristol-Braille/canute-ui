@@ -2,7 +2,7 @@ import aiofiles
 import asyncio
 import logging
 import re
-import xml.dom.minidom as minidom
+import xml.etree.ElementTree as ElementTree
 import threading
 from concurrent.futures import TimeoutError
 
@@ -29,16 +29,19 @@ async def init(book):
 
     return book._replace(file_contents=file_contents, pages=tuple())
 
+NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
+
 
 async def read_pages(book):
     if book.filename == manual.filename:
         return book
+    # if it has pages, it's already loaded
     if len(book.pages) > 0:
         return book
     log.debug('reading pages {}'.format(book.filename))
+    pages = []
     if book.ext == '.brf':
         page = []
-        pages = []
         for line in book.file_contents.splitlines():
             if FORM_FEED.match(line):
                 # pad up to the next page
@@ -58,18 +61,13 @@ async def read_pages(book):
                 page.append(tuple())
             pages.append(tuple(page))
     elif book.ext == '.pef':
-        xml_doc = minidom.parseString(book.file_contents)
-        xml_pages = xml_doc.getElementsByTagName('page')
+        xml_doc = ElementTree.fromstring(book.file_contents)
+        xml_pages = xml_doc.findall('.//pef:page', NS)
         lines = []
         for page in xml_pages:
-            for row in page.getElementsByTagName('row'):
-                try:
-                    line = row.childNodes[0].data.rstrip()
-                except IndexError:
-                    # empty row element
-                    line = ''
+            for row in page.findall('.//pef:row', NS):
+                line = ''.join(row.itertext()).rstrip()
                 lines.append(braille.from_unicode(line))
-        pages = []
         for i in range(len(lines))[::book.height]:
             page = lines[i:i + book.height]
             # pad up to the end
