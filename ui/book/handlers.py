@@ -140,10 +140,16 @@ async def fully_load_books(store):
         # check if the futures are completed but don't hog this thread to wait
         # for that, asyncio.sleep instead
         await asyncio.sleep(2)
-        for future in concurrent.futures.as_completed(futures, LOAD_BOOKS_TIMEOUT):
-            book = future.result()
-            await store.dispatch(actions.add_or_replace(book))
-            await asyncio.sleep(0)
+        try:
+            for future in concurrent.futures.as_completed(futures, LOAD_BOOKS_TIMEOUT):
+                book = future.result()
+                await store.dispatch(actions.add_or_replace(book))
+                await asyncio.sleep(0)
+        except concurrent.futures.TimeoutError:
+            log.warning('loading books timed out')
+            for future in futures:
+                future.cancel()
+            aborted = True
 
         # seems to be the only way to close the event loop
         async def stop(loop):
