@@ -98,7 +98,7 @@ async def get_page_data(book, store, page_number=None):
     return book.pages[page_number]
 
 # in seconds
-LOAD_BOOKS_TIMEOUT = 9 * 60 * 60
+LOAD_BOOKS_TIMEOUT = 9 * 60
 
 async def fully_load_books(store):
     state = store.state['app']
@@ -109,7 +109,8 @@ async def fully_load_books(store):
         aborted = False
         futures = []
 
-        # run actual book reading on another thread as it hogs the event loop otherwise
+        # run actual book reading on another thread as it hogs the event loop
+        # otherwise
         loop = asyncio.new_event_loop()
         thread = threading.Thread(target=loop.run_forever)
 
@@ -139,16 +140,19 @@ async def fully_load_books(store):
         # for that, asyncio.sleep instead
         start = time.time()
         done = []
-        while len(done) < len(futures):
+        while not aborted and len(done) < len(futures):
+            await asyncio.sleep(1)
             for future in futures:
                 if future.done():
                     book = future.result()
                     if book not in done:
                         await store.dispatch(actions.add_or_replace(book))
                         done.append(book)
-                else:
-                    await asyncio.sleep(0.1)
-            if (time.time() - start) > LOAD_BOOKS_TIMEOUT:
+            now = time.time() - start
+            if now > LOAD_BOOKS_TIMEOUT:
+                aborted = True
+                for future in futures:
+                    future.cancel()
                 log.warning('loading books timed out')
                 break
 
