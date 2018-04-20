@@ -121,6 +121,7 @@ async def run_async(driver, config, loop):
         await display.send_line(driver)
         await asyncio.sleep(0)
 
+
 def handle_changes(driver, config, store):
     library_dir = config.get('files', 'library_dir')
 

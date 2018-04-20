@@ -3,6 +3,8 @@ import asyncio
 import logging
 import re
 import xml.dom.minidom as minidom
+import threading
+from concurrent.futures import TimeoutError
 
 
 from ..actions import actions
@@ -56,9 +58,7 @@ async def read_pages(book):
                 page.append(tuple())
             pages.append(tuple(page))
     elif book.ext == '.pef':
-        await asyncio.sleep(0)
         xml_doc = minidom.parseString(book.file_contents)
-        await asyncio.sleep(0)
         xml_pages = xml_doc.getElementsByTagName('page')
         lines = []
         for page in xml_pages:
@@ -69,7 +69,6 @@ async def read_pages(book):
                     # empty row element
                     line = ''
                 lines.append(braille.from_unicode(line))
-            await asyncio.sleep(0)
         pages = []
         for i in range(len(lines))[::book.height]:
             page = lines[i:i + book.height]
@@ -101,18 +100,21 @@ async def get_page_data(book, store, page_number=None):
 
     return book.pages[page_number]
 
+
 async def fully_load_books(store):
-    await asyncio.sleep(0.1)
     state = store.state['app']
     if state['load_books'] == 'start':
         await store.dispatch(actions.load_books('loading'))
         books = state['user']['books']
         log.info('loading {} books'.format(len(books)))
         aborted = False
-        futures = []
+        tasks = []
+
         async def read(book):
             book = await read_pages(book)
             await store.dispatch(actions.add_or_replace(book))
+
+        # gather tasks to reading books
         for filename in books:
             book = books[filename]
             if len(book.pages) == 0:
@@ -128,9 +130,31 @@ async def fully_load_books(store):
                     log.info('already loading {}, skipping'.format(book.title))
                     continue
                 await store.dispatch(actions.set_book_loading(book))
-                futures.append(read(book))
+                tasks.append(read(book))
 
-        await asyncio.wait(futures)
+        # run actual book reading on another thread as it hogs the event loop otherwise
+        loop = asyncio.new_event_loop()
+        thread = threading.Thread(target=loop.run_forever)
+        future = asyncio.run_coroutine_threadsafe(
+            asyncio.wait(tasks), loop=loop)
+        thread.start()
+
+        # check if the tasks are completed but don't hog this thread to wait
+        # for that, asyncio.sleep instead
+        while True:
+            try:
+                # check if the result is there, but don't wait very long at all
+                # if it's there exit this loop
+                future.result(timeout=0.00000000000000000000000000000001)
+                break
+            except TimeoutError:
+                await asyncio.sleep(1)
+
+        # seems to be the only way to close the event loop
+        async def stop(loop):
+            loop.stop()
+        asyncio.run_coroutine_threadsafe(stop(loop), loop=loop)
+        thread.join()
 
         await store.dispatch(actions.load_books(False))
         if aborted:
