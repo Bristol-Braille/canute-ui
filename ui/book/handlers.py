@@ -106,13 +106,13 @@ async def fully_load_books(store):
         books = state['user']['books']
         log.info('loading {} books'.format(len(books)))
         aborted = False
-        tasks = []
+        futures = []
 
-        async def read(book):
-            book = await read_pages(book)
-            await store.dispatch(actions.add_or_replace(book))
+        # run actual book reading on another thread as it hogs the event loop otherwise
+        loop = asyncio.new_event_loop()
+        thread = threading.Thread(target=loop.run_forever)
 
-        # gather tasks to reading books
+        # gather futures to reading books
         for filename in books:
             book = books[filename]
             if len(book.pages) == 0:
@@ -128,25 +128,25 @@ async def fully_load_books(store):
                     log.info('already loading {}, skipping'.format(book.title))
                     continue
                 await store.dispatch(actions.set_book_loading(book))
-                tasks.append(read(book))
+                future = asyncio.run_coroutine_threadsafe(
+                    read_pages(book), loop=loop)
+                futures.append(future)
 
-        # run actual book reading on another thread as it hogs the event loop otherwise
-        loop = asyncio.new_event_loop()
-        thread = threading.Thread(target=loop.run_forever)
-        future = asyncio.run_coroutine_threadsafe(
-            asyncio.wait(tasks), loop=loop)
         thread.start()
 
-        # check if the tasks are completed but don't hog this thread to wait
+        # check if the futures are completed but don't hog this thread to wait
         # for that, asyncio.sleep instead
-        while True:
-            try:
-                # check if the result is there, but don't wait very long at all
-                # if it's there exit this loop
-                future.result(timeout=0.00000000000000000000000000000001)
-                break
-            except TimeoutError:
-                await asyncio.sleep(1)
+        done = []
+        while len(done) < len(futures):
+            for future in futures:
+                try:
+                    # check if the result is there, but don't wait very long at all
+                    book = future.result(timeout=0)
+                    if book not in done:
+                        await store.dispatch(actions.add_or_replace(book))
+                        done.append(book)
+                except TimeoutError:
+                    await asyncio.sleep(1)
 
         # seems to be the only way to close the event loop
         async def stop(loop):
