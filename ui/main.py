@@ -119,8 +119,7 @@ async def run_async(driver, config, loop):
         await buttons.check(driver, state['app'],
                             store.dispatch)
         await display.send_line(driver)
-        await asyncio.sleep(0.001)
-
+        await asyncio.sleep(0)
 
 def handle_changes(driver, config, store):
     library_dir = config.get('files', 'library_dir')
@@ -128,9 +127,9 @@ def handle_changes(driver, config, store):
     def listener():
         state = store.state
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
-        asyncio.ensure_future(fully_load_books(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
         asyncio.ensure_future(initial_state.write(store, library_dir))
+        asyncio.ensure_future(fully_load_books(store))
     return listener
 
 

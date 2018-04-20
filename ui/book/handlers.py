@@ -91,7 +91,6 @@ async def get_page_data(book, store, page_number=None):
             while book.loading:
                 # accessing store.state will get a fresh state
                 book = store.state['app']['user']['books'][book.filename]
-                await asyncio.sleep(1)
         else:
             await store.dispatch(actions.set_book_loading(book))
             book = await read_pages(book)
@@ -102,14 +101,18 @@ async def get_page_data(book, store, page_number=None):
 
     return book.pages[page_number]
 
-
-async def fully_load_books(state, store):
+async def fully_load_books(store):
+    await asyncio.sleep(0.1)
     state = store.state['app']
     if state['load_books'] == 'start':
         await store.dispatch(actions.load_books('loading'))
         books = state['user']['books']
         log.info('loading {} books'.format(len(books)))
         aborted = False
+        futures = []
+        async def read(book):
+            book = await read_pages(book)
+            await store.dispatch(actions.add_or_replace(book))
         for filename in books:
             book = books[filename]
             if len(book.pages) == 0:
@@ -125,9 +128,10 @@ async def fully_load_books(state, store):
                     log.info('already loading {}, skipping'.format(book.title))
                     continue
                 await store.dispatch(actions.set_book_loading(book))
-                book = await read_pages(book)
-                await store.dispatch(actions.add_or_replace(book))
-                await asyncio.sleep(0.1)
+                futures.append(read(book))
+
+        await asyncio.wait(futures)
+
         await store.dispatch(actions.load_books(False))
         if aborted:
             log.info('loading books aborted')
