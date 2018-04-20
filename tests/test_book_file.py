@@ -13,7 +13,7 @@ class TestBookFileBrf(unittest.TestCase):
                          + 'g_Value_and_Creating_a_Love_of_Reading.BRF')
         book = BookFile(self.filename, 40, 9)
         book = await init(book)
-        self.book = read_pages(book)
+        self.book = await read_pages(book)
 
     def test_filename(self):
         self.assertEqual(self.book.filename, self.filename)
@@ -44,10 +44,10 @@ class TestBookFilePef(unittest.TestCase):
     @classmethod
     @async_test
     async def setUpClass(self):
-        self.filename = ("books/g2 AESOP'S FABLES.pef")
+        self.filename = "books/g2 AESOP'S FABLES.pef"
         book = BookFile(self.filename, 40, 9)
         book = await init(book)
-        self.book = read_pages(book)
+        self.book = await read_pages(book)
 
     def test_filename(self):
         self.assertEqual(self.book.filename, self.filename)
