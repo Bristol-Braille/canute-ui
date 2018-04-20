@@ -4,6 +4,7 @@ import logging
 import re
 import xml.etree.ElementTree as ElementTree
 import threading
+import time
 from concurrent.futures import TimeoutError
 
 
@@ -98,6 +99,8 @@ async def get_page_data(book, store, page_number=None):
 
     return book.pages[page_number]
 
+# in seconds
+LOAD_BOOKS_TIMEOUT = 9 * 60 * 60
 
 async def fully_load_books(store):
     state = store.state['app']
@@ -112,7 +115,7 @@ async def fully_load_books(store):
         loop = asyncio.new_event_loop()
         thread = threading.Thread(target=loop.run_forever)
 
-        # gather futures to reading books
+        # gather futures for reading books
         for filename in books:
             book = books[filename]
             if len(book.pages) == 0:
@@ -136,6 +139,7 @@ async def fully_load_books(store):
 
         # check if the futures are completed but don't hog this thread to wait
         # for that, asyncio.sleep instead
+        start = time.time()
         done = []
         while len(done) < len(futures):
             for future in futures:
@@ -147,6 +151,9 @@ async def fully_load_books(store):
                         done.append(book)
                 except TimeoutError:
                     await asyncio.sleep(1)
+            if (time.time() - start) > LOAD_BOOKS_TIMEOUT:
+                log.warning('loading books timed out')
+                break
 
         # seems to be the only way to close the event loop
         async def stop(loop):
