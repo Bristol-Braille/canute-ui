@@ -4,7 +4,7 @@ import logging
 import re
 import xml.etree.ElementTree as ElementTree
 import threading
-import time
+import concurrent.futures
 
 from ..actions import actions
 from ..manual import manual
@@ -100,6 +100,7 @@ async def get_page_data(book, store, page_number=None):
 # in seconds
 LOAD_BOOKS_TIMEOUT = 9 * 60
 
+
 async def fully_load_books(store):
     state = store.state['app']
     if state['load_books'] == 'start':
@@ -138,23 +139,11 @@ async def fully_load_books(store):
 
         # check if the futures are completed but don't hog this thread to wait
         # for that, asyncio.sleep instead
-        start = time.time()
-        done = []
-        while not aborted and len(done) < len(futures):
-            await asyncio.sleep(1)
-            for future in futures:
-                if future.done():
-                    book = future.result()
-                    if book not in done:
-                        await store.dispatch(actions.add_or_replace(book))
-                        done.append(book)
-            now = time.time() - start
-            if now > LOAD_BOOKS_TIMEOUT:
-                aborted = True
-                for future in futures:
-                    future.cancel()
-                log.warning('loading books timed out')
-                break
+        await asyncio.sleep(2)
+        for future in concurrent.futures.as_completed(futures, LOAD_BOOKS_TIMEOUT):
+            book = future.result()
+            await store.dispatch(actions.add_or_replace(book))
+            await asyncio.sleep(0)
 
         # seems to be the only way to close the event loop
         async def stop(loop):
