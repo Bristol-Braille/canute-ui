@@ -115,14 +115,6 @@ async def fully_load_books(store):
             for filename in books:
                 book = books[filename]
                 if len(book.pages) == 0:
-                    state = store.state['app']
-                    if state['load_books'] == 'cancel':
-                        aborted = True
-                        break
-                    try:
-                        book = state['user']['books'][filename]
-                    except IndexError:
-                        continue
                     if book.loading:
                         log.info(
                             'already loading {}, skipping'.format(book.title))
@@ -136,6 +128,11 @@ async def fully_load_books(store):
             await asyncio.sleep(2)
             try:
                 for future in concurrent.futures.as_completed(futures, timeout=LOAD_BOOKS_TIMEOUT):
+                    # accessing store.state will get a fresh state
+                    if store.state['app']['load_books'] == 'cancel':
+                        aborted = True
+                        stop_process_pool(executor)
+                        break
                     book = future.result(timeout=LOAD_BOOKS_TIMEOUT)
                     await store.dispatch(actions.add_or_replace(book))
                     await asyncio.sleep(0)
