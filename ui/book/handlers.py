@@ -84,7 +84,7 @@ async def get_page_data(book, store, page_number=None):
         page_number = book.page_number
     if len(book.pages) == 0:
         while book.loading:
-            await asyncio.sleep(1)
+            await asyncio.sleep(0)
             # accessing store.state will get a fresh state
             book = store.state['app']['user']['books'][book.filename]
         else:
@@ -115,6 +115,10 @@ async def fully_load_books(store):
         loop = asyncio.new_event_loop()
         thread = threading.Thread(target=loop.run_forever)
 
+        async def task(book):
+            await store.dispatch(actions.set_book_loading(book))
+            return await read_pages(book)
+
         # gather futures for reading books
         for filename in books:
             book = books[filename]
@@ -130,9 +134,8 @@ async def fully_load_books(store):
                 if book.loading:
                     log.info('already loading {}, skipping'.format(book.title))
                     continue
-                await store.dispatch(actions.set_book_loading(book))
                 future = asyncio.run_coroutine_threadsafe(
-                    read_pages(book), loop=loop)
+                    task(book), loop=loop)
                 futures.append(future)
 
         thread.start()
