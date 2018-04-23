@@ -82,10 +82,10 @@ async def get_page_data(book, store, page_number=None):
     if page_number is None:
         page_number = book.page_number
     if len(book.pages) == 0:
-        if book.loading:
-            while book.loading:
-                # accessing store.state will get a fresh state
-                book = store.state['app']['user']['books'][book.filename]
+        while book.loading:
+            await asyncio.sleep(1)
+            # accessing store.state will get a fresh state
+            book = store.state['app']['user']['books'][book.filename]
         else:
             await store.dispatch(actions.set_book_loading(book))
             book = read_pages(book)
