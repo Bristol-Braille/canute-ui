@@ -20,7 +20,7 @@ class AppReducers():
         return state.copy()
 
     def set_dimensions(self, state, value):
-        dimensions = frozendict({'width': value[0], 'height': value[1]})
+        dimensions = frozendict(width=value[0], height=value[1])
         return state.copy(dimensions=dimensions)
 
     def go_to_library(self, state, _):
@@ -34,7 +34,7 @@ class AppReducers():
 
     def toggle_help_menu(self, state, _):
         visible = state['help_menu']['visible']
-        help_menu = utility.freeze(dict(visible=not visible, page=0))
+        help_menu = frozendict(visible=not visible, page=0)
         return state.copy(help_menu=help_menu)
 
     def close_menu(self, state, value):
