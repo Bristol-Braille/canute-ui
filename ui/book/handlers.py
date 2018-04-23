@@ -3,6 +3,7 @@ import asyncio
 import logging
 import re
 import xml.etree.ElementTree as ElementTree
+import threading
 import concurrent.futures
 
 from ..actions import actions
@@ -30,7 +31,7 @@ async def init(book):
 NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 
 
-def read_pages(book):
+async def read_pages(book):
     if book.filename == manual.filename:
         return book
     # if it has pages, it's already loaded
@@ -88,7 +89,7 @@ async def get_page_data(book, store, page_number=None):
             book = store.state['app']['user']['books'][book.filename]
         else:
             await store.dispatch(actions.set_book_loading(book))
-            book = read_pages(book)
+            book = await read_pages(book)
             await store.dispatch(actions.add_or_replace(book))
 
     if page_number >= len(book.pages):
@@ -109,49 +110,58 @@ async def fully_load_books(store):
         aborted = False
         futures = []
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=3) as executor:
+        # run actual book reading on another thread as it hogs the event loop
+        # otherwise
+        loop = asyncio.new_event_loop()
+        thread = threading.Thread(target=loop.run_forever)
 
-            # gather futures for reading books
-            for filename in books:
-                book = books[filename]
-                if len(book.pages) == 0:
-                    if book.loading:
-                        log.info(
-                            'already loading {}, skipping'.format(book.title))
-                        continue
-                    await store.dispatch(actions.set_book_loading(book))
-                    future = executor.submit(read_pages, book)
-                    futures.append(future)
+        # gather futures for reading books
+        for filename in books:
+            book = books[filename]
+            if len(book.pages) == 0:
+                state = store.state['app']
+                if state['load_books'] == 'cancel':
+                    aborted = True
+                    break
+                try:
+                    book = state['user']['books'][filename]
+                except IndexError:
+                    continue
+                if book.loading:
+                    log.info('already loading {}, skipping'.format(book.title))
+                    continue
+                await store.dispatch(actions.set_book_loading(book))
+                future = asyncio.run_coroutine_threadsafe(
+                    read_pages(book), loop=loop)
+                futures.append(future)
 
-            # check if the futures are completed but don't hog this thread to wait
-            # for that, asyncio.sleep instead
-            await asyncio.sleep(2)
-            try:
-                for future in concurrent.futures.as_completed(futures, timeout=LOAD_BOOKS_TIMEOUT):
-                    # accessing store.state will get a fresh state
-                    if store.state['app']['load_books'] == 'cancel':
-                        aborted = True
-                        stop_process_pool(executor)
-                        break
-                    book = future.result(timeout=LOAD_BOOKS_TIMEOUT)
-                    await store.dispatch(actions.add_or_replace(book))
-                    await asyncio.sleep(0)
-            except concurrent.futures.TimeoutError:
-                log.warning('loading books timed out')
-                aborted = True
-                stop_process_pool(executor)
+        thread.start()
 
-            await store.dispatch(actions.load_books(False))
-            if aborted:
-                log.info('loading books aborted')
-            else:
-                log.info('loading books done')
+        # check if the futures are completed but don't hog this thread to wait
+        # for that, asyncio.sleep instead
+        await asyncio.sleep(2)
+        try:
+            for future in concurrent.futures.as_completed(futures, LOAD_BOOKS_TIMEOUT):
+                book = future.result()
+                await store.dispatch(actions.add_or_replace(book))
+                await asyncio.sleep(0)
+        except concurrent.futures.TimeoutError:
+            log.warning('loading books timed out')
+            for future in futures:
+                future.cancel()
+            aborted = True
 
+        # seems to be the only way to close the event loop
+        async def stop(loop):
+            loop.stop()
+        asyncio.run_coroutine_threadsafe(stop(loop), loop=loop)
+        thread.join()
 
-def stop_process_pool(executor):
-    for pid, process in executor._processes.items():
-        process.terminate()
-    executor.shutdown()
+        await store.dispatch(actions.load_books(False))
+        if aborted:
+            log.info('loading books aborted')
+        else:
+            log.info('loading books done')
 
 
 class BookFileError(Exception):
