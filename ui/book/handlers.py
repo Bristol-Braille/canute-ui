@@ -135,7 +135,7 @@ async def fully_load_books(store):
                         break
                     book = future.result(timeout=LOAD_BOOKS_TIMEOUT)
                     await store.dispatch(actions.add_or_replace(book))
-                    await asyncio.sleep(0)
+                    await asyncio.sleep(0.1)
             except concurrent.futures.TimeoutError:
                 log.warning('loading books timed out')
                 aborted = True
