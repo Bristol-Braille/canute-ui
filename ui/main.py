@@ -17,7 +17,6 @@ from .driver.driver_dummy import Dummy
 from .setup_logs import setup_logs
 from .store import main_reducer
 from .actions import actions
-from .library import handlers as library
 from .display import Display
 from .book.handlers import fully_load_books
 
