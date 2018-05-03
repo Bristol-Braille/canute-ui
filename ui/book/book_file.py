@@ -6,6 +6,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class LoadState(Enum):
     INITIAL = 0
     LOADING = 1
@@ -33,6 +34,8 @@ class BookFile(BookData):
 
     @property
     def max_pages(self):
+        if self.load_state != LoadState.DONE:
+            return -1
         m = len(self.pages) - 1
         if m < 0:
             return 0

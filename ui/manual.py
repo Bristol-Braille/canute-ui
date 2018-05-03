@@ -1,5 +1,5 @@
 from .braille import from_ascii
-from .book.book_file import BookFile
+from .book.book_file import BookFile, LoadState
 
 pages = ((
     '         canute quick help',
@@ -95,4 +95,4 @@ class Manual(BookFile):
         return 'canute manual'
 
 
-manual = Manual(manual_filename, 40, 9, pages=pages)
+manual = Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)

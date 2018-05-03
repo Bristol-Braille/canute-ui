@@ -10,14 +10,14 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         * page numbers all the way at the right,
         e.g. ',,library menu               #1/#3'.
     '''
-    page_number += 1
-    total_pages += 1
-
     # ',, indicates all uppercase'
     if capitalize:
         title = ',,' + title
 
-    if total_pages == 1:
+    page_number += 1
+    total_pages += 1
+
+    if total_pages == 0:
         return from_ascii(title)
 
     current_page = ' {}/{}'.format(to_ueb_number(page_number),

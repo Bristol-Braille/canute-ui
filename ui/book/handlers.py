@@ -34,8 +34,7 @@ NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 def read_pages(book):
     if book.filename == manual.filename:
         return book
-    # if it has pages, it's already loaded
-    if len(book.pages) > 0:
+    if book.load_state == book_file.LoadState.DONE:
         return book
     log.debug('reading pages {}'.format(book.filename))
     pages = []
@@ -76,7 +75,7 @@ def read_pages(book):
     else:
         raise BookFileError(
             'Unexpected extension: {}'.format(book.ext))
-    return book._replace(pages=tuple(pages))
+    return book._replace(pages=tuple(pages), load_state=book_file.LoadState.DONE)
 
 
 async def get_page_data(book, store, page_number=None):

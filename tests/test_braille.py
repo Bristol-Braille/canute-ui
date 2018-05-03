@@ -1,6 +1,7 @@
 import unittest
 import ui.braille as braille
 
+
 class TestBraille(unittest.TestCase):
     def setUp(self):
         pass
