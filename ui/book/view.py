@@ -7,8 +7,8 @@ def render_home_menu(width, height, book):
     data.append(format_title(
         book.title, width, book.page_number, book.max_pages))
     data.append(from_ascii('go to page'))
-    data.append(from_ascii('go to start of book'))
-    data.append(from_ascii('go to end of book'))
+    data.append(tuple())
+    data.append(tuple())
     data.append(from_ascii('insert bookmark at current page'))
     data.append(from_ascii('choose from existing bookmarks'))
     data.append(tuple())

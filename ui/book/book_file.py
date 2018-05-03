@@ -17,7 +17,7 @@ BookData = namedtuple('BookData', ['filename', 'width', 'height',
                                    'page_number', 'bookmarks',
                                    'file_contents', 'pages', 'load_state'])
 BookData.__new__.__defaults__ = (None, None, None,
-                                 0, tuple(),
+                                 0, tuple([0]),
                                  None, tuple(), LoadState.INITIAL)
 
 

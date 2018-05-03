@@ -39,13 +39,17 @@ async def render(width, height, state, store):
     data = [title]
 
     for bm in bookmarks:
-        if bm == 'deleted':
+        if bm == 0:
+            data.append(from_ascii('start of book'))
+        elif bm == book.max_pages:
+            data.append(from_ascii('end of book'))
+        elif bm == 'deleted':
             data.append(tuple())
-            continue
-        lines = await get_page_data(book, store, page_number=bm)
-        line = lines[0]
-        n = from_ascii(to_ueb_number(bm + 1) + ' ')
-        data.append(n + tuple(line))
+        else:
+            lines = await get_page_data(book, store, page_number=bm)
+            line = lines[0]
+            n = from_ascii(to_ueb_number(bm + 1) + ' ')
+            data.append(n + tuple(line))
 
     # pad page with empty rows
     while len(data) < height:

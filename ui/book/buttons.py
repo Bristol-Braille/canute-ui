@@ -3,8 +3,6 @@ from ..actions import actions
 book_buttons = {
     'single': {
         '2': actions.enter_go_to_page(),
-        '3': actions.go_to_start(),
-        '4': actions.go_to_end(),
         '5': actions.insert_bookmark(),
         '6': actions.go_to_bookmarks_menu(),
         '8': actions.go_to_system_menu(),
@@ -16,8 +14,6 @@ book_buttons = {
     },
     'long': {
         '2': actions.enter_go_to_page(),
-        '3': actions.go_to_start(),
-        '4': actions.go_to_end(),
         '5': actions.insert_bookmark(),
         '6': actions.go_to_bookmarks_menu(),
         '8': actions.go_to_system_menu(),
