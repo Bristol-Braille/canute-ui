@@ -2,15 +2,12 @@
 # relative path to where log is kept
 log_file = canute.log
 # book directory
-library_dir = ~/books/
-# where usb sticks will be automounted
-usb_dir = /media/
+# where usb sticks and sd-cards will be automounted
+media_dir = /media
+# the exact sub mount-point directory name of the sd-card
+sd_card_dir = sd-card
 # where the software is - needed for ui updates
 install_dir = ~/canute-ui/
-archive_dir = ~/
-
-[user]
-user_name = pi
 
 [comms]
 # serial timeout in seconds

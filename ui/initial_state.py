@@ -114,7 +114,7 @@ async def read(path):
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
-async def write(store, library_dir):
+async def write(store, media_dir):
     global prev
     state = store.state
     user_state = state['app']['user']
@@ -122,9 +122,9 @@ async def write(store, library_dir):
     selected_book = user_state['current_book']
     if selected_book != prev['current_book']:
         if not selected_book == manual_filename:
-            selected_book = os.path.relpath(selected_book, library_dir)
+            selected_book = os.path.relpath(selected_book, media_dir)
         s = toml.dumps({'current_book': selected_book})
-        path = os.path.join(library_dir, 'sd-card', USER_STATE_FILE)
+        path = os.path.join(media_dir, 'sd-card', USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)
     for filename in books:
@@ -136,7 +136,7 @@ async def write(store, library_dir):
         if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
             path = to_state_file(book.filename)
             if book.filename == manual_filename:
-                path = os.path.join(library_dir, path)
+                path = os.path.join(media_dir, path)
             bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
             # remove start-of-book and end-of-book bookmarks
             bms = bms[1:-1]

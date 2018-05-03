@@ -83,8 +83,8 @@ async def run_async_timeout(driver, config, duration, loop):
 
 async def run_async(driver, config, loop):
 
-    library_dir = config.get('files', 'library_dir')
-    state = await initial_state.read(library_dir)
+    media_dir = config.get('files', 'media_dir')
+    state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
@@ -107,7 +107,7 @@ async def run_async(driver, config, loop):
 
     while 1:
         state = store.state
-        if (await handle_hardware(driver, state, store, library_dir)):
+        if (await handle_hardware(driver, state, store, media_dir)):
             break
         await buttons.check(driver, state['app'],
                             store.dispatch)
@@ -116,13 +116,13 @@ async def run_async(driver, config, loop):
 
 
 def handle_changes(driver, config, store):
-    library_dir = config.get('files', 'library_dir')
+    media_dir = config.get('files', 'media_dir')
 
     def listener():
         state = store.state
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
-        asyncio.ensure_future(initial_state.write(store, library_dir))
+        asyncio.ensure_future(initial_state.write(store, media_dir))
         asyncio.ensure_future(fully_load_books(store))
     return listener
 
@@ -140,11 +140,11 @@ async def change_files(config, state, store):
         await store.dispatch(actions.backup_log('done'))
 
 
-async def handle_hardware(driver, state, store, library_dir):
+async def handle_hardware(driver, state, store, media_dir):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         await store.dispatch(actions.load_books('cancel'))
-        await initial_state.write(store, library_dir)
+        await initial_state.write(store, media_dir)
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
@@ -167,10 +167,12 @@ async def handle_hardware(driver, state, store, library_dir):
 
 
 def backup_log(config):
-    usb_dir = config.get('files', 'usb_dir')
+    sd_card_dir = config.get('files', 'sd_card_dir')
+    media_dir = config.get('files', 'sd_card_dir')
+    sd_card_dir = os.path.join(media_dir, sd_card_dir)
     log_file = config.get('files', 'log_file')
     # make a filename based on the date
-    backup_file = os.path.join(usb_dir, time.strftime('%Y%m%d_log.txt'))
+    backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
     log.warning('backing up log to USB stick: {}'.format(backup_file))
     try:
         shutil.copyfile(log_file, backup_file)
