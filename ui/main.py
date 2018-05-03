@@ -129,11 +129,6 @@ def handle_changes(driver, config, store):
 
 async def change_files(config, state, store):
     state = store.state['app']
-    if state['replacing_library'] == 'start':
-        await store.dispatch(actions.load_books('cancel'))
-        await store.dispatch(actions.replace_library('in progress'))
-        await library.replace(config, state, store)
-        await store.dispatch(actions.replace_library(False))
     if state['backing_up_log'] == 'start':
         await store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
