@@ -1,0 +1,6 @@
+proc            /proc           proc    defaults          0       0
+PARTUUID=a5b0a9e0-01  /boot           vfat    defaults          0       2
+PARTUUID=a5b0a9e0-02  /               ext4    defaults,noatime  0       1
+/dev/sda1 /media/sd-card auto defaults,user,rw,noatime,exec,nofail,errors=continue,sync,umask=000 0 0
+# a swapfile is not a swap partition, no line here
+#   use  dphys-swapfile swap[on|off]  for that
