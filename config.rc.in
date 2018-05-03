@@ -6,8 +6,6 @@ log_file = canute.log
 media_dir = /media
 # the exact sub mount-point directory name of the sd-card
 sd_card_dir = sd-card
-# where the software is - needed for ui updates
-install_dir = ~/canute-ui/
 
 [comms]
 # serial timeout in seconds
