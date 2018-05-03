@@ -43,6 +43,8 @@ Install the rc.local file to make canute_ui start on boot
 
 Add a mountpoint for the external sd-card and an fstab entry to automount it
 
+
+    sudo bash -c 'cat fstab >> /etc/fstab'
     sudo chown pi:pi /media
     mkdir /media/sd-card
     sudo cp fstab /etc/
