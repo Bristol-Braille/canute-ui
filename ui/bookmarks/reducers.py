@@ -15,6 +15,9 @@ class BookmarksReducers():
         book = books[book_n]
         bookmarks = book.bookmarks
         line = page * height
+        # don't delete go-to-start end and go-to-end bookmarks
+        if (line + n) == 0 or (line + n) == (len(bookmarks) - 1):
+            return state
         changed_bookmarks = list(bookmarks[line:line + height])
         if n >= len(changed_bookmarks):
             return state
