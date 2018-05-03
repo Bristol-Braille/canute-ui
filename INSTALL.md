@@ -37,18 +37,20 @@ Install requirements:
     sudo apt install -y usbmount python3-pip python3-dev
     sudo pip3 install -r requirements-pi.txt
 
-Install the rc.local and fstab files
+Install the rc.local file to make canute_ui start on boot
 
-    sudo cp rc.local fstab /etc/
+    sudo cp rc.local /etc/
 
-Copy the test books to the home directory:
+Add a mountpoint for the external sd-card and an fstab entry to automount it
 
-    cp -r books ~/
+    sudo chown pi:pi /media
+    mkdir /media/sd-card
+    sudo cp fstab /etc/
 
 Copy the config file:
 
     cp config.rc.in config.rc
 
-Run the UI software without the emulator and read the buttons through evdev:
+Run the UI software:
 
-    ./canute_ui --real --pi-buttons
+    ./run.sh
