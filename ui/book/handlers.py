@@ -75,7 +75,7 @@ def read_pages(book):
     else:
         raise BookFileError(
             'Unexpected extension: {}'.format(book.ext))
-    return book._replace(pages=tuple(pages), load_state=book_file.LoadState.DONE)
+    return book._replace(pages=tuple(pages), load_state=book_file.LoadState.DONE, bookmarks=book.bookmarks+(len(pages) - 1,))
 
 
 async def get_page_data(book, store, page_number=None):

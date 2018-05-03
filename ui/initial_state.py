@@ -139,6 +139,8 @@ async def write(store, library_dir):
             if book.filename == manual_filename:
                 path = os.path.join(library_dir, path)
             bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
+            # remove start-of-book and end-of-book bookmarks
+            bms = bms[1:-1]
             # ordered to make sure current_page comes before bookmarks
             d = OrderedDict([['current_page', book.page_number + 1],
                              ['bookmarks', bms]])
