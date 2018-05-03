@@ -53,16 +53,14 @@ def main():
         log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
         from .driver.driver_both import DriverBoth
-        with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
-                        delay=args.delay, display_text=args.text,
+        with DriverBoth(port=args.tty, delay=args.delay,
+                        display_text=args.text,
                         timeout=timeout) as driver:
             run(driver, config)
     else:
         log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
-        with Pi(port=args.tty,
-                pi_buttons=args.pi_buttons,
-                timeout=timeout) as driver:
+        with Pi(port=args.tty, timeout=timeout) as driver:
             run(driver, config)
 
 

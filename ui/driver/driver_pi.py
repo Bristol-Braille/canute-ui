@@ -20,10 +20,9 @@ class Pi(Driver):
     to it
 
     :param port: the serial port the display is plugged into
-    :param pi_buttons: whether to use the evdev input for button presses
     '''
 
-    def __init__(self, port=None, pi_buttons=False, timeout=60):
+    def __init__(self, port=None, timeout=60):
         self.timeout = timeout
         # get serial connection
         if port is None:
@@ -165,12 +164,3 @@ class Pi(Driver):
 
 
 Driver.register(Pi)
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-
-    pi = Pi(pi_buttons=True)
-    while 1:
-        buttons = pi.get_buttons()
-        log.info('buttons: %s' % buttons)
-        time.sleep(1)
