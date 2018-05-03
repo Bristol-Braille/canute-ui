@@ -76,7 +76,7 @@ def read_pages(book):
         raise BookFileError(
             'Unexpected extension: {}'.format(book.ext))
     bookmarks = book.bookmarks
-    if len(book.pages) > 1:
+    if len(pages) > 1:
         # add an end-of-book bookmark
         bookmarks += (len(pages) - 1,)
     return book._replace(pages=tuple(pages),
