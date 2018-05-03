@@ -1,17 +1,23 @@
 import os
 from collections import namedtuple
+from enum import Enum
 import logging
 
 
 log = logging.getLogger(__name__)
 
+class LoadState(Enum):
+    INITIAL = 0
+    LOADING = 1
+    DONE = 2
+
 
 BookData = namedtuple('BookData', ['filename', 'width', 'height',
                                    'page_number', 'bookmarks',
-                                   'file_contents', 'pages', 'loading'])
+                                   'file_contents', 'pages', 'load_state'])
 BookData.__new__.__defaults__ = (None, None, None,
                                  0, tuple(),
-                                 None, tuple(), False)
+                                 None, tuple(), LoadState.INITIAL)
 
 
 class BookFile(BookData):

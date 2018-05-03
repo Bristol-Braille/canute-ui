@@ -1,6 +1,7 @@
 from frozendict import FrozenOrderedDict
 import logging
 from collections import OrderedDict
+from ..book import book_file
 
 from .. import utility
 
@@ -28,7 +29,7 @@ class LibraryReducers():
         return state.copy(user=state['user'].copy(books=books))
 
     def set_book_loading(self, state, book):
-        book = book._replace(loading=True)
+        book = book._replace(load_state=book_file.LoadState.LOADING)
         return self.add_or_replace(state, book)
 
     def remove_book(self, state, book):
