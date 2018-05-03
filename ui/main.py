@@ -100,11 +100,6 @@ async def run_async(driver, config, loop):
 
     store.subscribe(handle_changes(driver, config, store))
 
-    # if we startup and update_ui is still 'in progress' then we are using the
-    # old state file and update has failed
-    if state['app']['update_ui'] == 'in progress':
-        await store.dispatch(actions.update_ui('failed'))
-
     # since handle_changes subscription happens after init and library.sync it
     # may not have triggered. so we trigger it here. if we put it before init
     # it will start of by rendering a possibly invalid state. library.sync
@@ -145,13 +140,6 @@ async def change_files(config, state, store):
         await store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
         await store.dispatch(actions.backup_log('done'))
-    if state['update_ui'] == 'start':
-        log.info('update ui = start')
-        if utility.find_ui_update(config):
-            await store.dispatch(actions.update_ui('in progress'))
-        else:
-            log.info('update not found')
-            await store.dispatch(actions.update_ui('failed'))
 
 
 async def handle_hardware(driver, state, store, library_dir):

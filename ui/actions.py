@@ -130,9 +130,6 @@ class AppReducers():
         else:
             return state.copy(backing_up_log=value)
 
-    def update_ui(self, state, value):
-        return state.copy(update_ui=value)
-
     def shutdown(self, state, value):
         return state.copy(shutting_down=True)
 

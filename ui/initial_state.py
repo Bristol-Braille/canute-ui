@@ -43,7 +43,6 @@ initial_state = utility.freeze({
         },
         'replacing_library': False,
         'backing_up_log': False,
-        'update_ui': False,
         'shutting_down': False,
         'dimensions': {'width': 40, 'height': 9},
         'home_menu_visible': False,
