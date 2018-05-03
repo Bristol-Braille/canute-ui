@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-autopep8 --in-place canute_ui update_ui.py $(find ui tests -name '*.py')
+autopep8 --in-place canute_ui $(find ui tests -name '*.py')

@@ -8,7 +8,6 @@ import aioredux
 import aioredux.middleware
 import async_timeout
 
-from . import utility
 from . import argparser
 from . import config_loader
 from . import initial_state
