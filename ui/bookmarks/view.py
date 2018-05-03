@@ -30,7 +30,8 @@ async def render(width, height, state, store):
     page = state['bookmarks_menu']['page']
 
     line_n = page * (height - 1)
-    bookmarks = book.bookmarks[line_n:line_n + (height - 1)]
+    all_bookmarks = (0,) + book.bookmarks + (book.max_pages,)
+    bookmarks = all_bookmarks[line_n:line_n + (height - 1)]
 
     max_pages = (len(book.bookmarks) - 1) // (height - 1)
     title = format_title(
@@ -39,7 +40,13 @@ async def render(width, height, state, store):
     data = [title]
 
     for bm in bookmarks:
-        if bm == 'deleted':
+        if bm == 0:
+            data.append(from_ascii('start of book'))
+            continue
+        elif bm == book.max_pages:
+            data.append(from_ascii('end of book'))
+            continue
+        elif bm == 'deleted':
             data.append(tuple())
             continue
         lines = await get_page_data(book, store, page_number=bm)
