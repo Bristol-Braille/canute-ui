@@ -10,8 +10,8 @@ class GoToPageReducers():
 
         # handle delete ('<') characters
         r = re.compile('\d<')
-        while r.search(selection) is not None:
-            selection = r.sub('', selection)
+        if r.search(selection) is not None:
+            selection = ''
         # any left over delete characters after numbers are ignored
         selection = ''.join([c for c in selection if c != '<'])
 

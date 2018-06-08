@@ -35,10 +35,12 @@ class BookmarksReducers():
         book_n = state['user']['current_book']
         book = state['user']['books'][book_n]
         bookmarks = book.bookmarks[page * height:(page * height) + height]
+        set_book_page = BookReducers().set_book_page
+        if n == len(bookmarks):
+            return set_book_page(state, book.max_pages)
         if n >= len(bookmarks):
             return state
         bookmark = bookmarks[n]
         if bookmark == 'deleted':
             return state
-        set_book_page = BookReducers().set_book_page
         return set_book_page(state, bookmark)
