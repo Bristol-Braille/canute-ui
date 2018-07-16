@@ -10,6 +10,7 @@ class I18n:
         self.translate = None
 
     def _(self, key):
+        env_lang = os.getenv('LANGUAGE', "en_GB")
         print(env_lang)
         if env_lang and self.lang != env_lang:
             self.lang = env_lang

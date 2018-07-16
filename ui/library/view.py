@@ -1,5 +1,5 @@
 from ..braille import from_ascii, format_title
-from .i18n import I18n
+from ..i18n import I18n
 
 i18n = I18n()
 

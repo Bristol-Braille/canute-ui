@@ -1,6 +1,6 @@
 from ..braille import from_ascii, format_title
 from .handlers import get_page_data
-from .i18n import I18n
+from ..i18n import I18n
 
 i18n = I18n()
 

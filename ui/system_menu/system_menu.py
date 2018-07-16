@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from ..braille import from_ascii
 from ..actions import actions
-from .i18n import I18n
+from ..i18n import I18n
 
 i18n = I18n()
 

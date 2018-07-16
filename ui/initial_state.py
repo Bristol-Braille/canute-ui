@@ -6,15 +6,16 @@ import toml
 import os
 from frozendict import frozendict
 from . import utility
-from .manual import manual, manual_filename
+from .manual import Manual, manual_filename
 from .book.book_file import BookFile
 from .book.handlers import init
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
 
-log = logging.getLogger(__name__)
+manual = Manual.create()
 
+log = logging.getLogger(__name__)
 
 initial_state = utility.freeze({
     'app': {

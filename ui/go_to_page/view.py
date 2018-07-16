@@ -1,5 +1,5 @@
 from ..braille import from_ascii, format_title
-from .i18n import I18n
+from ..i18n import I18n
 
 i18n = I18n()
 
@@ -10,7 +10,7 @@ def render_help_menu(width, height, page):
         i18n._('forward. Pages are numbered based on the'),
         i18n._('#i line page height of the Canute. You'),
         i18n._('can delete entered numbers by pressing'),
-        i18n._('or holding the back button. As always')
+        i18n._('or holding the back button. As always'),
         i18n._('you can go back to your current page by'),
         i18n._('pressing the menu button.'),
     )
