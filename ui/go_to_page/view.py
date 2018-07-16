@@ -1,16 +1,18 @@
 from ..braille import from_ascii, format_title
+from .i18n import I18n
 
+i18n = I18n()
 
 def render_help_menu(width, height, page):
     data = (
-        'Go to a page number by keying it in with',
-        'the side number buttons and pressing',
-        'forward. Pages are numbered based on the',
-        '#i line page height of the Canute. You',
-        'can delete entered numbers by pressing',
-        'or holding the back button. As always'
-        'you can go back to your current page by',
-        'pressing the menu button.',
+        i18n._('Go to a page number by keying it in with'),
+        i18n._('the side number buttons and pressing'),
+        i18n._('forward. Pages are numbered based on the'),
+        i18n._('#i line page height of the Canute. You'),
+        i18n._('can delete entered numbers by pressing'),
+        i18n._('or holding the back button. As always')
+        i18n._('you can go back to your current page by'),
+        i18n._('pressing the menu button.'),
     )
 
     data = [from_ascii(line) for line in data]
@@ -25,7 +27,7 @@ def render(width, height, state):
     if state['help_menu']['visible']:
         return render_help_menu(width, height, state['help_menu']['page'])
 
-    data = [from_ascii('enter page number using the side buttons')]
+    data = [from_ascii(i18n._('enter page number using the side buttons'))]
 
     try:
         book = state['user']['books'][state['user']['current_book']]
@@ -50,13 +52,13 @@ def render(width, height, state):
     else:
         selection = int(selection) - 1
 
-    t = format_title('go to page number', width,
+    t = format_title(i18n._('go to page number'), width,
                      selection, total_pages, capitalize=False)
     data.append(t)
 
-    data.append(from_ascii('please confirm by pressing forward'))
-    data.append(from_ascii('undo by pressing back'))
-    data.append(from_ascii('to go back to book press middle button'))
+    data.append(from_ascii(i18n._('please confirm by pressing forward')))
+    data.append(from_ascii(i18n._('undo by pressing back')))
+    data.append(from_ascii(i18n._('to go back to book press middle button')))
 
     for _ in range(height - 6):
         data.append(tuple())

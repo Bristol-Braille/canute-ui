@@ -1,18 +1,20 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
+from .i18n import I18n
 
+i18n = I18n()
 
 def render_help_menu(width, height):
     data = []
 
-    data.append(from_ascii('Add a bookmark by pressing button #e'))
-    data.append(from_ascii('while in a book. Bookmarks are listed'))
-    data.append(from_ascii('here in the bookmark menu. Each bookmark'))
-    data.append(from_ascii('starts with the Canute page number based'))
-    data.append(from_ascii('on its #i line page. Go to the page by'))
-    data.append(from_ascii('selecting a bookmark by pressing one of'))
-    data.append(from_ascii('the side buttons. Holding the button'))
-    data.append(from_ascii('down will delete the bookmark.'))
+    data.append(from_ascii(i18n._('Add a bookmark by pressing button #e')))
+    data.append(from_ascii(i18n._('while in a book. Bookmarks are listed')))
+    data.append(from_ascii(i18n._('here in the bookmark menu. Each bookmark')))
+    data.append(from_ascii(i18n._('starts with the Canute page number based')))
+    data.append(from_ascii(i18n._('on its #i line page. Go to the page by')))
+    data.append(from_ascii(i18n._('selecting a bookmark by pressing one of')))
+    data.append(from_ascii(i18n._('the side buttons. Holding the button')))
+    data.append(from_ascii(i18n._('down will delete the bookmark.')))
 
     # pad page with empty rows
     while len(data) < height:

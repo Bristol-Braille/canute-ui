@@ -1,15 +1,17 @@
 from ..braille import from_ascii, format_title
 from .system_menu import menu_titles
+from .i18n import I18n
 
+i18n = I18n()
 
 def render_help_menu(width, height, page):
     data = [
-        'Configure your preference on the sorting',
-        'order of books in the library and',
-        'bookmarks through the menu options. To',
-        'shutdown the Canute safely, select the',
-        'shutdown option and wait for #cj',
-        'seconds before unplugging it.',
+        i18n._('Configure your preference on the sorting'),
+        i18n._('order of books in the library and'),
+        i18n._('bookmarks through the menu options. To'),
+        i18n._('shutdown the Canute safely, select the'),
+        i18n._('shutdown option and wait for #cj'),
+        i18n._('seconds before unplugging it.'),
     ]
 
     data = [from_ascii(line) for line in data]

@@ -1,14 +1,16 @@
 from ..braille import from_ascii, format_title
+from .i18n import I18n
 
+i18n = I18n()
 
 def render_help_menu(width, height, page):
     data = [
-        'Choose the book you wish to read by',
-        'pressing the button to the left of the',
-        'title. Use the arrow buttons to page',
-        'through the library. You can change the',
-        'ordering of the books in the system',
-        'menu.',
+        i18n._('Choose the book you wish to read by'),
+        i18n._('pressing the button to the left of the'),
+        i18n._('title. Use the arrow buttons to page'),
+        i18n._('through the library. You can change the'),
+        i18n._('ordering of the books in the system'),
+        i18n._('menu.'),
     ]
 
     data = [from_ascii(line) for line in data]
