@@ -6,6 +6,7 @@ from .library.reducers import LibraryReducers
 from .book.reducers import BookReducers
 from .go_to_page.reducers import GoToPageReducers
 from .bookmarks.reducers import BookmarksReducers
+from .language.reducers import LanguageReducers
 
 
 log = logging.getLogger(__name__)
@@ -31,6 +32,9 @@ class AppReducers():
 
     def go_to_bookmarks_menu(self, state, _):
         return state.copy(location='bookmarks_menu')
+
+    def go_to_language_menu(self, state, _):
+        return state.copy(location='language')
 
     def toggle_help_menu(self, state, _):
         visible = state['help_menu']['visible']
@@ -89,6 +93,11 @@ class AppReducers():
                 page = max_pages
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
+        elif location == 'language':
+            lang_n = state['user']['current_language']
+            lang = list(state['languages']['available'].keys())[lang_n]
+            language_menu = state['user'].copy(current_language=lang)
+            return state.copy(language=language_menu)
         elif location == 'help_menu':
             max_pages = 1
             if page >= max_pages:
@@ -112,6 +121,9 @@ class AppReducers():
             return self.go_to_page(state, page)
         elif location == 'bookmarks_menu':
             page = state['bookmarks_menu']['page'] + value
+            return self.go_to_page(state, page)
+        elif location == 'language_menu':
+            page = state['language_menu']['page'] + value
             return self.go_to_page(state, page)
         elif location == 'help_menu':
             page = state['help_menu']['page'] + value
@@ -164,6 +176,7 @@ action_types.extend(utility.get_methods(BookReducers))
 action_types.extend(utility.get_methods(GoToPageReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
 action_types.extend(utility.get_methods(BookmarksReducers))
+action_types.extend(utility.get_methods(LanguageReducers))
 
 
 def actions():

@@ -22,6 +22,7 @@ initial_state = utility.freeze({
         'user': {
             'current_book': manual_filename,
             'books': OrderedDict({manual_filename: manual}),
+            'current_language': 'en_GB'
         },
         'location': 'book',
         'library': {
@@ -33,6 +34,11 @@ initial_state = utility.freeze({
         },
         'bookmarks_menu': {
             'page': 0
+        },
+        'languages': {
+            'available': OrderedDict({'en_GB': 'English', 'de_DE': 'German'}),
+            'selection': '',
+            'keys_pressed': '',
         },
         'go_to_page': {
             'selection': '',
