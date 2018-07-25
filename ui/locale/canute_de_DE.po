@@ -22,7 +22,7 @@ msgid "         canute quick help"
 msgstr "         ultra quick help"
 
 #: ui/manual.py:8
-msgid "you can also acess these contextual"
+msgid "you can also acess these German"
 msgstr ""
 
 #: ui/manual.py:9

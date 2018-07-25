@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-16 21:01+0100\n"
+"POT-Creation-Date: 2018-07-25 19:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,196 +17,200 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
 
-#: ui/manual.py:13
+#: ui/manual.py:12
 msgid "canute manual"
 msgstr ""
 
-#: ui/manual.py:18
+#: ui/manual.py:20
 msgid "         canute quick help"
 msgstr ""
 
-#: ui/manual.py:20
+#: ui/manual.py:22
 msgid "you can also acess these contextual"
 msgstr ""
 
-#: ui/manual.py:21
+#: ui/manual.py:23
 msgid "help texts from anywhere by pressing"
 msgstr ""
 
-#: ui/manual.py:22
+#: ui/manual.py:24
 msgid "the topmost side button on the left"
 msgstr ""
 
-#: ui/manual.py:28
+#: ui/manual.py:30
 msgid "          book and home menu"
 msgstr ""
 
-#: ui/book/view.py:25 ui/manual.py:30
+#: ui/book/view.py:26 ui/manual.py:32
 msgid "Move through the book by pressing the"
 msgstr ""
 
-#: ui/book/view.py:26 ui/manual.py:31
+#: ui/book/view.py:27 ui/manual.py:33
 msgid "arrow buttons on the front of the"
 msgstr ""
 
-#: ui/book/view.py:27 ui/manual.py:32
+#: ui/book/view.py:28 ui/manual.py:34
 msgid "machine. Hold them down to move #e"
 msgstr ""
 
-#: ui/book/view.py:28 ui/manual.py:33
+#: ui/book/view.py:29 ui/manual.py:35
 msgid "pages at a time. The home menu shows"
 msgstr ""
 
-#: ui/book/view.py:29 ui/manual.py:34
+#: ui/book/view.py:30 ui/manual.py:36
 msgid "what you can do with the side buttons"
 msgstr ""
 
-#: ui/book/view.py:30 ui/manual.py:35
+#: ui/book/view.py:31 ui/manual.py:37
 msgid "from the home menu or the book. View"
 msgstr ""
 
-#: ui/book/view.py:31 ui/manual.py:36
+#: ui/book/view.py:32 ui/manual.py:38
 msgid "this by pressing the middle button on"
 msgstr ""
 
-#: ui/book/view.py:32 ui/manual.py:38
+#: ui/book/view.py:33 ui/manual.py:40
 msgid "the front. Pressing this button again"
 msgstr ""
 
-#: ui/book/view.py:33 ui/manual.py:39
+#: ui/book/view.py:34 ui/manual.py:41
 msgid "will always return you to your book."
 msgstr ""
 
-#: ui/manual.py:42
+#: ui/manual.py:44
 msgid "          bookmarks"
 msgstr ""
 
-#: ui/bookmarks/view.py:10 ui/manual.py:44
+#: ui/bookmarks/view.py:10 ui/manual.py:46
 msgid "Add a bookmark by pressing button #e"
 msgstr ""
 
-#: ui/bookmarks/view.py:11 ui/manual.py:45
+#: ui/bookmarks/view.py:11 ui/manual.py:47
 msgid "while in a book. Bookmarks are listed"
 msgstr ""
 
-#: ui/bookmarks/view.py:12 ui/manual.py:46
+#: ui/bookmarks/view.py:12 ui/manual.py:48
 msgid "here in the bookmark menu. Each bookmark"
 msgstr ""
 
-#: ui/bookmarks/view.py:13 ui/manual.py:48
+#: ui/bookmarks/view.py:13 ui/manual.py:50
 msgid "starts with the Canute page number based"
 msgstr ""
 
-#: ui/bookmarks/view.py:14 ui/manual.py:49
+#: ui/bookmarks/view.py:14 ui/manual.py:51
 msgid "on its #i line page. Go to the page by"
 msgstr ""
 
-#: ui/bookmarks/view.py:15 ui/manual.py:50
+#: ui/bookmarks/view.py:15 ui/manual.py:52
 msgid "selecting a bookmark by pressing one of"
 msgstr ""
 
-#: ui/bookmarks/view.py:16 ui/manual.py:51
+#: ui/bookmarks/view.py:16 ui/manual.py:53
 msgid "the side buttons. Holding the button"
 msgstr ""
 
-#: ui/bookmarks/view.py:17 ui/manual.py:52
+#: ui/bookmarks/view.py:17 ui/manual.py:54
 msgid "down will delete the bookmark."
 msgstr ""
 
-#: ui/manual.py:58
+#: ui/manual.py:60
 msgid "          go to page menu"
 msgstr ""
 
-#: ui/go_to_page/view.py:8 ui/manual.py:60
+#: ui/go_to_page/view.py:8 ui/manual.py:62
 msgid "Go to a page number by keying it in with"
 msgstr ""
 
-#: ui/go_to_page/view.py:9 ui/manual.py:61
+#: ui/go_to_page/view.py:9 ui/manual.py:63
 msgid "the side number buttons and pressing"
 msgstr ""
 
-#: ui/go_to_page/view.py:10 ui/manual.py:62
+#: ui/go_to_page/view.py:10 ui/manual.py:64
 msgid "forward. Pages are numbered based on the"
 msgstr ""
 
-#: ui/go_to_page/view.py:11 ui/manual.py:63
+#: ui/go_to_page/view.py:11 ui/manual.py:65
 msgid "#i line page height of the Canute. You"
 msgstr ""
 
-#: ui/go_to_page/view.py:12 ui/manual.py:64
+#: ui/go_to_page/view.py:12 ui/manual.py:66
 msgid "can delete entered numbers by pressing"
 msgstr ""
 
-#: ui/go_to_page/view.py:13 ui/manual.py:65
+#: ui/go_to_page/view.py:13 ui/manual.py:67
 msgid "or holding the back button. As always"
 msgstr ""
 
-#: ui/go_to_page/view.py:14 ui/manual.py:66
+#: ui/go_to_page/view.py:14 ui/manual.py:68
 msgid "you can go back to your current page by"
 msgstr ""
 
-#: ui/go_to_page/view.py:15 ui/manual.py:68
+#: ui/go_to_page/view.py:15 ui/manual.py:70
 msgid "pressing the menu button."
 msgstr ""
 
-#: ui/manual.py:71
+#: ui/manual.py:73
 msgid "          library menu"
 msgstr ""
 
-#: ui/library/view.py:8 ui/manual.py:73
+#: ui/library/view.py:8 ui/manual.py:75
 msgid "Choose the book you wish to read by"
 msgstr ""
 
-#: ui/library/view.py:9 ui/manual.py:74
+#: ui/library/view.py:9 ui/manual.py:76
 msgid "pressing the button to the left of the"
 msgstr ""
 
-#: ui/library/view.py:10 ui/manual.py:75
+#: ui/library/view.py:10 ui/manual.py:77
 msgid "title. Use the arrow buttons to page"
 msgstr ""
 
-#: ui/library/view.py:11 ui/manual.py:76
+#: ui/library/view.py:11 ui/manual.py:78
 msgid "through the library. You can change the"
 msgstr ""
 
-#: ui/library/view.py:12 ui/manual.py:78
+#: ui/library/view.py:12 ui/manual.py:80
 msgid "ordering of the books in the system"
 msgstr ""
 
-#: ui/library/view.py:13 ui/manual.py:79
+#: ui/library/view.py:13 ui/manual.py:81
 msgid "menu."
 msgstr ""
 
-#: ui/manual.py:82
+#: ui/manual.py:84
 msgid "          system menu"
 msgstr ""
 
-#: ui/manual.py:84 ui/system_menu/view.py:9
+#: ui/manual.py:86 ui/system_menu/view.py:9
 msgid "Configure your preference on the sorting"
 msgstr ""
 
-#: ui/manual.py:85 ui/system_menu/view.py:10
+#: ui/manual.py:87 ui/system_menu/view.py:10
 msgid "order of books in the library and"
 msgstr ""
 
-#: ui/manual.py:86 ui/system_menu/view.py:11
+#: ui/manual.py:88 ui/system_menu/view.py:11
 msgid "bookmarks through the menu options. To"
 msgstr ""
 
-#: ui/manual.py:88 ui/system_menu/view.py:12
+#: ui/manual.py:90 ui/system_menu/view.py:12
 msgid "shutdown the Canute safely, select the"
 msgstr ""
 
-#: ui/manual.py:89 ui/system_menu/view.py:13
+#: ui/manual.py:91 ui/system_menu/view.py:13
 msgid "shutdown option and wait for #cj"
 msgstr ""
 
-#: ui/manual.py:90 ui/system_menu/view.py:14
+#: ui/manual.py:92 ui/system_menu/view.py:14
 msgid "seconds before unplugging it."
 msgstr ""
 
 #: ui/book/view.py:11
 msgid "go to page"
+msgstr ""
+
+#: ui/book/view.py:13
+msgid "select language"
 msgstr ""
 
 #: ui/book/view.py:14
@@ -233,15 +237,15 @@ msgstr ""
 msgid "go to page number"
 msgstr ""
 
-#: ui/go_to_page/view.py:59 ui/language/view.py:40
+#: ui/go_to_page/view.py:59
 msgid "please confirm by pressing forward"
 msgstr ""
 
-#: ui/go_to_page/view.py:60 ui/language/view.py:41
+#: ui/go_to_page/view.py:60
 msgid "undo by pressing back"
 msgstr ""
 
-#: ui/go_to_page/view.py:61 ui/language/view.py:42
+#: ui/go_to_page/view.py:61
 msgid "to go back to book press middle button"
 msgstr ""
 
@@ -251,10 +255,6 @@ msgstr ""
 
 #: ui/language/view.py:9
 msgid "number buttons and pressing forward."
-msgstr ""
-
-#: ui/language/view.py:24
-msgid "select language using the side buttons"
 msgstr ""
 
 #: ui/system_menu/system_menu.py:10

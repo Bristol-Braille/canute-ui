@@ -37,7 +37,7 @@ initial_state = utility.freeze({
             'page': 0
         },
         'languages': {
-            'available': OrderedDict({'en_GB:en': 'English', 'de_DE:de': 'German'}),
+            'available': OrderedDict({'en_GB:en': 'English', 'de_DE:de': 'German', 'es_MX:es': 'Spanish (Mexican)'}),
             'selection': '',
             'keys_pressed': '',
         },
@@ -82,6 +82,15 @@ async def read_user_state(path):
             current_book = main_state['current_book']
             if not current_book == manual_filename:
                 current_book = os.path.join(path, current_book)
+        if 'current_language' in main.state:
+            current_language = main_state['current_language']
+        else:
+            current_language = 'en_GB:en'
+    else:
+        current_language = 'en_GB:en'
+
+    print("current language")
+    print(current_language)
 
     manual_toml = os.path.join(path, to_state_file(manual_filename))
     if os.path.exists(manual_toml):
@@ -91,6 +100,9 @@ async def read_user_state(path):
         if 'bookmarks' in t:
             manual = manual._replace(bookmarks=tuple(sorted(manual.bookmarks + tuple(
                 bm - 1 for bm in t['bookmarks']))))
+    else:
+        manual = Manual.create(current_language)
+
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
@@ -112,11 +124,9 @@ async def read_user_state(path):
         current_book = manual_filename
 
     user_state = frozendict(books=FrozenOrderedDict(
-        books), current_book=current_book)
+        books), current_book=current_book, current_language=current_language)
     prev = user_state
-    if 'user_language' not in user_state:
-        user_state = user_state.copy(user_language='en_GB:en')
-    return user_state
+    return user_state.copy(books=user_state['books'])
 
 
 async def read(path):
@@ -130,10 +140,11 @@ async def write(store, media_dir):
     user_state = state['app']['user']
     books = user_state['books']
     selected_book = user_state['current_book']
+    selected_lang = user_state['current_language']
     if selected_book != prev['current_book']:
         if not selected_book == manual_filename:
             selected_book = os.path.relpath(selected_book, media_dir)
-        s = toml.dumps({'current_book': selected_book})
+        s = toml.dumps({'current_book': selected_book, 'current_language': selected_lang})
         path = os.path.join(media_dir, 'sd-card', USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)

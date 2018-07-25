@@ -23,7 +23,6 @@ def render(width, height, state):
         return render_help_menu(width, height, get_user_locale(state))
 
     lang = state['user'].get('current_language', None)
-
     languages = state['languages']['available']
     current_lang = languages.get(lang, 'English')
 
