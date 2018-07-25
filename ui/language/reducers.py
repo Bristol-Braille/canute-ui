@@ -8,4 +8,5 @@ class LanguageReducers():
         lang = value
         locale = list(languages['available'].keys())[lang]
         user = state['user'].copy(current_language=locale)
+        print(user['current_language'])
         return state.copy(user=user)
