@@ -1,10 +1,10 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
 from ..i18n import I18n
+from ..utility import get_user_locale
 
-i18n = I18n()
-
-def render_help_menu(width, height):
+def render_help_menu(width, height, locale):
+    i18n = I18n(locale)
     data = []
 
     data.append(from_ascii(i18n._('Add a bookmark by pressing button #e')))
@@ -26,7 +26,7 @@ def render_help_menu(width, height):
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height)
+        return render_help_menu(width, height, get_user_locale(state))
 
     book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']

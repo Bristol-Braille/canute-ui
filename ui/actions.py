@@ -94,7 +94,7 @@ class AppReducers():
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
         elif location == 'language':
-            lang_n = state['user']['current_language']
+            lang_n = utility.get_user_locale(state)
             lang = list(state['languages']['available'].keys())[lang_n]
             language_menu = state['user'].copy(current_language=lang)
             return state.copy(language=language_menu)
@@ -171,12 +171,12 @@ def make_action_method(name):
 
 
 action_types = utility.get_methods(AppReducers)
+action_types.extend(utility.get_methods(LanguageReducers))
 action_types.extend(utility.get_methods(LibraryReducers))
 action_types.extend(utility.get_methods(BookReducers))
 action_types.extend(utility.get_methods(GoToPageReducers))
 action_types.extend(utility.get_methods(HardwareReducers))
 action_types.extend(utility.get_methods(BookmarksReducers))
-action_types.extend(utility.get_methods(LanguageReducers))
 
 
 def actions():

@@ -3,17 +3,17 @@ from .book.book_file import BookFile, LoadState
 from .i18n import I18n
 import os
 
-i18n = I18n()
-
 manual_filename = '@@__canute_manual__@@'
 
 class Manual(BookFile):
     @property
-    def title(self):
+    def title(self, locale='en_GB:en'):
+        i18n = I18n(locale)
         return i18n._('canute manual')
 
     @staticmethod
-    def create():
+    def create(locale='en_GB:en'):
+        i18n = I18n(locale)
         pages = ((
             i18n._('         canute quick help'),
             '',

@@ -1,10 +1,10 @@
 from ..braille import from_ascii, format_title
 from .handlers import get_page_data
 from ..i18n import I18n
+from ..utility import get_user_locale
 
-i18n = I18n()
-
-def render_home_menu(width, height, book):
+def render_home_menu(width, height, book, locale):
+    i18n = I18n(locale)
     data = []
     data.append(format_title(
         book.title, width, book.page_number, book.max_pages))
@@ -19,7 +19,8 @@ def render_home_menu(width, height, book):
     return tuple(data)
 
 
-def render_help_menu(width, height):
+def render_help_menu(width, height, locale):
+    i18n = I18n(locale)
     data = []
 
     data.append(from_ascii(i18n._('Move through the book by pressing the')))
@@ -42,11 +43,11 @@ def render_help_menu(width, height):
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height)
+        return render_help_menu(width, height, get_user_locale(state))
     home_menu = state['home_menu_visible']
     book_n = state['user']['current_book']
     book = state['user']['books'][book_n]
     if home_menu:
-        return render_home_menu(width, height, book)
+        return render_home_menu(width, height, book, get_user_locale(state))
     else:
         return await get_page_data(book, store)

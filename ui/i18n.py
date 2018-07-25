@@ -1,19 +1,16 @@
-import gettext
 import os
-
-# update language with 'os.environ["LANGUAGE"] = "de_DE"'
+import gettext
 
 class I18n:
-    def __init__(self):
-        self.env_lang = None
-        self.lang = None
+    def __init__(self, locale="en_GB:en"):
+        if locale:
+            self.lang = locale
+        else:
+            self.lang = None
         self.translate = None
 
     def _(self, key):
-        env_lang = os.getenv('LANGUAGE', "en_GB")
-        print(env_lang)
-        if env_lang and self.lang != env_lang:
-            self.lang = env_lang
+        if self.lang != None:
             try:
                 language = self.lang
                 translate = gettext.translation(

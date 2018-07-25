@@ -12,8 +12,9 @@ from .book.handlers import init
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
+DEFAULT_LOCALE = 'en_GB:en'
 
-manual = Manual.create()
+manual = Manual.create(DEFAULT_LOCALE)
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ initial_state = utility.freeze({
         'user': {
             'current_book': manual_filename,
             'books': OrderedDict({manual_filename: manual}),
-            'current_language': 'en_GB'
+            'current_language': DEFAULT_LOCALE
         },
         'location': 'book',
         'library': {
@@ -36,7 +37,7 @@ initial_state = utility.freeze({
             'page': 0
         },
         'languages': {
-            'available': OrderedDict({'en_GB': 'English', 'de_DE': 'German'}),
+            'available': OrderedDict({'en_GB:en': 'English', 'de_DE:de': 'German'}),
             'selection': '',
             'keys_pressed': '',
         },
@@ -113,6 +114,8 @@ async def read_user_state(path):
     user_state = frozendict(books=FrozenOrderedDict(
         books), current_book=current_book)
     prev = user_state
+    if 'user_language' not in user_state:
+        user_state = user_state.copy(user_language='en_GB:en')
     return user_state
 
 

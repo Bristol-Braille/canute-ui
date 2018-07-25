@@ -1,9 +1,9 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..i18n import I18n
+from ..utility import get_user_locale
 
-i18n = I18n()
-
-def render_help_menu(width, height, page):
+def render_help_menu(width, height, page, locale):
+    i18n = I18n(locale)
     data = (
         from_ascii(i18n._('Select a language by using the side')),
         from_ascii(i18n._('number buttons and pressing forward.')),
@@ -20,7 +20,7 @@ def render_help_menu(width, height, page):
 def render(width, height, state):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height)
+        return render_help_menu(width, height, get_user_locale(state))
 
     lang = state['user'].get('current_language', None)
 

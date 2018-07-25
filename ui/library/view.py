@@ -1,9 +1,9 @@
 from ..braille import from_ascii, format_title
 from ..i18n import I18n
+from ..utility import get_user_locale
 
-i18n = I18n()
-
-def render_help_menu(width, height, page):
+def render_help_menu(width, height, page, locale):
+    i18n = I18n(locale)
     data = [
         i18n._('Choose the book you wish to read by'),
         i18n._('pressing the button to the left of the'),
@@ -43,6 +43,6 @@ def render_library(width, height, state):
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        return render_help_menu(width, height, state['help_menu']['page'])
+        return render_help_menu(width, height, state['help_menu']['page'], get_user_locale(state))
     else:
         return render_library(width, height, state)
