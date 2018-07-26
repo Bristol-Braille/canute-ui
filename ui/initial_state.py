@@ -37,7 +37,11 @@ initial_state = utility.freeze({
             'page': 0
         },
         'languages': {
-            'available': OrderedDict({'en_GB:en': 'English', 'de_DE:de': 'German', 'es_MX:es': 'Spanish (Mexican)'}),
+            'available': OrderedDict({
+                'en_GB:en': 'English',
+                'de_DE:de': 'German',
+                'es_MX:es': 'Spanish (Mexican)'
+            }),
             'selection': '',
             'keys_pressed': '',
         },

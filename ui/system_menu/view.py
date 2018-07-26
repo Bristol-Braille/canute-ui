@@ -24,7 +24,8 @@ def render_help_menu(width, height, page, locale):
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        return render_help_menu(width, height, state['help_menu']['page'], state['user'].get('current_language', 'en_GB:en'))
+        locale = state['user'].get('current_language', 'en_GB:en')
+        return render_help_menu(width, height, state['help_menu']['page'], locale)
 
     page = state['system_menu']['page']
     data = list(menu_titles)

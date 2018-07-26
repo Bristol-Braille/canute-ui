@@ -2,6 +2,7 @@ from ..braille import from_ascii, format_title
 from .handlers import get_page_data
 from ..i18n import I18n
 
+
 def render_home_menu(width, height, book, locale):
     i18n = I18n(locale)
     data = []
@@ -41,12 +42,13 @@ def render_help_menu(width, height, locale):
 
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
+    locale = state['user'].get('current_language', 'en_GB:en')
     if help_menu:
-        return render_help_menu(width, height, state['user'].get('current_language', 'en_GB:en'))
+        return render_help_menu(width, height, locale)
     home_menu = state['home_menu_visible']
     book_n = state['user']['current_book']
     book = state['user']['books'][book_n]
     if home_menu:
-        return render_home_menu(width, height, book, state['user'].get('current_language', 'en_GB:en'))
+        return render_home_menu(width, height, book, locale)
     else:
         return await get_page_data(book, store)

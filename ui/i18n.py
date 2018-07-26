@@ -2,7 +2,7 @@ import gettext
 
 
 class I18n:
-    def __init__(self, locale="en_GB:en"):
+    def __init__(self, locale='en_GB:en'):
         if locale:
             self.lang = locale
         else:
@@ -16,7 +16,7 @@ class I18n:
                 translate = gettext.translation(
                     'canute', localedir='ui/locale', languages=[language], fallback=False)
                 translate.install()
-            except:
+            except Exception:
                 translate = gettext.NullTranslations()
             self.translate = translate
         elif not self.translate:
