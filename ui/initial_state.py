@@ -82,15 +82,12 @@ async def read_user_state(path):
             current_book = main_state['current_book']
             if not current_book == manual_filename:
                 current_book = os.path.join(path, current_book)
-        if 'current_language' in main.state:
+        if 'current_language' in main_state:
             current_language = main_state['current_language']
         else:
             current_language = 'en_GB:en'
     else:
         current_language = 'en_GB:en'
-
-    print("current language")
-    print(current_language)
 
     manual_toml = os.path.join(path, to_state_file(manual_filename))
     if os.path.exists(manual_toml):

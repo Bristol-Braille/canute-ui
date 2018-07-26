@@ -14,8 +14,6 @@ class Manual(BookFile):
     @staticmethod
     def create(locale='en_GB:en'):
         i18n = I18n(locale)
-        print("Rebuilding")
-        print(i18n.lang)
         pages = ((
             i18n._('         canute quick help'),
             '',

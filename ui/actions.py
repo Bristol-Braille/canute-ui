@@ -94,7 +94,7 @@ class AppReducers():
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
         elif location == 'language':
-            lang_n = utility.get_user_locale(state)
+            lang_n = state['user'].get('current_language', 'en_GB:en')
             lang = list(state['languages']['available'].keys())[lang_n]
             language_menu = state['user'].copy(current_language=lang)
             return state.copy(language=language_menu)

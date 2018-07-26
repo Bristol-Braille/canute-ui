@@ -43,11 +43,11 @@ def render_help_menu(width, height, locale):
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height, get_user_locale(state))
+        return render_help_menu(width, height, state['user'].get('current_language', 'en_GB:en'))
     home_menu = state['home_menu_visible']
     book_n = state['user']['current_book']
     book = state['user']['books'][book_n]
     if home_menu:
-        return render_home_menu(width, height, book, get_user_locale(state))
+        return render_home_menu(width, height, book, state['user'].get('current_language', 'en_GB:en'))
     else:
         return await get_page_data(book, store)

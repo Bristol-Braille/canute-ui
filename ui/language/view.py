@@ -20,7 +20,7 @@ def render_help_menu(width, height, page, locale):
 def render(width, height, state):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height, get_user_locale(state))
+        return render_help_menu(width, height, state['user'].get('current_language', 'en_GB:en'))
 
     lang = state['user'].get('current_language', None)
     languages = state['languages']['available']

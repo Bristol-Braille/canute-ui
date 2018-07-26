@@ -26,7 +26,7 @@ def render_help_menu(width, height, locale):
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height, get_user_locale(state))
+        return render_help_menu(width, height, state['user'].get('current_language', 'en_GB:en'))
 
     book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']

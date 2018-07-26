@@ -21,14 +21,6 @@ def get_page_num_width(state):
     return len(str(max_pages))
 
 
-def get_user_locale(state):
-    user = state['user']
-    if 'current_langauge' in user:
-        user['current_language']
-    else:
-        'en_GB:en'
-
-
 def dimensions(state):
     width = state['dimensions']['width']
     height = state['dimensions']['height']
