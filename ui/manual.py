@@ -1,9 +1,10 @@
 from .braille import from_ascii
 from .book.book_file import BookFile, LoadState
 from .i18n import I18n
-import os
+
 
 manual_filename = '@@__canute_manual__@@'
+
 
 class Manual(BookFile):
     @property

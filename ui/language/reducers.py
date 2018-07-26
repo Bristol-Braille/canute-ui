@@ -1,5 +1,3 @@
-import re
-from .. import utility
 from ..manual import Manual, manual_filename
 
 

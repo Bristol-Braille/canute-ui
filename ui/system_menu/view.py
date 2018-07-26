@@ -2,6 +2,7 @@ from ..braille import from_ascii, format_title
 from .system_menu import menu_titles
 from ..i18n import I18n
 
+
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = [

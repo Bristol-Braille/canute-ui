@@ -1,5 +1,6 @@
 import gettext
 
+
 class I18n:
     def __init__(self, locale="en_GB:en"):
         if locale:
@@ -9,7 +10,7 @@ class I18n:
         self.translate = None
 
     def _(self, key):
-        if self.lang != None:
+        if self.lang is not None:
             try:
                 language = self.lang
                 translate = gettext.translation(

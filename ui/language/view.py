@@ -1,6 +1,7 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..i18n import I18n
 
+
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = (
@@ -35,10 +36,10 @@ def render(width, height, state):
         width, cur_index, len(languages.keys()))
     data = [title]
 
-    for x in languages:
-        l = list(languages.keys()).index(x)
-        n = from_ascii(to_ueb_number(l + 1) + ' ')
-        data.append(n + tuple(from_ascii(languages[x])))
+    for lang in languages:
+        langs = list(languages.keys()).index(lang)
+        n = from_ascii(to_ueb_number(langs + 1) + ' ')
+        data.append(n + tuple(from_ascii(languages[lang])))
 
     while len(data) < height:
         data.append(tuple())

@@ -26,6 +26,9 @@ def render(width, height, state):
     if state['help_menu']['visible']:
         return render_help_menu(width, height, state['help_menu']['page'], state['user'].get('current_language', 'en_GB:en'))
 
+    locale = state['user'].get('current_language', 'en_GB:en')
+    i18n = I18n(locale)
+
     data = [from_ascii(i18n._('enter page number using the side buttons'))]
 
     try:
