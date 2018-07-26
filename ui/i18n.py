@@ -1,4 +1,3 @@
-import os
 import gettext
 
 class I18n:
