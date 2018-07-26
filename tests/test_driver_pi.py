@@ -13,7 +13,7 @@ class TestDriverPi(unittest.TestCase):
         master, slave = pty.openpty()
         s_name = os.ttyname(slave)
         cls._master = master
-        cls._driver = Process(target=Pi, args=(s_name, False))
+        cls._driver = Process(target=Pi, args=(s_name,))
         cls._driver.start()
 
     def get_message(self, len=1):
