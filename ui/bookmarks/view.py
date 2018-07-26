@@ -38,10 +38,13 @@ async def render(width, height, state, store):
         width, page, max_pages)
     data = [title]
 
+    end_inserted = False
+
     for bm in bookmarks:
         if bm == 0:
             data.append(from_ascii('start of book'))
         elif bm == book.max_pages:
+            end_inserted = True
             data.append(from_ascii('end of book'))
         elif bm == 'deleted':
             data.append(tuple())
@@ -50,6 +53,9 @@ async def render(width, height, state, store):
             line = lines[0]
             n = from_ascii(to_ueb_number(bm + 1) + ' ')
             data.append(n + tuple(line))
+
+    if not end_inserted:
+        data.append(from_ascii('end of book'))
 
     # pad page with empty rows
     while len(data) < height:
