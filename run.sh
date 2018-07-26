@@ -6,6 +6,6 @@ stty -icrnl -ixon -opost -onlcr -icanon -isig -iexten -echo -echoe -echok -echoc
 
 while true; do
     cd /home/pi/canute-ui
-    ./canute_ui --real --pi-buttons --tty="${Device}"
+    ./canute_ui --real --tty="${Device}"
     sleep 1
 done
