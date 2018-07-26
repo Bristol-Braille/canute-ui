@@ -1,7 +1,6 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
 from ..i18n import I18n
-from ..utility import get_user_locale
 
 def render_help_menu(width, height, locale):
     i18n = I18n(locale)
