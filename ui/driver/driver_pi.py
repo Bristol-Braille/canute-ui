@@ -1,6 +1,5 @@
 from .driver import Driver
 from . import comms_codes as comms
-import time
 import serial
 import logging
 import struct
@@ -10,7 +9,6 @@ log = logging.getLogger(__name__)
 
 long_press = 500.0  # ms
 double_click = 200.0  # ms
-debounce = 20  # ms
 
 
 class Pi(Driver):
