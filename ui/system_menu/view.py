@@ -28,7 +28,7 @@ def render(width, height, state):
     data = list(menu_titles)
     # subtract title from page height
     data_height = height - 1
-    max_pages = 0
+    max_pages = 1
     title = format_title('system menu', width, page, max_pages)
     n = page * data_height
     data = data[n: n + data_height]

@@ -15,10 +15,6 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         title = ',,' + title
 
     page_number += 1
-    total_pages += 1
-
-    if total_pages == 0:
-        return from_ascii(title)
 
     current_page = ' {}/{}'.format(to_ueb_number(page_number),
                                    to_ueb_number(total_pages))
