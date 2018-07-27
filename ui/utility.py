@@ -48,7 +48,7 @@ def find_files(directory, extensions):
     insensitive)'''
     matches = []
     for root, dirnames, filenames in os.walk(directory):
-        for d in dirnames:
+        for d in dirnames[:]:
             if d.startswith('.') or d == 'RECYCLE' or d == '$Recycle':
                 dirnames.remove(d)
         for filename in filenames:
