@@ -76,8 +76,6 @@ async def read_pages(book, fast=False):
             while len(page) < book.height:
                 page.append(tuple())
             pages.append(tuple(page))
-        if not fast:
-            await asyncio.sleep(0)
     else:
         raise BookFileError(
             'Unexpected extension: {}'.format(book.ext))
@@ -101,6 +99,7 @@ async def get_page_data(book, store, page_number=None):
                 book = store.state['app']['user']['books'][book.filename]
         else:
             await store.dispatch(actions.set_book_loading(book))
+            log.info('quickly loading {}'.format(book.filename))
             book = await read_pages(book, fast=True)
             await store.dispatch(actions.add_or_replace(book))
 
@@ -118,15 +117,18 @@ async def fully_load_books(store):
     if state['load_books'] == 'start':
         await store.dispatch(actions.load_books('loading'))
         books = state['user']['books']
-        log.info('loading {} books'.format(len(books)))
-        await asyncio.sleep(0.1)
-        for filename in books:
+        log.info('loading {} books in background'.format(len(books)))
+        for i,filename in enumerate(books):
             book = state['user']['books'][filename]
             if book.load_state == book_file.LoadState.INITIAL:
                 await store.dispatch(actions.set_book_loading(book))
+                log.info('{} loading {} in background'.format(i + 1, filename))
                 book = await read_pages(book)
                 await store.dispatch(actions.add_or_replace(book))
-                await asyncio.sleep(0.1)
+            else:
+                log.info('{} skipping background loading of {}'.format(i + 1, filename))
+
+        log.info('background loading of books done')
 
 
 class BookFileError(Exception):
