@@ -39,13 +39,13 @@ class Display():
         row = self.row
         if row >= len(self.buffer):
             return
+        self.row += 1
         while row >= len(self.hardware_state):
             self.hardware_state.append([])
         braille = self.buffer[row]
         if braille != self.hardware_state[row]:
             await driver.async_set_braille_row(row, braille)
             self.hardware_state[row] = braille
-        self.row += 1
 
     def _set_buffer(self, data):
         self.buffer = data
