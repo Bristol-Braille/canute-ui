@@ -107,9 +107,6 @@ async def get_page_data(book, store, page_number=None):
 
     return book.pages[page_number]
 
-# in seconds
-LOAD_BOOKS_TIMEOUT = 9 * 60
-
 
 async def fully_load_books(store):
     state = store.state['app']
