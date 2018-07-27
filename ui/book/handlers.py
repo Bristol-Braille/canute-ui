@@ -3,7 +3,6 @@ import asyncio
 import logging
 import re
 import xml.etree.ElementTree as ElementTree
-import concurrent.futures
 
 from ..actions import actions
 from ..manual import manual
@@ -118,7 +117,7 @@ async def fully_load_books(store):
         await store.dispatch(actions.load_books('loading'))
         books = state['user']['books']
         log.info('loading {} books in background'.format(len(books)))
-        for i,filename in enumerate(books):
+        for i, filename in enumerate(books):
             book = state['user']['books'][filename]
             if book.load_state == book_file.LoadState.INITIAL:
                 await store.dispatch(actions.set_book_loading(book))
@@ -126,7 +125,8 @@ async def fully_load_books(store):
                 book = await read_pages(book)
                 await store.dispatch(actions.add_or_replace(book))
             else:
-                log.info('{} skipping background loading of {}'.format(i + 1, filename))
+                log.info('{} skipping background loading of {}'.format(
+                    i + 1, filename))
 
         log.info('background loading of books done')
 
