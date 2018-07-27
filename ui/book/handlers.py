@@ -118,6 +118,9 @@ async def fully_load_books(store):
         books = state['user']['books']
         log.info('loading {} books in background'.format(len(books)))
         for i, filename in enumerate(books):
+            if state['load_books'] == 'cancel':
+                log.info('background loading of books cancelled')
+                return
             book = state['user']['books'][filename]
             if book.load_state == book_file.LoadState.INITIAL:
                 await store.dispatch(actions.set_book_loading(book))
