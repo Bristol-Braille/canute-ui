@@ -1,11 +1,13 @@
-from .driver import Driver
+import asyncio
 import time
 import logging
 import sys
 from multiprocessing import Process, Queue
 from queue import Empty
+
 from . import comms_codes as comms
 from . import qt_display
+from .driver import Driver
 
 log = logging.getLogger(__name__)
 
@@ -112,8 +114,6 @@ class Emulated(Driver):
             log.error('making OK sound!')
         elif cmd == comms.CMD_SEND_LINE:
             self.data = 0
-            if self.prev_data[data[0]] != tuple(data[1:]):
-                time.sleep(self.delay / 1000.0)
             self.send_queue.put_nowait([comms.CMD_SEND_LINE] + data)
             self.prev_data[data[0]] = tuple(data[1:])
         elif cmd == comms.CMD_RESET:
@@ -137,6 +137,7 @@ class Emulated(Driver):
         otherwise)
         :rtype: an integer return value
         '''
+        await asyncio.sleep(self.delay / 1000.0)
         return self.data
 
 
