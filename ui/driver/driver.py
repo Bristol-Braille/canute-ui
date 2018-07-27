@@ -46,6 +46,10 @@ class Driver(object, metaclass=abc.ABCMeta):
     def send_data(self, cmd, data=[]):
         return
 
+    @abc.abstractmethod
+    async def async_get_data(self, cmd, data=[]):
+        return
+
     def reset_display(self):
         self.send_data(comms.CMD_RESET)
         return self.get_data(comms.CMD_RESET)
@@ -146,7 +150,19 @@ class Driver(object, metaclass=abc.ABCMeta):
 
         self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
 
-        # get status
         self.status = self.get_data(comms.CMD_SEND_LINE)
+        if self.status != 0:
+            log.warning('got an error after setting braille: %d' % self.status)
+
+    async def async_set_braille_row(self, row, data):
+        if len(data) < self.chars:
+            data = tuple(data) + ((0,) * (self.chars - len(data)))
+
+        if len(data) > self.chars:
+            data = data[0:self.chars]
+
+        self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
+
+        self.status = await self.async_get_data(comms.CMD_SEND_LINE)
         if self.status != 0:
             log.warning('got an error after setting braille: %d' % self.status)

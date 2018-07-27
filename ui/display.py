@@ -43,7 +43,7 @@ class Display():
             self.hardware_state.append([])
         braille = self.buffer[row]
         if braille != self.hardware_state[row]:
-            driver.set_braille_row(row, braille)
+            await driver.async_set_braille_row(row, braille)
             self.hardware_state[row] = braille
         self.row += 1
 

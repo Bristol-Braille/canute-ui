@@ -1,9 +1,10 @@
-from .driver import Driver
 from . import comms_codes as comms
-import serial
+from .driver import Driver
+import asyncio
 import logging
-import struct
+import serial
 import serial.tools.list_ports
+import struct
 
 log = logging.getLogger(__name__)
 
@@ -128,6 +129,26 @@ class Pi(Driver):
         '''
         message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
         self.port.write(message)
+
+    async def async_get_data(self, expected_cmd):
+        '''gets 2 bytes of data from the hardware
+
+        :param expected_cmd: what command we're expecting (error raised
+        otherwise)
+
+        :rtype: an integer return value
+        '''
+        while self.port.inWaiting() < 3:
+            await asyncio.sleep(0)
+
+        message = self.port.read(3)
+        if len(message) < 2:
+            log.warning('unexpected rx data length %d' % len(message))
+        data = struct.unpack('3b', message)
+        if data[0] != expected_cmd:
+            log.warning('unexpected rx command %d, expecting %d' %
+                        (data[0], expected_cmd))
+        return data[1] | (data[2] << 8)
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
