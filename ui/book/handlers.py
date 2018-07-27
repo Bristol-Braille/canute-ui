@@ -3,6 +3,7 @@ import asyncio
 import logging
 import re
 import xml.etree.ElementTree as ElementTree
+import concurrent.futures
 
 from ..actions import actions
 from ..manual import manual

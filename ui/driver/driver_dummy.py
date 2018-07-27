@@ -113,6 +113,16 @@ class Dummy(Driver):
         '''
         return self.data
 
+    async def async_get_data(self, expected_cmd):
+        '''gets 2 bytes of data from the hardware - we're faking this so the
+        driver doesn't complain
+
+        :param expected_cmd: what command we're expecting (error raised
+        otherwise)
+        :rtype: an integer return value
+        '''
+        return self.data
+
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the port properly'''
         if ex_type is not None:
