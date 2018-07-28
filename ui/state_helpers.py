@@ -34,3 +34,11 @@ def get_books(state):
         if book.load_state != LoadState.FAILED:
             successful_books.append(book)
     return tuple(successful_books)
+
+
+def get_books_for_lib_page(state, page=None):
+    width, height = dimensions(state)
+    if page is None:
+        page = state['library']['page']
+    books = get_books(state)
+    return books[page * height:(page * height) + height]

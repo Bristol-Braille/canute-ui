@@ -7,7 +7,9 @@ import lxml.etree as ElementTree
 from ..actions import actions
 from ..manual import manual
 from .. import braille
+from .. import state_helpers
 from . import book_file
+
 
 log = logging.getLogger(__name__)
 
@@ -97,17 +99,11 @@ async def read_pages(book, fast=False):
 async def get_page_data(book, store, page_number=None):
     if page_number is None:
         page_number = book.page_number
-    if len(book.pages) == 0:
-        if book.load_state == book_file.LoadState.LOADING:
-            while book.load_state == book_file.LoadState.LOADING:
-                await asyncio.sleep(0)
-                # accessing store.state will get a fresh state
-                book = store.state['app']['user']['books'][book.filename]
-        else:
-            await store.dispatch(actions.set_book_loading(book))
-            log.info('quickly loading {}'.format(book.filename))
-            book = await read_pages(book, fast=True)
-            await store.dispatch(actions.add_or_replace(book))
+
+    while book.load_state != book_file.LoadState.DONE:
+        await asyncio.sleep(0)
+        # accessing store.state will get a fresh state
+        book = store.state['app']['user']['books'][book.filename]
 
     if page_number >= len(book.pages):
         return book.pages[len(book.pages) - 1]
@@ -115,28 +111,30 @@ async def get_page_data(book, store, page_number=None):
     return book.pages[page_number]
 
 
+async def load_book(book, store, background=False):
+    print('loading {book.title}')
+    await store.dispatch(actions.set_book_loading(book))
+    if background:
+        log.info('background loading {}'.format(book.filename))
+    else:
+        log.info('quickly loading {}'.format(book.filename))
+    book = await read_pages(book, fast=not background)
+    await store.dispatch(actions.add_or_replace(book))
+
+
 async def fully_load_books(store):
     state = store.state['app']
 
-    if state['load_books'] == 'start':
-        await store.dispatch(actions.load_books('loading'))
-        books = state['user']['books']
-        log.info('loading {} books in background'.format(len(books)))
-        for i, filename in enumerate(books):
-            if store.state['app']['load_books'] == 'cancel':
-                log.info('background loading of books cancelled')
-                return
-            book = state['user']['books'][filename]
-            if book.load_state == book_file.LoadState.INITIAL:
-                await store.dispatch(actions.set_book_loading(book))
-                log.info('{} loading {} in background'.format(i + 1, filename))
-                book = await read_pages(book)
-                await store.dispatch(actions.add_or_replace(book))
-            else:
-                log.info('{} skipping background loading of {}'.format(
-                    i + 1, filename))
+    current_book = state_helpers.get_current_book(state)
 
-        log.info('background loading of books done')
+    if current_book.load_state == book_file.LoadState.INITIAL:
+        await load_book(current_book, store)
+
+    background = not state['location'] == 'library'
+    books = state_helpers.get_books_for_lib_page(state)
+    for book in books:
+        if book.load_state == book_file.LoadState.INITIAL:
+            await load_book(book, store, background=background)
 
 
 class BookFileError(Exception):
