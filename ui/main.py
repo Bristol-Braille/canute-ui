@@ -110,7 +110,12 @@ async def run_async(driver, config, loop):
         await buttons.check(driver, state['app'],
                             store.dispatch)
         await display.send_line(driver)
-        await asyncio.sleep(0)
+        # in the emulated driver we can be too agressive in checking buttons
+        # and sending lines if we don't have any delay
+        if not isinstance(driver, Pi):
+            await asyncio.sleep(0.01)
+        else:
+            await asyncio.sleep(0)
 
 
 def handle_changes(driver, config, store):
