@@ -2,7 +2,7 @@ import aiofiles
 import asyncio
 import logging
 import re
-import xml.etree.ElementTree as ElementTree
+import lxml.etree as ElementTree
 
 from ..actions import actions
 from ..manual import manual
@@ -18,9 +18,13 @@ async def init(book):
     if book.filename == manual.filename:
         return book
 
-    log.debug('initialiazing {}'.format(book.filename))
+    log.info('initialiazing {}'.format(book.filename))
 
-    async with aiofiles.open(book.filename) as f:
+    if book.ext == '.pef':
+        mode = 'rb'
+    else:
+        mode = 'r'
+    async with aiofiles.open(book.filename, mode) as f:
         file_contents = await f.read()
     if len(file_contents) == 0:
         raise BookFileError('File is empty: {}'.format(book.filename))
