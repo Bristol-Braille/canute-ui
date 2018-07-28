@@ -1,6 +1,6 @@
 import unittest
 from ui.book.book_file import BookFile
-from ui.book.handlers import init, read_pages, get_page_data
+from ui.book.handlers import read_pages, get_page_data
 
 from .util import async_test
 
@@ -12,7 +12,6 @@ class TestBookFileBrf(unittest.TestCase):
         self.filename = ('books/A_balance_between_technology_and_Braille_Addin'
                          + 'g_Value_and_Creating_a_Love_of_Reading.BRF')
         book = BookFile(self.filename, 40, 9)
-        book = await init(book)
         self.book = await read_pages(book)
 
     def test_filename(self):
@@ -46,7 +45,6 @@ class TestBookFilePef(unittest.TestCase):
     async def setUpClass(self):
         self.filename = "books/g2 AESOP'S FABLES.pef"
         book = BookFile(self.filename, 40, 9)
-        book = await init(book)
         self.book = await read_pages(book)
 
     def test_filename(self):
