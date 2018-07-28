@@ -11,7 +11,7 @@ class BookReducers():
         width, height = utility.dimensions(state)
         book_n = state['user']['current_book']
         book = state['user']['books'][book_n]
-        last_page = book.max_pages - 1
+        last_page = len(book.pages) - 1
         return self.set_book_page(state, last_page)
 
     def set_book_page(self, state, page):

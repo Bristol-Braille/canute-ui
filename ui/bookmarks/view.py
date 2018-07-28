@@ -41,7 +41,7 @@ async def render(width, height, state, store):
     for bm in bookmarks:
         if bm == 0:
             data.append(from_ascii('start of book'))
-        elif bm == book.max_pages:
+        elif bm == (len(book.pages) - 1):
             data.append(from_ascii('end of book'))
         elif bm == 'deleted':
             data.append(tuple())

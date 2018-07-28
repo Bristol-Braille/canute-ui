@@ -30,7 +30,7 @@ def render_library(width, height, state):
     n = page * data_height
     for book in books[n:n + data_height]:
         data.append(format_title(book.title, width, book.page_number,
-                                 book.max_pages, capitalize=False))
+                                 len(book.pages), capitalize=False))
 
     # pad page with empty rows
     while len(data) < height:

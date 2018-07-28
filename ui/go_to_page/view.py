@@ -37,7 +37,7 @@ def render(width, height, state):
         page = 0
         title_text = 'no book'
     else:
-        total_pages = book.max_pages
+        total_pages = len(book.pages)
         page = book.page_number
         title_text = book.title
 
