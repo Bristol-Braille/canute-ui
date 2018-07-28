@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 from .actions import actions
-from .system_menu.system_menu import system_menu
+from .system_menu.system_menu import SystemMenu
 from .library.buttons import library_buttons
 from .book.buttons import book_buttons
 from .go_to_page.buttons import go_to_page_buttons
@@ -50,9 +50,10 @@ bindings = {
     }
 }
 
+sys_menu = SystemMenu.system_menu()
 
-for i, item in enumerate(system_menu):
-    action = system_menu[item]
+for i, item in enumerate(sys_menu):
+    action = sys_menu[item]
     bindings['system_menu']['single'][str(i + 2)] = action
 
 

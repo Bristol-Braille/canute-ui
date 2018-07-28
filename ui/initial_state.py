@@ -145,7 +145,8 @@ async def write(store, media_dir):
     if selected_book != prev['current_book']:
         if not selected_book == manual_filename:
             selected_book = os.path.relpath(selected_book, media_dir)
-        s = toml.dumps({'current_book': selected_book, 'current_language': selected_lang})
+        s = toml.dumps({'current_book': selected_book,
+                        'current_language': selected_lang})
         path = os.path.join(media_dir, 'sd-card', USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)

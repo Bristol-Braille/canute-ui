@@ -28,9 +28,6 @@ class BookReducers():
     def enter_go_to_page(self, state, value):
         return state.copy(home_menu_visible=False, location='go_to_page')
 
-    def enter_languages(self, state, value):
-        return state.copy(home_menu_visible=False, location='language')
-
     def toggle_home_menu(self, state, value):
         return state.copy(home_menu_visible=not state['home_menu_visible'])
 
