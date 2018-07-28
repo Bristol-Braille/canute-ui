@@ -17,7 +17,7 @@ def render_help_menu(width, height, locale):
         the side buttons. Holding the button
         down will delete the bookmark.'''))
 
-    lines = para.split("\n")
+    lines = para.split('\n')
 
     for line in lines:
         data.append(line)

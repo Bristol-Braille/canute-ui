@@ -14,7 +14,7 @@ def render_help_menu(width, height, page, locale):
         shutdown option and wait for #cj
         seconds before unplugging it.'''))
 
-    lines = para.split("\n")
+    lines = para.split('\n')
 
     for line in lines:
         data.append(line)

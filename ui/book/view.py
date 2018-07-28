@@ -34,7 +34,7 @@ def render_help_menu(width, height, locale):
         the front. Pressing this button again
         will always return you to your book.'''))
 
-    lines = para.split("\n")
+    lines = para.split('\n')
 
     for line in lines:
         data.append(line)

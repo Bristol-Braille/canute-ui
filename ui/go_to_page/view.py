@@ -15,7 +15,7 @@ def render_help_menu(width, height, page, locale):
         you can go back to your current page by
         pressing the menu button.'''))
 
-    lines = para.split("\n")
+    lines = para.split('\n')
 
     for line in lines:
         data.append(line)

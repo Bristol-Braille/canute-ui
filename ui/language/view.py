@@ -9,7 +9,7 @@ def render_help_menu(width, height, page, locale):
         Select a language by using the side
         number buttons and pressing forward.'''))
 
-    lines = para.split("\n")
+    lines = para.split('\n')
 
     for line in lines:
         data.append(line)

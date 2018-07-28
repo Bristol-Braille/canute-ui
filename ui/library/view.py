@@ -13,7 +13,7 @@ def render_help_menu(width, height, page, locale):
         ordering of the books in the system
         menu.'''))
 
-    lines = para.split("\n")
+    lines = para.split('\n')
 
     for line in lines:
         data.append(line)
