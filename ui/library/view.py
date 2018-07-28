@@ -1,4 +1,5 @@
 from ..braille import from_ascii, format_title
+from .get_books import get_books
 
 
 def render_help_menu(width, height, page):
@@ -21,7 +22,7 @@ def render_help_menu(width, height, page):
 
 def render_library(width, height, state):
     page = state['library']['page']
-    books = tuple(state['user']['books'].values())
+    books = get_books(state)
     # subtract title from page height
     data_height = height - 1
     max_pages = (len(books) // data_height) + 1

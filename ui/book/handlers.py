@@ -14,23 +14,6 @@ log = logging.getLogger(__name__)
 FORM_FEED = re.compile('\f')
 
 
-async def init(book):
-    if book.filename == manual.filename:
-        return book
-
-    log.info('initialiazing {}'.format(book.filename))
-
-    if book.ext == '.pef':
-        mode = 'rb'
-    else:
-        mode = 'r'
-    async with aiofiles.open(book.filename, mode) as f:
-        file_contents = await f.read()
-    if len(file_contents) == 0:
-        raise BookFileError('File is empty: {}'.format(book.filename))
-
-    return book._replace(file_contents=file_contents, pages=tuple())
-
 NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 
 
@@ -39,60 +22,76 @@ async def read_pages(book, fast=False):
         return book
     if book.load_state == book_file.LoadState.DONE:
         return book
-    log.debug('reading pages {}'.format(book.filename))
-    pages = []
-    if book.ext == '.brf':
-        page = []
-        for line in book.file_contents.splitlines():
-            if FORM_FEED.match(line):
-                # pad up to the next page
+    try:
+        if book.ext == '.pef':
+            mode = 'rb'
+        else:
+            mode = 'r'
+
+        async with aiofiles.open(book.filename, mode) as f:
+            file_contents = await f.read()
+
+        if len(file_contents) == 0:
+            log.warning('book empty {}'.format(book.filename))
+            return book._replace(load_state=book_file.LoadState.FAILED)
+
+        log.debug('reading pages {}'.format(book.filename))
+        pages = []
+        if book.ext == '.brf':
+            page = []
+            for line in file_contents.splitlines():
+                if FORM_FEED.match(line):
+                    # pad up to the next page
+                    while len(page) < book.height:
+                        page.append('')
+                    if line == '\f':
+                        continue
+                    else:
+                        line = line.replace('\f', '')
+                if len(page) == book.height:
+                    pages.append(tuple(page))
+                    page = []
+                page.append(braille.from_ascii(line))
+                if not fast:
+                    await asyncio.sleep(0)
+            if len(page) > 0:
+                # pad up to the end
                 while len(page) < book.height:
-                    page.append('')
-                if line == '\f':
-                    continue
-                else:
-                    line = line.replace('\f', '')
-            if len(page) == book.height:
+                    page.append(tuple())
                 pages.append(tuple(page))
-                page = []
-            page.append(braille.from_ascii(line))
+        elif book.ext == '.pef':
+            xml_doc = ElementTree.fromstring(file_contents)
             if not fast:
                 await asyncio.sleep(0)
-        if len(page) > 0:
-            # pad up to the end
-            while len(page) < book.height:
-                page.append(tuple())
-            pages.append(tuple(page))
-    elif book.ext == '.pef':
-        xml_doc = ElementTree.fromstring(book.file_contents)
-        if not fast:
-            await asyncio.sleep(0)
-        xml_pages = xml_doc.findall('.//pef:page', NS)
-        if not fast:
-            await asyncio.sleep(0)
-        lines = []
-        for page in xml_pages:
-            for row in page.findall('.//pef:row', NS):
-                line = ''.join(row.itertext()).rstrip()
-                lines.append(braille.from_unicode(line))
+            xml_pages = xml_doc.findall('.//pef:page', NS)
             if not fast:
                 await asyncio.sleep(0)
-        for i in range(len(lines))[::book.height]:
-            page = lines[i:i + book.height]
-            # pad up to the end
-            while len(page) < book.height:
-                page.append(tuple())
-            pages.append(tuple(page))
-    else:
-        raise BookFileError(
-            'Unexpected extension: {}'.format(book.ext))
-    bookmarks = book.bookmarks
-    if len(pages) > 1:
-        # add an end-of-book bookmark
-        bookmarks += (len(pages) - 1,)
-    return book._replace(pages=tuple(pages),
-                         load_state=book_file.LoadState.DONE,
-                         bookmarks=bookmarks)
+            lines = []
+            for page in xml_pages:
+                for row in page.findall('.//pef:row', NS):
+                    line = ''.join(row.itertext()).rstrip()
+                    lines.append(braille.from_unicode(line))
+                if not fast:
+                    await asyncio.sleep(0)
+            for i in range(len(lines))[::book.height]:
+                page = lines[i:i + book.height]
+                # pad up to the end
+                while len(page) < book.height:
+                    page.append(tuple())
+                pages.append(tuple(page))
+        else:
+            raise BookFileError(
+                'Unexpected extension: {}'.format(book.ext))
+        bookmarks = book.bookmarks
+        if len(pages) > 1:
+            # add an end-of-book bookmark
+            bookmarks += (len(pages) - 1,)
+        return book._replace(pages=tuple(pages),
+                             load_state=book_file.LoadState.DONE,
+                             bookmarks=bookmarks)
+    except Exception:
+        log.warning('book loading failed for {}'.format(book.filename))
+        return book._replace(load_state=book_file.LoadState.FAILED)
 
 
 async def get_page_data(book, store, page_number=None):

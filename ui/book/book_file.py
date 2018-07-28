@@ -11,6 +11,7 @@ class LoadState(Enum):
     INITIAL = 0
     LOADING = 1
     DONE = 2
+    FAILED = 3
 
 
 BookData = namedtuple('BookData', ['filename', 'width', 'height',
