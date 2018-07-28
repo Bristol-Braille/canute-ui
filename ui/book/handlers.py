@@ -19,7 +19,7 @@ FORM_FEED = re.compile('\f')
 NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 
 
-async def read_pages(book, fast=False):
+async def _read_pages(book, background=False):
     if book.filename == manual.filename:
         return book
     if book.load_state == book_file.LoadState.DONE:
@@ -54,7 +54,7 @@ async def read_pages(book, fast=False):
                     pages.append(tuple(page))
                     page = []
                 page.append(braille.from_ascii(line))
-                if not fast:
+                if background:
                     await asyncio.sleep(0)
             if len(page) > 0:
                 # pad up to the end
@@ -63,17 +63,17 @@ async def read_pages(book, fast=False):
                 pages.append(tuple(page))
         elif book.ext == '.pef':
             xml_doc = ElementTree.fromstring(file_contents)
-            if not fast:
+            if background:
                 await asyncio.sleep(0)
             xml_pages = xml_doc.findall('.//pef:page', NS)
-            if not fast:
+            if background:
                 await asyncio.sleep(0)
             lines = []
             for page in xml_pages:
                 for row in page.findall('.//pef:row', NS):
                     line = ''.join(row.itertext()).rstrip()
                     lines.append(braille.from_unicode(line))
-                if not fast:
+                if background:
                     await asyncio.sleep(0)
             for i in range(len(lines))[::book.height]:
                 page = lines[i:i + book.height]
@@ -111,30 +111,29 @@ async def get_page_data(book, store, page_number=None):
     return book.pages[page_number]
 
 
-async def load_book(book, store, background=False):
-    print('loading {book.title}')
+async def _load(book, store, background=False):
     await store.dispatch(actions.set_book_loading(book))
     if background:
         log.info('background loading {}'.format(book.filename))
     else:
         log.info('quickly loading {}'.format(book.filename))
-    book = await read_pages(book, fast=not background)
+    book = await _read_pages(book, background=background)
     await store.dispatch(actions.add_or_replace(book))
 
 
-async def fully_load_books(store):
+async def load_books(store):
     state = store.state['app']
 
     current_book = state_helpers.get_current_book(state)
 
     if current_book.load_state == book_file.LoadState.INITIAL:
-        await load_book(current_book, store)
+        await _load(current_book, store)
 
     background = not state['location'] == 'library'
     books = state_helpers.get_books_for_lib_page(state)
     for book in books:
         if book.load_state == book_file.LoadState.INITIAL:
-            await load_book(book, store, background=background)
+            await _load(book, store, background=background)
 
 
 class BookFileError(Exception):
