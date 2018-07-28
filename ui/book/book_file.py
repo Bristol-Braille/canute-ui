@@ -32,13 +32,9 @@ class BookFile(BookData):
         title = os.path.splitext(basename)[0].replace('_', ' ')
         return title
 
-    @property
-    def max_pages(self):
-        return len(self.pages)
-
     def set_page(self, page):
         if page < 0:
             page = 0
-        elif page >= self.max_pages:
-            page = self.max_pages - 1
+        elif page >= len(self.pages):
+            page = len(self.pages) - 1
         return self._replace(page_number=page)

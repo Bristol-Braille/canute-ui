@@ -4,8 +4,8 @@ from .handlers import get_page_data
 
 def render_home_menu(width, height, book):
     data = []
-    data.append(format_title(
-        book.title, width, book.page_number, book.max_pages))
+    data.append(format_title(book.title, width,
+                             book.page_number, len(book.pages)))
     data.append(from_ascii('go to page'))
     data.append(tuple())
     data.append(tuple())
