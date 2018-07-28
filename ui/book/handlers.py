@@ -117,6 +117,7 @@ async def get_page_data(book, store, page_number=None):
 
 async def fully_load_books(store):
     state = store.state['app']
+
     if state['load_books'] == 'start':
         await store.dispatch(actions.load_books('loading'))
         books = state['user']['books']

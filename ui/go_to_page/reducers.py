@@ -1,6 +1,6 @@
 import re
 from ..book.reducers import BookReducers
-from .. import utility
+from .. import state_helpers
 
 
 class GoToPageReducers():
@@ -16,7 +16,7 @@ class GoToPageReducers():
         selection = ''.join([c for c in selection if c != '<'])
 
         # overwrite characters when exceeding max page num width
-        num_width = utility.get_page_num_width(state)
+        num_width = state_helpers.get_page_num_width(state)
         selection = selection[-num_width:]
 
         go_to_page = go_to_page.copy(selection=selection, keys_pressed='')

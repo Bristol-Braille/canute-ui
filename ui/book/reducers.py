@@ -1,6 +1,6 @@
 from frozendict import FrozenOrderedDict
 from collections import OrderedDict
-from .. import utility
+from .. import state_helpers
 
 
 class BookReducers():
@@ -8,14 +8,14 @@ class BookReducers():
         return self.set_book_page(state, 0)
 
     def go_to_end(self, state, value):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
         book_n = state['user']['current_book']
         book = state['user']['books'][book_n]
         last_page = len(book.pages) - 1
         return self.set_book_page(state, last_page)
 
     def set_book_page(self, state, page):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
         book_n = state['user']['current_book']
         books = OrderedDict(state['user']['books'])
         book = books[book_n].set_page(page)

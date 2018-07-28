@@ -1,6 +1,6 @@
 import asyncio
 from ..actions import actions
-from .. import utility
+from .. import state_helpers
 
 
 def queue_key_press(key):
@@ -16,7 +16,7 @@ def queue_key_press(key):
 
         await dispatch(actions.go_to_page_key_press(key))
 
-        num_width = utility.get_page_num_width(state)
+        num_width = state_helpers.get_page_num_width(state)
         if len(keys_pressed) < num_width:
             await asyncio.sleep(0.5)
 
