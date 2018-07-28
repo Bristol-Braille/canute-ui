@@ -32,8 +32,7 @@ class BookmarksReducers():
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['user']['current_book']
-        book = state['user']['books'][book_n]
+        book = state_helpers.get_current_book(state)
         bookmarks = book.bookmarks[page * height:(page * height) + height]
         if n >= len(bookmarks):
             return state

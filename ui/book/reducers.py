@@ -9,8 +9,7 @@ class BookReducers():
 
     def go_to_end(self, state, value):
         width, height = state_helpers.dimensions(state)
-        book_n = state['user']['current_book']
-        book = state['user']['books'][book_n]
+        book = state_helpers.get_current_book(state)
         last_page = len(book.pages) - 1
         return self.set_book_page(state, last_page)
 

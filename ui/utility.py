@@ -13,6 +13,7 @@ from frozendict import frozendict, FrozenOrderedDict
 import collections
 log = logging.getLogger(__name__)
 
+
 def find_ui_update(config):
     '''
     recursively look for firmware in the usb_dir,

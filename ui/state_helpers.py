@@ -7,9 +7,15 @@ contains various utility methods for getting information on the state
 from .book.book_file import LoadState
 
 
+def get_current_book(state):
+    user = state['user']
+    filename = user['current_book']
+    return user['books'][filename]
+
+
 def get_page_num_width(state):
     width, height = dimensions(state)
-    book = state['user']['books'][state['user']['current_book']]
+    book = get_current_book(state)
     max_pages = len(book.pages)
     return len(str(max_pages))
 
