@@ -124,16 +124,35 @@ async def _load(book, store, background=False):
 async def load_books(store):
     state = store.state['app']
 
+    # load our current book as quickly as possible
     current_book = state_helpers.get_current_book(state)
-
     if current_book.load_state == book_file.LoadState.INITIAL:
         await _load(current_book, store)
 
+    # load current library page books, in background unless we are actually in
+    # the library
     background = not state['location'] == 'library'
-    books = state_helpers.get_books_for_lib_page(state)
-    for book in books:
+    if background:
+        await asyncio.sleep(1)
+    current_lib_page_books = state_helpers.get_books_for_lib_page(state)
+    for book in current_lib_page_books:
+        book = state_helpers.get_up_to_date_book(store, book)
         if book.load_state == book_file.LoadState.INITIAL:
             await _load(book, store, background=background)
+
+    # load other books that are within 5 library pages
+    lib_page = state['library']['page']
+    within_range_books = tuple()
+    for i in range(5):
+        await asyncio.sleep(1)
+        within_range_books += state_helpers.get_books_for_lib_page(
+            state, lib_page + i)
+        within_range_books += state_helpers.get_books_for_lib_page(
+            state, lib_page - i)
+        for book in within_range_books:
+            book = state_helpers.get_up_to_date_book(store, book)
+            if book.load_state == book_file.LoadState.INITIAL:
+                await _load(book, store, background=True)
 
 
 class BookFileError(Exception):

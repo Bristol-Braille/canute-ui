@@ -42,3 +42,7 @@ def get_books_for_lib_page(state, page=None):
         page = state['library']['page']
     books = get_books(state)
     return books[page * height:(page * height) + height]
+
+
+def get_up_to_date_book(store, book):
+    return store.state['app']['user']['books'][book.filename]
