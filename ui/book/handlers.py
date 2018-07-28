@@ -65,14 +65,18 @@ async def read_pages(book, fast=False):
             pages.append(tuple(page))
     elif book.ext == '.pef':
         xml_doc = ElementTree.fromstring(book.file_contents)
+        if not fast:
+            await asyncio.sleep(0)
         xml_pages = xml_doc.findall('.//pef:page', NS)
+        if not fast:
+            await asyncio.sleep(0)
         lines = []
         for page in xml_pages:
             for row in page.findall('.//pef:row', NS):
                 line = ''.join(row.itertext()).rstrip()
                 lines.append(braille.from_unicode(line))
-                if not fast:
-                    await asyncio.sleep(0)
+            if not fast:
+                await asyncio.sleep(0)
         for i in range(len(lines))[::book.height]:
             page = lines[i:i + book.height]
             # pad up to the end
