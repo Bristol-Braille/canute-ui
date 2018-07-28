@@ -4,16 +4,19 @@ from ..i18n import I18n
 
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
-    data = [
-        i18n._('Choose the book you wish to read by'),
-        i18n._('pressing the button to the left of the'),
-        i18n._('title. Use the arrow buttons to page'),
-        i18n._('through the library. You can change the'),
-        i18n._('ordering of the books in the system'),
-        i18n._('menu.'),
-    ]
+    data = []
+    para = i18n._(from_ascii('''\
+        Choose the book you wish to read by
+        pressing the button to the left of the
+        title. Use the arrow buttons to page
+        through the library. You can change the
+        ordering of the books in the system
+        menu.'''))
 
-    data = [from_ascii(line) for line in data]
+    lines = para.split("\n")
+
+    for line in lines:
+        data.append(line)
 
     while len(data) < height:
         data.append(tuple())

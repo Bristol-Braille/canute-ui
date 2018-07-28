@@ -5,16 +5,19 @@ from ..i18n import I18n
 
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
-    data = [
-        i18n._('Configure your preference on the sorting'),
-        i18n._('order of books in the library and'),
-        i18n._('bookmarks through the menu options. To'),
-        i18n._('shutdown the Canute safely, select the'),
-        i18n._('shutdown option and wait for #cj'),
-        i18n._('seconds before unplugging it.'),
-    ]
+    data = []
+    para = i18n._(from_ascii('''/
+        Configure your preference on the sorting
+        order of books in the library and
+        bookmarks through the menu options. To
+        shutdown the Canute safely, select the
+        shutdown option and wait for #cj
+        seconds before unplugging it.'''))
 
-    data = [from_ascii(line) for line in data]
+    lines = para.split("\n")
+
+    for line in lines:
+        data.append(line)
 
     while len(data) < height:
         data.append(tuple())

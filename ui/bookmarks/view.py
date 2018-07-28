@@ -7,14 +7,20 @@ def render_help_menu(width, height, locale):
     i18n = I18n(locale)
     data = []
 
-    data.append(from_ascii(i18n._('Add a bookmark by pressing button #e')))
-    data.append(from_ascii(i18n._('while in a book. Bookmarks are listed')))
-    data.append(from_ascii(i18n._('here in the bookmark menu. Each bookmark')))
-    data.append(from_ascii(i18n._('starts with the Canute page number based')))
-    data.append(from_ascii(i18n._('on its #i line page. Go to the page by')))
-    data.append(from_ascii(i18n._('selecting a bookmark by pressing one of')))
-    data.append(from_ascii(i18n._('the side buttons. Holding the button')))
-    data.append(from_ascii(i18n._('down will delete the bookmark.')))
+    para = i18n._(from_ascii('''\
+        Add a bookmark by pressing button #e
+        while in a book. Bookmarks are listed
+        here in the bookmark menu. Each bookmark
+        starts with the Canute page number based
+        on its #i line page. Go to the page by
+        selecting a bookmark by pressing one of
+        the side buttons. Holding the button
+        down will delete the bookmark.'''))
+
+    lines = para.split("\n")
+
+    for line in lines:
+        data.append(line)
 
     # pad page with empty rows
     while len(data) < height:
