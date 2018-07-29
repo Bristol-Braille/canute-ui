@@ -139,23 +139,23 @@ async def _load(book, store, background=False):
 prev_location = ''
 prev_lib_page = -1
 prev_book = ''
-running = 0
+running_id = 0
 
 
 async def load_books(store):
     global prev_location
     global prev_lib_page
     global prev_book
-    global running
+    global running_id
 
     state = store.state['app']
     location_changed = state['location'] != prev_location
     book_changed = state['user']['current_book'] != prev_book
     lib_page_changed = state['library']['page'] != prev_lib_page
     if location_changed or book_changed or lib_page_changed:
-        this = running + 1
-        running = this
-        log.debug('starting load_books id:{}'.format(this))
+        task_id = running_id + 1
+        running_id = task_id
+        log.debug('starting load_books id:{}'.format(task_id))
         prev_location = state['location']
         prev_book = state['user']['current_book']
         prev_lib_page = state['library']['page']
@@ -163,8 +163,8 @@ async def load_books(store):
         current_book = state_helpers.get_current_book(state)
         await _load(current_book, store)
 
-        if running != this:
-            log.debug('cancelling load_books id:{}'.format(this))
+        if running_id != task_id:
+            log.debug('cancelling load_books id:{}'.format(task_id))
             return
 
         # load current library page books, in background unless we are actually in
@@ -172,37 +172,38 @@ async def load_books(store):
         background = not state['location'] == 'library'
         if background:
             await asyncio.sleep(1)
-            if running != this:
-                log.debug('cancelling load_books id:{}'.format(this))
+            if running_id != task_id:
+                log.debug('cancelling load_books id:{}'.format(task_id))
                 return
-        current_lib_page_books = state_helpers.get_books_for_lib_page(state)
+        lib_page = state['library']['page']
+        log.info('loading books for page {}, background: {}'.format(lib_page, background))
+        current_lib_page_books = state_helpers.get_books_for_lib_page(state, lib_page)
         for book in current_lib_page_books:
             book = state_helpers.get_up_to_date_book(store, book)
             await _load(book, store, background=background)
-            if running != this:
-                log.debug('cancelling load_books id:{}'.format(this))
+            if running_id != task_id:
+                log.debug('cancelling load_books id:{}'.format(task_id))
                 return
 
         # load other books that are within 5 library pages
-        lib_page = state['library']['page']
         for i in range(1, 6):
             await asyncio.sleep(1)
-            if running != this:
-                log.debug('cancelling load_books id:{}'.format(this))
+            if running_id != task_id:
+                log.debug('cancelling load_books id:{}'.format(task_id))
                 return
             books = tuple()
             n = lib_page + i
-            log.info('loading books for page {}'.format(n))
+            log.info('pre-loading books for page {}'.format(n))
             books += state_helpers.get_books_for_lib_page(state, n)
             n = lib_page - i
             if n >= 0:
-                log.info('loading books for page {}'.format(n))
+                log.info('pre-loading books for page {}'.format(n))
                 books += state_helpers.get_books_for_lib_page(state, n)
             for book in books:
                 book = state_helpers.get_up_to_date_book(store, book)
                 await _load(book, store, background=True)
-                if running != this:
-                    log.debug('cancelling load_books id:{}'.format(this))
+                if running_id != task_id:
+                    log.debug('cancelling load_books id:{}'.format(task_id))
                     return
 
 
