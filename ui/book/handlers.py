@@ -65,23 +65,15 @@ async def _read_pages(book, store, background=False):
         elif book.ext == '.pef':
             xml_doc = ElementTree.fromstring(file_contents)
 
-            book = state_helpers.get_up_to_date_book(store, book)
             if book.load_state == book_file.LoadState.CANCEL:
                 return book._replace(load_state=book_file.LoadState.INITIAL)
             if book.loading_in_background:
                 await asyncio.sleep(0)
 
-            xml_pages = xml_doc.findall('.//pef:page', NS)
-
-            book = state_helpers.get_up_to_date_book(store, book)
-            if book.load_state == book_file.LoadState.CANCEL:
-                return book._replace(load_state=book_file.LoadState.INITIAL)
-            if book.loading_in_background:
-                await asyncio.sleep(0)
 
             lines = []
-            for page in xml_pages:
-                for row in page.findall('.//pef:row', NS):
+            for page in xml_doc.iter('{http://www.daisy.org/ns/2008/pef}page'):
+                for row in page.iter('{http://www.daisy.org/ns/2008/pef}row'):
                     line = ''.join(row.itertext()).rstrip()
                     lines.append(braille.from_unicode(line))
 
@@ -106,8 +98,9 @@ async def _read_pages(book, store, background=False):
         return book._replace(pages=tuple(pages),
                              load_state=book_file.LoadState.DONE,
                              bookmarks=bookmarks)
-    except Exception:
+    except Exception as e:
         log.warning('book loading failed for {}'.format(book.filename))
+        log.warning(e)
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
