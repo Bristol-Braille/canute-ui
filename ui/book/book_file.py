@@ -12,14 +12,15 @@ class LoadState(Enum):
     LOADING = 1
     DONE = 2
     FAILED = 3
+    CANCEL = 4
 
 
 BookData = namedtuple('BookData', ['filename', 'width', 'height',
                                    'page_number', 'bookmarks',
-                                   'file_contents', 'pages', 'load_state'])
+                                   'file_contents', 'pages', 'load_state', 'loading_in_background'])
 BookData.__new__.__defaults__ = (None, None, None,
                                  0, tuple([0]),
-                                 None, tuple(), LoadState.INITIAL)
+                                 None, tuple(), LoadState.INITIAL, False)
 
 
 class BookFile(BookData):

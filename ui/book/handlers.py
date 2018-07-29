@@ -19,7 +19,7 @@ FORM_FEED = re.compile('\f')
 NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 
 
-async def _read_pages(book, background=False):
+async def _read_pages(book, store, background=False):
     if book.filename == manual.filename:
         return book
     if book.load_state == book_file.LoadState.DONE:
@@ -29,7 +29,6 @@ async def _read_pages(book, background=False):
             mode = 'rb'
         else:
             mode = 'r'
-
         async with aiofiles.open(book.filename, mode) as f:
             file_contents = await f.read()
 
@@ -37,7 +36,6 @@ async def _read_pages(book, background=False):
             log.warning('book empty {}'.format(book.filename))
             return book._replace(load_state=book_file.LoadState.FAILED)
 
-        log.debug('reading pages {}'.format(book.filename))
         pages = []
         if book.ext == '.brf':
             page = []
@@ -54,26 +52,43 @@ async def _read_pages(book, background=False):
                     pages.append(tuple(page))
                     page = []
                 page.append(braille.from_ascii(line))
-                if background:
-                    await asyncio.sleep(0)
+                book = state_helpers.get_up_to_date_book(store, book)
             if len(page) > 0:
                 # pad up to the end
                 while len(page) < book.height:
                     page.append(tuple())
                 pages.append(tuple(page))
+            if book.load_state == book_file.LoadState.CANCEL:
+                return book._replace(load_state=book_file.LoadState.INITIAL)
+            if book.loading_in_background:
+                await asyncio.sleep(0)
         elif book.ext == '.pef':
             xml_doc = ElementTree.fromstring(file_contents)
-            if background:
+
+            book = state_helpers.get_up_to_date_book(store, book)
+            if book.load_state == book_file.LoadState.CANCEL:
+                return book._replace(load_state=book_file.LoadState.INITIAL)
+            if book.loading_in_background:
                 await asyncio.sleep(0)
+
             xml_pages = xml_doc.findall('.//pef:page', NS)
-            if background:
+
+            book = state_helpers.get_up_to_date_book(store, book)
+            if book.load_state == book_file.LoadState.CANCEL:
+                return book._replace(load_state=book_file.LoadState.INITIAL)
+            if book.loading_in_background:
                 await asyncio.sleep(0)
+
             lines = []
             for page in xml_pages:
                 for row in page.findall('.//pef:row', NS):
                     line = ''.join(row.itertext()).rstrip()
                     lines.append(braille.from_unicode(line))
-                if background:
+
+                book = state_helpers.get_up_to_date_book(store, book)
+                if book.load_state == book_file.LoadState.CANCEL:
+                    return book._replace(load_state=book_file.LoadState.INITIAL)
+                if book.loading_in_background:
                     await asyncio.sleep(0)
             for i in range(len(lines))[::book.height]:
                 page = lines[i:i + book.height]
@@ -112,47 +127,90 @@ async def get_page_data(book, store, page_number=None):
 
 
 async def _load(book, store, background=False):
-    await store.dispatch(actions.set_book_loading(book))
-    if background:
-        log.info('background loading {}'.format(book.filename))
-    else:
-        log.info('quickly loading {}'.format(book.filename))
-    book = await _read_pages(book, background=background)
-    await store.dispatch(actions.add_or_replace(book))
+    if book.load_state == book_file.LoadState.LOADING:
+        if book.loading_in_background != background:
+            log.debug('switching loading of {} to background={}'.format(
+                book.filename, background))
+            book = book._replace(loading_in_background=background)
+            await store.dispatch(actions.add_or_replace(book))
+    elif book.load_state == book_file.LoadState.INITIAL:
+        log.debug('loading {}, background={}'.format(
+            book.filename, background))
+        book = book._replace(loading_in_background=background,
+                             load_state=book_file.LoadState.LOADING)
+        await store.dispatch(actions.add_or_replace(book))
+        book = await _read_pages(book, store)
+        await store.dispatch(actions.add_or_replace(book))
+
+
+prev_location = ''
+prev_lib_page = -1
+prev_book = ''
+running = 0
 
 
 async def load_books(store):
-    state = store.state['app']
+    global prev_location
+    global prev_lib_page
+    global prev_book
+    global running
 
-    # load our current book as quickly as possible
-    current_book = state_helpers.get_current_book(state)
-    if current_book.load_state == book_file.LoadState.INITIAL:
+    state = store.state['app']
+    location_changed = state['location'] != prev_location
+    book_changed = state['user']['current_book'] != prev_book
+    lib_page_changed = state['library']['page'] != prev_lib_page
+    if location_changed or book_changed or lib_page_changed:
+        this = running + 1
+        running = this
+        log.debug('starting load_books id:{}'.format(this))
+        prev_location = state['location']
+        prev_book = state['user']['current_book']
+        prev_lib_page = state['library']['page']
+        # load our current book as quickly as possible
+        current_book = state_helpers.get_current_book(state)
         await _load(current_book, store)
 
-    # load current library page books, in background unless we are actually in
-    # the library
-    background = not state['location'] == 'library'
-    if background:
-        await asyncio.sleep(1)
-    current_lib_page_books = state_helpers.get_books_for_lib_page(state)
-    for book in current_lib_page_books:
-        book = state_helpers.get_up_to_date_book(store, book)
-        if book.load_state == book_file.LoadState.INITIAL:
-            await _load(book, store, background=background)
+        if running != this:
+            log.debug('cancelling load_books id:{}'.format(this))
+            return
 
-    # load other books that are within 5 library pages
-    lib_page = state['library']['page']
-    within_range_books = tuple()
-    for i in range(5):
-        await asyncio.sleep(1)
-        within_range_books += state_helpers.get_books_for_lib_page(
-            state, lib_page + i)
-        within_range_books += state_helpers.get_books_for_lib_page(
-            state, lib_page - i)
-        for book in within_range_books:
+        # load current library page books, in background unless we are actually in
+        # the library
+        background = not state['location'] == 'library'
+        if background:
+            await asyncio.sleep(1)
+            if running != this:
+                log.debug('cancelling load_books id:{}'.format(this))
+                return
+        current_lib_page_books = state_helpers.get_books_for_lib_page(state)
+        for book in current_lib_page_books:
             book = state_helpers.get_up_to_date_book(store, book)
-            if book.load_state == book_file.LoadState.INITIAL:
+            await _load(book, store, background=background)
+            if running != this:
+                log.debug('cancelling load_books id:{}'.format(this))
+                return
+
+        # load other books that are within 5 library pages
+        lib_page = state['library']['page']
+        for i in range(1, 6):
+            await asyncio.sleep(1)
+            if running != this:
+                log.debug('cancelling load_books id:{}'.format(this))
+                return
+            books = tuple()
+            n = lib_page + i
+            log.info('loading books for page {}'.format(n))
+            books += state_helpers.get_books_for_lib_page(state, n)
+            n = lib_page - i
+            if n >= 0:
+                log.info('loading books for page {}'.format(n))
+                books += state_helpers.get_books_for_lib_page(state, n)
+            for book in books:
+                book = state_helpers.get_up_to_date_book(store, book)
                 await _load(book, store, background=True)
+                if running != this:
+                    log.debug('cancelling load_books id:{}'.format(this))
+                    return
 
 
 class BookFileError(Exception):
