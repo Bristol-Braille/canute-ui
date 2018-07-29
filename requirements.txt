@@ -10,4 +10,3 @@ aiofiles==0.3.2
 pyqt5==5.9.2
 toml==0.9.4
 crcmod==1.7
-lxml==4.2.3
