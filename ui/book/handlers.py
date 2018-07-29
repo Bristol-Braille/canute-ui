@@ -2,7 +2,7 @@ import aiofiles
 import asyncio
 import logging
 import re
-import lxml.etree as ElementTree
+import xml.etree.cElementTree as ElementTree
 
 from ..actions import actions
 from ..manual import manual
