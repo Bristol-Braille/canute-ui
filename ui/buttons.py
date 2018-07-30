@@ -72,23 +72,26 @@ long_buttons = {}
 
 
 async def check(driver, state, dispatch):
-    buttons = driver.get_buttons()
-    for key in buttons:
-        up_or_down = buttons[key]
-        if up_or_down == 'down':
-            prev_buttons[key] = datetime.now()
-        elif up_or_down == 'up':
-            if key in long_buttons:
-                del long_buttons[key]
-                del prev_buttons[key]
-            else:
-                if key in prev_buttons:
+    # this is a hack for now until we change the protocol, we read the buttons
+    # twice so we don't miss the release of short presses
+    for _ in range(2):
+        buttons = driver.get_buttons()
+        for key in buttons:
+            up_or_down = buttons[key]
+            if up_or_down == 'down':
+                prev_buttons[key] = datetime.now()
+            elif up_or_down == 'up':
+                if key in long_buttons:
+                    del long_buttons[key]
                     del prev_buttons[key]
-                await dispatch_button(key, 'single', state, dispatch)
+                else:
+                    if key in prev_buttons:
+                        del prev_buttons[key]
+                    await dispatch_button(key, 'single', state, dispatch)
 
-    for key in prev_buttons:
-        diff = (datetime.now() - prev_buttons[key]).total_seconds()
-        if diff > 0.5:
-            prev_buttons[key] = datetime.now()
-            long_buttons[key] = True
-            await dispatch_button(key, 'long', state, dispatch)
+        for key in prev_buttons:
+            diff = (datetime.now() - prev_buttons[key]).total_seconds()
+            if diff > 0.5:
+                prev_buttons[key] = datetime.now()
+                long_buttons[key] = True
+                await dispatch_button(key, 'long', state, dispatch)
