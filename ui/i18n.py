@@ -16,7 +16,8 @@ class I18n:
                 translate = gettext.translation(
                     'canute', localedir='ui/locale', languages=[language], fallback=False)
                 translate.install()
-            except Exception:
+            except Exception as e:
+                log.warning(e)
                 translate = gettext.NullTranslations()
             self.translate = translate
         elif not self.translate:
