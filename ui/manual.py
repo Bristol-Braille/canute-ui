@@ -15,88 +15,82 @@ class Manual(BookFile):
     @staticmethod
     def create(locale='en_GB:en'):
         i18n = I18n(locale)
-        pages = ((
-            i18n._('         canute quick help'),
-            '',
-            i18n._('you can also acess these contextual'),
-            i18n._('help texts from anywhere by pressing'),
-            i18n._('the topmost side button on the left'),
-            '',
-            '',
-            '',
-            '',
-        ), (
-            i18n._('          book and home menu'),
-            '',
-            i18n._('Move through the book by pressing the'),
-            i18n._('arrow buttons on the front of the'),
-            i18n._('machine. Hold them down to move #e'),
-            i18n._('pages at a time. The home menu shows'),
-            i18n._('what you can do with the side buttons'),
-            i18n._('from the home menu or the book. View'),
-            i18n._('this by pressing the middle button on'),
-        ), (
-            i18n._('the front. Pressing this button again'),
-            i18n._('will always return you to your book.'),
-            '',
-            '',
-            i18n._('          bookmarks'),
-            '',
-            i18n._('Add a bookmark by pressing button #e'),
-            i18n._('while in a book. Bookmarks are listed'),
-            i18n._('here in the bookmark menu. Each bookmark'),
-        ), (
-            i18n._('starts with the Canute page number based'),
-            i18n._('on its #i line page. Go to the page by'),
-            i18n._('selecting a bookmark by pressing one of'),
-            i18n._('the side buttons. Holding the button'),
-            i18n._('down will delete the bookmark.'),
-            '',
-            '',
-            '',
-            '',
-        ), (
-            i18n._('          go to page menu'),
-            '',
-            i18n._('Go to a page number by keying it in with'),
-            i18n._('the side number buttons and pressing'),
-            i18n._('forward. Pages are numbered based on the'),
-            i18n._('#i line page height of the Canute. You'),
-            i18n._('can delete entered numbers by pressing'),
-            i18n._('or holding the back button. As always'),
-            i18n._('you can go back to your current page by'),
-        ), (
-            i18n._('pressing the menu button.'),
-            '',
-            '',
-            i18n._('          library menu'),
-            '',
-            i18n._('Choose the book you wish to read by'),
-            i18n._('pressing the button to the left of the'),
-            i18n._('title. Use the arrow buttons to page'),
-            i18n._('through the library. You can change the'),
-        ), (
-            i18n._('ordering of the books in the system'),
-            i18n._('menu.'),
-            '',
-            '',
-            i18n._('          system menu'),
-            '',
-            i18n._('Configure your preference on the sorting'),
-            i18n._('order of books in the library and'),
-            i18n._('bookmarks through the menu options. To'),
-        ), (
-            i18n._('shutdown the Canute safely, select the'),
-            i18n._('shutdown option and wait for #cj'),
-            i18n._('seconds before unplugging it.'),
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-        ),
-        )
+        text = i18n._("""         canute quick help
+
+you can also access these contextual
+help texts from anywhere by pressing
+the topmost side button on the left
+
+
+
+
+          book and home menu
+
+Move through the book by pressing the
+arrow buttons on the front of the
+machine. Hold them down to move #e
+pages at a time. The home menu shows
+what you can do with the side buttons
+from the home menu or the book. View
+this by pressing the middle button on
+the front. Pressing this button again
+will always return you to your book.
+
+
+          bookmarks
+
+Add a bookmark by pressing button #e
+while in a book. Bookmarks are listed
+here in the bookmark menu. Each bookmark
+starts with the Canute page number based
+on its #i line page. Go to the page by
+selecting a bookmark by pressing one of
+the side buttons. Holding the button
+down will delete the bookmark.
+          go to page menu
+
+Go to a page number by keying it in with
+the side number buttons and pressing
+forward. Pages are numbered based on the
+#i line page height of the Canute. You
+can delete entered numbers by pressing
+or holding the back button. As always
+you can go back to your current page by
+pressing the menu button.
+
+
+          library menu
+
+Choose the book you wish to read by
+pressing the button to the left of the
+title. Use the arrow buttons to page
+through the library. You can change the
+ordering of the books in the system
+menu.
+
+
+          system menu
+
+Configure your preference on the sorting
+order of books in the library and
+bookmarks through the menu options. To
+shutdown the Canute safely, select the
+shutdown option and wait for #cj
+seconds before unplugging it.
+
+
+
+
+
+""")
+        lines = text.split('\n')
+        s = lambda A, n=9: [A[i:i+n] for i in range(0, len(A), n)]
+        pages = s(lines)
+        print(pages)
         pages = tuple(tuple(from_ascii(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)
+
+def do_format(t):
+    print(t.split('\n', 2))
+    return fill(dedent(t.split('\n',2)[2]))
