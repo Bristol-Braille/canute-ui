@@ -6,5 +6,4 @@ config.rc
 *.pkl
 *.log
 books/*.txt
-_books
 __pycache__
