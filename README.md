@@ -19,9 +19,6 @@ Canute UI
 
 optional arguments:
   -h, --help            show this help message and exit
-  --pi-buttons          use evdev to process button presses more
-                        directly(recommended for embedded usage on the
-                        Raspberry Pi)
   --debug               debugging content
   --text                show text instead of braille
   --tty TTY             serial port for the display and button board

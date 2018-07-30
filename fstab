@@ -1,0 +1,1 @@
+/dev/sda1 /media/sd-card auto defaults,user,rw,noatime,exec,nofail,errors=continue,sync,umask=000 0 0

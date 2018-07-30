@@ -8,5 +8,5 @@ install: "pip3 install -r requirements.txt"
 script:
   - ./test
   - ./lint
-  - mkdir ~/books && cp -r books ~/books/sd-card && cp config.rc.travis config.rc
+  - mkdir ~/canute-media && cp -r books ~/canute-media/sd-card && cp config.rc.travis config.rc
   - ./canute_ui --fuzz 550

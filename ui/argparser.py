@@ -4,15 +4,6 @@ import logging
 parser = argparse.ArgumentParser(description='Canute UI')
 
 parser.add_argument(
-    '--pi-buttons',
-    action='store_const',
-    dest='pi_buttons',
-    const=True,
-    default=False,
-    help='use evdev to process button presses more directly '
-    + '(recommended for embedded usage on the Raspberry Pi)'
-)
-parser.add_argument(
     '--debug',
     action='store_const',
     dest='loglevel',

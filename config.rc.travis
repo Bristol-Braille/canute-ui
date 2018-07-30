@@ -2,15 +2,10 @@
 # relative path to where log is kept
 log_file = canute.log
 # book directory
-library_dir = ~/books/
-# where usb sticks will be automounted
-usb_dir = /home/travis/build/Bristol-Braille/canute-ui/books/
-# where the software is - needed for ui updates
-install_dir = ~/build/Bristol-Braille/canute-ui/
-archive_dir = ~/
-
-[user]
-user_name = travis
+# where usb sticks and sd-cards will be automounted
+media_dir = ~/canute-media
+# the exact sub mount-point directory name of the sd-card
+sd_card_dir = sd-card
 
 [comms]
 # serial timeout in seconds

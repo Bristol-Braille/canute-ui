@@ -8,7 +8,6 @@ import aioredux
 import aioredux.middleware
 import async_timeout
 
-from . import utility
 from . import argparser
 from . import config_loader
 from . import initial_state
@@ -18,7 +17,6 @@ from .driver.driver_dummy import Dummy
 from .setup_logs import setup_logs
 from .store import main_reducer
 from .actions import actions
-from .library import handlers as library
 from .display import Display
 from .book.handlers import fully_load_books
 
@@ -55,16 +53,14 @@ def main():
         log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
         from .driver.driver_both import DriverBoth
-        with DriverBoth(port=args.tty, pi_buttons=args.pi_buttons,
-                        delay=args.delay, display_text=args.text,
+        with DriverBoth(port=args.tty, delay=args.delay,
+                        display_text=args.text,
                         timeout=timeout) as driver:
             run(driver, config)
     else:
         log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
-        with Pi(port=args.tty,
-                pi_buttons=args.pi_buttons,
-                timeout=timeout) as driver:
+        with Pi(port=args.tty, timeout=timeout) as driver:
             run(driver, config)
 
 
@@ -85,8 +81,8 @@ async def run_async_timeout(driver, config, duration, loop):
 
 async def run_async(driver, config, loop):
 
-    library_dir = config.get('files', 'library_dir')
-    state = await initial_state.read(library_dir)
+    media_dir = config.get('files', 'media_dir')
+    state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
@@ -100,11 +96,6 @@ async def run_async(driver, config, loop):
 
     store.subscribe(handle_changes(driver, config, store))
 
-    # if we startup and update_ui is still 'in progress' then we are using the
-    # old state file and update has failed
-    if state['app']['update_ui'] == 'in progress':
-        await store.dispatch(actions.update_ui('failed'))
-
     # since handle_changes subscription happens after init and library.sync it
     # may not have triggered. so we trigger it here. if we put it before init
     # it will start of by rendering a possibly invalid state. library.sync
@@ -114,7 +105,7 @@ async def run_async(driver, config, loop):
 
     while 1:
         state = store.state
-        if (await handle_hardware(driver, state, store, library_dir)):
+        if (await handle_hardware(driver, state, store, media_dir)):
             break
         await buttons.check(driver, state['app'],
                             store.dispatch)
@@ -123,42 +114,30 @@ async def run_async(driver, config, loop):
 
 
 def handle_changes(driver, config, store):
-    library_dir = config.get('files', 'library_dir')
+    media_dir = config.get('files', 'media_dir')
 
     def listener():
         state = store.state
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
-        asyncio.ensure_future(initial_state.write(store, library_dir))
+        asyncio.ensure_future(initial_state.write(store, media_dir))
         asyncio.ensure_future(fully_load_books(store))
     return listener
 
 
 async def change_files(config, state, store):
     state = store.state['app']
-    if state['replacing_library'] == 'start':
-        await store.dispatch(actions.load_books('cancel'))
-        await store.dispatch(actions.replace_library('in progress'))
-        await library.replace(config, state, store)
-        await store.dispatch(actions.replace_library(False))
     if state['backing_up_log'] == 'start':
         await store.dispatch(actions.backup_log('in progress'))
         backup_log(config)
         await store.dispatch(actions.backup_log('done'))
-    if state['update_ui'] == 'start':
-        log.info('update ui = start')
-        if utility.find_ui_update(config):
-            await store.dispatch(actions.update_ui('in progress'))
-        else:
-            log.info('update not found')
-            await store.dispatch(actions.update_ui('failed'))
 
 
-async def handle_hardware(driver, state, store, library_dir):
+async def handle_hardware(driver, state, store, media_dir):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         await store.dispatch(actions.load_books('cancel'))
-        await initial_state.write(store, library_dir)
+        await initial_state.write(store, media_dir)
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
@@ -181,10 +160,12 @@ async def handle_hardware(driver, state, store, library_dir):
 
 
 def backup_log(config):
-    usb_dir = config.get('files', 'usb_dir')
+    sd_card_dir = config.get('files', 'sd_card_dir')
+    media_dir = config.get('files', 'sd_card_dir')
+    sd_card_dir = os.path.join(media_dir, sd_card_dir)
     log_file = config.get('files', 'log_file')
     # make a filename based on the date
-    backup_file = os.path.join(usb_dir, time.strftime('%Y%m%d_log.txt'))
+    backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
     log.warning('backing up log to USB stick: {}'.format(backup_file))
     try:
         shutil.copyfile(log_file, backup_file)
