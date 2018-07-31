@@ -5,9 +5,9 @@ from ..i18n import I18n
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = i18n._(from_ascii('''\
-        Select a language by using the side
-        number buttons and pressing forward.'''))
+    para = from_ascii(i18n._('''\
+Select a language by using the side
+number buttons and pressing forward.'''))
 
     lines = para.split('\n')
 

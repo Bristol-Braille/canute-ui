@@ -23,7 +23,7 @@ def render_help_menu(width, height, locale):
     i18n = I18n(locale)
     data = []
 
-    para = i18n._(from_ascii('''\
+    para = from_ascii(i18n._('''\
         Move through the book by pressing the
         arrow buttons on the front of the
         machine. Hold them down to move #e

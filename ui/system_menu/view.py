@@ -6,7 +6,7 @@ from ..i18n import I18n
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = i18n._(from_ascii('''/
+    para = from_ascii(i18n._('''/
         Configure your preference on the sorting
         order of books in the library and
         bookmarks through the menu options. To

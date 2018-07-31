@@ -15,7 +15,8 @@ class Manual(BookFile):
     @staticmethod
     def create(locale='en_GB:en'):
         i18n = I18n(locale)
-        text = i18n._("""         canute quick help
+        text = i18n._('''\
+         canute quick help
 
 you can also access these contextual
 help texts from anywhere by pressing
@@ -82,7 +83,7 @@ seconds before unplugging it.
 
 
 
-""")
+''')
         lines = text.split('\n')
         s = lambda A, n=9: [A[i:i+n] for i in range(0, len(A), n)]
         pages = s(lines)

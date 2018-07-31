@@ -5,13 +5,13 @@ from ..i18n import I18n
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = i18n._(from_ascii('''\
-        Choose the book you wish to read by
-        pressing the button to the left of the
-        title. Use the arrow buttons to page
-        through the library. You can change the
-        ordering of the books in the system
-        menu.'''))
+    para = from_ascii(i18n._('''\
+Choose the book you wish to read by
+pressing the button to the left of the
+title. Use the arrow buttons to page
+through the library. You can change the
+ordering of the books in the system
+menu.'''))
 
     lines = para.split('\n')
 

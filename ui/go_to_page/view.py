@@ -5,15 +5,15 @@ from ..i18n import I18n
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = i18n._(from_ascii('''/
-        Go to a page number by keying it in with
-        the side number buttons and pressing
-        forward. Pages are numbered based on the
-        #i line page height of the Canute. You
-        can delete entered numbers by pressing
-        or holding the back button. As always
-        you can go back to your current page by
-        pressing the menu button.'''))
+    para = from_ascii(i18n._('''/
+Go to a page number by keying it in with
+the side number buttons and pressing
+forward. Pages are numbered based on the
+#i line page height of the Canute. You
+can delete entered numbers by pressing
+or holding the back button. As always
+you can go back to your current page by
+pressing the menu button.'''))
 
     lines = para.split('\n')
 
