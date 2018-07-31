@@ -6,6 +6,10 @@ from .i18n import I18n
 manual_filename = '@@__canute_manual__@@'
 
 
+def batch(a, n=9):
+    return [a[i:i+n] for i in range(0, len(a), n)]
+
+
 class Manual(BookFile):
     @property
     def title(self, locale='en_GB:en'):
@@ -90,7 +94,3 @@ seconds before unplugging it.
         pages = tuple(tuple(from_ascii(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)
-
-
-def batch(a, n=9):
-    return [a[i:i+n] for i in range(0, len(a), n)]
