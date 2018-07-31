@@ -85,13 +85,12 @@ seconds before unplugging it.
 
 ''')
         lines = text.split('\n')
-        s = lambda A, n=9: [A[i:i+n] for i in range(0, len(A), n)]
-        pages = s(lines)
+        pages = batch(lines)
         print(pages)
         pages = tuple(tuple(from_ascii(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)
 
-def do_format(t):
-    print(t.split('\n', 2))
-    return fill(dedent(t.split('\n',2)[2]))
+
+def batch(a, n=9):
+    return [a[i:i+n] for i in range(0, len(a), n)]
