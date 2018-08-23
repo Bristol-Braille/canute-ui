@@ -1,5 +1,5 @@
 from .driver import Driver
-from . import comms_codes as comms
+from . import comms_codes as comms, simple_hdlc
 import time
 import serial
 import logging
@@ -57,6 +57,7 @@ class Pi(Driver):
             serial_port.baudrate = 9600
             serial_port.open()
             serial_port.flush()
+            self.HDLC = simple_hdlc.HDLC(serial_port)
             return serial_port
         except IOError as e:
             log.error('check usb connection to arduino %s', e)
@@ -129,8 +130,8 @@ class Pi(Driver):
         :param cmd: command byte
         :param data: list of bytes
         '''
-        message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        self.port.write(message)
+        payload = struct.pack('%sb' % (len(data) + 1), cmd, *data)
+        self.HDLC.sendFrame(payload)
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
@@ -140,7 +141,18 @@ class Pi(Driver):
 
         :rtype: an integer return value
         '''
-        message = self.port.read(3)
+        try:
+            self.HDLC.readFrame(4)
+        except ValueError as e:
+            # Got a frame but CRC incorrect.  Punt for now and see
+            # where it lands, since this interface makes no allowance
+            # for failure.
+            raise e
+        except RuntimeError as e:
+            # No complete frame within timeout.  Same again.
+            raise e
+        message = self.HDLC.last_frame.data
+
         if len(message) < 2:
             log.warning('unexpected rx data length %d' % len(message))
         data = struct.unpack('3b', message)
