@@ -62,3 +62,4 @@ Copy the test books to the home directory (or wherever you specified in config.r
 Run the UI using the emulator:
 
     ./canute_ui
+
