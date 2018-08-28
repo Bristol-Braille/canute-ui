@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ElementTree
 import concurrent.futures
 
 from ..actions import actions
-from ..manual import Manual, manual_filename
+from ..manual import manual_filename
 from .. import braille
 from . import book_file
 
