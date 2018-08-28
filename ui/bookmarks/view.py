@@ -7,15 +7,15 @@ def render_help_menu(width, height, locale):
     i18n = I18n(locale)
     data = []
 
-    para = i18n._(from_ascii('''\
-        Add a bookmark by pressing button #e
-        while in a book. Bookmarks are listed
-        here in the bookmark menu. Each bookmark
-        starts with the Canute page number based
-        on its #i line page. Go to the page by
-        selecting a bookmark by pressing one of
-        the side buttons. Holding the button
-        down will delete the bookmark.'''))
+    para = from_ascii(i18n._('''\
+Add a bookmark by pressing button #e
+while in a book. Bookmarks are listed
+here in the bookmark menu. Each bookmark
+starts with the Canute page number based
+on its #i line page. Go to the page by
+selecting a bookmark by pressing one of
+the side buttons. Holding the button
+down will delete the bookmark.'''))
 
     lines = para.split('\n')
 

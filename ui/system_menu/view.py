@@ -7,12 +7,12 @@ def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
     para = from_ascii(i18n._('''/
-        Configure your preference on the sorting
-        order of books in the library and
-        bookmarks through the menu options. To
-        shutdown the Canute safely, select the
-        shutdown option and wait for #cj
-        seconds before unplugging it.'''))
+Configure your preference on the sorting
+order of books in the library and
+bookmarks through the menu options. To
+shutdown the Canute safely, select the
+shutdown option and wait for #cj
+seconds before unplugging it.'''))
 
     lines = para.split('\n')
 
