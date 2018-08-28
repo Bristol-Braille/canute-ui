@@ -10,6 +10,7 @@ def create(locale='en_GB:en'):
     sys_menu = system_menu(i18n)
     return tuple(map(from_ascii, sys_menu))
 
+
 def system_menu(i18n=I18n()):
     return OrderedDict([
         (i18n._('shutdown'), actions.shutdown()),
