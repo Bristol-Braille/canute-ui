@@ -1,5 +1,5 @@
 from ..braille import from_ascii, format_title
-from .system_menu import SystemMenu
+from .system_menu import create
 from ..i18n import I18n
 
 
@@ -30,7 +30,7 @@ def render(width, height, state):
     if state['help_menu']['visible']:
         return render_help_menu(width, height, state['help_menu']['page'], locale)
 
-    menu_titles = SystemMenu.create(locale)
+    menu_titles = create(locale)
 
     page = state['system_menu']['page']
     data = list(menu_titles)

@@ -5,17 +5,14 @@ from ..actions import actions
 from ..i18n import I18n
 
 
-class SystemMenu:
-    @staticmethod
-    def create(locale='en_GB:en'):
-        i18n = I18n(locale)
-        sys_menu = SystemMenu.system_menu(i18n)
-        return tuple(map(from_ascii, sys_menu))
+def create(locale='en_GB:en'):
+    i18n = I18n(locale)
+    sys_menu = system_menu(i18n)
+    return tuple(map(from_ascii, sys_menu))
 
-    @staticmethod
-    def system_menu(i18n=I18n()):
-        return OrderedDict([
-            (i18n._('shutdown'), actions.shutdown()),
-            (i18n._('backup log to USB stick'), actions.backup_log('start')),
-            (i18n._('select language'), actions.go_to_language_menu())
-        ])
+def system_menu(i18n=I18n()):
+    return OrderedDict([
+        (i18n._('shutdown'), actions.shutdown()),
+        (i18n._('backup log to USB stick'), actions.backup_log('start')),
+        (i18n._('select language'), actions.go_to_language_menu())
+    ])
