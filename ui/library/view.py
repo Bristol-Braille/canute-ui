@@ -6,18 +6,16 @@ from ..state_helpers import get_books
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = from_ascii(i18n._('''\
+    para = i18n._('''\
 Choose the book you wish to read by
 pressing the button to the left of the
 title. Use the arrow buttons to page
 through the library. You can change the
 ordering of the books in the system
-menu.'''))
+menu.''')
 
-    lines = para.split('\n')
-
-    for line in lines:
-        data.append(line)
+    for line in para.split('\n'):
+        data.append(from_ascii(line))
 
     while len(data) < height:
         data.append(tuple())

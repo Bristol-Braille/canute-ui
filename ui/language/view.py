@@ -5,14 +5,12 @@ from ..i18n import I18n
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = from_ascii(i18n._('''\
+    para = i18n._('''\
 Select a language by using the side
-number buttons and pressing forward.'''))
+number buttons and pressing forward.''')
 
-    lines = para.split('\n')
-
-    for line in lines:
-        data.append(line)
+    for line in para.split('\n'):
+        data.append(from_ascii(line))
 
     while len(data) < height:
         data.append(tuple())

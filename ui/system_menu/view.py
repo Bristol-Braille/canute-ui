@@ -6,18 +6,16 @@ from ..i18n import I18n
 def render_help_menu(width, height, page, locale):
     i18n = I18n(locale)
     data = []
-    para = from_ascii(i18n._('''/
+    para = i18n._('''/
 Configure your preference on the sorting
 order of books in the library and
 bookmarks through the menu options. To
 shutdown the Canute safely, select the
 shutdown option and wait for #cj
-seconds before unplugging it.'''))
+seconds before unplugging it.''')
 
-    lines = para.split('\n')
-
-    for line in lines:
-        data.append(line)
+    for line in para.split('\n'):
+        data.append(from_ascii(line))
 
     while len(data) < height:
         data.append(tuple())
