@@ -16,7 +16,7 @@ class LibraryReducers():
         books = tuple(state['user']['books'].values())
         try:
             book = books[line_number + number]
-        except:
+        except Exception:
             log.warning('no book at {}'.format(number))
             return state
         user = state['user'].copy(current_book=book.filename)

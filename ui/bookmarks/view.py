@@ -1,18 +1,26 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
+from ..i18n import I18n
 
 
-def render_help_menu(width, height):
+def render_help_menu(width, height, locale):
+    i18n = I18n(locale)
     data = []
 
-    data.append(from_ascii('Add a bookmark by pressing button #e'))
-    data.append(from_ascii('while in a book. Bookmarks are listed'))
-    data.append(from_ascii('here in the bookmark menu. Each bookmark'))
-    data.append(from_ascii('starts with the Canute page number based'))
-    data.append(from_ascii('on its #i line page. Go to the page by'))
-    data.append(from_ascii('selecting a bookmark by pressing one of'))
-    data.append(from_ascii('the side buttons. Holding the button'))
-    data.append(from_ascii('down will delete the bookmark.'))
+    para = from_ascii(i18n._('''\
+Add a bookmark by pressing button #e
+while in a book. Bookmarks are listed
+here in the bookmark menu. Each bookmark
+starts with the Canute page number based
+on its #i line page. Go to the page by
+selecting a bookmark by pressing one of
+the side buttons. Holding the button
+down will delete the bookmark.'''))
+
+    lines = para.split('\n')
+
+    for line in lines:
+        data.append(line)
 
     # pad page with empty rows
     while len(data) < height:
@@ -24,7 +32,7 @@ def render_help_menu(width, height):
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height)
+        return render_help_menu(width, height, state['user'].get('current_language', 'en_GB:en'))
 
     book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']

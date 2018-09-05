@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ElementTree
 import concurrent.futures
 
 from ..actions import actions
-from ..manual import manual
+from ..manual import manual_filename
 from .. import braille
 from . import book_file
 
@@ -16,7 +16,7 @@ FORM_FEED = re.compile('\f')
 
 
 async def init(book):
-    if book.filename == manual.filename:
+    if book.filename == manual_filename:
         return book
 
     log.debug('initialiazing {}'.format(book.filename))
@@ -32,7 +32,7 @@ NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 
 
 def read_pages(book):
-    if book.filename == manual.filename:
+    if book.filename == manual_filename:
         return book
     if book.load_state == book_file.LoadState.DONE:
         return book

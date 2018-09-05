@@ -1,19 +1,24 @@
 from ..braille import from_ascii, format_title
+from ..i18n import I18n
 
 
-def render_help_menu(width, height, page):
-    data = (
-        'Go to a page number by keying it in with',
-        'the side number buttons and pressing',
-        'forward. Pages are numbered based on the',
-        '#i line page height of the Canute. You',
-        'can delete entered numbers by pressing',
-        'or holding the back button. As always'
-        'you can go back to your current page by',
-        'pressing the menu button.',
-    )
+def render_help_menu(width, height, page, locale):
+    i18n = I18n(locale)
+    data = []
+    para = from_ascii(i18n._('''/
+Go to a page number by keying it in with
+the side number buttons and pressing
+forward. Pages are numbered based on the
+#i line page height of the Canute. You
+can delete entered numbers by pressing
+or holding the back button. As always
+you can go back to your current page by
+pressing the menu button.'''))
 
-    data = [from_ascii(line) for line in data]
+    lines = para.split('\n')
+
+    for line in lines:
+        data.append(line)
 
     while len(data) < height:
         data.append(tuple())
@@ -23,9 +28,13 @@ def render_help_menu(width, height, page):
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        return render_help_menu(width, height, state['help_menu']['page'])
+        locale = state['user'].get('current_language', 'en_GB:en')
+        return render_help_menu(width, height, state['help_menu']['page'], locale)
 
-    data = [from_ascii('enter page number using the side buttons')]
+    locale = state['user'].get('current_language', 'en_GB:en')
+    i18n = I18n(locale)
+
+    data = [from_ascii(i18n._('enter page number using the side buttons'))]
 
     try:
         book = state['user']['books'][state['user']['current_book']]
@@ -50,13 +59,13 @@ def render(width, height, state):
     else:
         selection = int(selection) - 1
 
-    t = format_title('go to page number', width,
+    t = format_title(i18n._('go to page number'), width,
                      selection, total_pages, capitalize=False)
     data.append(t)
 
-    data.append(from_ascii('please confirm by pressing forward'))
-    data.append(from_ascii('undo by pressing back'))
-    data.append(from_ascii('to go back to book press middle button'))
+    data.append(from_ascii(i18n._('please confirm by pressing forward')))
+    data.append(from_ascii(i18n._('undo by pressing back')))
+    data.append(from_ascii(i18n._('to go back to book press middle button')))
 
     for _ in range(height - 6):
         data.append(tuple())

@@ -6,6 +6,7 @@ from .library.buttons import library_buttons
 from .book.buttons import book_buttons
 from .go_to_page.buttons import go_to_page_buttons
 from .bookmarks.buttons import bookmarks_buttons
+from .language.buttons import language_buttons
 
 
 log = logging.getLogger(__name__)
@@ -16,6 +17,7 @@ bindings = {
     'book': book_buttons,
     'go_to_page': go_to_page_buttons,
     'bookmarks_menu': bookmarks_buttons,
+    'language': language_buttons,
     'help_menu': {
         'single': {
             'L': actions.close_menu(),
@@ -48,9 +50,10 @@ bindings = {
     }
 }
 
+sys_menu = system_menu()
 
-for i, item in enumerate(system_menu):
-    action = system_menu[item]
+for i, item in enumerate(sys_menu):
+    action = sys_menu[item]
     bindings['system_menu']['single'][str(i + 2)] = action
 
 

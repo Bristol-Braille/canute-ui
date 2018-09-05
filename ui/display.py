@@ -3,6 +3,7 @@ from . import utility
 from .library import view as library_view
 from .system_menu import view as system_menu_view
 from .go_to_page import view as go_to_page_view
+from .language import view as language_view
 from .book import view as book_view
 from .bookmarks import view as bookmarks_view
 
@@ -27,6 +28,9 @@ class Display():
             self._set_buffer(page_data)
         elif location == 'go_to_page':
             page_data = go_to_page_view.render(width, height, state)
+            self._set_buffer(page_data)
+        elif location == 'language':
+            page_data = language_view.render(width, height, state)
             self._set_buffer(page_data)
         elif location == 'book':
             page_data = await book_view.render(width, height, state, store)

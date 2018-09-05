@@ -5,4 +5,5 @@ test/test-books/*.canute
 config.rc
 *.pkl
 *.log
+books/*.txt
 __pycache__

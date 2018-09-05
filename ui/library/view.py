@@ -1,17 +1,22 @@
 from ..braille import from_ascii, format_title
+from ..i18n import I18n
 
 
-def render_help_menu(width, height, page):
-    data = [
-        'Choose the book you wish to read by',
-        'pressing the button to the left of the',
-        'title. Use the arrow buttons to page',
-        'through the library. You can change the',
-        'ordering of the books in the system',
-        'menu.',
-    ]
+def render_help_menu(width, height, page, locale):
+    i18n = I18n(locale)
+    data = []
+    para = from_ascii(i18n._('''\
+Choose the book you wish to read by
+pressing the button to the left of the
+title. Use the arrow buttons to page
+through the library. You can change the
+ordering of the books in the system
+menu.'''))
 
-    data = [from_ascii(line) for line in data]
+    lines = para.split('\n')
+
+    for line in lines:
+        data.append(line)
 
     while len(data) < height:
         data.append(tuple())
@@ -41,6 +46,7 @@ def render_library(width, height, state):
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        return render_help_menu(width, height, state['help_menu']['page'])
+        locale = state['user'].get('current_language', 'en_GB:en')
+        return render_help_menu(width, height, state['help_menu']['page'], locale)
     else:
         return render_library(width, height, state)
