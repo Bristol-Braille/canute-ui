@@ -1,6 +1,7 @@
-from . import comms_codes as comms
 from .driver import Driver
 import asyncio
+from . import comms_codes as comms, simple_hdlc
+import time
 import logging
 import serial
 import serial.tools.list_ports
@@ -55,6 +56,7 @@ class Pi(Driver):
             serial_port.baudrate = 9600
             serial_port.open()
             serial_port.flush()
+            self.HDLC = simple_hdlc.HDLC(serial_port)
             return serial_port
         except IOError as e:
             log.error('check usb connection to arduino %s', e)
@@ -127,8 +129,8 @@ class Pi(Driver):
         :param cmd: command byte
         :param data: list of bytes
         '''
-        message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        self.port.write(message)
+        payload = struct.pack('%sb' % (len(data) + 1), cmd, *data)
+        self.HDLC.sendFrame(payload)
 
     async def async_get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
@@ -138,17 +140,11 @@ class Pi(Driver):
 
         :rtype: an integer return value
         '''
-        while self.port.inWaiting() < 3:
+
+        while self.port.inWaiting() < 4:
             await asyncio.sleep(0)
 
-        message = self.port.read(3)
-        if len(message) < 2:
-            log.warning('unexpected rx data length %d' % len(message))
-        data = struct.unpack('3b', message)
-        if data[0] != expected_cmd:
-            log.warning('unexpected rx command %d, expecting %d' %
-                        (data[0], expected_cmd))
-        return data[1] | (data[2] << 8)
+        return self.get_data(expected_cmd)
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
@@ -158,7 +154,18 @@ class Pi(Driver):
 
         :rtype: an integer return value
         '''
-        message = self.port.read(3)
+        try:
+            self.HDLC.readFrame(4)
+        except ValueError as e:
+            # Got a frame but CRC incorrect.  Punt for now and see
+            # where it lands, since this interface makes no allowance
+            # for failure.
+            raise e
+        except RuntimeError as e:
+            # No complete frame within timeout.  Same again.
+            raise e
+        message = self.HDLC.last_frame.data
+
         if len(message) < 2:
             log.warning('unexpected rx data length %d' % len(message))
         data = struct.unpack('3b', message)
