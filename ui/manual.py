@@ -90,7 +90,6 @@ seconds before unplugging it.
 ''')
         lines = text.split('\n')
         pages = batch(lines)
-        print(pages)
         pages = tuple(tuple(from_ascii(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)
