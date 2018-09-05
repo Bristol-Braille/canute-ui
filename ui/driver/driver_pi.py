@@ -1,7 +1,6 @@
 from .driver import Driver
 import asyncio
 from . import comms_codes as comms, simple_hdlc
-import time
 import logging
 import serial
 import serial.tools.list_ports

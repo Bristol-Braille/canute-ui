@@ -7,7 +7,7 @@ from ui.driver.driver_pi import Pi
 import ui.driver.comms_codes as comms
 
 
-@unittest.skip("Needs to be updated to new protocol")
+@unittest.skip('Needs to be updated to new protocol')
 class TestDriverPi(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

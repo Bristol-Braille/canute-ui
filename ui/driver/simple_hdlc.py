@@ -14,10 +14,12 @@ logger = logging.getLogger(__name__)
 
 x25crc = crcmod.predefined.mkPredefinedCrcFun('x25')
 
+
 def calcCRC(data):
     crc = x25crc(bytes(data))
-    b = bytearray(struct.pack("<H", crc))
+    b = bytearray(struct.pack('<H', crc))
     return b
+
 
 class Frame(object):
     STATE_READ = 0x01
@@ -54,7 +56,7 @@ class Frame(object):
         if not res:
             c1 = str(self.crc)
             c2 = str(calcCRC(self.data))
-            logger.warning("invalid crc %s != %s", c1, c2)
+            logger.warning('invalid crc %s != %s', c1, c2)
             self.error = True
         return res
 
@@ -77,7 +79,7 @@ class HDLC(object):
 
     def sendFrame(self, data):
         bs = self._encode(self.toBytes(data))
-        res = self.serial.write(bs)
+        self.serial.write(bs)
 
     def _onFrame(self, frame):
         self.last_frame = frame
@@ -88,7 +90,7 @@ class HDLC(object):
     def _onError(self, frame):
         self.last_frame = frame
         s = self.last_frame.toString()
-        logger.warning("Frame Error: %s", s)
+        logger.warning('Frame Error: %s', s)
         if self.error_callback is not None:
             self.error_callback(s)
 
@@ -152,8 +154,8 @@ class HDLC(object):
                     return s
                 elif self.last_frame.finished:
                     # Error
-                    raise ValueError("Invalid Frame (CRC FAIL)")
-        raise RuntimeError("readFrame timeout")
+                    raise ValueError('Invalid Frame (CRC FAIL)')
+        raise RuntimeError('readFrame timeout')
 
     @classmethod
     def _encode(cls, bs):
@@ -176,11 +178,11 @@ class HDLC(object):
             if i < 1:
                 time.sleep(0.001)
                 continue
-            res = self._readBytes(i)
+            self._readBytes(i)
 
     def startReader(self, onFrame, onError=None):
         if self.running:
-            raise RuntimeError("reader already running")
+            raise RuntimeError('reader already running')
         self.reader = Thread(target=self._receiveLoop)
         self.reader.setDaemon(True)
         self.frame_callback = onFrame

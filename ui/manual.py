@@ -7,7 +7,7 @@ manual_filename = '@@__canute_manual__@@'
 
 
 def batch(a, n=9):
-    return [a[i:i+n] for i in range(0, len(a), n)]
+    return [a[i:i + n] for i in range(0, len(a), n)]
 
 
 class Manual(BookFile):
