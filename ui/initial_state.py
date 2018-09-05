@@ -37,7 +37,7 @@ initial_state = utility.freeze({
         },
         'languages': {
             'available': OrderedDict({
-                'en_GB:en': 'English',
+                'en_GB:en': 'English Grade 1',
             }),
             'selection': '',
             'keys_pressed': '',

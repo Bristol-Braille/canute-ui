@@ -27,7 +27,7 @@ def render(width, height, state):
 
     lang = state['user'].get('current_language', None)
     languages = state['languages']['available']
-    current_lang = languages.get(lang, 'English')
+    current_lang = languages.get(lang, 'English Grade 1')
 
     try:
         cur_index = list(languages.keys()).index(lang)
