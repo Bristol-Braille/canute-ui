@@ -1,5 +1,5 @@
 import logging
-from . import utility
+from . import state_helpers
 from .library import view as library_view
 from .system_menu import view as system_menu_view
 from .go_to_page import view as go_to_page_view
@@ -18,7 +18,7 @@ class Display():
         self.buffer = []
 
     async def render_to_buffer(self, state, store):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
         location = state['location']
         if location == 'library':
             page_data = library_view.render(width, height, state)

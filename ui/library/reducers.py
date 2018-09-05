@@ -1,19 +1,19 @@
 from frozendict import FrozenOrderedDict
 import logging
 from collections import OrderedDict
-from ..book import book_file
 
-from .. import utility
+from ..book import book_file
+from .. import state_helpers
 
 log = logging.getLogger(__name__)
 
 
 class LibraryReducers():
     def go_to_book(self, state, number):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
         page = state['library']['page']
         line_number = page * (height - 1)
-        books = tuple(state['user']['books'].values())
+        books = state_helpers.get_books(state)
         try:
             book = books[line_number + number]
         except Exception:

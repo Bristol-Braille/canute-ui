@@ -8,7 +8,6 @@ from frozendict import frozendict
 from . import utility
 from .manual import Manual, manual_filename
 from .book.book_file import BookFile
-from .book.handlers import init
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
@@ -113,11 +112,7 @@ async def read_user_state(path):
             if 'bookmarks' in t:
                 book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
                     bm - 1 for bm in t['bookmarks']))))
-        try:
-            books[book_file] = await init(book)
-        except Exception as e:
-            log.warning('could not open {}'.format(book_file))
-            log.warning(e)
+        books[book_file] = book
 
     if current_book not in books:
         current_book = manual_filename

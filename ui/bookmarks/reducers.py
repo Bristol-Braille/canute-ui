@@ -1,12 +1,12 @@
 from frozendict import FrozenOrderedDict
 from collections import OrderedDict
 from ..book.reducers import BookReducers
-from .. import utility
+from .. import state_helpers
 
 
 class BookmarksReducers():
     def delete_bookmark(self, state, n):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
@@ -28,12 +28,11 @@ class BookmarksReducers():
         return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
 
     def go_to_bookmark(self, state, n):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
         # adjust for title
         height -= 1
         page = state['bookmarks_menu']['page']
-        book_n = state['user']['current_book']
-        book = state['user']['books'][book_n]
+        book = state_helpers.get_current_book(state)
         bookmarks = book.bookmarks[page * height:(page * height) + height]
         if n >= len(bookmarks):
             return state

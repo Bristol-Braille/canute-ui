@@ -18,7 +18,7 @@ from .setup_logs import setup_logs
 from .store import main_reducer
 from .actions import actions
 from .display import Display
-from .book.handlers import fully_load_books
+from .book.handlers import load_books
 
 display = Display()
 
@@ -110,7 +110,12 @@ async def run_async(driver, config, loop):
         await buttons.check(driver, state['app'],
                             store.dispatch)
         await display.send_line(driver)
-        await asyncio.sleep(0)
+        # in the emulated driver we can be too agressive in checking buttons
+        # and sending lines if we don't have any delay
+        if not isinstance(driver, Pi):
+            await asyncio.sleep(0.01)
+        else:
+            await asyncio.sleep(0)
 
 
 def handle_changes(driver, config, store):
@@ -121,7 +126,7 @@ def handle_changes(driver, config, store):
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
         asyncio.ensure_future(initial_state.write(store, media_dir))
-        asyncio.ensure_future(fully_load_books(store))
+        asyncio.ensure_future(load_books(store))
     return listener
 
 

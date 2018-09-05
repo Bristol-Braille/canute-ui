@@ -2,6 +2,7 @@ import logging
 from frozendict import frozendict, FrozenOrderedDict
 from collections import OrderedDict
 from . import utility
+from . import state_helpers
 from .library.reducers import LibraryReducers
 from .book.reducers import BookReducers
 from .go_to_page.reducers import GoToPageReducers
@@ -58,7 +59,7 @@ class AppReducers():
                           user=state['user'].copy(books=FrozenOrderedDict(changed_books)))
 
     def go_to_page(self, state, page):
-        width, height = utility.dimensions(state)
+        width, height = state_helpers.dimensions(state)
 
         if page < 0:
             page = 0

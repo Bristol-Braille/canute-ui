@@ -14,17 +14,20 @@ import collections
 log = logging.getLogger(__name__)
 
 
-def get_page_num_width(state):
-    width, height = dimensions(state)
-    book = state['user']['books'][state['user']['current_book']]
-    max_pages = len(book.pages)
-    return len(str(max_pages))
+def find_ui_update(config):
+    '''
+    recursively look for firmware in the usb_dir,
+    firmware file is called canute-ui.tar.gz
+    returns first one found
+    '''
+    usb_dir = config.get('files', 'usb_dir')
+    ui_file = 'canute-ui.tar.gz'
 
-
-def dimensions(state):
-    width = state['dimensions']['width']
-    height = state['dimensions']['height']
-    return [width, height]
+    log.info('update UI - looking for new ui in %s' % usb_dir)
+    for root, dirnames, filenames in os.walk(usb_dir):
+        for filename in filenames:
+            if filename == ui_file:
+                return(os.path.join(root, filename))
 
 
 def find_files(directory, extensions):
