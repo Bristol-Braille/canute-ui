@@ -60,7 +60,8 @@ class Driver(object, metaclass=abc.ABCMeta):
 
     def lower_rods(self):
         self.send_data(comms.CMD_LOWER)
-        return self.get_data(comms.CMD_WARMUP)
+        # Work around due to response not being received when we try
+        return True
 
     def get_dimensions(self):
         '''
