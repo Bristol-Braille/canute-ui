@@ -140,7 +140,7 @@ class Pi(Driver):
         :rtype: an integer return value
         '''
 
-        while self.port.inWaiting() < 4:
+        while self.port.inWaiting() < 5:
             await asyncio.sleep(0)
 
         return self.get_data(expected_cmd)
