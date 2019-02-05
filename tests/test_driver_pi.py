@@ -2,12 +2,10 @@ from multiprocessing import Process
 import unittest
 import os
 import pty
-import struct
 from ui.driver.driver_pi import Pi
 import ui.driver.comms_codes as comms
 
 
-@unittest.skip('Needs to be updated to new protocol')
 class TestDriverPi(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -17,27 +15,50 @@ class TestDriverPi(unittest.TestCase):
         cls._driver = Process(target=Pi, args=(s_name,))
         cls._driver.start()
 
-    def get_message(self, len=1):
-        message = os.read(self._master, 1)
-        data = struct.unpack('1b', message)
-        return data
+    def get_message(self, msglen=1):
+        message = os.read(self._master, msglen)
+        return message
 
-    def send_message(self, data, cmd):
-        message = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        os.write(self._master, message)
+    def send_message(self, msg):
+        os.write(self._master, msg)
 
     def test_rxtx_data(self):
         # receive the get chars message
-        self.assertEqual(self.get_message()[0], comms.CMD_GET_CHARS)
+        FRAME_BOUNDARY = 0x7E
 
-        # send chars
-        self.send_message([24, 0], comms.CMD_GET_CHARS)
+        self.assertEqual(self.get_message(5), bytes([
+          FRAME_BOUNDARY,
+          comms.CMD_GET_CHARS,
+          0x78, 0xF0,  # CRC LSB, MSB
+          FRAME_BOUNDARY
+        ]))
+
+        # send chars (can pretend to be any size we like)
+        # [data bytearray], cmd
+        self.send_message(bytes([
+          FRAME_BOUNDARY,
+          comms.CMD_GET_CHARS,
+          24, 0,       # num cols LSB, MSB
+          0x9D, 0x9D,  # CRC LSB, MSB
+          FRAME_BOUNDARY
+        ]))
 
         # receive the get rows message
-        self.assertEqual(self.get_message()[0], comms.CMD_GET_ROWS)
+        self.assertEqual(self.get_message(5), bytes([
+          FRAME_BOUNDARY,
+          comms.CMD_GET_ROWS,
+          0xF1, 0xE1,  # CRC LSB, MSB
+          FRAME_BOUNDARY
+        ]))
 
         # send rows
-        self.send_message([4, 0], comms.CMD_GET_ROWS)
+        self.send_message(bytes([
+          FRAME_BOUNDARY,
+          comms.CMD_GET_ROWS,
+          4, 0,        # num rows LSB, MSB
+          0x70, 0xFB,  # CRC LSB, MSB
+          FRAME_BOUNDARY
+        ]))
 
     @classmethod
     def tearDownClass(cls):
