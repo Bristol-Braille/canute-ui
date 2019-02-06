@@ -41,15 +41,12 @@ async def _read_pages(book, background=False):
         pages = []
         if book.ext == '.brf':
             page = []
-            for line in file_contents.splitlines():
+            for line in file_contents.splitlines(keepends=True):
                 if FORM_FEED.match(line):
                     # pad up to the next page
                     while len(page) < book.height:
                         page.append('')
-                    if line == '\f':
-                        continue
-                    else:
-                        line = line.replace('\f', '')
+                    continue
                 if len(page) == book.height:
                     pages.append(tuple(page))
                     page = []
