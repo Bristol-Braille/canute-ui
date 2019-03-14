@@ -125,7 +125,17 @@ def alpha_to_pin_num(alpha):
     convert a single alpha, digit or some punctuation to 6 pin braille
     unknown characters will be logged and a space will be returned.
     '''
-    alpha = alpha.upper()
+    # This gets around a common Braille ASCII encoding ambiguity where
+    # some translation software produces `{|} and lower-case
+    # alphabeticals, which map to the same dot patterns as @[\] and
+    # upper-case (for which we do have a mapping).  But this is exactly
+    # the kind of temporary hack that will break proper i18n support.
+    # In particular, James Bowden warns: "in other country codes you may
+    # well need to define up to 0xff, as some accented characters are
+    # used for some dot combinations."
+    if ord(alpha) >= 0x60:
+        alpha = chr(ord(alpha) - 0x20)
+
     try:
         return mapping.index(alpha)
     except ValueError:
