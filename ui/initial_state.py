@@ -13,6 +13,8 @@ from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
 
 from . import config_loader
 
+from . import config_loader
+
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
 
