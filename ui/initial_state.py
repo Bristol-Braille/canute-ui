@@ -9,6 +9,8 @@ from . import utility
 from .manual import Manual, manual_filename
 from .book.book_file import BookFile
 
+from . import config_loader
+
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
 DEFAULT_LOCALE = 'en_GB:en'
@@ -75,7 +77,9 @@ async def read_user_state(path):
     global prev
     global manual
     book_files = utility.find_files(path, ('brf', 'pef'))
-    main_toml = os.path.join(path, 'sd-card', USER_STATE_FILE)
+    config = config_loader.load()
+    sd_card_dir = config.get('files', 'sd_card_dir')
+    main_toml = os.path.join(path, sd_card_dir, USER_STATE_FILE)
     current_book = manual_filename
     if os.path.exists(main_toml):
         main_state = toml.load(main_toml)
@@ -140,7 +144,9 @@ async def write(store, media_dir):
             selected_book = os.path.relpath(selected_book, media_dir)
         s = toml.dumps({'current_book': selected_book,
                         'current_language': selected_lang})
-        path = os.path.join(media_dir, 'sd-card', USER_STATE_FILE)
+        config = config_loader.load()
+        sd_card_dir = config.get('files', 'sd_card_dir')
+        path = os.path.join(media_dir, sd_card_dir, USER_STATE_FILE)
         async with aiofiles.open(path, 'w') as f:
             await f.write(s)
     for filename in books:
