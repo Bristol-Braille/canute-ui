@@ -1,4 +1,5 @@
 import os
+import sys
 from frozendict import frozendict
 import time
 import shutil
@@ -148,7 +149,8 @@ async def handle_hardware(driver, state, store, media_dir):
         if isinstance(driver, Pi):
             driver.clear_page()
             driver.lower_rods()
-            os.system('sudo shutdown -h now')
+            if not sys.stdout.isatty():
+                os.system('sudo shutdown -h now')
         # never exit from Dummy driver
         elif isinstance(driver, Dummy):
             return False
