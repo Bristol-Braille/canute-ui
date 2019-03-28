@@ -20,6 +20,7 @@ from .store import main_reducer
 from .actions import actions
 from .display import Display
 from .book.handlers import load_books, all_books_loaded
+from . import media
 
 display = Display()
 
@@ -129,12 +130,23 @@ async def run_async(driver, config, loop):
     await store.dispatch(actions.trigger())
 
     while 1:
+        print("while 1")
         state = store.state
         if (await handle_hardware(driver, state, store, media_dir)):
             break
         await buttons.check(driver, state['app'],
                             store.dispatch)
         await display.send_line(driver)
+
+        if not media.eventqueue.empty():
+            print("NotEmpty")
+            # We are the only consumer so get() will always work.
+            media_changes = media.eventqueue.get()
+            # TODO: make use of the inserted/removed & medium info.
+            # Exiting (and relying upon being restarted) is a very crude
+            # way to rescan the library!
+            sys.exit(0)
+
         # in the emulated driver we can be too agressive in checking buttons
         # and sending lines if we don't have any delay
         if not isinstance(driver, Pi):
