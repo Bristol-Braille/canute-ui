@@ -1,6 +1,16 @@
+#!/usr/bin/python3
+#
+# Monitor removeable block devices and notify UI of changes.
+#
+# UI spawns this as a subprocess and listens to our stdout.  When a
+# medium comes or goes we send a line to stdout describing the change;
+# the UI can then choose how to react.
+#
+# This is in a separate process because it interacts badly with the Qt
+# UI, slowing its start by as much as a minute.
+#
 import sys
 import threading
-import queue
 import pydbus
 from gi.repository import GLib
 
@@ -22,7 +32,6 @@ EXTERNAL_PORT_PATHS = {
 # Not really a class, just limiting the scope of some variables.
 class Media:
     def __init__(self):
-        # FIXME: Making this call causes *much* slower Qt UI start-up.
         bus = pydbus.SystemBus()
         ud = bus.get(".UDisks2")
 
@@ -38,10 +47,6 @@ class Media:
         # symlink.  Notifications about disappearances tell us only the
         # UDisks2 name.  Entries are UDisks2 path -> symlink.
         self.obj2sym = {}
-
-        # We produce tuples like: ("inserted", "sd-card"), ("removed",
-        # "back-usb") and enqueue them here.
-        self.eventqueue = queue.Queue()
 
         # When True (i.e. just during synthesize_insertions()) we don't
         # trigger actions for insertions, just subscribe to updates and
@@ -118,8 +123,7 @@ class Media:
                return
            if not self.synthetic:
                sym = self.obj2sym[object_path]
-               print("Put")
-               self.eventqueue.put(("inserted", EXTERNAL_PORT_PATHS[sym]))
+               print("inserted %s" % EXTERNAL_PORT_PATHS[sym])
 
         for sym in map(stringify, syms):
             if sym in EXTERNAL_PORT_PATHS and sym not in self.sym2sub:
@@ -132,7 +136,7 @@ class Media:
         """Handle media disappearing from external ports"""
         if not self.synthetic:
             sym = self.obj2sym[object_path]
-            self.eventqueue.put(("removed", EXTERNAL_PORT_PATHS[sym]))
+            print("removed %s" % EXTERNAL_PORT_PATHS[sym])
 
 # Create a singleton instance to act as the module.
 sys.modules[__name__] = Media()
