@@ -84,9 +84,9 @@ class Media:
 	# this doesn't seem to be necessary; old subs seem to continue
 	# working when the port gets used again.
         #
-	# Upon removal pydbus will only tell us the block device name
-	# and what interfaces went away, not the symlinks.  So we'll
-	# need to record the mapping.
+        # Upon removal pydbus will only tell us the block device name
+        # and what interfaces went away, not the symlinks.  So we'll
+        # need to record the mapping.
     
         # If we're given just the Block then no FS is recognised, so
         # ignore it.  Happens with whole-disk devices.
