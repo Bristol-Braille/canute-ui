@@ -32,8 +32,8 @@ EXTERNAL_PORT_PATHS = {
 # Not really a class, just limiting the scope of some variables.
 class Media:
     def __init__(self):
-        bus = pydbus.SystemBus()
-        ud = bus.get(".UDisks2")
+        self.bus = pydbus.SystemBus()
+        ud = self.bus.get(".UDisks2")
 
         ud_api = ud['org.freedesktop.DBus.ObjectManager']
 
@@ -123,7 +123,7 @@ class Media:
 
         for sym in map(stringify, syms):
             if sym in EXTERNAL_PORT_PATHS and sym not in self.sym2sub:
-                fs = bus.get(".UDisks2", object_path)
+                fs = self.bus.get(".UDisks2", object_path)
                 # Only FS property changes are interesting.
                 fs = fs['org.freedesktop.UDisks2.Filesystem']
                 self.sym2sub[sym] = fs.PropertiesChanged.connect(handle_mount_changes)
