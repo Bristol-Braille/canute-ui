@@ -110,7 +110,7 @@ async def run_async_timeout(driver, config, duration, loop):
 # change notifications, and handles them.
 async def handle_media_changes():
     proc = await asyncio.create_subprocess_exec(
-                    "./media.py", stdout=asyncio.subprocess.PIPE)
+                    './media.py', stdout=asyncio.subprocess.PIPE)
     while True:
         try:
             change = await proc.stdout.readline()
@@ -119,11 +119,12 @@ async def handle_media_changes():
             await proc.wait()
             raise
         change = change.decode('ascii')
-        if change.startswith("inserted") or change.startswith("removed"):
+        if change.startswith('inserted') or change.startswith('removed'):
             # For now we do nothing more sophisticated than die and allow
             # supervision to restart us, at which point we'll rescan the
             # library.
             sys.exit(0)
+
 
 async def run_async(driver, config, loop):
     media_handler = asyncio.ensure_future(handle_media_changes())
