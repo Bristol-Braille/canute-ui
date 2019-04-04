@@ -70,6 +70,7 @@ def run(driver, config):
     loop.run_until_complete(run_async(driver, config, loop))
     pending = asyncio.Task.all_tasks()
     loop.run_until_complete(asyncio.gather(*pending))
+    loop.close()
 
 
 async def run_async_timeout(driver, config, duration, loop):
@@ -86,7 +87,12 @@ async def handle_media_changes():
     proc = await asyncio.create_subprocess_exec(
                     "./media.py", stdout=asyncio.subprocess.PIPE)
     while True:
-        change = await proc.stdout.readline()
+        try:
+            change = await proc.stdout.readline()
+        except asyncio.CancelledError:
+            proc.terminate()
+            await proc.wait()
+            raise
         change = change.decode('ascii')
         if change.startswith("inserted") or change.startswith("removed"):
             # For now we do nothing more sophisticated than die and allow
@@ -95,7 +101,7 @@ async def handle_media_changes():
             sys.exit(0)
 
 async def run_async(driver, config, loop):
-    asyncio.ensure_future(handle_media_changes())
+    media_handler = asyncio.ensure_future(handle_media_changes())
     media_dir = config.get('files', 'media_dir')
     state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
@@ -121,6 +127,11 @@ async def run_async(driver, config, loop):
     while 1:
         state = store.state
         if (await handle_hardware(driver, state, store, media_dir)):
+            media_handler.cancel()
+            try:
+                await media_handler
+            except asyncio.CancelledError:
+                pass
             break
         await buttons.check(driver, state['app'],
                             store.dispatch)
