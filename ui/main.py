@@ -84,7 +84,7 @@ async def run_async_timeout(driver, config, duration, loop):
 # change notifications, and handles them.
 async def handle_media_changes():
     proc = await asyncio.create_subprocess_exec(
-                    "/home/pi/canute-ui/media.py", stdout=asyncio.subprocess.PIPE)
+                    "./media.py", stdout=asyncio.subprocess.PIPE)
     while True:
         change = await proc.stdout.readline()
         change = change.decode('ascii')
