@@ -76,22 +76,30 @@ def to_state_file(book_path):
 async def read_user_state(path):
     global prev
     global manual
+    current_book = manual_filename
+    current_language = None
     book_files = utility.find_files(path, ('brf', 'pef'))
     config = config_loader.load()
-    sd_card_dir = config.get('files', 'sd_card_dir')
-    main_toml = os.path.join(path, sd_card_dir, USER_STATE_FILE)
-    current_book = manual_filename
-    if os.path.exists(main_toml):
-        main_state = toml.load(main_toml)
-        if 'current_book' in main_state:
-            current_book = main_state['current_book']
-            if not current_book == manual_filename:
-                current_book = os.path.join(path, current_book)
-        if 'current_language' in main_state:
-            current_language = main_state['current_language']
-        else:
-            current_language = 'en_GB:en'
-    else:
+
+    state_sources = ['sd_card_dir']
+    if config.has_option('files', 'additional_lib_1'):
+        state_sources.append('additional_lib_1')
+    if config.has_option('files', 'additional_lib_2'):
+        state_sources.append('additional_lib_2')
+    for state_source in state_sources:
+        _dir = config.get('files', state_source)
+        main_toml = os.path.join(path, _dir, USER_STATE_FILE)
+        if os.path.exists(main_toml):
+            main_state = toml.load(main_toml)
+            if 'current_book' in main_state:
+                current_book = main_state['current_book']
+                if not current_book == manual_filename:
+                    current_book = os.path.join(path, current_book)
+            if 'current_language' in main_state:
+                current_language = main_state['current_language']
+            break
+
+    if not current_language:
         current_language = 'en_GB:en'
 
     manual_toml = os.path.join(path, to_state_file(manual_filename))
