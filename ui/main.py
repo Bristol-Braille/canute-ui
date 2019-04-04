@@ -1,4 +1,5 @@
 import os
+import sys
 from frozendict import frozendict
 import time
 import shutil
@@ -19,7 +20,6 @@ from .store import main_reducer
 from .actions import actions
 from .display import Display
 from .book.handlers import load_books
-from . import media
 
 display = Display()
 
@@ -80,8 +80,22 @@ async def run_async_timeout(driver, config, duration, loop):
         return
 
 
-async def run_async(driver, config, loop):
+# This is a task in its own right that listens to an external process for media
+# change notifications, and handles them.
+async def handle_media_changes():
+    proc = await asyncio.create_subprocess_exec(
+                    "/home/pi/canute-ui/media.py", stdout=asyncio.subprocess.PIPE)
+    while True:
+        change = await proc.stdout.readline()
+        change = change.decode('ascii')
+        if change.startswith("inserted") or change.startswith("removed"):
+            # For now we do nothing more sophisticated than die and allow
+            # supervision to restart us, at which point we'll rescan the
+            # library.
+            sys.exit(0)
 
+async def run_async(driver, config, loop):
+    asyncio.ensure_future(handle_media_changes())
     media_dir = config.get('files', 'media_dir')
     state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
@@ -105,23 +119,13 @@ async def run_async(driver, config, loop):
     await store.dispatch(actions.trigger())
 
     while 1:
-        print("while 1")
         state = store.state
         if (await handle_hardware(driver, state, store, media_dir)):
             break
         await buttons.check(driver, state['app'],
                             store.dispatch)
+
         await display.send_line(driver)
-
-        if not media.eventqueue.empty():
-            print("NotEmpty")
-            # We are the only consumer so get() will always work.
-            media_changes = media.eventqueue.get()
-            # TODO: make use of the inserted/removed & medium info.
-            # Exiting (and relying upon being restarted) is a very crude
-            # way to rescan the library!
-            sys.exit(0)
-
         # in the emulated driver we can be too agressive in checking buttons
         # and sending lines if we don't have any delay
         if not isinstance(driver, Pi):

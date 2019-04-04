@@ -1,0 +1,4 @@
+# Install as /etc/udev/rules.d/99-umount.rules
+# This won't fire for the 2640 SD card reader since the devices never
+# go away, just shrink to zero size.  But it does work for USB sticks.
+ACTION=="remove", KERNEL=="sd[a-z]1", SUBSYSTEM=="block", RUN+="/usr/local/sbin/umount.sh"

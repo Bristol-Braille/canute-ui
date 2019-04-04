@@ -10,6 +10,7 @@
 # UI, slowing its start by as much as a minute.
 #
 import sys
+import os
 import threading
 import pydbus
 from gi.repository import GLib
@@ -37,15 +38,13 @@ class Media:
 
         ud_api = ud['org.freedesktop.DBus.ObjectManager']
 
-        # Remember Filesystem objects whose PropertiesChanged events
-        # we've subscribed to.  Entries are symlink -> pydbus
-        # subscription.  For now we never use the subscription; presence
-        # in here is the entire meaning.
-        self.sym2sub = {}
+        # Entries are by-path symlinks.
+        self.mounted = []
 
-        # Remember which UDisks2 name refers to which recognised by-path
-        # symlink.  Notifications about disappearances tell us only the
-        # UDisks2 name.  Entries are UDisks2 path -> symlink.
+        # Map UDisks2 object paths to by-path symlinks affected by them
+        # coming and going.  More than one UDisks2 object may map to the
+        # same symlink because we map both the partition and the
+        # whole-block-device object to the symlink.
         self.obj2sym = {}
 
         # When True (i.e. just during synthesize_insertions()) we don't
@@ -55,34 +54,53 @@ class Media:
         self.synthesize_insertions(ud_api)
         self.synthetic = False
 
-        ud_api.InterfacesAdded.connect(self.handle_media_changes)
+        # Drivers vary in their handling of removal of a medium.  Our
+        # (2640) SD card reader whole-medium block device will persist
+        # when the card is removed but will shrink to zero size.
+        # There's no implicit unmounting of rudely removed media, so we
+        # do that manually.  USB sticks' block devices disappear when
+        # they're removed.  There's no implicit unmounting of rudely
+        # removed media, so we do that.  So multiple subscriptions are
+        # used to handle these cases.  Adding to the fun is that pydbus
+        # doesn't always give all the information needed to work out
+        # what to do, so there's some caching thrown in.
+        ud_api.InterfacesAdded.connect(self.handle_medium_insertion)
         ud_api.InterfacesRemoved.connect(self.handle_medium_removal)
 
+        # Simulate these either with udisksadm monitor or with
+        # dbus-monitor --system sender='org.freedesktop.UDisks2',arg0='org.freedesktop.UDisks2.Filesystem',member=PropertiesChanged,interface=org.freedesktop.DBus.Properties
+        self.bus.subscribe(sender='org.freedesktop.UDisks2',
+                iface='org.freedesktop.DBus.Properties',
+                signal='PropertiesChanged',
+                arg0='org.freedesktop.UDisks2.Filesystem',
+                signal_fired=self.handle_mounts)
+
+        self.bus.subscribe(sender='org.freedesktop.UDisks2',
+                iface='org.freedesktop.DBus.Properties',
+                signal='PropertiesChanged',
+                arg0='org.freedesktop.UDisks2.Block',
+                signal_fired=self.handle_device_shrinks)
 
     def synthesize_insertions(self, ud_api):
-        """Generate an insertion event for each existing medium"""
+        """Generate an insertion event for each mounted medium"""
         existing_media = ud_api.GetManagedObjects()
         for (obj, properties) in existing_media.items():
-            self.handle_media_changes(obj, properties)
+            if 'org.freedesktop.UDisks2.Filesystem' in properties:
+                self.handle_medium_insertion(obj, properties)
+                params = (
+                    'org.freedesktop.UDisks2.Filesystem',
+                    properties['org.freedesktop.UDisks2.Filesystem'],
+                    []
+                )
+                self.handle_mounts(None, obj, None, None, params)
 
-    # Should probably be handle_medium_insertion() ?
-    def handle_media_changes(self, object_path, properties):
-        """Handle media coming and going in external ports"""
-        # This gets called by pydbus for any new block device.
+    def handle_medium_insertion(self, object_path, properties):
+        """Handle medium insertion in external ports"""
+        # Gets callback from pydbus for any new block device.
         #
-        # For new media, subscribe to see mount (probably in a few
-	# milliseconds' time).  For now, when we see the mount, notify
-	# the UI main loop which will restart the UI.  We could handle
-	# this with more finesse later, adding books with a property
-	# denoting the medium they reside on, and rebuilding the menu.
-        #
-	# For removed media, again notify the UI main loop which will
-	# restart the UI.  We could handle this with more finesse later,
-	# removing only the books on this medium and then rebuilding the
-	# menu.  Technically we should also cancel subscriptions to
-	# PropertiesChanged on the disappearing medium, but in practice
-	# this doesn't seem to be necessary; old subs seem to continue
-	# working when the port gets used again.
+        # For new media, add UDisks2 object mappings and subscribe to
+        # changes in whole-block-device size.  The mount itself is
+        # handled elsewhere (see constructor).
         #
         # Upon removal pydbus will only tell us the block device name
         # and what interfaces went away, not the symlinks.  So we'll
@@ -100,39 +118,73 @@ class Media:
     
         syms = properties['org.freedesktop.UDisks2.Block']['Symlinks']
 
-        # Few decent ways exist to have callback know which medium was
-        # mounted.  A closure seems least bad.
-        def handle_mount_changes(iface, changed, invalidated):
-           """Handle mounts/unmounts of removeable media"""
-           # FIXME do we need to handle brute-force unmounts?  I don't
-           # fancy yanking a block device under braille VM because Qubes
-           # bugs.  But I don't know whether we get notifications.  If
-           # we get both, things are nice and symmetrical.  If we don't
-           # get mount-yank notifications, it's muddier.
-           assert(iface == 'org.freedesktop.UDisks2.Filesystem')
-           if 'MountPoints' not in changed:
-               return
-           # If a medium gets yanked we'll catch it at the block level,
-           # but we allow for a notification here with MountPoints
-           # empty.
-           if len(changed['MountPoints']) != 1:
-               return
-           if not self.synthetic:
-               sym = self.obj2sym[object_path]
-               print("inserted %s" % EXTERNAL_PORT_PATHS[sym])
-
         for sym in map(stringify, syms):
-            if sym in EXTERNAL_PORT_PATHS and sym not in self.sym2sub:
+            if sym in EXTERNAL_PORT_PATHS:
+                self.obj2sym[object_path] = sym
                 fs = self.bus.get(".UDisks2", object_path)
-                # Only FS property changes are interesting.
-                fs = fs['org.freedesktop.UDisks2.Filesystem']
-                self.sym2sub[sym] = fs.PropertiesChanged.connect(handle_mount_changes)
+
+                # Since our devices are all partitions they'll always
+                # have parent devices with tables.
+                table = fs['org.freedesktop.UDisks2.Partition'].Table
+                self.obj2sym[table] = sym
 
     def handle_medium_removal(self, object_path, lost_interfaces):
         """Handle media disappearing from external ports"""
-        if not self.synthetic:
-            sym = self.obj2sym[object_path]
+        # Pretty much all we can use is the object path.
+        # We may or may not be interested in this object.
+        if 'org.freedesktop.UDisks2.Block' not in lost_interfaces:
+            return
+        if object_path not in self.obj2sym:
+            return
+        sym = self.obj2sym[object_path]
+        if sym in self.mounted:
+            self.mounted.remove(sym)
             print("removed %s" % EXTERNAL_PORT_PATHS[sym])
+            sys.stdout.flush()
+
+    @staticmethod
+    def known_mountpoint(mountpoint):
+        for slug in EXTERNAL_PORT_PATHS.values():
+            if mountpoint.endswith(slug):
+                return True
+        return False
+
+    def handle_mounts(self, sender, obj, iface, signal, params):
+        """Handle mounts of newly inserted media"""
+        (ud_iface, changed, invalidated) = params
+        if ud_iface != 'org.freedesktop.UDisks2.Filesystem':
+            return
+        if 'MountPoints' not in changed:
+            return
+        if len(changed['MountPoints']) != 1:
+            return
+        mountpoint = stringify(changed['MountPoints'][0])
+        if not self.known_mountpoint(mountpoint):
+            return
+        sym = self.obj2sym[obj]
+        assert(sym not in self.mounted)
+        self.mounted.append(sym)
+        if not self.synthetic:
+            print("inserted %s" % EXTERNAL_PORT_PATHS[sym])
+            sys.stdout.flush()
+
+    def handle_device_shrinks(self, sender, obj, iface, signal, params):
+        # Handle devices that shrink to zero but persist when medium is
+        # removed.  We'll only get a call for the whole-medium device,
+        # not the partitions.
+        (ud_iface, changed, invalidated) = params
+        if 'Size' not in changed:
+            return
+        if changed['Size'] != 0:
+            return
+        sym = self.obj2sym[obj]
+        if sym in self.mounted:
+            # OS won't do a unmount; do one ourselves, mostly so that we
+            # get a proper mount notification when it comes back.
+            os.system("sudo umount %s" % sym)
+            self.mounted.remove(sym)
+            print("removed %s" % EXTERNAL_PORT_PATHS[sym])
+            sys.stdout.flush()
 
 media = Media()
 loop = GLib.MainLoop()
