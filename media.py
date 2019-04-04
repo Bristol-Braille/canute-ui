@@ -58,10 +58,6 @@ class Media:
         ud_api.InterfacesAdded.connect(self.handle_media_changes)
         ud_api.InterfacesRemoved.connect(self.handle_medium_removal)
 
-        loop = GLib.MainLoop()
-        self.thread = threading.Thread(target=loop.run)
-        self.thread.daemon = True
-        self.thread.start()
 
     def synthesize_insertions(self, ud_api):
         """Generate an insertion event for each existing medium"""
@@ -138,5 +134,6 @@ class Media:
             sym = self.obj2sym[object_path]
             print("removed %s" % EXTERNAL_PORT_PATHS[sym])
 
-# Create a singleton instance to act as the module.
-sys.modules[__name__] = Media()
+media = Media()
+loop = GLib.MainLoop()
+loop.run()
