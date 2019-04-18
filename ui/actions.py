@@ -9,6 +9,12 @@ from .go_to_page.reducers import GoToPageReducers
 from .bookmarks.reducers import BookmarksReducers
 from .language.reducers import LanguageReducers
 
+from .book.help import render_help as render_book_help
+from .library.view import render_help as render_library_help
+from .system_menu.help import render_help as render_system_help
+from .language.view import render_help as render_language_help
+from .go_to_page.view import render_help as render_gtp_help
+from .bookmarks.help import render_help as render_bookmarks_help
 
 log = logging.getLogger(__name__)
 
@@ -100,10 +106,24 @@ class AppReducers():
             language_menu = state['user'].copy(current_language=lang)
             return state.copy(language=language_menu)
         elif location == 'help_menu':
-            max_pages = 1
-            if page >= max_pages:
-                page = max_pages - 1
 
+            # To calculate help page bounds and ensure we stay within
+            # them, do a dummy render of the help and count the pages.
+
+            # Default to one page.
+            renderer = lambda w, h: (None,) * h
+            mapping = {
+                'book': render_book_help,
+                'library': render_library_help,
+                'system_menu': render_system_help,
+                'language': render_language_help,
+                'bookmarks_menu': render_bookmarks_help,
+                'go_to_page': render_gtp_help,
+            }
+            renderer = mapping.get(state['location'], renderer)
+            num_pages = len(renderer(width, height)) // height
+            if page >= num_pages:
+                page = num_pages - 1
             return state.copy(help_menu=state['help_menu'].copy(page=page))
         return state
 
