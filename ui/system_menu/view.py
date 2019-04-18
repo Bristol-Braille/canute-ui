@@ -1,4 +1,4 @@
-from ..braille import from_ascii, format_title
+from ..braille import format_title
 from .system_menu import create
 from .help import render_help
 

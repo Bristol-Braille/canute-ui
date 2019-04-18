@@ -1,5 +1,4 @@
 from ..braille import from_ascii, format_title
-from ..i18n import I18n
 from ..state_helpers import get_books
 
 

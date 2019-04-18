@@ -1,5 +1,6 @@
 from ..braille import from_ascii
 
+
 def render_help(width, height):
     data = []
 

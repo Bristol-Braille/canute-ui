@@ -16,6 +16,7 @@ from .language.view import render_help as render_language_help
 from .go_to_page.view import render_help as render_gtp_help
 from .bookmarks.help import render_help as render_bookmarks_help
 
+
 log = logging.getLogger(__name__)
 
 
@@ -110,8 +111,6 @@ class AppReducers():
             # To calculate help page bounds and ensure we stay within
             # them, do a dummy render of the help and count the pages.
 
-            # Default to one page.
-            renderer = lambda w, h: (None,) * h
             mapping = {
                 'book': render_book_help,
                 'library': render_library_help,
@@ -120,8 +119,10 @@ class AppReducers():
                 'bookmarks_menu': render_bookmarks_help,
                 'go_to_page': render_gtp_help,
             }
-            renderer = mapping.get(state['location'], renderer)
-            num_pages = len(renderer(width, height)) // height
+            help_getter = mapping.get(state['location'])
+            num_pages = 1
+            if help_getter:
+                num_pages = len(help_getter(width, height)) // height
             if page >= num_pages:
                 page = num_pages - 1
             return state.copy(help_menu=state['help_menu'].copy(page=page))
