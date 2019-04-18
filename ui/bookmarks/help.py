@@ -18,7 +18,7 @@ down will delete the bookmark.''')
         data.append(from_ascii(line))
 
     # pad page with empty rows
-    while len(data) < height:
+    while len(data) % height:
         data.append(tuple())
 
     return tuple(data)

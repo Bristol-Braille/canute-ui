@@ -10,7 +10,7 @@ number buttons and pressing forward.''')
     for line in para.split('\n'):
         data.append(from_ascii(line))
 
-    while len(data) < height:
+    while len(data) % height:
         data.append(tuple())
 
     return tuple(data)
@@ -19,7 +19,13 @@ number buttons and pressing forward.''')
 def render(width, height, state):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help(width, height)
+        all_lines = render_help(width, height)
+        num_pages = len(all_lines) // height
+        page_num = min(state['help_menu']['page'], num_pages - 1)
+        first_line = page_num * height
+        off_end = first_line + height
+        page = all_lines[first_line:off_end]
+        return page
 
     lang = state['user'].get('current_language', None)
     languages = state['languages']['available']

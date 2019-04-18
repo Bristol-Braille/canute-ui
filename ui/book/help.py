@@ -21,7 +21,7 @@ will always return you to your book.''')
         data.append(line)
 
     # pad page with empty rows
-    while len(data) < height:
+    while len(data) % height:
         data.append(tuple())
 
     return tuple(data)
