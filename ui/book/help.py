@@ -21,7 +21,7 @@ Here is another page of help.''')
         data.append(line)
 
     # pad page with empty rows
-    while len(data) < height:
+    while len(data) % height:
         data.append(tuple())
 
     return tuple(data)

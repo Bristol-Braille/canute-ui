@@ -17,7 +17,7 @@ seconds before unplugging it.
     for line in para.split('\n'):
         data.append(from_ascii(line))
 
-    while len(data) < height:
+    while len(data) % height:
         data.append(tuple())
 
     return tuple(data)

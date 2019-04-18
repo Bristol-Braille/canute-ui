@@ -6,7 +6,13 @@ from .help import render_help
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help(width, height)
+        all_lines = render_help(width, height)
+        num_pages = len(all_lines) // height
+        page_num = min(state['help_menu']['page'], num_pages - 1)
+        first_line = page_num * height
+        off_end = first_line + height
+        page = all_lines[first_line:off_end]
+        return page
 
     book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']
