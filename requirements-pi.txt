@@ -6,3 +6,4 @@ aiofiles==0.3.2
 toml==0.9.4
 crcmod==1.7
 lxml==4.2.3
+pyzmq==16.0.2
