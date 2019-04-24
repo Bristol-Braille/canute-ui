@@ -13,8 +13,7 @@ what you can do with the side buttons
 from the home menu or the book. View
 this by pressing the middle button on
 the front. Pressing this button again
-will always return you to your book.
-Here is another page of help.''')
+will always return you to your book.''')
 
     lines = tuple(from_ascii(l) for l in para.split('\n'))
 

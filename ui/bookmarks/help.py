@@ -12,9 +12,7 @@ starts with the Canute page number based
 on its #i line page. Go to the page by
 selecting a bookmark by pressing one of
 the side buttons. Holding the button
-down will delete the bookmark.
-another line
-another page''')
+down will delete the bookmark.''')
 
     for line in para.split('\n'):
         data.append(from_ascii(line))
