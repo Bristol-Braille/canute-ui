@@ -120,7 +120,7 @@ class AppReducers():
                 'go_to_page': render_gtp_help,
             }
             if state['home_menu_visible']:
-                mapping["book"] = render_home_menu_help
+                mapping['book'] = render_home_menu_help
             help_getter = mapping.get(state['location'])
             num_pages = 1
             if help_getter:
