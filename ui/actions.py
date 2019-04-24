@@ -9,7 +9,7 @@ from .go_to_page.reducers import GoToPageReducers
 from .bookmarks.reducers import BookmarksReducers
 from .language.reducers import LanguageReducers
 
-from .book.help import render_help as render_book_help
+from .book.help import render_book_help, render_home_menu_help
 from .library.view import render_help as render_library_help
 from .system_menu.help import render_help as render_system_help
 from .language.view import render_help as render_language_help
@@ -119,6 +119,8 @@ class AppReducers():
                 'bookmarks_menu': render_bookmarks_help,
                 'go_to_page': render_gtp_help,
             }
+            if state['home_menu_visible']:
+                mapping['book'] = render_home_menu_help
             help_getter = mapping.get(state['location'])
             num_pages = 1
             if help_getter:
