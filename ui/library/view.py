@@ -1,19 +1,33 @@
-from ..braille import from_ascii, format_title
+import textwrap
+from ..braille import format_title, from_unicode, alphas_to_unicodes
 from ..state_helpers import get_books
 
 
 def render_help(width, height):
     data = []
     para = _('''\
-Choose the book you wish to read by
-pressing the button to the left of the
-title. Use the arrow buttons to page
-through the library. You can change the
-ordering of the books in the system
-menu.''')
+This is the library menu. From this menu, you can view and select from \
+the files loaded onto the memory stick or SD card. As with other menus, \
+press the line select key to the left of a menu item to select it. \
+Canute 360 will then display your chosen file on the reading surface. \
+Navigate within the menu using the "forward" and "back" buttons. To load \
+books onto your canute, first turn it off by pressing the button to the \
+right of the power socket on the back panel. Once the "please wait" text \
+disappears, remove the memory stick or SD card you are using. Copy and \
+paste a BRF or PEF file onto the stick or card, using a computer, insert \
+the stick or card into the slot. Turn your Canute on again, and once it \
+has started your file will be in the library menu. As with all menus, \
+select your file using the line select button to it's left. For best \
+results, format BRF files with nine lines of forty cells per page in \
+software. Duxbury DBT and RoboBraille have a Canute preset built in for \
+formatting.\
+''')
+    if _(para) == para:
+        para = textwrap.fill(para, width=width)
+        para = alphas_to_unicodes(para)
 
     for line in para.split('\n'):
-        data.append(from_ascii(line))
+        data.append(from_unicode(line))
 
     while len(data) % height:
         data.append(tuple())

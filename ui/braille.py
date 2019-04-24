@@ -1,5 +1,8 @@
 import logging
+from curses.ascii import isspace, isprint
 log = logging.getLogger(__name__)
+
+UNICODE_BRAILLE_BASE = 0x2800
 
 
 def format_title(title, width, page_number, total_pages, capitalize=True):
@@ -67,7 +70,7 @@ def unicode_to_pin_num(uni_char):
     used to convert PEF format to CANUTE format
     http://en.wikipedia.org/wiki/Braille_Patterns
     '''
-    int_code = ord(uni_char) - 10240
+    int_code = ord(uni_char) - UNICODE_BRAILLE_BASE
     pin_num = 0
     pins = [0] * 6
     if int_code >= 0x20:
@@ -102,7 +105,7 @@ def pin_num_to_unicode(pin_num):
     '''
     used by the gui to display braille
     '''
-    return chr(pin_num + 10240)
+    return chr(pin_num + UNICODE_BRAILLE_BASE)
 
 
 # mapping from
@@ -156,3 +159,26 @@ def from_unicode(alphas):
     :meth:`unicode_to_pin_num` form feed and line feed characters are supressed
     '''
     return tuple(unicode_to_pin_num(a) for a in alphas)
+
+
+def alpha_to_unicode(alpha):
+    '''
+    Convert an alpha to a Unicode character.
+    '''
+    alpha = alpha.upper()
+    try:
+        if isprint(alpha):  # includes ASCII space, 0x20
+            return chr(UNICODE_BRAILLE_BASE + mapping.index(alpha))
+        elif isspace(alpha):
+            return alpha
+        else:
+            return chr(UNICODE_BRAILLE_BASE)
+    except ValueError:
+        return 0
+
+
+def alphas_to_unicodes(alphas):
+    '''
+    Convert an alpha string to a Unicode string.
+    '''
+    return ''.join(map(alpha_to_unicode, alphas))
