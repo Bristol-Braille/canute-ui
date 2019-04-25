@@ -14,7 +14,7 @@ STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
 DEFAULT_LOCALE = 'en_GB:en'
 
-manual = Manual.create(DEFAULT_LOCALE)
+manual = Manual.create()
 
 log = logging.getLogger(__name__)
 
@@ -90,6 +90,7 @@ async def read_user_state(path):
             current_language = 'en_GB:en'
     else:
         current_language = 'en_GB:en'
+    manual = Manual.create()
 
     manual_toml = os.path.join(path, to_state_file(manual_filename))
     if os.path.exists(manual_toml):
@@ -99,8 +100,6 @@ async def read_user_state(path):
         if 'bookmarks' in t:
             manual = manual._replace(bookmarks=tuple(sorted(manual.bookmarks + tuple(
                 bm - 1 for bm in t['bookmarks']))))
-    else:
-        manual = Manual.create(current_language)
 
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
