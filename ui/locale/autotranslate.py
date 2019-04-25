@@ -37,31 +37,31 @@ variants = [
     # It's assumed that the current system text uses British English
     # spellings and idioms; perhaps, again, there's not enough material
     # that anyone would notice.
-    Variant("British English, UEB grade 1", "en-ueb-g1.ctb", "en_GB.UTF-8@ueb1"),
-    Variant("British English, UEB grade 2", "en-ueb-g2.ctb", "en_GB.UTF-8@ueb2"),
+    Variant('British English, UEB grade 1', 'en-ueb-g1.ctb', 'en_GB.UTF-8@ueb1'),
+    Variant('British English, UEB grade 2', 'en-ueb-g2.ctb', 'en_GB.UTF-8@ueb2'),
 ]
 
 for variant in variants:
     dest = polib.POFile()
 
     dest.metadata = src.metadata
-    now = datetime.now(timezone.utc).strftime("%F %H:%M%z")
-    dest.metadata["PO-Revision-Date"] = now
+    now = datetime.now(timezone.utc).strftime('%F %H:%M%z')
+    dest.metadata['PO-Revision-Date'] = now
 
     for src_entry in valid_entries:
         # unicode.dis still uses ASCII spaces.
         translation = louis.translateString(
-            ["unicode.dis", variant.table],
+            ['unicode.dis', variant.table],
             src_entry.msgid
         )
         dest_entry = polib.POEntry(
-            msgid = src_entry.msgid,
+            msgid=src_entry.msgid,
         )
         dest_entry.merge(src_entry)
         dest_entry.msgstr = translation
         dest.append(dest_entry)
 
-    destdir = os.path.join(variant.locale, "LC_MESSAGES")
+    destdir = os.path.join(variant.locale, 'LC_MESSAGES')
     os.makedirs(destdir, exist_ok=True)
     po_path = os.path.join(destdir, 'canute.po')
     dest.save(po_path)
