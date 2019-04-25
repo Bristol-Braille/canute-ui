@@ -6,6 +6,7 @@
 # Don't forget to update the POT first.
 #
 import collections
+import textwrap
 import os
 import polib
 import louis
@@ -16,6 +17,8 @@ This OVERWRITES any existing translations with new automatic ones.
 (By the time that matters, you shouldn't be using this any more.)
 So be careful before committing changed translations!\
 ''')
+
+CANUTE_WIDTH = 40
 
 src = polib.pofile('canute.pot')
 valid_entries = [e for e in src if not e.obsolete]
@@ -54,6 +57,7 @@ for variant in variants:
             ['unicode.dis', variant.table],
             src_entry.msgid
         )
+        translation = textwrap.fill(translation, width=CANUTE_WIDTH)
         dest_entry = polib.POEntry(
             msgid=src_entry.msgid,
         )
