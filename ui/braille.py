@@ -12,7 +12,11 @@ def format_title(title, width, page_number, total_pages, capitalize=True):
         * use two dot-six characters to indicate all uppercase for the title.
         * page numbers all the way at the right,
         e.g. ',,library menu               #1/#3'.
+    `title` may be given as a mixture of Unicode Braille and SimBraille.
     '''
+    if ord(title[0]) >= UNICODE_BRAILLE_BASE:
+        title = unicodes_to_alphas(title)
+
     # ',, indicates all uppercase'
     if capitalize:
         title = ',,' + title
@@ -172,3 +176,22 @@ def alphas_to_unicodes(alphas):
     Convert an alpha string to a Unicode string.
     '''
     return ''.join(map(alpha_to_unicode, alphas))
+
+
+def unicode_to_alpha(uni):
+    '''
+    Convert a six-dot Unicode Braille character to a SimBraille one.
+    Printable ASCII is returned unchanged.  Unprintable ASCII not allowed.
+    '''
+    if ASCII.isprint(uni):
+        return uni
+    return mapping[ord(uni) - UNICODE_BRAILLE_BASE]
+
+
+def unicodes_to_alphas(unis):
+    '''
+    Convert a six-dot Unicode Braille string to a SimBraille one.
+    Printable ASCII chars are left unchanged.  Unprintable ASCII not
+    allowed.
+    '''
+    return ''.join(map(unicode_to_alpha, unis))
