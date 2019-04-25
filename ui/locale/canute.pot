@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-04-24 21:22+0100\n"
+"POT-Creation-Date: 2019-05-01 16:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ui/manual.py:17
-msgid "canute manual"
+#: ui/cleaning_and_testing.py:21
+msgid "for cleaning and testing canute"
 msgstr ""
 
-#: ui/manual.py:22
+#. TRANSLATORS: This is a language name menu item, so should always appear
+#. in the language it denotes so that it remains readable to those who
+#. speak only that language, just as "Deutsch" should always be left as
+#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
+#. appropriate, if possible.
+#: ui/i18n.py:37
+msgid "English, UEB grade 1"
+msgstr ""
+
+#. TRANSLATORS: This is a language name menu item, so should always appear
+#. in the language it denotes so that it remains readable to those who
+#. speak only that language, just as "Deutsch" should always be left as
+#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
+#. appropriate, if possible.
+#: ui/i18n.py:44
+msgid "English, UEB grade 2"
+msgstr ""
+
+#: ui/manual.py:24
 msgid ""
 "         canute quick help\n"
 "\n"
@@ -92,7 +110,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ui/book/help.py:22
+#: ui/book/help.py:21
 msgid ""
 "With Canute 360 you can read files in Braille, as well as insert, edit, "
 "and navigate to bookmarks.  To move within a file, use the three large "
@@ -106,7 +124,7 @@ msgid ""
 "\"menu\" in Braille to access the main menu."
 msgstr ""
 
-#: ui/book/help.py:42
+#: ui/book/help.py:38
 msgid ""
 "This is the main menu. From the main menu, you can access the library "
 "insert a bookmark at the current page, return to a bookmark that was "
@@ -126,23 +144,23 @@ msgid ""
 "the line select buttons."
 msgstr ""
 
-#: ui/book/view.py:13
+#: ui/book/view.py:11
 msgid "go to page"
 msgstr ""
 
-#: ui/book/view.py:16
+#: ui/book/view.py:14
 msgid "insert bookmark at current page"
 msgstr ""
 
-#: ui/book/view.py:17
+#: ui/book/view.py:15
 msgid "choose from existing bookmarks"
 msgstr ""
 
-#: ui/book/view.py:19
+#: ui/book/view.py:17
 msgid "view system menu"
 msgstr ""
 
-#: ui/book/view.py:20
+#: ui/book/view.py:18
 msgid "view library menu"
 msgstr ""
 
@@ -158,7 +176,20 @@ msgid ""
 "down will delete the bookmark."
 msgstr ""
 
-#: ui/go_to_page/view.py:7
+#. TRANSLATORS: Bookmarks menu title; gets followed by book name
+#: ui/bookmarks/view.py:25
+msgid "bookmarks:"
+msgstr ""
+
+#: ui/bookmarks/view.py:33
+msgid "start of book"
+msgstr ""
+
+#: ui/bookmarks/view.py:35
+msgid "end of book"
+msgstr ""
+
+#: ui/go_to_page/view.py:6
 msgid ""
 "Go to a page number by keying it in with\n"
 "the side number buttons and pressing\n"
@@ -170,23 +201,23 @@ msgid ""
 "pressing the menu button."
 msgstr ""
 
-#: ui/go_to_page/view.py:39
+#: ui/go_to_page/view.py:35
 msgid "enter page number using the side buttons"
 msgstr ""
 
-#: ui/go_to_page/view.py:64
+#: ui/go_to_page/view.py:60
 msgid "go to page number"
 msgstr ""
 
-#: ui/go_to_page/view.py:68
+#: ui/go_to_page/view.py:64
 msgid "please confirm by pressing forward"
 msgstr ""
 
-#: ui/go_to_page/view.py:69
+#: ui/go_to_page/view.py:65
 msgid "undo by pressing back"
 msgstr ""
 
-#: ui/go_to_page/view.py:70
+#: ui/go_to_page/view.py:66
 msgid "to go back to book press middle button"
 msgstr ""
 
@@ -196,7 +227,12 @@ msgid ""
 "number buttons and pressing forward."
 msgstr ""
 
-#: ui/library/view.py:8
+#. TRANSLATORS: A menu title, to which language title is appended
+#: ui/language/view.py:40
+msgid "languages:"
+msgstr ""
+
+#: ui/library/view.py:7
 msgid ""
 "This is the library menu. From this menu, you can view and select from "
 "the files loaded onto the memory stick or SD card. As with other menus, "
@@ -215,6 +251,10 @@ msgid ""
 "formatting."
 msgstr ""
 
+#: ui/library/view.py:40
+msgid "library menu"
+msgstr ""
+
 #: ui/system_menu/help.py:6
 msgid ""
 "Configure your preference on the sorting\n"
@@ -225,15 +265,19 @@ msgid ""
 "seconds before unplugging it."
 msgstr ""
 
-#: ui/system_menu/system_menu.py:16
+#: ui/system_menu/system_menu.py:14
 msgid "shutdown"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:17
+#: ui/system_menu/system_menu.py:15
 msgid "backup log to USB stick"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:18
+#: ui/system_menu/system_menu.py:16
 msgid "select language"
+msgstr ""
+
+#: ui/system_menu/view.py:23
+msgid "system menu"
 msgstr ""
 
