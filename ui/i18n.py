@@ -7,7 +7,10 @@ log = logging.getLogger(__name__)
 
 def install(locale_code):
     try:
-        translations = gettext.translation('canute', localedir='ui/locale', languages=[locale_code], fallback=False)
+        translations = gettext.translation(
+            'canute', localedir='ui/locale', languages=[locale_code],
+            fallback=False
+        )
     except OSError as e:
         log.warning(e)
         translations = gettext.NullTranslations()
@@ -17,6 +20,7 @@ def install(locale_code):
 # Before having installed _() we need extractors to see language titles.
 # It's convenient to have it act as the identity function, too.
 def _(x): return x
+
 
 Builtin = namedtuple('BuiltinLang', ['code', 'title'])
 

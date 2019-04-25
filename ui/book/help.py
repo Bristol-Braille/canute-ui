@@ -1,4 +1,4 @@
-from ..braille import from_unicode, alphas_to_unicodes
+from ..braille import from_unicode
 
 
 def _render(width, height, text):
