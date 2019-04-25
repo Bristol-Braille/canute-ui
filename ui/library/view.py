@@ -37,7 +37,7 @@ def render_library(width, height, state):
     # subtract title from page height
     data_height = height - 1
     max_pages = (len(books) // data_height) + 1
-    title = format_title('library menu', width, page, max_pages)
+    title = format_title(_('library menu'), width, page, max_pages)
     data = [title]
     n = page * data_height
     for book in books[n:n + data_height]:

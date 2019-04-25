@@ -1,23 +1,21 @@
-from ..braille import from_ascii, format_title
+from ..braille import from_unicode, format_title
 from .handlers import get_page_data
-from ..i18n import I18n
 from .. import state_helpers
 from .help import render_book_help, render_home_menu_help
 
 
 def render_home_menu(width, height, book, locale):
-    i18n = I18n(locale)
     data = []
     data.append(format_title(book.title, width,
                              book.page_number, len(book.pages)))
-    data.append(from_ascii(i18n._('go to page')))
+    data.append(from_unicode(_('go to page')))
     data.append(tuple())
     data.append(tuple())
-    data.append(from_ascii(i18n._('insert bookmark at current page')))
-    data.append(from_ascii(i18n._('choose from existing bookmarks')))
+    data.append(from_unicode(_('insert bookmark at current page')))
+    data.append(from_unicode(_('choose from existing bookmarks')))
     data.append(tuple())
-    data.append(from_ascii(i18n._('view system menu')))
-    data.append(from_ascii(i18n._('view library menu')))
+    data.append(from_unicode(_('view system menu')))
+    data.append(from_unicode(_('view library menu')))
     return tuple(data)
 
 
