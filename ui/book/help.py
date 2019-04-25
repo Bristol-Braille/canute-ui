@@ -1,4 +1,3 @@
-import textwrap
 from ..braille import from_unicode, alphas_to_unicodes
 
 
@@ -31,9 +30,6 @@ To access other features, including bookmarks, press the H button above \
 line select button one, then press the large central button, labeled \
 "menu" in Braille to access the main menu.\
 ''')
-    if _(text) == text:
-        text = textwrap.fill(text, width=width)
-        text = alphas_to_unicodes(text)
 
     return _render(width, height, text)
 
@@ -57,8 +53,5 @@ line select button to the left of "choose from existing bookmarks".  A \
 list of bookmarks within a file will display. You can select one using \
 the line select buttons.\
 ''')
-    if _(text) == text:
-        text = textwrap.fill(text, width=width)
-        text = alphas_to_unicodes(text)
 
     return _render(width, height, text)

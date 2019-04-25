@@ -1,4 +1,3 @@
-import textwrap
 from ..braille import format_title, from_unicode, alphas_to_unicodes
 from ..state_helpers import get_books
 
@@ -22,9 +21,6 @@ results, format BRF files with nine lines of forty cells per page in \
 software. Duxbury DBT and RoboBraille have a Canute preset built in for \
 formatting.\
 ''')
-    if _(para) == para:
-        para = textwrap.fill(para, width=width)
-        para = alphas_to_unicodes(para)
 
     for line in para.split('\n'):
         data.append(from_unicode(line))
