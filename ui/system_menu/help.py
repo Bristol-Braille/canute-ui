@@ -1,4 +1,4 @@
-from ..braille import from_ascii
+from ..braille import from_unicode
 
 
 def render_help(width, height):
@@ -12,7 +12,7 @@ shutdown option and wait for #cj
 seconds before unplugging it.''')
 
     for line in para.split('\n'):
-        data.append(from_ascii(line))
+        data.append(from_unicode(line))
 
     while len(data) % height:
         data.append(tuple())

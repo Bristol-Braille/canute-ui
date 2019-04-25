@@ -1,5 +1,4 @@
-from ..braille import from_ascii, format_title
-from ..i18n import I18n
+from ..braille import format_title, from_unicode
 
 
 def render_help(width, height):
@@ -15,7 +14,7 @@ you can go back to your current page by
 pressing the menu button.''')
 
     for line in para.split('\n'):
-        data.append(from_ascii(line))
+        data.append(from_unicode(line))
 
     while len(data) % height:
         data.append(tuple())
@@ -33,10 +32,7 @@ def render(width, height, state):
         page = all_lines[first_line:off_end]
         return page
 
-    locale = state['user'].get('current_language', 'en_GB:en')
-    i18n = I18n(locale)
-
-    data = [from_ascii(i18n._('enter page number using the side buttons'))]
+    data = [from_unicode(_('enter page number using the side buttons'))]
 
     try:
         book = state['user']['books'][state['user']['current_book']]
@@ -61,15 +57,15 @@ def render(width, height, state):
     else:
         selection = int(selection) - 1
 
-    t = format_title(i18n._('go to page number'), width,
+    t = format_title(_('go to page number'), width,
                      selection, total_pages, capitalize=False)
     data.append(t)
 
-    data.append(from_ascii(i18n._('please confirm by pressing forward')))
-    data.append(from_ascii(i18n._('undo by pressing back')))
-    data.append(from_ascii(i18n._('to go back to book press middle button')))
+    data.append(from_unicode(_('please confirm by pressing forward')))
+    data.append(from_unicode(_('undo by pressing back')))
+    data.append(from_unicode(_('to go back to book press middle button')))
 
-    for _ in range(height - 6):
+    for __ in range(height - 6):
         data.append(tuple())
 
     return tuple(data)

@@ -1,6 +1,5 @@
-from .braille import from_ascii
+from .braille import from_unicode
 from .book.book_file import BookFile, LoadState
-from .i18n import I18n
 
 
 manual_filename = '@@__canute_manual__@@'
@@ -90,6 +89,6 @@ seconds before unplugging it.
 ''')
         lines = text.split('\n')
         pages = batch(lines)
-        pages = tuple(tuple(from_ascii(line) for line in page)
+        pages = tuple(tuple(from_unicode(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)

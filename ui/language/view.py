@@ -1,4 +1,4 @@
-from ..braille import from_ascii, format_title, to_ueb_number
+from ..braille import from_ascii, format_title, to_ueb_number, from_unicode
 
 
 def render_help(width, height):
@@ -8,7 +8,7 @@ Select a language by using the side
 number buttons and pressing forward.''')
 
     for line in para.split('\n'):
-        data.append(from_ascii(line))
+        data.append(from_unicode(line))
 
     while len(data) % height:
         data.append(tuple())
@@ -36,15 +36,17 @@ def render(width, height, state):
     except ValueError:
         cur_index = -1
 
+    # TRANSLATORS: A menu title, to which language title is appended
+    title = _('languages:') + ' {}'
     title = format_title(
-        'languages: {}'.format(current_lang),
+        title.format(current_lang),
         width, cur_index, len(languages.keys()))
     data = [title]
 
     for lang in languages:
         langs = list(languages.keys()).index(lang)
         n = from_ascii(to_ueb_number(langs + 1) + ' ')
-        data.append(n + tuple(from_ascii(languages[lang])))
+        data.append(n + tuple(from_unicode(languages[lang])))
 
     while len(data) < height:
         data.append(tuple())
