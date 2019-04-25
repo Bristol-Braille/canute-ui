@@ -9,10 +9,10 @@ from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
+from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
-DEFAULT_LOCALE = 'en_GB:en'
 
 manual = Manual.create()
 
@@ -23,7 +23,7 @@ initial_state = utility.freeze({
         'user': {
             'current_book': manual_filename,
             'books': OrderedDict({manual_filename: manual}),
-            'current_language': DEFAULT_LOCALE
+            'current_language': DEFAULT_LOCALE.code,
         },
         'location': 'book',
         'library': {
@@ -37,9 +37,7 @@ initial_state = utility.freeze({
             'page': 0
         },
         'languages': {
-            'available': OrderedDict({
-                'en_GB:en': 'English Grade 1',
-            }),
+            'available': BUILTIN_LANGUAGES,
             'selection': '',
             'keys_pressed': '',
         },
@@ -87,9 +85,10 @@ async def read_user_state(path):
         if 'current_language' in main_state:
             current_language = main_state['current_language']
         else:
-            current_language = 'en_GB:en'
+            current_language = DEFAULT_LOCALE.code
     else:
-        current_language = 'en_GB:en'
+        current_language = DEFAULT_LOCALE.code
+    install(current_language)
     manual = Manual.create()
 
     manual_toml = os.path.join(path, to_state_file(manual_filename))
