@@ -1,5 +1,5 @@
 import logging
-from curses.ascii import isspace, isprint
+import curses.ascii as ASCII
 log = logging.getLogger(__name__)
 
 UNICODE_BRAILLE_BASE = 0x2800
@@ -157,9 +157,9 @@ def alpha_to_unicode(alpha):
     '''
     alpha = alpha.upper()
     try:
-        if isprint(alpha):  # includes ASCII space, 0x20
+        if ASCII.isprint(alpha):  # includes ASCII space, 0x20
             return chr(UNICODE_BRAILLE_BASE + mapping.index(alpha))
-        elif isspace(alpha):
+        elif ASCII.isspace(alpha):
             return alpha
         else:
             return chr(UNICODE_BRAILLE_BASE)
