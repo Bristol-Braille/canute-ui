@@ -11,6 +11,12 @@ import polib
 import louis
 from datetime import datetime, timezone
 
+print('''\
+This OVERWRITES any existing translations with new automatic ones.
+(By the time that matters, you shouldn't be using this any more.)
+So be careful before committing changed translations!\
+''')
+
 src = polib.pofile('canute.pot')
 valid_entries = [e for e in src if not e.obsolete]
 
@@ -43,6 +49,7 @@ for variant in variants:
     dest.metadata["PO-Revision-Date"] = now
 
     for src_entry in valid_entries:
+        # unicode.dis still uses ASCII spaces.
         translation = louis.translateString(
             ["unicode.dis", variant.table],
             src_entry.msgid
