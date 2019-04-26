@@ -88,6 +88,7 @@ async def _read_pages(book, background=False):
         if len(pages) > 1:
             # add an end-of-book bookmark
             bookmarks += (len(pages) - 1,)
+        log.info('loading complete for {}'.format(book.filename))
         return book._replace(pages=tuple(pages),
                              load_state=book_file.LoadState.DONE,
                              bookmarks=bookmarks)
@@ -116,7 +117,7 @@ async def _load(book, store, background=False):
     if background:
         log.info('background loading {}'.format(book.filename))
     else:
-        log.info('quickly loading {}'.format(book.filename))
+        log.info('priority loading {}'.format(book.filename))
     book = await _read_pages(book, background=background)
     await store.dispatch(actions.add_or_replace(book))
 
@@ -142,8 +143,19 @@ async def load_books(store):
         if not to_load:
             break
         await _load(to_load[0], store, background=background)
-        # Reload state in case we yielded.
+        # Reload state, in case we yielded and because _load() always updates
+        # state.
         state = store.state['app']
+        if all_books_loaded(state):
+            log.info('all outstanding book loads complete')
+            return
+
+
+def all_books_loaded(state):
+    books = state_helpers.get_books_for_lib_page(state)
+    return all(b.load_state == book_file.LoadState.DONE
+               or b.load_state == book_file.LoadState.FAILED
+               for b in books)
 
 
 class BookFileError(Exception):

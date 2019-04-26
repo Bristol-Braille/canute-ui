@@ -19,7 +19,7 @@ from .setup_logs import setup_logs
 from .store import main_reducer
 from .actions import actions
 from .display import Display
-from .book.handlers import load_books
+from .book.handlers import load_books, all_books_loaded
 
 display = Display()
 
@@ -127,7 +127,8 @@ def handle_changes(driver, config, store):
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
         asyncio.ensure_future(initial_state.write(store, media_dir))
-        asyncio.ensure_future(load_books(store))
+        if not all_books_loaded(state['app']):
+            asyncio.ensure_future(load_books(store))
     return listener
 
 
