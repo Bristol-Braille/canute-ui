@@ -121,6 +121,9 @@ async def _load(book, store, background=False):
     await store.dispatch(actions.add_or_replace(book))
 
 
+# Since handle_changes() spawns a new instance of this every time state
+# changes, and since loading a book may take a while, be aware there may
+# be multiple instances running concurrently (but not in parallel).
 async def load_books(store):
     state = store.state['app']
 
@@ -128,12 +131,19 @@ async def load_books(store):
 
     if current_book.load_state == book_file.LoadState.INITIAL:
         await _load(current_book, store)
+        # Reload state in case we yielded.
+        state = store.state['app']
 
     background = not state['location'] == 'library'
-    books = state_helpers.get_books_for_lib_page(state)
-    for book in books:
-        if book.load_state == book_file.LoadState.INITIAL:
-            await _load(book, store, background=background)
+
+    while True:
+        books = state_helpers.get_books_for_lib_page(state)
+        to_load = [b for b in books if b.load_state == book_file.LoadState.INITIAL]
+        if not to_load:
+            break
+        await _load(to_load[0], store, background=background)
+        # Reload state in case we yielded.
+        state = store.state['app']
 
 
 class BookFileError(Exception):
