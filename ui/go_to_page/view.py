@@ -2,10 +2,9 @@ from ..braille import from_ascii, format_title
 from ..i18n import I18n
 
 
-def render_help_menu(width, height, page, locale):
-    i18n = I18n(locale)
+def render_help(width, height):
     data = []
-    para = i18n._('''/
+    para = _('''\
 Go to a page number by keying it in with
 the side number buttons and pressing
 forward. Pages are numbered based on the
@@ -26,8 +25,7 @@ pressing the menu button.''')
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        locale = state['user'].get('current_language', 'en_GB:en')
-        return render_help_menu(width, height, state['help_menu']['page'], locale)
+        return render_help(width, height)
 
     locale = state['user'].get('current_language', 'en_GB:en')
     i18n = I18n(locale)
