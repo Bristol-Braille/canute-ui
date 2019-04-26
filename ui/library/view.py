@@ -1,12 +1,10 @@
 from ..braille import from_ascii, format_title
-from ..i18n import I18n
 from ..state_helpers import get_books
 
 
-def render_help_menu(width, height, page, locale):
-    i18n = I18n(locale)
+def render_help(width, height):
     data = []
-    para = i18n._('''\
+    para = _('''\
 Choose the book you wish to read by
 pressing the button to the left of the
 title. Use the arrow buttons to page
@@ -45,7 +43,6 @@ def render_library(width, height, state):
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        locale = state['user'].get('current_language', 'en_GB:en')
-        return render_help_menu(width, height, state['help_menu']['page'], locale)
+        return render_help(width, height)
     else:
         return render_library(width, height, state)

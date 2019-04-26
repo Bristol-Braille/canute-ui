@@ -1,32 +1,12 @@
-from ..braille import from_ascii, format_title
+from ..braille import format_title
 from .system_menu import create
-from ..i18n import I18n
-
-
-def render_help_menu(width, height, page, locale):
-    i18n = I18n(locale)
-    data = []
-    para = i18n._('''/
-Configure your preference on the sorting
-order of books in the library and
-bookmarks through the menu options. To
-shutdown the Canute safely, select the
-shutdown option and wait for #cj
-seconds before unplugging it.''')
-
-    for line in para.split('\n'):
-        data.append(from_ascii(line))
-
-    while len(data) < height:
-        data.append(tuple())
-
-    return tuple(data)
+from .help import render_help
 
 
 def render(width, height, state):
     locale = state['user'].get('current_language', 'en_GB:en')
     if state['help_menu']['visible']:
-        return render_help_menu(width, height, state['help_menu']['page'], locale)
+        return render_help(width, height)
 
     menu_titles = create(locale)
 

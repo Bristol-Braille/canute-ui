@@ -1,36 +1,12 @@
 from ..braille import from_ascii, format_title, to_ueb_number
 from ..book.handlers import get_page_data
-from ..i18n import I18n
-
-
-def render_help_menu(width, height, locale):
-    i18n = I18n(locale)
-    data = []
-
-    para = i18n._('''\
-Add a bookmark by pressing button #e
-while in a book. Bookmarks are listed
-here in the bookmark menu. Each bookmark
-starts with the Canute page number based
-on its #i line page. Go to the page by
-selecting a bookmark by pressing one of
-the side buttons. Holding the button
-down will delete the bookmark.''')
-
-    for line in para.split('\n'):
-        data.append(from_ascii(line))
-
-    # pad page with empty rows
-    while len(data) < height:
-        data.append(tuple())
-
-    return tuple(data)
+from .help import render_help
 
 
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help_menu(width, height, state['user'].get('current_language', 'en_GB:en'))
+        return render_help(width, height)
 
     book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']
