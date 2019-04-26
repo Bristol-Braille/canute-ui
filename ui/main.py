@@ -166,7 +166,7 @@ async def handle_hardware(driver, state, store, media_dir):
 
 def backup_log(config):
     sd_card_dir = config.get('files', 'sd_card_dir')
-    media_dir = config.get('files', 'sd_card_dir')
+    media_dir = config.get('files', 'media_dir')
     sd_card_dir = os.path.join(media_dir, sd_card_dir)
     log_file = config.get('files', 'log_file')
     # make a filename based on the date
