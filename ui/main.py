@@ -198,7 +198,7 @@ def backup_log(config):
     log_file = config.get('files', 'log_file')
     # make a filename based on the date
     backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
-    log.warning('backing up log to USB stick: {}'.format(backup_file))
+    log.debug('backing up log to USB stick: {}'.format(backup_file))
     try:
         shutil.copyfile(log_file, backup_file)
     except IOError as e:

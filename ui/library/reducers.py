@@ -17,7 +17,7 @@ class LibraryReducers():
         try:
             book = books[line_number + number]
         except Exception:
-            log.warning('no book at {}'.format(number))
+            log.debug('no book at {}'.format(number))
             return state
         user = state['user'].copy(current_book=book.filename)
         return state.copy(location='book', user=user, home_menu_visible=False)
