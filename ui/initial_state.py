@@ -9,7 +9,7 @@ from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
-from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES
+from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
 
 STATE_FILE = 'state.pkl'
 USER_STATE_FILE = 'canute_state.txt'
@@ -88,6 +88,10 @@ async def read_user_state(path):
             current_language = DEFAULT_LOCALE.code
     else:
         current_language = DEFAULT_LOCALE.code
+
+    if current_language == OLD_DEFAULT_LOCALE:
+        current_language = DEFAULT_LOCALE.code
+
     install(current_language)
     manual = Manual.create()
 

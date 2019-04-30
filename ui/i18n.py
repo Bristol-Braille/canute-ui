@@ -55,3 +55,8 @@ BUILTIN_LANGUAGES = OrderedDict([
     (ueb1.code, _(ueb1.title)),
     (ueb2.code, _(ueb2.title)),
 ])
+
+# For detecting the default language of older installations, which
+# didn't really have switchable language but did add a default
+# sort-of-locale to the global state file.
+OLD_DEFAULT_LOCALE = 'en_GB:en'
