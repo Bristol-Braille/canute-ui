@@ -37,10 +37,34 @@ def main():
         log.info('running fuzz test')
         with Dummy(fuzz=True) as driver:
             loop = asyncio.get_event_loop()
+            if 'TRAVIS' in os.environ:
+                marker = asyncio.ensure_future(log_markers())
+            else:
+                marker = asyncio.ensure_future(asyncio.sleep(0))
             loop.run_until_complete(run_async_timeout(
                 driver, config, args.fuzz_duration, loop))
+            marker.cancel()
             pending = asyncio.Task.all_tasks()
-            loop.run_until_complete(asyncio.gather(*pending))
+            loop.run_until_complete(asyncio.wait(pending))
+
+            # HACK: Sleep and re-wait() is a workaround.  Although wait()
+            # almost always returns all done/none pending, short (~1s)
+            # fuzz runs still often result in RuntimeError and "Task was
+            # destroyed but it is pending!" upon closing the loop, with
+            # outstanding async write()s being the offenders.  Possible
+            # this is down to outstanding callbacks scheduled with
+            # call_soon() which, unlike tasks, can't be enumerated and
+            # cancelled/completed.
+            #
+            # A less bad workaround might be to have just one state-writer
+            # task which we signal through a queue and which manages its
+            # own write heartbeat; that way there'd be far fewer
+            # outstanding writes in the first place.
+            time.sleep(1)
+            # Fetch again to spot the ex nihilo task(s).
+            pending = asyncio.Task.all_tasks()
+            loop.run_until_complete(asyncio.wait(pending))
+            loop.close()
     elif args.dummy:
         log.info('running with dummy hardware')
         with Dummy(fuzz=False) as driver:
@@ -174,11 +198,17 @@ def backup_log(config):
     log_file = config.get('files', 'log_file')
     # make a filename based on the date
     backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
-    log.warning('backing up log to USB stick: {}'.format(backup_file))
+    log.debug('backing up log to USB stick: {}'.format(backup_file))
     try:
         shutil.copyfile(log_file, backup_file)
     except IOError as e:
         log.warning("couldn't backup log file: {}".format(e))
+
+
+async def log_markers():
+    while True:
+        await asyncio.sleep(60)
+        log.info('MARK')
 
 
 if __name__ == '__main__':

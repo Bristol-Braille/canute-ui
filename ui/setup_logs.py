@@ -1,3 +1,5 @@
+import sys
+import os
 import logging
 
 
@@ -11,7 +13,11 @@ def setup_logs(config, loglevel):
     log.setLevel(logging.DEBUG)
 
     # create console handler and set level to info
-    ch = logging.StreamHandler()
+    stream = sys.stderr
+    # Travis kills you if you're quiet on stdout too long.
+    if 'TRAVIS' in os.environ:
+        stream = sys.stdout
+    ch = logging.StreamHandler(stream)
     ch.setLevel(loglevel)
 
     # create formatter for console
