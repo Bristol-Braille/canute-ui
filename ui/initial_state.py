@@ -7,6 +7,7 @@ import os
 from frozendict import frozendict
 from . import utility
 from .manual import Manual, manual_filename
+from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
 
 STATE_FILE = 'state.pkl'
@@ -113,6 +114,7 @@ async def read_user_state(path):
                 book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
                     bm - 1 for bm in t['bookmarks']))))
         books[book_file] = book
+    books[cleaning_filename] = CleaningAndTesting.create()
 
     if current_book not in books:
         current_book = manual_filename
