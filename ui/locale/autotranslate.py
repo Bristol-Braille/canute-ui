@@ -63,6 +63,8 @@ for variant in variants:
         )
         dest_entry.merge(src_entry)
         dest_entry.msgstr = translation
+        if dest_entry.msgid == "English, UEB grade 2":
+            dest_entry.msgstr = "⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃"
         dest.append(dest_entry)
 
     destdir = os.path.join(variant.locale, 'LC_MESSAGES')
