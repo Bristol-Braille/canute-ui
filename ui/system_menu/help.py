@@ -4,12 +4,8 @@ from ..braille import from_unicode
 def render_help(width, height):
     data = []
     para = _('''\
-Configure your preference on the sorting
-order of books in the library and
-bookmarks through the menu options. To
-shutdown the Canute safely, select the
-shutdown option and wait for #cj
-seconds before unplugging it.''')
+This is the system menu.  From the system menu you can make system \
+wide changes, such as changing the system language or shut down Canute''')
 
     for line in para.split('\n'):
         data.append(from_unicode(line))

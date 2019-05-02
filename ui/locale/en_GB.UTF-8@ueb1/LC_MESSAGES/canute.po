@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-05-01 16:21+0100\n"
-"PO-Revision-Date: 2019-05-02 11:23+0000\n"
+"POT-Creation-Date: 2019-05-02 14:59+0100\n"
+"PO-Revision-Date: 2019-05-02 13:59+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ui/cleaning_and_testing.py:21
+#: ui/cleaning_and_testing.py:19
 msgid "for cleaning and testing canute"
 msgstr "⠋⠕⠗ ⠉⠇⠑⠁⠝⠊⠝⠛ ⠁⠝⠙ ⠞⠑⠎⠞⠊⠝⠛ ⠉⠁⠝⠥⠞⠑"
 
@@ -250,24 +250,20 @@ msgstr "⠧⠊⠑⠺ ⠇⠊⠃⠗⠁⠗⠽ ⠍⠑⠝⠥"
 
 #: ui/bookmarks/help.py:7
 msgid ""
-"Add a bookmark by pressing button #e\n"
-"while in a book. Bookmarks are listed\n"
-"here in the bookmark menu. Each bookmark\n"
-"starts with the Canute page number based\n"
-"on its #i line page. Go to the page by\n"
-"selecting a bookmark by pressing one of\n"
-"the side buttons. Holding the button\n"
-"down will delete the bookmark."
+"To navigate to a bookmark within a file, press the line select button "
+"immediately to the left of the desired bookmark. From the bookmark menu, you"
+" can also navigate to the beginning of the book by selecting \"start of "
+"book\" or the end of a book by selecting \"end of book\" using the line "
+"select buttons."
 msgstr ""
-"⠠⠁⠙⠙ ⠁ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠃⠽ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠃⠥⠞⠞⠕⠝ ⠸⠹⠑\n"
-"⠺⠓⠊⠇⠑ ⠊⠝ ⠁ ⠃⠕⠕⠅⠲ ⠠⠃⠕⠕⠅⠍⠁⠗⠅⠎ ⠁⠗⠑ ⠇⠊⠎⠞⠑⠙\n"
-"⠓⠑⠗⠑ ⠊⠝ ⠞⠓⠑ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠍⠑⠝⠥⠲ ⠠⠑⠁⠉⠓\n"
-"⠃⠕⠕⠅⠍⠁⠗⠅ ⠎⠞⠁⠗⠞⠎ ⠺⠊⠞⠓ ⠞⠓⠑ ⠠⠉⠁⠝⠥⠞⠑ ⠏⠁⠛⠑\n"
-"⠝⠥⠍⠃⠑⠗ ⠃⠁⠎⠑⠙ ⠕⠝ ⠊⠞⠎ ⠸⠹⠊ ⠇⠊⠝⠑ ⠏⠁⠛⠑⠲ ⠠⠛⠕\n"
-"⠞⠕ ⠞⠓⠑ ⠏⠁⠛⠑ ⠃⠽ ⠎⠑⠇⠑⠉⠞⠊⠝⠛ ⠁ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠃⠽\n"
-"⠏⠗⠑⠎⠎⠊⠝⠛ ⠕⠝⠑ ⠕⠋ ⠞⠓⠑ ⠎⠊⠙⠑ ⠃⠥⠞⠞⠕⠝⠎⠲\n"
-"⠠⠓⠕⠇⠙⠊⠝⠛ ⠞⠓⠑ ⠃⠥⠞⠞⠕⠝ ⠙⠕⠺⠝ ⠺⠊⠇⠇ ⠙⠑⠇⠑⠞⠑ ⠞⠓⠑\n"
-"⠃⠕⠕⠅⠍⠁⠗⠅⠲"
+"⠠⠞⠕ ⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕ ⠁ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠺⠊⠞⠓⠊⠝ ⠁\n"
+"⠋⠊⠇⠑⠂ ⠏⠗⠑⠎⠎ ⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝\n"
+"⠊⠍⠍⠑⠙⠊⠁⠞⠑⠇⠽ ⠞⠕ ⠞⠓⠑ ⠇⠑⠋⠞ ⠕⠋ ⠞⠓⠑ ⠙⠑⠎⠊⠗⠑⠙\n"
+"⠃⠕⠕⠅⠍⠁⠗⠅⠲ ⠠⠋⠗⠕⠍ ⠞⠓⠑ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠍⠑⠝⠥⠂ ⠽⠕⠥\n"
+"⠉⠁⠝ ⠁⠇⠎⠕ ⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕ ⠞⠓⠑ ⠃⠑⠛⠊⠝⠝⠊⠝⠛ ⠕⠋\n"
+"⠞⠓⠑ ⠃⠕⠕⠅ ⠃⠽ ⠎⠑⠇⠑⠉⠞⠊⠝⠛ ⠦⠎⠞⠁⠗⠞ ⠕⠋ ⠃⠕⠕⠅⠴ ⠕⠗\n"
+"⠞⠓⠑ ⠑⠝⠙ ⠕⠋ ⠁ ⠃⠕⠕⠅ ⠃⠽ ⠎⠑⠇⠑⠉⠞⠊⠝⠛ ⠦⠑⠝⠙ ⠕⠋\n"
+"⠃⠕⠕⠅⠴ ⠥⠎⠊⠝⠛ ⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝⠎⠲"
 
 #. TRANSLATORS: Bookmarks menu title; gets followed by book name
 #: ui/bookmarks/view.py:25
@@ -284,42 +280,51 @@ msgstr "⠑⠝⠙ ⠕⠋ ⠃⠕⠕⠅"
 
 #: ui/go_to_page/view.py:6
 msgid ""
-"Go to a page number by keying it in with\n"
-"the side number buttons and pressing\n"
-"forward. Pages are numbered based on the\n"
-"#i line page height of the Canute. You\n"
-"can delete entered numbers by pressing\n"
-"or holding the back button. As always\n"
-"you can go back to your current page by\n"
-"pressing the menu button."
+"To navigate to a page within a file, enter the page number using the line "
+"select buttons on the left hand side of Canute 360. For example, for page "
+"10, press button 1 followed by button 0.  Press the forward button to "
+"confirm your selection. Line 3 will refresh to show your selected page. "
+"Press the forward button to navigate to your page.  If you have entered the "
+"wrong page number, press the back button to reset the selection on line 3. "
+"You can then enter the correct number using the line select keys, before "
+"pressing forward to confirm, and pressing forward once more to navigate to "
+"the selected page."
 msgstr ""
-"⠠⠛⠕ ⠞⠕ ⠁ ⠏⠁⠛⠑ ⠝⠥⠍⠃⠑⠗ ⠃⠽ ⠅⠑⠽⠊⠝⠛ ⠊⠞ ⠊⠝\n"
-"⠺⠊⠞⠓ ⠞⠓⠑ ⠎⠊⠙⠑ ⠝⠥⠍⠃⠑⠗ ⠃⠥⠞⠞⠕⠝⠎ ⠁⠝⠙\n"
-"⠏⠗⠑⠎⠎⠊⠝⠛ ⠋⠕⠗⠺⠁⠗⠙⠲ ⠠⠏⠁⠛⠑⠎ ⠁⠗⠑ ⠝⠥⠍⠃⠑⠗⠑⠙\n"
-"⠃⠁⠎⠑⠙ ⠕⠝ ⠞⠓⠑ ⠸⠹⠊ ⠇⠊⠝⠑ ⠏⠁⠛⠑ ⠓⠑⠊⠛⠓⠞ ⠕⠋ ⠞⠓⠑\n"
-"⠠⠉⠁⠝⠥⠞⠑⠲ ⠠⠽⠕⠥ ⠉⠁⠝ ⠙⠑⠇⠑⠞⠑ ⠑⠝⠞⠑⠗⠑⠙ ⠝⠥⠍⠃⠑⠗⠎\n"
-"⠃⠽ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠕⠗ ⠓⠕⠇⠙⠊⠝⠛ ⠞⠓⠑ ⠃⠁⠉⠅ ⠃⠥⠞⠞⠕⠝⠲\n"
-"⠠⠁⠎ ⠁⠇⠺⠁⠽⠎ ⠽⠕⠥ ⠉⠁⠝ ⠛⠕ ⠃⠁⠉⠅ ⠞⠕ ⠽⠕⠥⠗\n"
-"⠉⠥⠗⠗⠑⠝⠞ ⠏⠁⠛⠑ ⠃⠽ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠞⠓⠑ ⠍⠑⠝⠥\n"
-"⠃⠥⠞⠞⠕⠝⠲"
+"⠠⠞⠕ ⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕ ⠁ ⠏⠁⠛⠑ ⠺⠊⠞⠓⠊⠝ ⠁ ⠋⠊⠇⠑⠂\n"
+"⠑⠝⠞⠑⠗ ⠞⠓⠑ ⠏⠁⠛⠑ ⠝⠥⠍⠃⠑⠗ ⠥⠎⠊⠝⠛ ⠞⠓⠑ ⠇⠊⠝⠑\n"
+"⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝⠎ ⠕⠝ ⠞⠓⠑ ⠇⠑⠋⠞ ⠓⠁⠝⠙ ⠎⠊⠙⠑ ⠕⠋\n"
+"⠠⠉⠁⠝⠥⠞⠑ ⠼⠉⠋⠚⠲ ⠠⠋⠕⠗ ⠑⠭⠁⠍⠏⠇⠑⠂ ⠋⠕⠗ ⠏⠁⠛⠑\n"
+"⠼⠁⠚⠂ ⠏⠗⠑⠎⠎ ⠃⠥⠞⠞⠕⠝ ⠼⠁ ⠋⠕⠇⠇⠕⠺⠑⠙ ⠃⠽ ⠃⠥⠞⠞⠕⠝\n"
+"⠼⠚⠲  ⠠⠏⠗⠑⠎⠎ ⠞⠓⠑ ⠋⠕⠗⠺⠁⠗⠙ ⠃⠥⠞⠞⠕⠝ ⠞⠕\n"
+"⠉⠕⠝⠋⠊⠗⠍ ⠽⠕⠥⠗ ⠎⠑⠇⠑⠉⠞⠊⠕⠝⠲ ⠠⠇⠊⠝⠑ ⠼⠉ ⠺⠊⠇⠇\n"
+"⠗⠑⠋⠗⠑⠎⠓ ⠞⠕ ⠎⠓⠕⠺ ⠽⠕⠥⠗ ⠎⠑⠇⠑⠉⠞⠑⠙ ⠏⠁⠛⠑⠲\n"
+"⠠⠏⠗⠑⠎⠎ ⠞⠓⠑ ⠋⠕⠗⠺⠁⠗⠙ ⠃⠥⠞⠞⠕⠝ ⠞⠕ ⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕\n"
+"⠽⠕⠥⠗ ⠏⠁⠛⠑⠲  ⠠⠊⠋ ⠽⠕⠥ ⠓⠁⠧⠑ ⠑⠝⠞⠑⠗⠑⠙ ⠞⠓⠑\n"
+"⠺⠗⠕⠝⠛ ⠏⠁⠛⠑ ⠝⠥⠍⠃⠑⠗⠂ ⠏⠗⠑⠎⠎ ⠞⠓⠑ ⠃⠁⠉⠅ ⠃⠥⠞⠞⠕⠝\n"
+"⠞⠕ ⠗⠑⠎⠑⠞ ⠞⠓⠑ ⠎⠑⠇⠑⠉⠞⠊⠕⠝ ⠕⠝ ⠇⠊⠝⠑ ⠼⠉⠲ ⠠⠽⠕⠥\n"
+"⠉⠁⠝ ⠞⠓⠑⠝ ⠑⠝⠞⠑⠗ ⠞⠓⠑ ⠉⠕⠗⠗⠑⠉⠞ ⠝⠥⠍⠃⠑⠗ ⠥⠎⠊⠝⠛\n"
+"⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠅⠑⠽⠎⠂ ⠃⠑⠋⠕⠗⠑ ⠏⠗⠑⠎⠎⠊⠝⠛\n"
+"⠋⠕⠗⠺⠁⠗⠙ ⠞⠕ ⠉⠕⠝⠋⠊⠗⠍⠂ ⠁⠝⠙ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠋⠕⠗⠺⠁⠗⠙\n"
+"⠕⠝⠉⠑ ⠍⠕⠗⠑ ⠞⠕ ⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕ ⠞⠓⠑ ⠎⠑⠇⠑⠉⠞⠑⠙\n"
+"⠏⠁⠛⠑⠲"
 
-#: ui/go_to_page/view.py:35
+#: ui/go_to_page/view.py:36
 msgid "enter page number using the side buttons"
 msgstr "⠑⠝⠞⠑⠗ ⠏⠁⠛⠑ ⠝⠥⠍⠃⠑⠗ ⠥⠎⠊⠝⠛ ⠞⠓⠑ ⠎⠊⠙⠑ ⠃⠥⠞⠞⠕⠝⠎"
 
-#: ui/go_to_page/view.py:60
+#: ui/go_to_page/view.py:61
 msgid "go to page number"
 msgstr "⠛⠕ ⠞⠕ ⠏⠁⠛⠑ ⠝⠥⠍⠃⠑⠗"
 
-#: ui/go_to_page/view.py:64
+#: ui/go_to_page/view.py:65
 msgid "please confirm by pressing forward"
 msgstr "⠏⠇⠑⠁⠎⠑ ⠉⠕⠝⠋⠊⠗⠍ ⠃⠽ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠋⠕⠗⠺⠁⠗⠙"
 
-#: ui/go_to_page/view.py:65
+#: ui/go_to_page/view.py:66
 msgid "undo by pressing back"
 msgstr "⠥⠝⠙⠕ ⠃⠽ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠃⠁⠉⠅"
 
-#: ui/go_to_page/view.py:66
+#: ui/go_to_page/view.py:67
 msgid "to go back to book press middle button"
 msgstr "⠞⠕ ⠛⠕ ⠃⠁⠉⠅ ⠞⠕ ⠃⠕⠕⠅ ⠏⠗⠑⠎⠎ ⠍⠊⠙⠙⠇⠑ ⠃⠥⠞⠞⠕⠝"
 
@@ -388,19 +393,13 @@ msgstr "⠇⠊⠃⠗⠁⠗⠽ ⠍⠑⠝⠥"
 
 #: ui/system_menu/help.py:6
 msgid ""
-"Configure your preference on the sorting\n"
-"order of books in the library and\n"
-"bookmarks through the menu options. To\n"
-"shutdown the Canute safely, select the\n"
-"shutdown option and wait for #cj\n"
-"seconds before unplugging it."
+"This is the system menu.  From the system menu you can make system wide "
+"changes, such as changing the system language or shut down Canute"
 msgstr ""
-"⠠⠉⠕⠝⠋⠊⠛⠥⠗⠑ ⠽⠕⠥⠗ ⠏⠗⠑⠋⠑⠗⠑⠝⠉⠑ ⠕⠝ ⠞⠓⠑\n"
-"⠎⠕⠗⠞⠊⠝⠛ ⠕⠗⠙⠑⠗ ⠕⠋ ⠃⠕⠕⠅⠎ ⠊⠝ ⠞⠓⠑ ⠇⠊⠃⠗⠁⠗⠽\n"
-"⠁⠝⠙ ⠃⠕⠕⠅⠍⠁⠗⠅⠎ ⠞⠓⠗⠕⠥⠛⠓ ⠞⠓⠑ ⠍⠑⠝⠥ ⠕⠏⠞⠊⠕⠝⠎⠲\n"
-"⠠⠞⠕ ⠎⠓⠥⠞⠙⠕⠺⠝ ⠞⠓⠑ ⠠⠉⠁⠝⠥⠞⠑ ⠎⠁⠋⠑⠇⠽⠂ ⠎⠑⠇⠑⠉⠞\n"
-"⠞⠓⠑ ⠎⠓⠥⠞⠙⠕⠺⠝ ⠕⠏⠞⠊⠕⠝ ⠁⠝⠙ ⠺⠁⠊⠞ ⠋⠕⠗ ⠸⠹⠉⠚\n"
-"⠎⠑⠉⠕⠝⠙⠎ ⠃⠑⠋⠕⠗⠑ ⠥⠝⠏⠇⠥⠛⠛⠊⠝⠛ ⠊⠞⠲"
+"⠠⠞⠓⠊⠎ ⠊⠎ ⠞⠓⠑ ⠎⠽⠎⠞⠑⠍ ⠍⠑⠝⠥⠲  ⠠⠋⠗⠕⠍ ⠞⠓⠑\n"
+"⠎⠽⠎⠞⠑⠍ ⠍⠑⠝⠥ ⠽⠕⠥ ⠉⠁⠝ ⠍⠁⠅⠑ ⠎⠽⠎⠞⠑⠍ ⠺⠊⠙⠑\n"
+"⠉⠓⠁⠝⠛⠑⠎⠂ ⠎⠥⠉⠓ ⠁⠎ ⠉⠓⠁⠝⠛⠊⠝⠛ ⠞⠓⠑ ⠎⠽⠎⠞⠑⠍\n"
+"⠇⠁⠝⠛⠥⠁⠛⠑ ⠕⠗ ⠎⠓⠥⠞ ⠙⠕⠺⠝ ⠠⠉⠁⠝⠥⠞⠑"
 
 #: ui/system_menu/system_menu.py:14
 msgid "shutdown"
