@@ -4,8 +4,18 @@ from ..braille import from_ascii, format_title, to_ueb_number, from_unicode
 def render_help(width, height):
     data = []
     para = _('''\
-Select a language by using the side
-number buttons and pressing forward.''')
+You can change the system language or Braille code (for example to \
+switch between contracted and un-contracted Braille) from the system \
+menu.  Please note this will only change the language and code within \
+the menus, help file, and manuals; not the language or code in any books \
+on Canute.  To access the system menu, first access the main menu by \
+pressing the largest control button in the centre of the front edge of \
+Canute 360.  Then, press the line select button immediately to the left \
+of "VIEW SYSTEM MENU" to access the system menu.  Press the line select \
+button immediately to the left of "SELECT LANGUAGE" to access the \
+language selection menu. You can then select a language or Braille code \
+using the triangular line select button immediately to the left of your \
+chosen language or code.''')
 
     for line in para.split('\n'):
         data.append(from_unicode(line))
