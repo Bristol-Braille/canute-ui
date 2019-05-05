@@ -1,6 +1,6 @@
 Uses babel translation library.  To generate POT file, use from root:
 
-pybabel extract -o ./ui/locale/canute.pot ./ui
+pybabel extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
 
 PO files are created with: https://www.transifex.com/bristol-braille-technology/canute/translate
 

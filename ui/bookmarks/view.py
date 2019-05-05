@@ -1,4 +1,4 @@
-from ..braille import from_ascii, format_title, to_ueb_number
+from ..braille import from_ascii, from_unicode, format_title, to_ueb_number
 from ..book.handlers import get_page_data
 from .help import render_help
 
@@ -6,7 +6,13 @@ from .help import render_help
 async def render(width, height, state, store):
     help_menu = state['help_menu']['visible']
     if help_menu:
-        return render_help(width, height)
+        all_lines = render_help(width, height)
+        num_pages = len(all_lines) // height
+        page_num = min(state['help_menu']['page'], num_pages - 1)
+        first_line = page_num * height
+        off_end = first_line + height
+        page = all_lines[first_line:off_end]
+        return page
 
     book = state['user']['books'][state['user']['current_book']]
     page = state['bookmarks_menu']['page']
@@ -15,16 +21,18 @@ async def render(width, height, state, store):
     bookmarks = book.bookmarks[line_n:line_n + (height - 1)]
 
     max_pages = (len(book.bookmarks) - 1) // (height - 1)
+    # TRANSLATORS: Bookmarks menu title; gets followed by book name
+    title = _('bookmarks:') + ' {}'
     title = format_title(
-        'bookmarks: {}'.format(book.title),
+        title.format(book.title),
         width, page, max_pages)
     data = [title]
 
     for bm in bookmarks:
         if bm == 0:
-            data.append(from_ascii('start of book'))
+            data.append(from_unicode(_('start of book')))
         elif bm == (len(book.pages) - 1):
-            data.append(from_ascii('end of book'))
+            data.append(from_unicode(_('end of book')))
         elif bm == 'deleted':
             data.append(tuple())
         else:

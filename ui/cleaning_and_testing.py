@@ -3,7 +3,6 @@
 # for hardware errors.
 from .braille import unicode_to_pin_num
 from .book.book_file import BookFile, LoadState
-from .i18n import I18n
 
 # There's no real use in having state for this book, but the special
 # cases required to exclude it from state-keeping would cause more mess
@@ -16,9 +15,8 @@ NUM_COLS = 40
 
 class CleaningAndTesting(BookFile):
     @property
-    def title(self, locale='en_GB:en'):
-        i18n = I18n(locale)
-        return i18n._('for cleaning and testing canute')
+    def title(self):
+        return _('for cleaning and testing canute')
 
     @staticmethod
     def create():

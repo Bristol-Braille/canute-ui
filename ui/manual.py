@@ -1,6 +1,5 @@
-from .braille import from_ascii
+from .braille import from_unicode
 from .book.book_file import BookFile, LoadState
-from .i18n import I18n
 
 
 manual_filename = '@@__canute_manual__@@'
@@ -12,14 +11,17 @@ def batch(a, n=9):
 
 class Manual(BookFile):
     @property
-    def title(self, locale='en_GB:en'):
-        i18n = I18n(locale)
-        return i18n._('canute manual')
+    def title(self):
+        # Since book titles are naively mapped from ASCII and since we
+        # can only do that to SimBraille (currently!) the menu renderers
+        # expect them in SimBraille.  So, I figure it's better to give a
+        # naive-but-consistent SimBraille title here than a
+        # decently-translated-but-inconsistent Unicode title.
+        return 'canute manual'
 
     @staticmethod
-    def create(locale='en_GB:en'):
-        i18n = I18n(locale)
-        text = i18n._('''\
+    def create():
+        text = _('''\
          canute quick help
 
 you can also access these contextual
@@ -90,6 +92,6 @@ seconds before unplugging it.
 ''')
         lines = text.split('\n')
         pages = batch(lines)
-        pages = tuple(tuple(from_ascii(line) for line in page)
+        pages = tuple(tuple(from_unicode(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)

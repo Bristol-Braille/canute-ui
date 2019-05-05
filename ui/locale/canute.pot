@@ -1,27 +1,45 @@
 # Translations template for PROJECT.
-# Copyright (C) 2018 ORGANIZATION
+# Copyright (C) 2019 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-28 20:06+0100\n"
+"POT-Creation-Date: 2019-05-04 11:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.3\n"
+"Generated-By: Babel 2.3.4\n"
 
-#: ui/manual.py:17
-msgid "canute manual"
+#: ui/cleaning_and_testing.py:19
+msgid "for cleaning and testing canute"
 msgstr ""
 
-#: ui/manual.py:22
+#. TRANSLATORS: This is a language name menu item, so should always appear
+#. in the language it denotes so that it remains readable to those who
+#. speak only that language, just as "Deutsch" should always be left as
+#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
+#. appropriate, if possible.
+#: ui/i18n.py:37
+msgid "English, UEB grade 1"
+msgstr ""
+
+#. TRANSLATORS: This is a language name menu item, so should always appear
+#. in the language it denotes so that it remains readable to those who
+#. speak only that language, just as "Deutsch" should always be left as
+#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
+#. appropriate, if possible.
+#: ui/i18n.py:44
+msgid "English, UEB grade 2"
+msgstr ""
+
+#: ui/manual.py:24
 msgid ""
 "         canute quick help\n"
 "\n"
@@ -92,6 +110,40 @@ msgid ""
 "\n"
 msgstr ""
 
+#: ui/book/help.py:21
+msgid ""
+"With Canute 360 you can read files in Braille, as well as insert, edit, "
+"and navigate to bookmarks.  To move within a file, use the three large "
+"control buttons on the front panel of Canute.  Press the large button to "
+"the right of centre on the front panel now, labelled \"forward\" in "
+"Braille to move forward one page within this file.  Press the large "
+"button to the left of centre, labelled \"back\" in Braille to move back "
+"one page within a file, similar to turning the pages in a physical book."
+"  To access other features, including bookmarks, press the H button above"
+" line select button one, then press the large central button, labeled "
+"\"menu\" in Braille to access the main menu."
+msgstr ""
+
+#: ui/book/help.py:38
+msgid ""
+"This is the main menu. From the main menu, you can access the library "
+"insert a bookmark at the current page, return to a bookmark that was "
+"previously placed within a file, or navigate to a page within a book. To "
+"select an item from the main menu, press the triangular line select "
+"button to the left of the menu item on the reading surface.  To choose a "
+"new book, press the line select button to the left of \"view library "
+"menu\". The library menu will then load.  To navigate to a page within "
+"the file, press the triangular line select button immediately to the left"
+" of \"go to page\" on the reading surface. A help screen will appear. "
+"Enter the page number using the numbered line select keys. Press the "
+"\"forward\" button to navigate to the selected page.  To insert a new "
+"bookmark at the current page, press the line select button to the left of"
+" \"insert bookmark at current page\". To retrieve a bookmark, press the "
+"line select button to the left of \"choose from existing bookmarks\".  A "
+"list of bookmarks within a file will display. You can select one using "
+"the line select buttons."
+msgstr ""
+
 #: ui/book/view.py:11
 msgid "go to page"
 msgstr ""
@@ -112,100 +164,124 @@ msgstr ""
 msgid "view library menu"
 msgstr ""
 
-#: ui/book/view.py:26
+#: ui/bookmarks/help.py:7
 msgid ""
-"Move through the book by pressing the\n"
-"arrow buttons on the front of the\n"
-"machine. Hold them down to move #e\n"
-"pages at a time. The home menu shows\n"
-"what you can do with the side buttons\n"
-"from the home menu or the book. View\n"
-"this by pressing the middle button on\n"
-"the front. Pressing this button again\n"
-"will always return you to your book."
+"To navigate to a bookmark within a file, press the line select button "
+"immediately to the left of the desired bookmark. From the bookmark menu, "
+"you can also navigate to the beginning of the book by selecting \"start "
+"of book\" or the end of a book by selecting \"end of book\" using the "
+"line select buttons."
 msgstr ""
 
-#: ui/bookmarks/view.py:10
-msgid ""
-"Add a bookmark by pressing button #e\n"
-"while in a book. Bookmarks are listed\n"
-"here in the bookmark menu. Each bookmark\n"
-"starts with the Canute page number based\n"
-"on its #i line page. Go to the page by\n"
-"selecting a bookmark by pressing one of\n"
-"the side buttons. Holding the button\n"
-"down will delete the bookmark."
+#. TRANSLATORS: Bookmarks menu title; gets followed by book name
+#: ui/bookmarks/view.py:25
+msgid "bookmarks:"
 msgstr ""
 
-#: ui/go_to_page/view.py:8
-msgid ""
-"/\n"
-"Go to a page number by keying it in with\n"
-"the side number buttons and pressing\n"
-"forward. Pages are numbered based on the\n"
-"#i line page height of the Canute. You\n"
-"can delete entered numbers by pressing\n"
-"or holding the back button. As always\n"
-"you can go back to your current page by\n"
-"pressing the menu button."
+#: ui/bookmarks/view.py:33
+msgid "start of book"
 msgstr ""
 
-#: ui/go_to_page/view.py:37
+#: ui/bookmarks/view.py:35
+msgid "end of book"
+msgstr ""
+
+#: ui/go_to_page/view.py:6
+msgid ""
+"To navigate to a page within a file, enter the page number using the line"
+" select buttons on the left hand side of Canute 360. For example, for "
+"page 10, press button 1 followed by button 0.  Press the forward button "
+"to confirm your selection. Line 3 will refresh to show your selected "
+"page. Press the forward button to navigate to your page.  If you have "
+"entered the wrong page number, press the back button to reset the "
+"selection on line 3. You can then enter the correct number using the line"
+" select keys, before pressing forward to confirm, and pressing forward "
+"once more to navigate to the selected page."
+msgstr ""
+
+#: ui/go_to_page/view.py:36
 msgid "enter page number using the side buttons"
 msgstr ""
 
-#: ui/go_to_page/view.py:62
+#: ui/go_to_page/view.py:61
 msgid "go to page number"
 msgstr ""
 
-#: ui/go_to_page/view.py:66
+#: ui/go_to_page/view.py:65
 msgid "please confirm by pressing forward"
 msgstr ""
 
-#: ui/go_to_page/view.py:67
+#: ui/go_to_page/view.py:66
 msgid "undo by pressing back"
 msgstr ""
 
-#: ui/go_to_page/view.py:68
+#: ui/go_to_page/view.py:67
 msgid "to go back to book press middle button"
 msgstr ""
 
-#: ui/language/view.py:8
+#: ui/language/view.py:6
 msgid ""
-"Select a language by using the side\n"
-"number buttons and pressing forward."
+"You can change the system language or Braille code (for example to switch"
+" between contracted and un-contracted Braille) from the system menu.  "
+"Please note this will only change the language and code within the menus,"
+" help file, and manuals; not the language or code in any books on Canute."
+"  To access the system menu, first access the main menu by pressing the "
+"largest control button in the centre of the front edge of Canute 360.  "
+"Then, press the line select button immediately to the left of \"VIEW "
+"SYSTEM MENU\" to access the system menu.  Press the line select button "
+"immediately to the left of \"SELECT LANGUAGE\" to access the language "
+"selection menu. You can then select a language or Braille code using the "
+"triangular line select button immediately to the left of your chosen "
+"language or code."
 msgstr ""
 
-#: ui/library/view.py:8
-msgid ""
-"Choose the book you wish to read by\n"
-"pressing the button to the left of the\n"
-"title. Use the arrow buttons to page\n"
-"through the library. You can change the\n"
-"ordering of the books in the system\n"
-"menu."
+#. TRANSLATORS: A menu title, to which language title is appended
+#: ui/language/view.py:50
+msgid "languages:"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:15
+#: ui/library/view.py:7
+msgid ""
+"This is the library menu. From this menu, you can view and select from "
+"the files loaded onto the memory stick or SD card. As with other menus, "
+"press the line select key to the left of a menu item to select it. Canute"
+" 360 will then display your chosen file on the reading surface. Navigate "
+"within the menu using the \"forward\" and \"back\" buttons. To load books"
+" onto your canute, first turn it off by pressing the button to the right "
+"of the power socket on the back panel. Once the \"please wait\" text "
+"disappears, remove the memory stick or SD card you are using. Copy and "
+"paste a BRF or PEF file onto the stick or card, using a computer, insert "
+"the stick or card into the slot. Turn your Canute on again, and once it "
+"has started your file will be in the library menu. As with all menus, "
+"select your file using the line select button to it's left. For best "
+"results, format BRF files with nine lines of forty cells per page in "
+"software. Duxbury DBT and RoboBraille have a Canute preset built in for "
+"formatting."
+msgstr ""
+
+#: ui/library/view.py:40
+msgid "library menu"
+msgstr ""
+
+#: ui/system_menu/help.py:6
+msgid ""
+"This is the system menu.  From the system menu you can make system wide "
+"changes, such as changing the system language or shut down Canute"
+msgstr ""
+
+#: ui/system_menu/system_menu.py:14
 msgid "shutdown"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:16
+#: ui/system_menu/system_menu.py:15
 msgid "backup log to USB stick"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:17
+#: ui/system_menu/system_menu.py:16
 msgid "select language"
 msgstr ""
 
-#: ui/system_menu/view.py:9
-msgid ""
-"/\n"
-"        Configure your preference on the sorting\n"
-"        order of books in the library and\n"
-"        bookmarks through the menu options. To\n"
-"        shutdown the Canute safely, select the\n"
-"        shutdown option and wait for #cj\n"
-"        seconds before unplugging it."
+#: ui/system_menu/view.py:23
+msgid "system menu"
 msgstr ""
 

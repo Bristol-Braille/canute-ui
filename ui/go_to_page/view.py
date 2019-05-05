@@ -1,23 +1,23 @@
-from ..braille import from_ascii, format_title
-from ..i18n import I18n
+from ..braille import format_title, from_unicode
 
 
 def render_help(width, height):
     data = []
     para = _('''\
-Go to a page number by keying it in with
-the side number buttons and pressing
-forward. Pages are numbered based on the
-#i line page height of the Canute. You
-can delete entered numbers by pressing
-or holding the back button. As always
-you can go back to your current page by
-pressing the menu button.''')
+To navigate to a page within a file, enter the page number using the \
+line select buttons on the left hand side of Canute 360. For example, \
+for page 10, press button 1 followed by button 0.  Press the forward \
+button to confirm your selection. Line 3 will refresh to show your \
+selected page. Press the forward button to navigate to your page.  If \
+you have entered the wrong page number, press the back button to reset \
+the selection on line 3. You can then enter the correct number using \
+the line select keys, before pressing forward to confirm, and pressing \
+forward once more to navigate to the selected page.''')
 
     for line in para.split('\n'):
-        data.append(from_ascii(line))
+        data.append(from_unicode(line))
 
-    while len(data) < height:
+    while len(data) % height:
         data.append(tuple())
 
     return tuple(data)
@@ -25,12 +25,15 @@ pressing the menu button.''')
 
 def render(width, height, state):
     if state['help_menu']['visible']:
-        return render_help(width, height)
+        all_lines = render_help(width, height)
+        num_pages = len(all_lines) // height
+        page_num = min(state['help_menu']['page'], num_pages - 1)
+        first_line = page_num * height
+        off_end = first_line + height
+        page = all_lines[first_line:off_end]
+        return page
 
-    locale = state['user'].get('current_language', 'en_GB:en')
-    i18n = I18n(locale)
-
-    data = [from_ascii(i18n._('enter page number using the side buttons'))]
+    data = [from_unicode(_('enter page number using the side buttons'))]
 
     try:
         book = state['user']['books'][state['user']['current_book']]
@@ -55,15 +58,15 @@ def render(width, height, state):
     else:
         selection = int(selection) - 1
 
-    t = format_title(i18n._('go to page number'), width,
+    t = format_title(_('go to page number'), width,
                      selection, total_pages, capitalize=False)
     data.append(t)
 
-    data.append(from_ascii(i18n._('please confirm by pressing forward')))
-    data.append(from_ascii(i18n._('undo by pressing back')))
-    data.append(from_ascii(i18n._('to go back to book press middle button')))
+    data.append(from_unicode(_('please confirm by pressing forward')))
+    data.append(from_unicode(_('undo by pressing back')))
+    data.append(from_unicode(_('to go back to book press middle button')))
 
-    for _ in range(height - 6):
+    for __ in range(height - 6):
         data.append(tuple())
 
     return tuple(data)
