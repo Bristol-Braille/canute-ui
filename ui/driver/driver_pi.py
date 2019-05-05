@@ -5,11 +5,15 @@ import logging
 import serial
 import serial.tools.list_ports
 import struct
+import zmq
+from .. import braille
 
 log = logging.getLogger(__name__)
 
 long_press = 500.0  # ms
 double_click = 200.0  # ms
+
+LINE_PUBLISHING_PORT = '5556'
 
 
 class Pi(Driver):
@@ -38,6 +42,10 @@ class Pi(Driver):
             self.port = None
 
         self.previous_buttons = tuple()
+
+        context = zmq.Context()
+        self.socket = context.socket(zmq.PUB)
+        self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
 
         super(Pi, self).__init__()
 
@@ -129,7 +137,13 @@ class Pi(Driver):
         :param data: list of bytes
         '''
         payload = struct.pack('%sb' % (len(data) + 1), cmd, *data)
-        self.HDLC.sendFrame(payload)
+        if self.port:
+            if cmd == comms.CMD_SEND_LINE:
+                brl = ''.join([braille.pin_num_to_unicode(ch) for ch in data[1:]])
+                brf = ''.join(braille.pin_nums_to_alphas(data[1:]))
+                self.socket.send_pyobj({'line_number': data[0], 'visual': brf, 'braille': brl})
+
+            self.HDLC.sendFrame(payload)
 
     async def async_get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
