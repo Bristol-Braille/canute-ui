@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #
 # Monitor removeable block devices and notify UI of changes.
 #
