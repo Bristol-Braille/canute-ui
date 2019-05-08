@@ -108,8 +108,13 @@ async def run_async_timeout(driver, config, duration, loop):
 # This is a task in its own right that listens to an external process for media
 # change notifications, and handles them.
 async def handle_media_changes():
+    # For now, under Travis, don't launch it.  It requires pygi which is hard
+    # to make accessible to a virtualenv.
+    media_helper = './media.py'
+    if 'TRAVIS' in os.environ:
+        media_helper = '/bin/cat'
     proc = await asyncio.create_subprocess_exec(
-                    './media.py', stdout=asyncio.subprocess.PIPE)
+                    media_helper, stdout=asyncio.subprocess.PIPE)
     while True:
         try:
             change = await proc.stdout.readline()
