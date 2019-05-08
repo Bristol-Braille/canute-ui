@@ -24,6 +24,8 @@ def stringify(enc):
 # /media).  This must match /etc/fstab.  The plan is to later use the
 # same slug as a marker within the UI state to allow for selective
 # addition/removal of books as media come and go.
+# FIXME: we should probably use the slugs as keys to extract the paths
+# dynamically, using findmnt.
 EXTERNAL_PORT_PATHS = {
  '/dev/disk/by-path/platform-20980000.usb-usb-0:1.1:1.0-scsi-0:0:0:0-part1': 'sd-card',
  '/dev/disk/by-path/platform-20980000.usb-usb-0:1.2:1.0-scsi-0:0:0:0-part1': 'front-usb',
