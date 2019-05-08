@@ -10,9 +10,6 @@ from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
 from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
-
-from . import config_loader
-
 from . import config_loader
 
 STATE_FILE = 'state.pkl'

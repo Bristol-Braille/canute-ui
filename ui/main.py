@@ -20,7 +20,6 @@ from .store import main_reducer
 from .actions import actions
 from .display import Display
 from .book.handlers import load_books, all_books_loaded
-from . import media
 
 display = Display()
 
