@@ -46,6 +46,7 @@ def main():
             marker.cancel()
             pending = asyncio.Task.all_tasks()
             for t in pending:
+                print("first reap: tasks remaining:")
                 print(t)
 
             loop.run_until_complete(asyncio.wait(pending))
@@ -66,7 +67,14 @@ def main():
             time.sleep(1)
             # Fetch again to spot the ex nihilo task(s).
             pending = asyncio.Task.all_tasks()
-            loop.run_until_complete(asyncio.wait(pending))
+            for t in pending:
+                print("second reap: tasks remaining:")
+                print(t)
+            loop.run_until_complete(asyncio.wait(pending, timeout=3))
+            pending = asyncio.Task.all_tasks()
+            for t in pending:
+                print("third reap: tasks remaining:")
+                print(t)
             loop.close()
     elif args.dummy:
         log.info('running with dummy hardware')
