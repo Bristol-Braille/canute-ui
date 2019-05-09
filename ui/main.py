@@ -45,6 +45,9 @@ def main():
                 driver, config, args.fuzz_duration, loop))
             marker.cancel()
             pending = asyncio.Task.all_tasks()
+            for t in pending:
+                print(t)
+
             loop.run_until_complete(asyncio.wait(pending))
 
             # HACK: Sleep and re-wait() is a workaround.  Although wait()
@@ -121,6 +124,7 @@ async def handle_media_changes():
         except asyncio.CancelledError:
             proc.terminate()
             await proc.wait()
+            print("killed proc")
             raise
         change = change.decode('ascii')
         if change.startswith('inserted') or change.startswith('removed'):
@@ -176,6 +180,7 @@ async def run_async(driver, config, loop):
                 await asyncio.sleep(0)
     except asyncio.CancelledError:
         media_handler.cancel()
+        print("cancelled handler")
         raise
 
 
