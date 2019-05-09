@@ -9,4 +9,4 @@ script:
   - ./test
   - ./lint
   - mkdir ~/canute-media && cp -r books ~/canute-media/sd-card && cp config.rc.travis config.rc
-  - ./canute_ui --fuzz 550
+  - ./canute_ui --fuzz 30
