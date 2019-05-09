@@ -41,10 +41,14 @@ class Dummy(Driver):
     # FIXME: copied, with margin, from buttons.py which has no constant
     LONG_PRESS_DURATION = 0.55  # seconds
 
-    def __init__(self, fuzz=True):
+    def __init__(self, fuzz=True, seed=None):
         super(Dummy, self).__init__()
         self.fuzz = fuzz
         self.fuzz_press = None
+        if not seed:
+            seed = random.randint(0, 1000000)
+            log.info('fuzz seed is %d' % seed)
+        random.seed(seed)
 
     def is_ok(self):
         return True

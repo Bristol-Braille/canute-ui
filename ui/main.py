@@ -35,7 +35,7 @@ def main():
 
     if args.fuzz_duration:
         log.info('running fuzz test')
-        with Dummy(fuzz=True) as driver:
+        with Dummy(fuzz=True, seed=args.fuzz_seed) as driver:
             loop = asyncio.get_event_loop()
             if 'TRAVIS' in os.environ:
                 marker = asyncio.ensure_future(log_markers())
