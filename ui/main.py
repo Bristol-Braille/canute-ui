@@ -44,26 +44,40 @@ def main():
             loop.run_until_complete(run_async_timeout(
                 driver, config, args.fuzz_duration, loop))
             marker.cancel()
-            pending = asyncio.Task.all_tasks()
-            loop.run_until_complete(asyncio.wait(pending))
+            all_tasks = asyncio.Task.all_tasks()
 
-            # HACK: Sleep and re-wait() is a workaround.  Although wait()
-            # almost always returns all done/none pending, short (~1s)
-            # fuzz runs still often result in RuntimeError and "Task was
-            # destroyed but it is pending!" upon closing the loop, with
-            # outstanding async write()s being the offenders.  Possible
-            # this is down to outstanding callbacks scheduled with
-            # call_soon() which, unlike tasks, can't be enumerated and
-            # cancelled/completed.
+            # HACK: We have two problems here with interwoven
+            # workarounds: stubborn tasks and ex nihilo tasks.
             #
-            # A less bad workaround might be to have just one state-writer
-            # task which we signal through a queue and which manages its
-            # own write heartbeat; that way there'd be far fewer
-            # outstanding writes in the first place.
-            time.sleep(1)
-            # Fetch again to spot the ex nihilo task(s).
-            pending = asyncio.Task.all_tasks()
-            loop.run_until_complete(asyncio.wait(pending))
+            # Stubborn tasks fail to terminate on their own and are seen
+            # in some long CI fuzz runs that get timed out by Travis.
+            # The current approach is to use timeouts on wait() and to
+            # fail, with logging, if tasks haven't terminated by
+            # themselves after a few seconds.
+            #
+            # Ex nihilo tasks are ones that appear only when you reap.
+            # Seen especially in short (~1s) fuzz runs, these manifest
+            # with wait() returning all done/none pending, but
+            # loop.close() triggering RuntimeError and "Task was
+            # destroyed but it is pending!".  The offending tasks are
+            # async write()s.  Possible this is down to outstanding
+            # callbacks scheduled; such callbacks, unlike the tasks they
+            # seem to be spawning, can't be enumerated and
+            # cancelled/completed.  The current approach is to do a
+            # second wait() on a freshly gathered task list.  A less bad
+            # workaround might be to have just one state-writer task
+            # which we signal through a queue and which manages its own
+            # write heartbeat; that way there'd be far fewer outstanding
+            # writes in the first place.
+            loop.run_until_complete(asyncio.wait(all_tasks, timeout=1))
+
+            all_tasks = asyncio.Task.all_tasks()
+            (_, pending) = loop.run_until_complete(asyncio.wait(all_tasks, timeout=3))
+            if pending:
+                log.error('some tasks failed to stop:')
+                for t in pending:
+                    log.error(t)
+                sys.exit(1)
             loop.close()
     elif args.dummy:
         log.info('running with dummy hardware')
