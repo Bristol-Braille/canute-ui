@@ -1,14 +1,12 @@
 #!/usr/bin/python
 # coding: utf8
-
-__version__ = '0.2'
-
 import logging
 import struct
 import time
 from threading import Thread
 import crcmod.predefined
 
+__version__ = '0.2'
 
 logger = logging.getLogger(__name__)
 
