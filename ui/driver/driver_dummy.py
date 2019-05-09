@@ -1,6 +1,8 @@
 import sys
 import logging
 import random
+import time
+from collections import namedtuple
 
 from .driver import Driver
 from . import comms_codes as comms
@@ -33,11 +35,20 @@ class Dummy(Driver):
         'R',
         'X',
     )
-    button_choice = list(button_map)
+    button_choice = list()
+    FuzzPress = namedtuple('FuzzPress', field_names=['button', 'up_at'])
 
-    def __init__(self, fuzz=True):
+    # FIXME: copied, with margin, from buttons.py which has no constant
+    LONG_PRESS_DURATION = 0.55  # seconds
+
+    def __init__(self, fuzz=True, seed=None):
         super(Dummy, self).__init__()
         self.fuzz = fuzz
+        self.fuzz_press = None
+        if not seed:
+            seed = random.randint(0, 1000000)
+            log.info('fuzz seed is %d' % seed)
+        random.seed(seed)
 
     def is_ok(self):
         return True
@@ -47,27 +58,44 @@ class Dummy(Driver):
         before repeating any buttons'''
         if len(self.button_choice) == 0:
             self.button_choice = list(self.button_map)
+            random.shuffle(self.button_choice)
 
-        n = random.randint(0, len(self.button_choice) - 1)
-        return self.button_choice.pop(n)
+        return self.button_choice.pop()
+
+    def _get_random_press(self):
+        '''Create a random button press event.
+
+        Fixed odds of getting a long press, 1 in 20.
+        '''
+        _long = random.random() > 0.95
+        if _long:
+            up_at = time.time() + self.LONG_PRESS_DURATION
+        else:
+            # Short presses can end at the next call; no minimum time
+            up_at = time.time()
+        return self.FuzzPress(button=self._get_random_button(), up_at=up_at)
 
     def get_buttons(self):
         '''get button states
 
+        In fuzz mode this presses only one button at a time.
         :rtype: dict of elements either set to 'down' or 'up'
         '''
-        if self.fuzz:
+        if not self.fuzz:
+            # No presses ever get simulated without fuzz.
+            return dict()
 
-            # raise any previously held keys
-            for button in self.buttons.keys():
-                if self.buttons[button] == 'down':
-                    self.buttons[button] = 'up'
-                else:
-                    self.buttons[button]
+        report = {}
 
-            self.buttons[self._get_random_button()] = 'down'
+        if self.fuzz_press and time.time() >= self.fuzz_press.up_at:
+            report[self.fuzz_press.button] = 'up'
+            self.fuzz_press = None
 
-        return self.buttons
+        if not self.fuzz_press:
+            self.fuzz_press = self._get_random_press()
+            report[self.fuzz_press.button] = 'down'
+
+        return report
 
     def send_error_sound(self):
         '''make the hardware make an error sound'''

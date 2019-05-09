@@ -59,6 +59,14 @@ parser.add_argument(
     type=float,
 )
 parser.add_argument(
+    '--fuzz-seed',
+    action='store',
+    dest='fuzz_seed',
+    default=None,
+    help='start fuzz RNG with supplied seed',
+    type=int,
+)
+parser.add_argument(
     '--dummy',
     action='store_const',
     dest='dummy',
