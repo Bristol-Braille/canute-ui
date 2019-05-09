@@ -7,6 +7,17 @@ media_dir = /media
 # the exact sub mount-point directory name of the sd-card
 sd_card_dir = sd-card
 
+# Additional books made available on the USB ports will (for now at
+# least) be visible in the library.  Further, in the absence of a state
+# file on the SD card, a state file on a USB medium will get read (but
+# will not be updated).  Neither of these behaviours are officially
+# supported and they may change at any time so shouldn't be relied upon.
+#
+# These paths are relative to media_dir.
+# These config values are optional.
+additional_lib_1 = front-usb
+additional_lib_2 = back-usb
+
 [comms]
 # serial timeout in seconds
 timeout = 1000
