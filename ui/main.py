@@ -94,6 +94,7 @@ def run(driver, config):
     loop.run_until_complete(run_async(driver, config, loop))
     pending = asyncio.Task.all_tasks()
     loop.run_until_complete(asyncio.gather(*pending))
+    loop.close()
 
 
 async def run_async_timeout(driver, config, duration, loop):
@@ -104,8 +105,28 @@ async def run_async_timeout(driver, config, duration, loop):
         return
 
 
-async def run_async(driver, config, loop):
+# This is a task in its own right that listens to an external process for media
+# change notifications, and handles them.
+async def handle_media_changes():
+    proc = await asyncio.create_subprocess_exec(
+                    './media.py', stdout=asyncio.subprocess.PIPE)
+    while True:
+        try:
+            change = await proc.stdout.readline()
+        except asyncio.CancelledError:
+            proc.terminate()
+            await proc.wait()
+            raise
+        change = change.decode('ascii')
+        if change.startswith('inserted') or change.startswith('removed'):
+            # For now we do nothing more sophisticated than die and allow
+            # supervision to restart us, at which point we'll rescan the
+            # library.
+            sys.exit(0)
 
+
+async def run_async(driver, config, loop):
+    media_handler = asyncio.ensure_future(handle_media_changes())
     media_dir = config.get('files', 'media_dir')
     state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
@@ -128,19 +149,29 @@ async def run_async(driver, config, loop):
     # guarantee of the subscription triggering if subscribed before that.
     await store.dispatch(actions.trigger())
 
-    while 1:
-        state = store.state
-        if (await handle_hardware(driver, state, store, media_dir)):
-            break
-        await buttons.check(driver, state['app'],
-                            store.dispatch)
-        await display.send_line(driver)
-        # in the emulated driver we can be too agressive in checking buttons
-        # and sending lines if we don't have any delay
-        if not isinstance(driver, Pi):
-            await asyncio.sleep(0.01)
-        else:
-            await asyncio.sleep(0)
+    try:
+        while 1:
+            state = store.state
+            if (await handle_hardware(driver, state, store, media_dir)):
+                media_handler.cancel()
+                try:
+                    await media_handler
+                except asyncio.CancelledError:
+                    pass
+                break
+            await buttons.check(driver, state['app'],
+                                store.dispatch)
+
+            await display.send_line(driver)
+            # in the emulated driver we can be too agressive in checking buttons
+            # and sending lines if we don't have any delay
+            if not isinstance(driver, Pi):
+                await asyncio.sleep(0.01)
+            else:
+                await asyncio.sleep(0)
+    except asyncio.CancelledError:
+        media_handler.cancel()
+        raise
 
 
 def handle_changes(driver, config, store):

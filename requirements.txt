@@ -11,3 +11,4 @@ pyqt5==5.9.2
 toml==0.9.4
 crcmod==1.7
 pyzmq==16.0.2
+pydbus==0.6.0
