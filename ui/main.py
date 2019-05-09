@@ -45,36 +45,22 @@ def main():
                 driver, config, args.fuzz_duration, loop))
             marker.cancel()
             pending = asyncio.Task.all_tasks()
+            log.info('first reap: tasks remaining:')
             for t in pending:
-                print('first reap: tasks remaining:')
-                print(t)
+                log.info(t)
 
-            loop.run_until_complete(asyncio.wait(pending))
+            loop.run_until_complete(asyncio.wait(pending, timeout=1))
 
-            # HACK: Sleep and re-wait() is a workaround.  Although wait()
-            # almost always returns all done/none pending, short (~1s)
-            # fuzz runs still often result in RuntimeError and "Task was
-            # destroyed but it is pending!" upon closing the loop, with
-            # outstanding async write()s being the offenders.  Possible
-            # this is down to outstanding callbacks scheduled with
-            # call_soon() which, unlike tasks, can't be enumerated and
-            # cancelled/completed.
-            #
-            # A less bad workaround might be to have just one state-writer
-            # task which we signal through a queue and which manages its
-            # own write heartbeat; that way there'd be far fewer
-            # outstanding writes in the first place.
-            time.sleep(1)
             # Fetch again to spot the ex nihilo task(s).
             pending = asyncio.Task.all_tasks()
+            log.info('second reap: tasks remaining:')
             for t in pending:
-                print('second reap: tasks remaining:')
-                print(t)
+                log.info(t)
             loop.run_until_complete(asyncio.wait(pending, timeout=3))
             pending = asyncio.Task.all_tasks()
+            log.info("tasks we've given up onthird reap: tasks remaining:")
             for t in pending:
-                print('third reap: tasks remaining:')
-                print(t)
+                log.info(t)
             loop.close()
     elif args.dummy:
         log.info('running with dummy hardware')
@@ -132,7 +118,7 @@ async def handle_media_changes():
         except asyncio.CancelledError:
             proc.terminate()
             await proc.wait()
-            print('killed proc')
+            log.info('killed media proc')
             raise
         change = change.decode('ascii')
         if change.startswith('inserted') or change.startswith('removed'):
@@ -188,7 +174,7 @@ async def run_async(driver, config, loop):
                 await asyncio.sleep(0)
     except asyncio.CancelledError:
         media_handler.cancel()
-        print('cancelled handler')
+        log.info('got cancelled; cancelled media handler')
         raise
 
 
