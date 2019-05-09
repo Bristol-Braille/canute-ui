@@ -208,8 +208,8 @@ async def handle_hardware(driver, state, store, media_dir):
         await store.dispatch(actions.shutdown())
     if state['app']['shutting_down']:
         if isinstance(driver, Pi):
-            driver.clear_page()
-            driver.lower_rods()
+            driver.port.close()
+            os.system('/home/pi/util/shutdown-stage-1.py')
             if not sys.stdout.isatty():
                 os.system('sudo shutdown -h now')
         # never exit from Dummy driver
