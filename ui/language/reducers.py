@@ -7,9 +7,12 @@ class LanguageReducers():
         languages = state['languages']
         lang = abs(int(value))
         keys = list(languages['available'].keys())
-        locale = keys[lang] if lang < len(keys) else 'en_GB:en'
-        install(locale)
-        manual = Manual.create()
-        books = state['user']['books'].copy(**{manual_filename: manual})
-        user = state['user'].copy(current_language=locale, books=books)
-        return state.copy(location='book', user=user)
+        if lang < len(keys):
+            locale = keys[lang]
+            install(locale)
+            manual = Manual.create()
+            books = state['user']['books'].copy(**{manual_filename: manual})
+            user = state['user'].copy(current_language=locale, books=books)
+            return state.copy(location='book', user=user)
+        else:
+            return state
