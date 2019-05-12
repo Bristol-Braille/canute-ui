@@ -79,6 +79,9 @@ def main():
                 log.error('some tasks failed to stop:')
                 for t in pending:
                     log.error(t)
+                    t.cancel()
+                log.error("forcibly cancelling them to see where they're stuck...")
+                loop.run_until_complete(asyncio.gather(*pending))
                 sys.exit(1)
             loop.close()
     elif args.dummy:
