@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from . import state_helpers
 from .library import view as library_view
 from .system_menu import view as system_menu_view
@@ -18,6 +19,14 @@ class Display():
         self.buffer = []
 
     async def render_to_buffer(self, state, store):
+        try:
+            self._render_to_buffer(state, store)
+        except asyncio.CancelledError as e:
+            import traceback
+            traceback.print_exc()
+            raise
+
+    async def _render_to_buffer(self, state, store):
         width, height = state_helpers.dimensions(state)
         location = state['location']
         if location == 'library':
