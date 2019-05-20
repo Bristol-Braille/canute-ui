@@ -15,7 +15,6 @@ class Driver(object, metaclass=abc.ABCMeta):
     '''
 
     def __init__(self):
-        self.status = 0
         (self.chars, self.rows) = self.get_dimensions()
         self.page_length = self.rows * self.chars
         log.info('device ready with %d x %d characters' %
@@ -151,9 +150,9 @@ class Driver(object, metaclass=abc.ABCMeta):
 
         self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
 
-        self.status = self.get_data(comms.CMD_SEND_LINE)
-        if self.status != 0:
-            log.warning('got an error after setting braille: %d' % self.status)
+        status = self.get_data(comms.CMD_SEND_LINE)
+        if status != 0:
+            log.warning('got an error after setting braille: %d' % status)
 
     async def async_set_braille_row(self, row, data):
         if len(data) < self.chars:
@@ -164,6 +163,6 @@ class Driver(object, metaclass=abc.ABCMeta):
 
         self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
 
-        self.status = await self.async_get_data(comms.CMD_SEND_LINE)
-        if self.status != 0:
-            log.warning('got an error after setting braille: %d' % self.status)
+        status = await self.async_get_data(comms.CMD_SEND_LINE)
+        if status != 0:
+            log.warning('got an error after setting braille: %d' % status)
