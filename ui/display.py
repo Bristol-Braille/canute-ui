@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from . import state_helpers
 from .library import view as library_view
 from .system_menu import view as system_menu_view
@@ -49,6 +50,13 @@ class Display():
         braille = self.buffer[row]
         if braille != self.hardware_state[row]:
             await driver.async_set_braille_row(row, braille)
+            # Don't issue new motions until current is done, but allow
+            # button checks while we wait.
+            while True:
+                await asyncio.sleep(0.05)
+                complete = await driver.is_motion_complete()
+                if complete:
+                    break
             self.hardware_state[row] = braille
 
     def _set_buffer(self, data):

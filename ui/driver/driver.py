@@ -154,6 +154,15 @@ class Driver(object, metaclass=abc.ABCMeta):
         if status != 0:
             log.warning('got an error after setting braille: %d' % status)
 
+    async def is_motion_complete(self):
+        flags = await self._poll()
+        return flags & (1 << comms.POLL_FLAG_BIT_MOVING) == 0
+
+    async def _poll(self):
+        self.send_data(comms.CMD_POLL)
+        flags = await self.async_get_data(comms.CMD_POLL)
+        return flags
+
     async def async_set_braille_row(self, row, data):
         if len(data) < self.chars:
             data = tuple(data) + ((0,) * (self.chars - len(data)))

@@ -117,6 +117,8 @@ class Emulated(Driver):
             self.prev_data[data[0]] = tuple(data[1:])
         elif cmd == comms.CMD_RESET:
             self.data = 0
+        elif cmd == comms.CMD_POLL:
+            self.data = 0
 
     def get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware - we're faking this so the
