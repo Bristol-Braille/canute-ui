@@ -21,19 +21,23 @@ class Manual(BookFile):
 
     @staticmethod
     def create():
+        # TRANSLATORS: Source text uses (minimal) AsciiDoc markup to give
+        # formatting hints.  Since translation will generally alter width
+        # and wrapping, these are just hints.  Interpretation of markup is
+        # entirely up to you (no code processes it).
         text = _('''\
-         canute quick help
+= Canute Quick Help
 
-you can also access these contextual
+You can also access these contextual
 help texts from anywhere by pressing
-the topmost side button on the left
+the topmost side button on the left.
 
-
-
-
-          book and home menu
+== Book and Home Menu
 
 Move through the book by pressing the
+
+<<<
+
 arrow buttons on the front of the
 machine. Hold them down to move #e
 pages at a time. The home menu shows
@@ -43,8 +47,9 @@ this by pressing the middle button on
 the front. Pressing this button again
 will always return you to your book.
 
+<<<
 
-          bookmarks
+== Bookmarks
 
 Add a bookmark by pressing button #e
 while in a book. Bookmarks are listed
@@ -53,42 +58,48 @@ starts with the Canute page number based
 on its #i line page. Go to the page by
 selecting a bookmark by pressing one of
 the side buttons. Holding the button
+
+<<<
+
 down will delete the bookmark.
-          go to page menu
+
+== Go To Page Menu
 
 Go to a page number by keying it in with
 the side number buttons and pressing
 forward. Pages are numbered based on the
 #i line page height of the Canute. You
 can delete entered numbers by pressing
+
+<<<
+
 or holding the back button. As always
 you can go back to your current page by
 pressing the menu button.
 
-
-          library menu
+== Library Menu
 
 Choose the book you wish to read by
 pressing the button to the left of the
 title. Use the arrow buttons to page
+
+<<<
+
 through the library. You can change the
 ordering of the books in the system
 menu.
 
-
-          system menu
+== System Menu
 
 Configure your preference on the sorting
 order of books in the library and
 bookmarks through the menu options. To
+
+<<<
+
 shutdown the Canute safely, select the
 shutdown option and wait for #cj
 seconds before unplugging it.
-
-
-
-
-
 ''')
         lines = text.split('\n')
         pages = batch(lines)
