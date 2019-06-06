@@ -124,6 +124,7 @@ async def handle_media_changes():
             raise
         change = change.decode('ascii')
         if change.startswith('inserted') or change.startswith('removed'):
+            log.debug('shutting down as crude route to library rescan')
             # For now we do nothing more sophisticated than die and allow
             # supervision to restart us, at which point we'll rescan the
             # library.
@@ -132,6 +133,7 @@ async def handle_media_changes():
 
 async def run_async(driver, config, loop):
     media_handler = asyncio.ensure_future(handle_media_changes())
+    duty_logger = asyncio.ensure_future(driver.track_duty())
     media_dir = config.get('files', 'media_dir')
     state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
@@ -163,7 +165,14 @@ async def run_async(driver, config, loop):
                     await media_handler
                 except asyncio.CancelledError:
                     pass
+                duty_logger.cancel()
+                try:
+                    await duty_logger
+                except asyncio.CancelledError:
+                    pass
+
                 break
+
             await buttons.check(driver, state['app'],
                                 store.dispatch)
 
@@ -176,6 +185,7 @@ async def run_async(driver, config, loop):
                 await asyncio.sleep(0)
     except asyncio.CancelledError:
         media_handler.cancel()
+        duty_logger.cancel()
         raise
 
 
