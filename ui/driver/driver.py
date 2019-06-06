@@ -50,6 +50,10 @@ class Driver(object, metaclass=abc.ABCMeta):
     async def async_get_data(self, cmd, data=[]):
         return
 
+    async def track_duty(self):
+        # Pi driver periodically saves actuations to EEPROM.
+        return
+
     def reset_display(self):
         self.send_data(comms.CMD_RESET)
         return self.get_data(comms.CMD_RESET)
