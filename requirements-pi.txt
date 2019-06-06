@@ -8,3 +8,4 @@ crcmod==1.7
 lxml==4.2.3
 pyzmq==16.0.2
 pydbus==0.6.0
+smbus2=0.2.3

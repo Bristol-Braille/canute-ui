@@ -6,12 +6,22 @@ import serial
 import serial.tools.list_ports
 import struct
 import zmq
+import smbus2
 from .. import braille
 
 log = logging.getLogger(__name__)
 
 long_press = 500.0  # ms
 double_click = 200.0  # ms
+
+EEPROM_SIZE = 8 * 1024  # For M24C64 as in (at least) PCB v1.0, v1.1
+EEPROM_PAGE_SIZE = 32
+# -1 is serial number; -2 is flags.
+DUTY_RECORD_PAGE = (EEPROM_SIZE // EEPROM_PAGE_SIZE) - 3
+DUTY_RECORD_ADDR = DUTY_RECORD_PAGE * EEPROM_PAGE_SIZE
+N_ROWS = 9
+BYTES_PER_DUTY_RECORD = 3
+ACTUATION_SAVE_PERIOD = 60 * 5  # seconds
 
 LINE_PUBLISHING_PORT = '5556'
 
@@ -46,6 +56,8 @@ class Pi(Driver):
         context = zmq.Context()
         self.socket = context.socket(zmq.PUB)
         self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
+        self.row_actuations = [0] * N_ROWS
+        self.i2c_bus = smbus2.SMBus(1)
 
         super(Pi, self).__init__()
 
@@ -139,9 +151,11 @@ class Pi(Driver):
         payload = struct.pack('%sb' % (len(data) + 1), cmd, *data)
         if self.port:
             if cmd == comms.CMD_SEND_LINE:
+                row = data[0]
+                self._log_row_actuation(row)
                 brl = ''.join([braille.pin_num_to_unicode(ch) for ch in data[1:]])
                 brf = ''.join(braille.pin_nums_to_alphas(data[1:]))
-                self.socket.send_pyobj({'line_number': data[0], 'visual': brf, 'braille': brl})
+                self.socket.send_pyobj({'line_number': row, 'visual': brf, 'braille': brl})
 
             self.HDLC.sendFrame(payload)
 
@@ -186,6 +200,60 @@ class Pi(Driver):
             log.warning('unexpected rx command %d, expecting %d' %
                         (data[0], expected_cmd))
         return data[1] | (data[2] << 8)
+
+    async def track_duty(self):
+        # Fetch any existing actuation counts from EEPROM.
+        self._read_actuations()
+        # Every 5 minutes, or when cancelled, save actuations back to
+        # EEPROM.
+        last_actuations = self.row_actuations
+        try:
+            while True:
+                await asyncio.sleep(ACTUATION_SAVE_PERIOD)
+                if self.row_actuations != last_actuations:
+                    self._save_actuations()
+                last_actuations = self.row_actuations
+        except asyncio.CancelledError:
+            self._save_actuations()
+            raise
+
+    def _save_actuations(self):
+        '''Update EEPROM with actuations from the last period'''
+        # We loaded actuations from EEPROM so we can simply write.
+        start_address = struct.pack('>H', DUTY_RECORD_ADDR)
+
+        # Keep this to one page; store only the 24 lowest bits of each.
+        data = b''.join([struct.pack('<I', count)[0:BYTES_PER_DUTY_RECORD]
+                         for count in self.row_actuations])
+
+        write = smbus2.i2c_msg.write(0x50, start_address + data)
+
+        self.i2c_bus.i2c_rdwr(write)
+        log.debug('Duty cycles written back to EEPROM')
+
+    def _read_actuations(self):
+        '''Extract past actuations from EEPROM'''
+        start_address = struct.pack('>H', DUTY_RECORD_ADDR)
+
+        write = smbus2.i2c_msg.write(0x50, start_address)
+        read = smbus2.i2c_msg.read(0x50, N_ROWS * BYTES_PER_DUTY_RECORD)
+
+        self.i2c_bus.i2c_rdwr(write, read)
+
+        read = bytes(list(read))
+        for i in range(N_ROWS):
+            first = BYTES_PER_DUTY_RECORD * i
+            after = BYTES_PER_DUTY_RECORD * (i + 1)
+            padded_record = read[first:after] + b'\0'
+            saved_actuations = struct.unpack('<I', padded_record)[0]
+            if saved_actuations != 0x00FFFFFF:
+                # UI might have started rendering already, so add 'em up.
+                self.row_actuations[i] += saved_actuations
+
+    def _log_row_actuation(self, row):
+        '''Increment cached actuation count for :row:.
+           Cache will be periodically written to EEPROM in background.'''
+        self.row_actuations[row] += 1
 
     def __exit__(self, ex_type, ex_value, traceback):
         '''__exit__ method allows us to shut down the port properly'''
