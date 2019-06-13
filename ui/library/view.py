@@ -5,21 +5,29 @@ from ..state_helpers import get_books
 def render_help(width, height):
     data = []
     para = _('''\
-This is the library menu. From this menu, you can view and select from \
-the files loaded onto the memory stick or SD card. As with other menus, \
-press the line select key to the left of a menu item to select it. \
-Canute 360 will then display your chosen file on the reading surface. \
-Navigate within the menu using the "forward" and "back" buttons. To load \
-books onto your canute, first turn it off by pressing the button to the \
-right of the power socket on the back panel. Once the "please wait" text \
-disappears, remove the memory stick or SD card you are using. Copy and \
-paste a BRF or PEF file onto the stick or card, using a computer, insert \
-the stick or card into the slot. Turn your Canute on again, and once it \
-has started your file will be in the library menu. As with all menus, \
-select your file using the line select button to it's left. For best \
-results, format BRF files with nine lines of forty cells per page in \
-software. Duxbury DBT and RoboBraille have a Canute preset built in for \
-formatting.\
+This is the library menu. From this menu you can view and select from \
+the files on the memory stick or SD card. You can choose a file by \
+pressing the line select button to the left of the file name. Canute \
+360 will then show your chosen file on the display. You can navigate \
+forward and backwards within the library menu using the large buttons \
+labelled "forward" and "back" on the front panel. You can return to \
+the file you are currently reading by pressing the large central \
+button labelled "menu".
+
+To load a new file onto your Canute, first turn it off by pressing and \
+then quickly releasing the small button to the right of the power \
+socket on the back panel. Once the "please wait" text disappears, \
+remove the memory stick or SD card you are using to store your files. \
+Copy and paste your files, in BRF or PEF format, onto the memory stick \
+or SD card using a computer. Finally, insert the USB stick or SD card \
+into the slot on the side of Canute. Turn your Canute on again using \
+the small button to the right of the power socket on the back panel. \
+Once Canute has started your files will appear in the library menu.
+
+For best results you should format your files with forty cells per \
+line and nine lines of Braille per page. The latest version of Duxbury \
+DBT and the free online robo-braille service both have a Canute 360 \
+preset built in for formatting.\
 ''')
 
     for line in para.split('\n'):
