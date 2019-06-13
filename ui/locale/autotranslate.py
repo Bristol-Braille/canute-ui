@@ -63,7 +63,9 @@ for variant in variants:
         )
         dest_entry.merge(src_entry)
         dest_entry.msgstr = translation
-        if dest_entry.msgid == 'English, UEB grade 2':
+        if dest_entry.msgid == 'English, UEB grade 1':
+            dest_entry.msgstr = '⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁'
+        elif dest_entry.msgid == 'English, UEB grade 2':
             dest_entry.msgstr = '⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃'
         dest.append(dest_entry)
 

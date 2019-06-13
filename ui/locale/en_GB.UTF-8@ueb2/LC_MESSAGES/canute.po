@@ -23,7 +23,7 @@ msgstr "⠿ ⠉⠇⠂⠝⠬ ⠯ ⠞⠑⠌⠬ ⠉⠁⠝⠥⠞⠑"
 #. appropriate, if possible.
 #: ui/i18n.py:37
 msgid "English, UEB grade 1"
-msgstr "⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
+msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
 
 #. TRANSLATORS: This is a language name menu item, so should always appear
 #. in the language it denotes so that it remains readable to those who
