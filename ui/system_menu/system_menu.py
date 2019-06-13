@@ -13,5 +13,5 @@ def system_menu():
     return OrderedDict([
         (_('shutdown'), actions.shutdown()),
         (_('backup log to USB stick'), actions.backup_log('start')),
-        (_('select language'), actions.go_to_language_menu())
+        (_('select language and code'), actions.go_to_language_menu())
     ])

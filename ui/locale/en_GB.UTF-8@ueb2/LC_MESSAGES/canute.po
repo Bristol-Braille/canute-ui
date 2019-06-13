@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-13 17:47+0100\n"
-"PO-Revision-Date: 2019-06-13 16:52+0000\n"
+"POT-Creation-Date: 2019-06-13 18:16+0100\n"
+"PO-Revision-Date: 2019-06-13 17:17+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -289,8 +289,8 @@ msgid "backup log to USB stick"
 msgstr "⠃⠁⠉⠅⠥⠏ ⠇⠕⠛ ⠞⠕ ⠠⠠⠥⠎⠃ ⠌⠊⠉⠅"
 
 #: ui/system_menu/system_menu.py:16
-msgid "select language"
-msgstr "⠎⠑⠇⠑⠉⠞ ⠇⠁⠝⠛⠥⠁⠛⠑"
+msgid "select language and code"
+msgstr "⠎⠑⠇⠑⠉⠞ ⠇⠁⠝⠛⠥⠁⠛⠑ ⠯ ⠉⠕⠙⠑"
 
 #: ui/system_menu/view.py:23
 msgid "system menu"
