@@ -147,7 +147,7 @@ async def write(store, media_dir):
     books = user_state['books']
     selected_book = user_state['current_book']
     selected_lang = user_state['current_language']
-    if selected_book != prev['current_book']:
+    if selected_book != prev['current_book'] or selected_lang != prev['current_language']:
         if not selected_book == manual_filename:
             selected_book = os.path.relpath(selected_book, media_dir)
         s = toml.dumps({'current_book': selected_book,
