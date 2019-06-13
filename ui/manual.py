@@ -1,6 +1,16 @@
 from .braille import from_unicode
 from .book.book_file import BookFile, LoadState
 
+# This is no longer any kind of manual.
+#
+# The long-standing intention is that Canute ships with the full manual;
+# it's an accident that the quick start got baked in.  For now, since
+# the (nominal) manual is special in several ways and removal would
+# cause code churn, the quick start has been replaced with this
+# placeholder.  In time we'll kill this off completely and put permanent
+# books on the Pi SD as regular BRFs.  For now, full manual will come on
+# the library card and user will just have to be careful not to delete
+# it.
 
 manual_filename = '@@__canute_manual__@@'
 
@@ -17,78 +27,18 @@ class Manual(BookFile):
         # expect them in SimBraille.  So, I figure it's better to give a
         # naive-but-consistent SimBraille title here than a
         # decently-translated-but-inconsistent Unicode title.
-        return 'canute manual'
+        return 'Canute 360 by Bristol Braille'
 
     @staticmethod
     def create():
         text = _('''\
-         canute quick help
+Canute 360 by Bristol Braille Technology
 
-you can also access these contextual
-help texts from anywhere by pressing
-the topmost side button on the left
+Bristol Braille Technology is a not-for-profit organisation dedicated \
+to serving the Braille reading community.
 
-
-
-
-          book and home menu
-
-Move through the book by pressing the
-arrow buttons on the front of the
-machine. Hold them down to move #e
-pages at a time. The home menu shows
-what you can do with the side buttons
-from the home menu or the book. View
-this by pressing the middle button on
-the front. Pressing this button again
-will always return you to your book.
-
-
-          bookmarks
-
-Add a bookmark by pressing button #e
-while in a book. Bookmarks are listed
-here in the bookmark menu. Each bookmark
-starts with the Canute page number based
-on its #i line page. Go to the page by
-selecting a bookmark by pressing one of
-the side buttons. Holding the button
-down will delete the bookmark.
-          go to page menu
-
-Go to a page number by keying it in with
-the side number buttons and pressing
-forward. Pages are numbered based on the
-#i line page height of the Canute. You
-can delete entered numbers by pressing
-or holding the back button. As always
-you can go back to your current page by
-pressing the menu button.
-
-
-          library menu
-
-Choose the book you wish to read by
-pressing the button to the left of the
-title. Use the arrow buttons to page
-through the library. You can change the
-ordering of the books in the system
-menu.
-
-
-          system menu
-
-Configure your preference on the sorting
-order of books in the library and
-bookmarks through the menu options. To
-shutdown the Canute safely, select the
-shutdown option and wait for #cj
-seconds before unplugging it.
-
-
-
-
-
+Founded in 2011. Registered in the United Kingdom with the Regulator \
+of Community Interest Companies. Company number 7518101.
 ''')
         lines = text.split('\n')
         pages = batch(lines)

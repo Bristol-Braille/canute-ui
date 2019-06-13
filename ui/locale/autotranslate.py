@@ -53,17 +53,32 @@ for variant in variants:
 
     for src_entry in valid_entries:
         # unicode.dis still uses ASCII spaces.
+        if src_entry.msgid.find('  ') != -1:
+            print('Warning: embedded double-space:\n' + str(src_entry.occurrences))
         translation = louis.translateString(
             ['unicode.dis', variant.table],
             src_entry.msgid
         )
-        translation = textwrap.fill(translation, width=CANUTE_WIDTH)
+        # Louis squashes newlines into spaces.  Provided there are
+        # no double-spaces in the input we can assume a double-space
+        # in the output was meant to be a line break.
+        import re
+        wrapped = []
+        for para in re.split(r'  ', translation):
+            wrapped.append(textwrap.fill(para, width=CANUTE_WIDTH))
+            wrapped.append('\n')
+            wrapped.append('\n')
+        wrapped.pop()
+        wrapped.pop()
+        wrapped = ''.join(wrapped)
         dest_entry = polib.POEntry(
             msgid=src_entry.msgid,
         )
         dest_entry.merge(src_entry)
-        dest_entry.msgstr = translation
-        if dest_entry.msgid == 'English, UEB grade 2':
+        dest_entry.msgstr = wrapped
+        if dest_entry.msgid == 'English, UEB grade 1':
+            dest_entry.msgstr = '⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁'
+        elif dest_entry.msgid == 'English, UEB grade 2':
             dest_entry.msgstr = '⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃'
         dest.append(dest_entry)
 

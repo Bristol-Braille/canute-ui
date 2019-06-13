@@ -18,17 +18,25 @@ def _render(width, height, text):
 
 
 def render_book_help(width, height):
+    # TRANSLATORS: The AsciiDoc markup is used to suggest a page break
+    # in this string.
     text = _('''\
-With Canute 360 you can read files in Braille, as well as insert, edit, \
-and navigate to bookmarks.  To move within a file, use the three large \
-control buttons on the front panel of Canute.  Press the large button to \
-the right of centre on the front panel now, labelled "forward" in \
-Braille to move forward one page within this file.  Press the large \
-button to the left of centre, labelled "back" in Braille to move back \
-one page within a file, similar to turning the pages in a physical book.  \
-To access other features, including bookmarks, press the H button above \
-line select button one, then press the large central button, labeled \
-"menu" in Braille to access the main menu.\
+With Canute 360 you can read files in Braille. You can move within a \
+file using the three large control buttons on the front panel of \
+Canute. Press the large button to the right of centre on the front \
+panel labelled "forward" to move forward one page within this help \
+file.
+
+<<<
+
+Press the large button to the left of centre, labelled "back" to move \
+back one page within a file, similar to turning the pages in a \
+physical book. You can move forwards of backwards five pages at a time \
+by holding down the "forward" or "back" button. You can access all \
+other Canute features, including the library menu, bookmarks and \
+system settings by pressing the large central button labelled "menu" \
+to access the main menu. Press the circular help button (labelled "H") \
+at the top left of the display to return to your book.\
 ''')
 
     return _render(width, height, text)
@@ -36,22 +44,22 @@ line select button one, then press the large central button, labeled \
 
 def render_home_menu_help(width, height):
     text = _('''\
-This is the main menu. From the main menu, you can access the library \
-insert a bookmark at the current page, return to a bookmark that was \
-previously placed within a file, or navigate to a page within a book. To \
-select an item from the main menu, press the triangular line select \
-button to the left of the menu item on the reading surface.  To choose a \
-new book, press the line select button to the left of "view library \
-menu". The library menu will then load.  To navigate to a page within \
-the file, press the triangular line select button immediately to the \
-left of "go to page" on the reading surface. A help screen will appear. \
-Enter the page number using the numbered line select keys. Press the \
-"forward" button to navigate to the selected page.  To insert a new \
-bookmark at the current page, press the line select button to the left \
-of "insert bookmark at current page". To retrieve a bookmark, press the \
-line select button to the left of "choose from existing bookmarks".  A \
-list of bookmarks within a file will display. You can select one using \
-the line select buttons.\
+This is the main menu. From the main menu you can access the library, \
+insert a bookmark, return to a bookmark that was previously placed \
+within a file, or navigate to a page within a book. You can select an \
+item from the main menu by pressing the triangular line select button \
+to the left of the menu item on the display.
+
+You can choose a new book by pressing the line select button to the \
+left of "view library menu" on the display to access the library menu. \
+You can navigate to a page within a file by pressing the triangular \
+line select button to the left of "go to page" and following the \
+instructions on the display. You can insert a bookmark by pressing the \
+line select button to the left of "insert bookmark at current page". \
+You can retrieve a bookmark by pressing the line select button to the \
+left of "choose from existing bookmarks". To make system wide changes, \
+including changing the language or Braille code, press the line select \
+button to the left of "view system menu" on the display.\
 ''')
 
     return _render(width, height, text)

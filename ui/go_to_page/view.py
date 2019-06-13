@@ -4,15 +4,16 @@ from ..braille import format_title, from_unicode
 def render_help(width, height):
     data = []
     para = _('''\
-To navigate to a page within a file, enter the page number using the \
-line select buttons on the left hand side of Canute 360. For example, \
-for page 10, press button 1 followed by button 0.  Press the forward \
-button to confirm your selection. Line 3 will refresh to show your \
-selected page. Press the forward button to navigate to your page.  If \
-you have entered the wrong page number, press the back button to reset \
-the selection on line 3. You can then enter the correct number using \
-the line select keys, before pressing forward to confirm, and pressing \
-forward once more to navigate to the selected page.''')
+You can navigate to a page within a file by entering the page number \
+using the line select buttons on the left hand side the display. For \
+example, for page 10 press button 1 followed by button 0. Press the \
+forward button to confirm your selection. Line 3 will refresh to show \
+your selected page. Press the large forward button on the front \
+surface to navigate to your page.
+
+If you have entered the wrong page number you can reset your selection \
+by pressing the large back button on the front surface.\
+''')
 
     for line in para.split('\n'):
         data.append(from_unicode(line))
