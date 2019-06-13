@@ -56,8 +56,8 @@ class Pi(Driver):
         context = zmq.Context()
         self.socket = context.socket(zmq.PUB)
         self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
+
         self.row_actuations = [0] * N_ROWS
-        self.i2c_bus = smbus2.SMBus(1)
 
         super(Pi, self).__init__()
 
@@ -202,6 +202,8 @@ class Pi(Driver):
         return data[1] | (data[2] << 8)
 
     async def track_duty(self):
+        # FIXME: prefer to do this in constructor, but it breaks test_txrx
+        self.i2c_bus = smbus2.SMBus(1)
         # Fetch any existing actuation counts from EEPROM.
         self._read_actuations()
         # Every 5 minutes, or when cancelled, save actuations back to
