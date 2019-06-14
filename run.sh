@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Device="/dev/ttyS0"
+Device="/dev/ttyAMA0"
 
 stty -icrnl -ixon -opost -onlcr -icanon -isig -iexten -echo -echoe -echok -echoctl -echoke < "${Device}"
 
