@@ -16,7 +16,7 @@ NUM_COLS = 40
 class CleaningAndTesting(BookFile):
     @property
     def title(self):
-        return _('for cleaning and testing canute')
+        return 'for cleaning and testing canute'
 
     @staticmethod
     def create():
