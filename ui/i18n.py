@@ -45,7 +45,7 @@ ueb2 = Builtin(code='en_GB.UTF-8@ueb2', title=_('English, UEB grade 2'))
 
 del _
 
-DEFAULT_LOCALE = ueb1
+DEFAULT_LOCALE = ueb2
 
 install(DEFAULT_LOCALE.code)
 
