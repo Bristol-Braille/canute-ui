@@ -227,10 +227,17 @@ async def handle_hardware(driver, state, store, media_dir):
             return False
         return True
     elif state['hardware']['resetting_display'] == 'start':
-        store.dispatch(actions.reset_display('in progress'))
         driver.reset_display()
         display.hardware_state = []
-        await store.dispatch(actions.reset_display('done'))
+        # FIXME: issuing an async reset and then blocking waiting for it
+        # is an 'orrible 'ack
+        while True:
+            done = driver.is_motion_complete()
+            if done:
+                store.dispatch(actions.reset_display('done'))
+                break
+        # FIXME: directly meddling with buttons is an 'orrible 'ack
+        driver.previous_buttons = tuple()
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
