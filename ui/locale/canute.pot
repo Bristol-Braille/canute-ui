@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-13 18:16+0100\n"
+"POT-Creation-Date: 2019-06-20 16:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-
-#: ui/cleaning_and_testing.py:19
-msgid "for cleaning and testing canute"
-msgstr ""
 
 #. TRANSLATORS: This is a language name menu item, so should always appear
 #. in the language it denotes so that it remains readable to those who
@@ -221,16 +217,24 @@ msgid ""
 "files in the library."
 msgstr ""
 
-#: ui/system_menu/system_menu.py:14
+#: ui/system_menu/system_menu.py:48
 msgid "shutdown"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:15
+#: ui/system_menu/system_menu.py:49
 msgid "backup log to USB stick"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:16
+#: ui/system_menu/system_menu.py:50
 msgid "select language and code"
+msgstr ""
+
+#: ui/system_menu/system_menu.py:54
+msgid "release:"
+msgstr ""
+
+#: ui/system_menu/system_menu.py:55
+msgid "serial:"
 msgstr ""
 
 #: ui/system_menu/view.py:23
