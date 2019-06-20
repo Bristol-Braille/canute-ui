@@ -172,6 +172,9 @@ class AppReducers():
     def load_books(self, state, value):
         return state.copy(load_books=value)
 
+    def do_nothing(self, state, value):
+        return state
+
 
 class HardwareReducers():
     def warm_up(self, state, value):
