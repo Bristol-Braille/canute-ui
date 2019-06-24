@@ -1,6 +1,5 @@
 from collections import OrderedDict
 import curses.ascii as ASCII
-import os
 
 from ..braille import from_unicode, alpha_to_unicode, ueb_number_mapping
 from ..actions import actions
@@ -42,7 +41,8 @@ def brailleify(rel):
 
 with open('/etc/canute_release') as x:
     release = brailleify(x.read().strip())
-serial = brailleify(os.popen('/home/pi/util/getserial.py').read().strip())
+with open('/etc/canute_serial') as x:
+    serial = brailleify(x.read().strip())
 
 
 def system_menu():
