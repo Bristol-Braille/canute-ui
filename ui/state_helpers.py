@@ -16,7 +16,7 @@ def get_current_book(state):
 def get_page_num_width(state):
     width, height = dimensions(state)
     book = get_current_book(state)
-    max_pages = len(book.pages)
+    max_pages = book.get_num_pages()
     return len(str(max_pages))
 
 

@@ -7,7 +7,7 @@ from .help import render_book_help, render_home_menu_help
 def render_home_menu(width, height, book, locale):
     data = []
     data.append(format_title(book.title, width,
-                             book.page_number, len(book.pages)))
+                             book.page_number, book.get_num_pages()))
     data.append(from_unicode(_('go to page')))
     data.append(tuple())
     data.append(tuple())
