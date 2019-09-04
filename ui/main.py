@@ -8,6 +8,7 @@ import asyncio
 import aioredux
 import aioredux.middleware
 import async_timeout
+import toml
 
 from . import argparser
 from . import config_loader
@@ -20,6 +21,7 @@ from .store import main_reducer
 from .actions import actions
 from .display import Display
 from .book.handlers import load_books, all_books_loaded
+from . import state_helpers
 
 display = Display()
 
@@ -132,6 +134,19 @@ async def handle_media_changes():
 
 
 async def run_async(driver, config, loop):
+    inter_page_delay = 0
+    pages_per_burst = -1
+    inter_burst_delay = 0
+    autoadvance_path = '/media/sd-card/autoadvance'
+    if os.path.exists(autoadvance_path):
+        autoadvance = toml.load(autoadvance_path)
+        inter_page_delay = autoadvance['inter_page_delay']
+        pages_per_burst = autoadvance['pages_per_burst']
+        inter_burst_delay = autoadvance['inter_burst_delay']
+    last_autopage_finished_at = time.time()
+    bursted_pages = 0
+    last_burst_finished_at = time.time()
+
     media_handler = asyncio.ensure_future(handle_media_changes())
     duty_logger = asyncio.ensure_future(driver.track_duty())
     media_dir = config.get('files', 'media_dir')
@@ -176,7 +191,57 @@ async def run_async(driver, config, loop):
             await buttons.check(driver, state['app'],
                                 store.dispatch)
 
-            await display.send_line(driver)
+            state = store.state
+            in_book = (state['app']['location'] == 'book'
+                       and not state['app']['help_menu']['visible']
+                       and not state['app']['home_menu_visible'])
+            if not display.is_up_to_date():
+                await display.send_line(driver)
+                # Just finished rendering a book page.
+                if display.is_up_to_date() and in_book:
+                    last_autopage_finished_at = time.time()
+                    bursted_pages += 1
+                    if bursted_pages == pages_per_burst:
+                        last_burst_finished_at = time.time()
+
+            # For APH automatic page turning.  Requirements are very fuzzy but
+            # Ed thinks they probably want a book to turn its own pages up to a
+            # certain number of pages, then pause for some amount of time.
+            advance = True
+            # Never advance a single-page book nor a book we haven't indexed
+            # yet (since those too might be single-page).  Either would cause
+            # redundant refreshes.
+            current_book = state_helpers.get_current_book(state['app'])
+            if len(current_book.pages) <= 1:
+                advance = False
+            autoadvance_due = last_autopage_finished_at + inter_page_delay > time.time()
+            if display.is_up_to_date() and inter_page_delay and autoadvance_due:
+                advance = False
+            if bursted_pages == pages_per_burst:
+                if last_burst_finished_at + inter_burst_delay > time.time():
+                    advance = False
+                else:
+                    # Begin new burst.
+                    bursted_pages = 0
+            # For EMC automatic page turning.  We'll always boot up into a
+            # book, but pause turning pages if someone switches to a menu.
+            # This test is slightly broken: when switching from menu to book
+            # we'll always skip a page, because the display is up to date (the
+            # menu was rendered) but we haven't buffered a book page yet.
+            if in_book and display.is_up_to_date() and advance:
+                # Our display content may not update before we come through
+                # here again; if we do come through here multiple times
+                # before the page renders then we'll skip multiple pages at
+                # once; so explicitly mark the display out of date.  This
+                # is a bit of a hack, but then so is the whole EMC test
+                # mode.
+                display.up_to_date = False
+                display.row = 0
+                if current_book.page_number == len(current_book.pages) - 1:
+                    await store.dispatch(actions.go_to_page(0))
+                else:
+                    await store.dispatch(actions.next_page())
+
             # in the emulated driver we can be too agressive in checking buttons
             # and sending lines if we don't have any delay
             if not isinstance(driver, Pi):
