@@ -174,8 +174,12 @@ class Driver(object, metaclass=abc.ABCMeta):
         if len(data) > self.chars:
             data = data[0:self.chars]
 
-        self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
+        while True:
+            self.send_data(comms.CMD_SEND_LINE, [row] + list(data))
 
-        self.status = await self.async_get_data(comms.CMD_SEND_LINE)
-        if self.status != 0:
-            log.warning('got an error after setting braille: %d' % self.status)
+            self.status = await self.async_get_data(comms.CMD_SEND_LINE)
+            if self.status != 0:
+                log.warning('got an error after setting braille: %d' % self.status)
+                log.warning('...retrying the line')
+            else:
+                break

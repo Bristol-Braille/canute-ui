@@ -1,3 +1,4 @@
+import time
 from .driver import Driver
 import asyncio
 from . import comms_codes as comms, simple_hdlc
@@ -167,9 +168,17 @@ class Pi(Driver):
 
         :rtype: an integer return value
         '''
-
-        while self.port.inWaiting() < 5:
+        # 4s is roughly the max amount of time it takes to render a line.
+        # The MCUs will reply instantly to a single SEND_LINE but when a second
+        # is sent immediately after the first it'll be blocked (unacknowledged)
+        # until the first completes.
+        timeout_at = time.time() + 4
+        # 5 bytes is the minimum HDLC frame: 0x7E,cmd,cksum,cksum,0x7E
+        while self.port.inWaiting() < 5 and time.time() < timeout_at:
             await asyncio.sleep(0)
+
+        if self.port.inWaiting() < 5:
+            return -1
 
         return self.get_data(expected_cmd)
 
