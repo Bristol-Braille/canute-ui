@@ -140,8 +140,9 @@ async def read(path):
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
-async def write(store, media_dir):
+async def write(store, media_dir, sem, writes_in_flight):
     global prev
+    await sem.acquire()
     state = store.state
     user_state = state['app']['user']
     books = user_state['books']
@@ -177,3 +178,5 @@ async def write(store, media_dir):
             async with aiofiles.open(path, 'w') as f:
                 await f.write(s)
     prev = user_state
+    sem.release()
+    writes_in_flight[0] -= 1

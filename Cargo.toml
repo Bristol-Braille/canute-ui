@@ -1,0 +1,61 @@
+# It's slightly too early to upgrade the standard build env to buster.
+# It's too many hoops to install a snapshots.d.o copy; would require an equivs for various new dependencies.
+# (But if you wanted to try: a source of deb https://snapshot.debian.org/archive/debian/20180901T000000Z buster main
+# gets you most of the way there; it just then wants several packages that older rustc didn't; probably ones that
+# can be satisfied from stretch)
+# So I figure we run with rustup for this.  In which case we might as well use what buster does.
+#
+# To build me for ARM under Debian stretch:
+#
+#  * Get a suitable cross-compiler, because Rust will need to borrow a linker.
+#    It seems a suitable one needs to have been built for <=ARMv6, not just
+#    retargeted at ARMv6 with e.g. -march=armv6, because the libc startup comes
+#    precompiled and gets pulled in at link time, not recompiled, and may have
+#    Thumb-2 or VFP3 inside.  Alternatively you could find/create an
+#    appropriately built MUSL.  Toolchain approaches investigated:
+#    * download https://github.com/raspberrypi/tools and use
+#      `arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf` (ancient, but it's still
+#      what they use); works, and currently in use
+#    * mount a Raspbian image with GCC installed inside and run the link stage
+#      using that compiler under QEmu
+#    * use Debian's arm-linux-gnueabi-gcc (*not* the gnueabihf one); you can
+#      build a hello world with this, but a .so linked under Rust's instruction
+#      fails to be recognised as a loadable library (dl_open() looks at the ELF
+#      header and moves on, but LD_DEBUG reveals nothing about why)
+#    * you could just build natively on Raspbian, but I'd expect the build to
+#      be slow enough to obstruct development
+#  * Install rustup, ideally *not* by curl; see:
+#    https://forge.rust-lang.org/other-installation-methods.html
+#  * `rustup toolchain install 1.34.2`
+#  * `rustup target add --toolchain 1.34.2 arm-unknown-linux-gnueabihf`
+#  * `cargo +1.34.2 build --target arm-unknown-linux-gnueabihf --release`
+#
+# To build natively, just (ensure the default toolchain is x86_64 and) leave
+# out the ARM target:
+#
+#  * `cargo +1.34.2 build --release`
+#
+[package]
+authors = ["ZakW <zw@bbt>"]
+name = "bookindex"
+version = "0.0.1"
+
+[dependencies]
+# These are Debian buster's versions, in the hope that we can run on a
+# minimally modified buster in future.
+libc = "=0.2.48"
+lazy_static = "=1.2.0"
+# Debian doesn't have this.
+quick-xml = "0.12.0"
+# Do not use PyO3.  Firstly every available version of it requires Rust
+# nightly.  That's not OK for production, however expressive, and hints
+# that no thought is or probably ever will be given to long-term/stable
+# releases (meaning it'll likely never work in Debian stable).  Secondly
+# various threads out there hint at poor code quality, bypassing safety
+# in questionable ways.  That defeats the whole point of using Rust.
+# Even if rust-cpython is unmaintained, its chances of being stable and
+# safe are better for the time being.
+
+[lib]
+name = "bookindex"
+crate-type = ["cdylib"]

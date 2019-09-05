@@ -16,10 +16,12 @@ class LoadState(Enum):
 
 BookData = namedtuple('BookData', ['filename', 'width', 'height',
                                    'page_number', 'bookmarks',
-                                   'file_contents', 'pages', 'load_state'])
+                                   'indexed', 'pages', 'load_state',
+                                   'num_pages'])
 BookData.__new__.__defaults__ = (None, None, None,
                                  0, tuple([0]),
-                                 None, tuple(), LoadState.INITIAL)
+                                 None, tuple(), LoadState.INITIAL,
+                                 0)
 
 
 class BookFile(BookData):
@@ -33,9 +35,17 @@ class BookFile(BookData):
         title = os.path.splitext(basename)[0].replace('_', ' ')
         return title
 
+    def get_num_pages(self):
+        if self.load_state != LoadState.DONE:
+            log.warning('get pages on not-yet-loaded book')
+        if self.indexed:
+            return self.num_pages
+        else:
+            return len(self.pages)
+
     def set_page(self, page):
         if page < 0:
             page = 0
-        elif page >= len(self.pages):
-            page = len(self.pages) - 1
+        elif page >= self.get_num_pages():
+            page = self.get_num_pages() - 1
         return self._replace(page_number=page)

@@ -19,7 +19,7 @@ from .setup_logs import setup_logs
 from .store import main_reducer
 from .actions import actions
 from .display import Display
-from .book.handlers import load_books, all_books_loaded
+from .book.handlers import load_books
 
 display = Display()
 
@@ -155,6 +155,8 @@ async def run_async(driver, config, loop):
     # won't dispatch if the library is already in sync so there would be no
     # guarantee of the subscription triggering if subscribed before that.
     await store.dispatch(actions.trigger())
+    loader_limit = asyncio.Event()
+    loader = asyncio.ensure_future(load_books(store, loader_limit))
 
     try:
         while 1:
@@ -176,7 +178,10 @@ async def run_async(driver, config, loop):
             await buttons.check(driver, state['app'],
                                 store.dispatch)
 
-            await display.send_line(driver)
+            if not display.is_up_to_date():
+                await display.send_line(driver)
+            elif not loader.done() and not loader_limit.is_set():
+                loader_limit.set()
             # in the emulated driver we can be too agressive in checking buttons
             # and sending lines if we don't have any delay
             if not isinstance(driver, Pi):
@@ -191,14 +196,21 @@ async def run_async(driver, config, loop):
 
 def handle_changes(driver, config, store):
     media_dir = config.get('files', 'media_dir')
+    # Limit the number of book indexing tasks in flight at once, because
+    # they may well be IO-bound and because we index all books on media,
+    # not just the ones visible in the current library menu page.
+    config_limit = asyncio.Semaphore(1)
+    writes_in_flight = [0]
 
     def listener():
         state = store.state
         asyncio.ensure_future(display.render_to_buffer(state['app'], store))
         asyncio.ensure_future(change_files(config, state['app'], store))
-        asyncio.ensure_future(initial_state.write(store, media_dir))
-        if not all_books_loaded(state['app']):
-            asyncio.ensure_future(load_books(store))
+        if not config_limit.locked():
+            writes_in_flight[0] += 1
+            log.warning('inflight: %d' % writes_in_flight[0])
+            asyncio.ensure_future(initial_state.write(store, media_dir,
+                                                      config_limit, writes_in_flight))
     return listener
 
 
