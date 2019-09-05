@@ -240,16 +240,14 @@ async def handle_hardware(driver, state, store, media_dir):
         return True
     elif state['hardware']['resetting_display'] == 'start':
         driver.reset_display()
-        display.hardware_state = []
-        # FIXME: issuing an async reset and then blocking waiting for it
-        # is an 'orrible 'ack
-        while True:
-            done = driver.is_motion_complete()
-            if done:
-                store.dispatch(actions.reset_display('done'))
-                break
-        # FIXME: directly meddling with buttons is an 'orrible 'ack
-        driver.previous_buttons = tuple()
+        # Wait for reset to complete so that upon respawn SEND_LINEs
+        # don't get ignored/rejected.
+        log.warning('long-press of square: issued reset, exiting')
+        time.sleep(8)
+        while driver.port.inWaiting():
+            c = driver.port.read()
+            log.warning('discard %s' % c)
+        sys.exit(0)
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
         driver.warm_up()
