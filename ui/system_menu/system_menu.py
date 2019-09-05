@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import os
 import curses.ascii as ASCII
 
 from ..braille import from_unicode, alpha_to_unicode, ueb_number_mapping
@@ -39,10 +40,17 @@ def brailleify(rel):
     return ret
 
 
-with open('/etc/canute_release') as x:
-    release = brailleify(x.read().strip())
-with open('/etc/canute_serial') as x:
-    serial = brailleify(x.read().strip())
+# This exists on a Pi and reading it yields a useful board identifier.
+# But existence will do for right now.
+if os.path.exists('/sys/firmware/devicetree/base/model'):
+    with open('/etc/canute_release') as x:
+        release = brailleify(x.read().strip())
+    with open('/etc/canute_serial') as x:
+        serial = brailleify(x.read().strip())
+else:
+    # Assume we're being emulated.
+    release = brailleify(_('emulated'))
+    serial = release
 
 
 def system_menu():
