@@ -96,9 +96,11 @@ class AppReducers():
             book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
             bookmarks_data = book.bookmarks
-            max_pages = (len(bookmarks_data) - 1) // height
-            if page > max_pages:
-                page = max_pages
+            # Account for title line.
+            effective_height = height - 1
+            num_pages = (len(bookmarks_data) + (effective_height-1)) // effective_height
+            if page >= num_pages - 1:
+                page = num_pages - 1
             bookmarks_menu = state['bookmarks_menu'].copy(page=page)
             return state.copy(bookmarks_menu=bookmarks_menu)
         elif location == 'language':

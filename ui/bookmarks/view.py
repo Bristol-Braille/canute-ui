@@ -20,12 +20,14 @@ async def render(width, height, state, store):
     line_n = page * (height - 1)
     bookmarks = book.bookmarks[line_n:line_n + (height - 1)]
 
-    max_pages = (len(book.bookmarks) - 1) // (height - 1)
+    # Account for title at the top in maths.
+    bookmark_lines = height - 1
+    num_pages = (len(book.bookmarks) + (bookmark_lines-1)) // bookmark_lines
     # TRANSLATORS: Bookmarks menu title; gets followed by book name
     title = _('bookmarks:') + ' {}'
     title = format_title(
         title.format(book.title),
-        width, page, max_pages)
+        width, page, num_pages)
     data = [title]
 
     for bm in bookmarks:
