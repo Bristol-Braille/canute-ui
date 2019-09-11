@@ -1,4 +1,4 @@
-from ..braille import from_ascii
+from ..braille import from_unicode
 
 
 def render_help(width, height):
@@ -13,7 +13,7 @@ using the line select buttons.\
 ''')
 
     for line in para.split('\n'):
-        data.append(from_ascii(line))
+        data.append(from_unicode(line))
 
     # pad page with empty rows
     while len(data) % height:
