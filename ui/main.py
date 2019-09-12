@@ -208,7 +208,6 @@ def handle_changes(driver, config, store):
         asyncio.ensure_future(change_files(config, state['app'], store))
         if not config_limit.locked():
             writes_in_flight[0] += 1
-            log.warning('inflight: %d' % writes_in_flight[0])
             asyncio.ensure_future(initial_state.write(store, media_dir,
                                                       config_limit, writes_in_flight))
     return listener

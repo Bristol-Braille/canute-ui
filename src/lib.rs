@@ -139,7 +139,7 @@ pub extern "C" fn trigger_load(bookpath: *const c_char, bookfd: i32) {
         let display_lines = NonZeroU8::new(display_lines).expect("init() hasn't been called yet");
         let index = index_book(&bookpath, display_lines);
         if index.is_some() {
-            println!("did index book");
+            //println!("did index book");
             let index = index.unwrap();
             let page_count = index.len() as PageNumber;
             BOOKS.lock().unwrap().insert(
