@@ -18,8 +18,8 @@ book_buttons = {
         '6': actions.go_to_bookmarks_menu(),
         '8': actions.go_to_system_menu(),
         '9': actions.go_to_library(),
-        '<': actions.skip_pages(-5),
-        '>': actions.skip_pages(5),
+        '<': actions.skip_pages(-3),
+        '>': actions.skip_pages(3),
         'L': actions.toggle_home_menu(),
         'R': actions.toggle_help_menu(),
         'X': actions.reset_display('start')
