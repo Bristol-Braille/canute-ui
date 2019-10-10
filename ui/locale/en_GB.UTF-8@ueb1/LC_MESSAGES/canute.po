@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-20 16:06+0100\n"
-"PO-Revision-Date: 2019-06-20 15:07+0000\n"
+"POT-Creation-Date: 2019-10-08 16:12+0100\n"
+"PO-Revision-Date: 2019-10-08 15:12+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -143,7 +143,10 @@ msgid ""
 "immediately to the left of your chosen bookmark. From the bookmark menu you "
 "can also navigate to the beginning of your book by selecting \"start of "
 "book\", or the end of a book by selecting \"end of book\", using the line "
-"select buttons."
+"select buttons. You can delete a bookmark by pressing and holding the line "
+"select button to the left of the bookmark you wish to delete for three "
+"seconds. You cannot delete the \"start of book\" or \"end of book\" "
+"bookmarks."
 msgstr ""
 "⠠⠞⠕ ⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕ ⠁ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠺⠊⠞⠓⠊⠝ ⠁ ⠋⠊⠇⠑\n"
 "⠏⠗⠑⠎⠎ ⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝ ⠊⠍⠍⠑⠙⠊⠁⠞⠑⠇⠽\n"
@@ -152,18 +155,24 @@ msgstr ""
 "⠝⠁⠧⠊⠛⠁⠞⠑ ⠞⠕ ⠞⠓⠑ ⠃⠑⠛⠊⠝⠝⠊⠝⠛ ⠕⠋ ⠽⠕⠥⠗ ⠃⠕⠕⠅\n"
 "⠃⠽ ⠎⠑⠇⠑⠉⠞⠊⠝⠛ ⠦⠎⠞⠁⠗⠞ ⠕⠋ ⠃⠕⠕⠅⠐⠂ ⠕⠗ ⠞⠓⠑ ⠑⠝⠙\n"
 "⠕⠋ ⠁ ⠃⠕⠕⠅ ⠃⠽ ⠎⠑⠇⠑⠉⠞⠊⠝⠛ ⠦⠑⠝⠙ ⠕⠋ ⠃⠕⠕⠅⠐⠂\n"
-"⠥⠎⠊⠝⠛ ⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝⠎⠲"
+"⠥⠎⠊⠝⠛ ⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝⠎⠲ ⠠⠽⠕⠥ ⠉⠁⠝\n"
+"⠙⠑⠇⠑⠞⠑ ⠁ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠃⠽ ⠏⠗⠑⠎⠎⠊⠝⠛ ⠁⠝⠙\n"
+"⠓⠕⠇⠙⠊⠝⠛ ⠞⠓⠑ ⠇⠊⠝⠑ ⠎⠑⠇⠑⠉⠞ ⠃⠥⠞⠞⠕⠝ ⠞⠕ ⠞⠓⠑\n"
+"⠇⠑⠋⠞ ⠕⠋ ⠞⠓⠑ ⠃⠕⠕⠅⠍⠁⠗⠅ ⠽⠕⠥ ⠺⠊⠎⠓ ⠞⠕ ⠙⠑⠇⠑⠞⠑\n"
+"⠋⠕⠗ ⠞⠓⠗⠑⠑ ⠎⠑⠉⠕⠝⠙⠎⠲ ⠠⠽⠕⠥ ⠉⠁⠝⠝⠕⠞ ⠙⠑⠇⠑⠞⠑\n"
+"⠞⠓⠑ ⠦⠎⠞⠁⠗⠞ ⠕⠋ ⠃⠕⠕⠅⠴ ⠕⠗ ⠦⠑⠝⠙ ⠕⠋ ⠃⠕⠕⠅⠴\n"
+"⠃⠕⠕⠅⠍⠁⠗⠅⠎⠲"
 
 #. TRANSLATORS: Bookmarks menu title; gets followed by book name
-#: ui/bookmarks/view.py:25
+#: ui/bookmarks/view.py:27
 msgid "bookmarks:"
 msgstr "⠃⠕⠕⠅⠍⠁⠗⠅⠎⠒"
 
-#: ui/bookmarks/view.py:33
+#: ui/bookmarks/view.py:35
 msgid "start of book"
 msgstr "⠎⠞⠁⠗⠞ ⠕⠋ ⠃⠕⠕⠅"
 
-#: ui/bookmarks/view.py:35
+#: ui/bookmarks/view.py:37
 msgid "end of book"
 msgstr "⠑⠝⠙ ⠕⠋ ⠃⠕⠕⠅"
 
@@ -300,23 +309,27 @@ msgstr ""
 "⠇⠁⠝⠛⠥⠁⠛⠑ ⠕⠗ ⠉⠕⠙⠑ ⠕⠋ ⠁⠝⠽ ⠋⠊⠇⠑⠎ ⠊⠝ ⠞⠓⠑\n"
 "⠇⠊⠃⠗⠁⠗⠽⠲"
 
-#: ui/system_menu/system_menu.py:48
+#: ui/system_menu/system_menu.py:52
+msgid "emulated"
+msgstr "⠑⠍⠥⠇⠁⠞⠑⠙"
+
+#: ui/system_menu/system_menu.py:58
 msgid "shutdown"
 msgstr "⠎⠓⠥⠞⠙⠕⠺⠝"
 
-#: ui/system_menu/system_menu.py:49
+#: ui/system_menu/system_menu.py:59
 msgid "backup log to USB stick"
 msgstr "⠃⠁⠉⠅⠥⠏ ⠇⠕⠛ ⠞⠕ ⠠⠠⠥⠎⠃ ⠎⠞⠊⠉⠅"
 
-#: ui/system_menu/system_menu.py:50
+#: ui/system_menu/system_menu.py:60
 msgid "select language and code"
 msgstr "⠎⠑⠇⠑⠉⠞ ⠇⠁⠝⠛⠥⠁⠛⠑ ⠁⠝⠙ ⠉⠕⠙⠑"
 
-#: ui/system_menu/system_menu.py:54
+#: ui/system_menu/system_menu.py:64
 msgid "release:"
 msgstr "⠗⠑⠇⠑⠁⠎⠑⠒"
 
-#: ui/system_menu/system_menu.py:55
+#: ui/system_menu/system_menu.py:65
 msgid "serial:"
 msgstr "⠎⠑⠗⠊⠁⠇⠒"
 
