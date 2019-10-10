@@ -1,10 +1,24 @@
-Uses babel translation library.  To generate POT file, use from root:
+Uses babel translation library.  To extract a POT file from the source, use
+(from project root):
 
 pybabel extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
 
-PO files are created with: https://www.transifex.com/bristol-braille-technology/canute/translate
+The eventual goal is to maintain PO files on Transifex (we have an account) but
+currently translations are done with `liblouis`, a little automation code, and
+possibly some small manual tweaks.
 
-To compile the resulting PO file into a useable MO file, use (for example):
+To compile the resulting POT file into a set of useable MO files, use:
 
-mkdir -p ./locale/es_MX/LC_MESSAGES
-pybabel compile -f -D canute -d ./ui/locale -l es_MX -i ./ui/locale/canute_es_MX.po
+    cd ui/locale
+    ./autotranslate.py
+
+This generates a PO for each braille code from the POT using `liblouis`, then
+compiles each PO to a MO.  Sometimes the autotranslated PO needs manual tweaks,
+like adjusting inter-paragraph spacing so that paragraphs break across pages in
+sensible ways, and removing formatting hints like AsciiDoc '<<<'.  If you make
+any such tweaks to an autotranslated PO, you must then separately remake the
+corresponding MO, e.g.:
+
+    pybabel compile -f -D canute -d . -l en_GB.UTF-8@ueb1 -i en_GB.UTF-8@ueb1/LC_MESSAGES/canute.po
+
+To see tweaks applied in the past, check the git diff.

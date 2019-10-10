@@ -70,6 +70,9 @@ for variant in variants:
             wrapped.append('\n')
         wrapped.pop()
         wrapped.pop()
+        # At this point we could apply a general rule that no page
+        # should ever start with a blank line; would save a manual tweak
+        # or two.
         wrapped = ''.join(wrapped)
         dest_entry = polib.POEntry(
             msgid=src_entry.msgid,
