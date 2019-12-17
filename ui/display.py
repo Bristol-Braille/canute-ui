@@ -46,9 +46,17 @@ class Display():
         while row >= len(self.hardware_state):
             self.hardware_state.append([])
         braille = self.buffer[row]
-        if braille != self.hardware_state[row]:
-            await driver.async_set_braille_row(row, braille)
-            self.hardware_state[row] = braille
+        failure_status = 0
+        while braille != self.hardware_state[row]:
+            status = await driver.async_set_braille_row(row, braille)
+            if status != 0:
+                if failure_status == 0:
+                    log.warning('line send failed with status %d, retrying' % status)
+                failure_status = status
+            else:
+                self.hardware_state[row] = braille
+                if failure_status != 0:
+                    log.warning('overcame line send error')
 
     def is_up_to_date(self):
         return self.up_to_date
