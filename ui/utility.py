@@ -40,7 +40,7 @@ def find_files(directory, extensions):
                 dirnames.remove(d)
         for filename in filenames:
             for ext in extensions:
-                if re.search('\.' + ext + '$', filename, re.I):
+                if re.search(r'\.' + ext + '$', filename, re.I):
                     matches.append(os.path.join(root, filename))
                     break
     return matches

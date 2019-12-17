@@ -9,7 +9,7 @@ class GoToPageReducers():
         selection = go_to_page['selection'] + go_to_page['keys_pressed']
 
         # handle delete ('<') characters
-        r = re.compile('\d<')
+        r = re.compile(r'\d<')
         if r.search(selection) is not None:
             selection = ''
         # any left over delete characters after numbers are ignored
