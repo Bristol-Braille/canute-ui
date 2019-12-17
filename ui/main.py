@@ -132,6 +132,13 @@ async def handle_media_changes():
 
 
 async def run_async(driver, config, loop):
+    # Last-minute hack: to clear as many errors as possible, without
+    # risking hanging up the UI by having it start comms with the MCUs
+    # while they're resetting, have the UI issue a reset as its first
+    # act, synchronously.
+    driver.reset_display()
+    while not driver.is_motion_complete():
+        await asyncio.sleep(0.01)
     media_handler = asyncio.ensure_future(handle_media_changes())
     duty_logger = asyncio.ensure_future(driver.track_duty())
     media_dir = config.get('files', 'media_dir')
