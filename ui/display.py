@@ -53,7 +53,20 @@ class Display():
                 if failure_status == 0:
                     log.warning('line send failed with status %d, retrying' % status)
                 failure_status = status
+                # FIXME: Horrible to have an unnamed constant here.
+                # This is REPLY_WARM_RESET, but, should display really
+                # be importing protocol constants?  Or, should driver
+                # really be translating protocol constants into
+                # corresponding driver failure codes?
+                if status == 0xDD:
+                    # If we're in warm reset, invalidate display cache.
+                    self.hardware_state = []
+                    log.warning('line refused because motors busy doing warm reset')
             else:
+                # If we triggered a warm reset, we will have emptied our
+                # cache of the display.
+                while row >= len(self.hardware_state):
+                    self.hardware_state.append([])
                 self.hardware_state[row] = braille
                 if failure_status != 0:
                     log.warning('overcame line send error')
