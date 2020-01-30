@@ -47,6 +47,7 @@ class Display():
             self.hardware_state.append([])
         braille = self.buffer[row]
         failure_status = 0
+        warm_reset = False
         while braille != self.hardware_state[row]:
             status = await driver.async_set_braille_row(row, braille)
             if status != 0:
@@ -58,16 +59,22 @@ class Display():
                 # be importing protocol constants?  Or, should driver
                 # really be translating protocol constants into
                 # corresponding driver failure codes?
-                if status == 0xDD:
-                    # If we're in warm reset, invalidate display cache.
-                    self.hardware_state = []
+                if not warm_reset and status == 0xDD:
+                    warm_reset = True
                     log.warning('line refused because motors busy doing warm reset')
             else:
-                # If we triggered a warm reset, we will have emptied our
-                # cache of the display.
-                while row >= len(self.hardware_state):
-                    self.hardware_state.append([])
+                if warm_reset:
+                    # If we waited out a warm reset, invalidate display
+                    # cache.
+                    self.hardware_state = []
+                    while row >= len(self.hardware_state):
+                        self.hardware_state.append([])
                 self.hardware_state[row] = braille
+                if warm_reset:
+                    # If we waited out a warm reset, flag that we need
+                    # to refresh all other lines.
+                    self.row = 0
+                    self.up_to_date = False
                 if failure_status != 0:
                     log.warning('overcame line send error')
 
