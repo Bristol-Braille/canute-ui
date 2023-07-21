@@ -54,8 +54,8 @@ class Pi(Driver):
 
         self.previous_buttons = tuple()
 
-        context = zmq.Context()
-        self.socket = context.socket(zmq.PUB)
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.PUB)
         self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
 
         self.row_actuations = [0] * N_ROWS
@@ -273,6 +273,8 @@ class Pi(Driver):
         if self.port:
             log.error('closing serial port')
             self.port.close()
+        if self.context:
+            self.context.destroy()
         if hasattr(self, 'button_thread'):
             self.button_thread.join()
 

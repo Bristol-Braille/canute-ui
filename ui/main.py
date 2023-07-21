@@ -2,7 +2,9 @@ import os
 import sys
 from frozendict import frozendict
 import time
+import atexit
 import shutil
+import signal
 import logging
 import asyncio
 import aioredux
@@ -115,13 +117,19 @@ async def handle_media_changes():
         media_helper = '/bin/cat'
     proc = await asyncio.create_subprocess_exec(
                     media_helper, stdout=asyncio.subprocess.PIPE)
+
+    # avoid leaving zombie processes on exits
+    asyncio.create_task(proc.wait())
+    def stop_helper(*args):
+        proc.terminate()
+        if len(args) > 0:
+            # received SIGTERM, so we should exit
+            sys.exit(0)
+    atexit.register(stop_helper)
+    signal.signal(signal.SIGTERM, stop_helper)
+
     while True:
-        try:
-            change = await proc.stdout.readline()
-        except asyncio.CancelledError:
-            proc.terminate()
-            await proc.wait()
-            raise
+        change = await proc.stdout.readline()
         change = change.decode('ascii')
         if change.startswith('inserted') or change.startswith('removed'):
             log.debug('shutting down as crude route to library rescan')
@@ -129,7 +137,6 @@ async def handle_media_changes():
             # supervision to restart us, at which point we'll rescan the
             # library.
             sys.exit(0)
-
 
 async def run_async(driver, config, loop):
     # Last-minute hack: to clear as many errors as possible, without
