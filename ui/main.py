@@ -87,13 +87,13 @@ def main():
     else:
         log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
-        with Pi(port=args.tty, timeout=timeout) as driver:
-            try:
+        try:
+            with Pi(port=args.tty, timeout=timeout) as driver:
                 run(driver, config)
-            except RuntimeError as err:
-                if driver.initialised and err.args[0] == 'readFrame timeout':
-                    log.info('passthrough serial disconnected, USB B in use, exiting')
-                    sys.exit(2)
+        except RuntimeError as err:
+            if err.args[0] == 'readFrame timeout':
+                log.info('passthrough serial disconnected, USB B probably in use, exiting')
+                sys.exit(2)
 
 def run(driver, config):
     loop = asyncio.get_event_loop()
@@ -150,7 +150,6 @@ async def run_async(driver, config, loop):
     driver.reset_display()
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
-    driver.initialised = True
     media_handler = asyncio.ensure_future(handle_media_changes())
     duty_logger = asyncio.ensure_future(driver.track_duty())
     media_dir = config.get('files', 'media_dir')
