@@ -260,10 +260,8 @@ async def handle_hardware(driver, state, store, media_dir):
         # Wait for reset to complete so that upon respawn SEND_LINEs
         # don't get ignored/rejected.
         log.warning('long-press of square: issued reset, exiting')
-        time.sleep(8)
-        while driver.port.inWaiting():
-            c = driver.port.read()
-            log.warning('discard %s' % c)
+        while not driver.is_motion_complete():
+            await asyncio.sleep(0.01)
         sys.exit(0)
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
