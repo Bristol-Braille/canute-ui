@@ -256,12 +256,7 @@ async def handle_hardware(driver, state, store, media_dir):
             return False
         return True
     elif state['hardware']['resetting_display'] == 'start':
-        driver.reset_display()
-        # Wait for reset to complete so that upon respawn SEND_LINEs
-        # don't get ignored/rejected.
-        log.warning('long-press of square: issued reset, exiting')
-        while not driver.is_motion_complete():
-            await asyncio.sleep(0.01)
+        log.warning('long-press of square: exiting to cause reset')
         sys.exit(0)
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
