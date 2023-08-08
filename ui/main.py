@@ -142,6 +142,14 @@ async def run_async(driver, config, loop):
     # while they're resetting, have the UI issue a reset as its first
     # act, synchronously.
     driver.reset_display()
+
+    # process these imports while resetting as they are slow
+    import aioredux
+    import aioredux.middleware
+    from . import buttons
+    from .store import main_reducer
+    from .book.handlers import load_books
+
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
     media_handler = asyncio.ensure_future(handle_media_changes())
@@ -151,13 +159,6 @@ async def run_async(driver, config, loop):
     width, height = driver.get_dimensions()
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
-
-    # defer these imports as they are slow
-    import aioredux
-    import aioredux.middleware
-    from . import buttons
-    from .store import main_reducer
-    from .book.handlers import load_books
 
     thunk_middleware = aioredux.middleware.thunk_middleware
     create_store = aioredux.apply_middleware(

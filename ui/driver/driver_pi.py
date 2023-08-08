@@ -155,7 +155,7 @@ class Pi(Driver):
 
     def _publish_line(self, row, content):
         if not hasattr(self, 'context'):
-            # defer this till needed as it slows startup
+            # defer this 'til needed as it slows startup
             import zmq
             self.context = zmq.Context()
             self.socket = self.context.socket(zmq.PUB)
