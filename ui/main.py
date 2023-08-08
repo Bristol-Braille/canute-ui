@@ -3,25 +3,19 @@ import sys
 from frozendict import frozendict
 import time
 import atexit
-import shutil
 import signal
 import logging
 import asyncio
-import aioredux
-import aioredux.middleware
 import async_timeout
 
 from . import argparser
 from . import config_loader
 from . import initial_state
-from . import buttons
 from .driver.driver_pi import Pi
 from .driver.driver_dummy import Dummy
 from .setup_logs import setup_logs
-from .store import main_reducer
 from .actions import actions
 from .display import Display
-from .book.handlers import load_books
 
 display = Display()
 
@@ -148,6 +142,14 @@ async def run_async(driver, config, loop):
     # while they're resetting, have the UI issue a reset as its first
     # act, synchronously.
     driver.reset_display()
+
+    # process these imports while resetting as they are slow
+    import aioredux
+    import aioredux.middleware
+    from . import buttons
+    from .store import main_reducer
+    from .book.handlers import load_books
+
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
     media_handler = asyncio.ensure_future(handle_media_changes())
@@ -256,14 +258,7 @@ async def handle_hardware(driver, state, store, media_dir):
             return False
         return True
     elif state['hardware']['resetting_display'] == 'start':
-        driver.reset_display()
-        # Wait for reset to complete so that upon respawn SEND_LINEs
-        # don't get ignored/rejected.
-        log.warning('long-press of square: issued reset, exiting')
-        time.sleep(8)
-        while driver.port.inWaiting():
-            c = driver.port.read()
-            log.warning('discard %s' % c)
+        log.warning('long-press of square: exiting to cause reset')
         sys.exit(0)
     elif state['hardware']['warming_up'] == 'start':
         store.dispatch(actions.warm_up('in progress'))
@@ -280,6 +275,7 @@ def backup_log(config):
     backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
     log.debug('backing up log to USB stick: {}'.format(backup_file))
     try:
+        import shutil
         shutil.copyfile(log_file, backup_file)
     except IOError as e:
         log.warning("couldn't backup log file: {}".format(e))

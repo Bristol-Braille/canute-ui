@@ -6,7 +6,6 @@ import logging
 import serial
 import serial.tools.list_ports
 import struct
-import zmq
 import smbus2
 from .. import braille
 
@@ -53,10 +52,6 @@ class Pi(Driver):
             self.port = None
 
         self.previous_buttons = tuple()
-
-        self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.PUB)
-        self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
 
         self.row_actuations = [0] * N_ROWS
 
@@ -154,11 +149,20 @@ class Pi(Driver):
             if cmd == comms.CMD_SEND_LINE:
                 row = data[0]
                 self._log_row_actuation(row)
-                brl = ''.join([braille.pin_num_to_unicode(ch) for ch in data[1:]])
-                brf = ''.join(braille.pin_nums_to_alphas(data[1:]))
-                self.socket.send_pyobj({'line_number': row, 'visual': brf, 'braille': brl})
+                self._publish_line(row, data[1:])
 
             self.HDLC.sendFrame(payload)
+
+    def _publish_line(self, row, content):
+        if not hasattr(self, 'context'):
+            # defer this 'til needed as it slows startup
+            import zmq
+            self.context = zmq.Context()
+            self.socket = self.context.socket(zmq.PUB)
+            self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
+        brl = ''.join([braille.pin_num_to_unicode(ch) for ch in content])
+        brf = ''.join(braille.pin_nums_to_alphas(content))
+        self.socket.send_pyobj({'line_number': row, 'visual': brf, 'braille': brl})
 
     async def async_get_data(self, expected_cmd):
         '''gets 2 bytes of data from the hardware
@@ -273,7 +277,7 @@ class Pi(Driver):
         if self.port:
             log.error('closing serial port')
             self.port.close()
-        if self.context:
+        if hasattr(self, 'context'):
             self.context.destroy()
         if hasattr(self, 'button_thread'):
             self.button_thread.join()
