@@ -3,25 +3,19 @@ import sys
 from frozendict import frozendict
 import time
 import atexit
-import shutil
 import signal
 import logging
 import asyncio
-import aioredux
-import aioredux.middleware
 import async_timeout
 
 from . import argparser
 from . import config_loader
 from . import initial_state
-from . import buttons
 from .driver.driver_pi import Pi
 from .driver.driver_dummy import Dummy
 from .setup_logs import setup_logs
-from .store import main_reducer
 from .actions import actions
 from .display import Display
-from .book.handlers import load_books
 
 display = Display()
 
@@ -158,6 +152,13 @@ async def run_async(driver, config, loop):
     state = state.copy(app=state['app'].copy(
         display=frozendict({'width': width, 'height': height})))
 
+    # defer these imports as they are slow
+    import aioredux
+    import aioredux.middleware
+    from . import buttons
+    from .store import main_reducer
+    from .book.handlers import load_books
+
     thunk_middleware = aioredux.middleware.thunk_middleware
     create_store = aioredux.apply_middleware(
         thunk_middleware)(aioredux.create_store)
@@ -273,6 +274,7 @@ def backup_log(config):
     backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
     log.debug('backing up log to USB stick: {}'.format(backup_file))
     try:
+        import shutil
         shutil.copyfile(log_file, backup_file)
     except IOError as e:
         log.warning("couldn't backup log file: {}".format(e))
