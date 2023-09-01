@@ -85,6 +85,17 @@ def mounted_source_paths(media_dir):
         if os.path.ismount(source_path):
             yield source_path
 
+def swap_library(media_dir, current_book):
+    config = config_loader.load()
+    if config.has_option('files', 'additional_lib_1') and config.has_option('files', 'additional_lib_2'):
+        lib1 = os.path.join(media_dir, config.get('files', 'additional_lib_1'))
+        lib2 = os.path.join(media_dir, config.get('files', 'additional_lib_2'))
+        if current_book.startswith(lib1):
+            return lib2 + current_book[len(lib1):]
+        elif current_book.startswith(lib2):
+            return lib1 + current_book[len(lib2):]
+    return current_book
+
 async def read_user_state(media_dir):
     global prev
     global manual
@@ -144,7 +155,12 @@ async def read_user_state(media_dir):
     books[cleaning_filename] = CleaningAndTesting.create()
 
     if current_book not in books:
-        current_book = manual_filename
+        # let's just check that's not simply that they're using a differnt USB port
+        log.info('current book not in original library {}'.format(current_book))
+        current_book = swap_library(media_dir, current_book)
+        if current_book not in books:
+            log.warn('current book not found {}, ignoring'.format(current_book))
+            current_book = manual_filename
 
     user_state = frozendict(books=FrozenOrderedDict(
         books), current_book=current_book, current_language=current_language)
