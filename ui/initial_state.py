@@ -71,28 +71,35 @@ def to_state_file(book_path):
     dirname = os.path.dirname(book_path)
     return os.path.join(dirname, 'canute.' + basename + '.txt')
 
-
-async def read_user_state(path):
-    global prev
-    global manual
-    current_book = manual_filename
-    current_language = None
-    book_files = utility.find_files(path, ('brf', 'pef'))
+def mounted_source_paths(media_dir):
     config = config_loader.load()
     state_sources = ['sd_card_dir']
     if config.has_option('files', 'additional_lib_1'):
         state_sources.append('additional_lib_1')
     if config.has_option('files', 'additional_lib_2'):
         state_sources.append('additional_lib_2')
-    for state_source in state_sources:
-        _dir = config.get('files', state_source)
-        main_toml = os.path.join(path, _dir, USER_STATE_FILE)
+
+    for source in state_sources:
+        source_dir = config.get('files', source)
+        source_path = os.path.join(media_dir, source_dir)
+        if os.path.ismount(source_path):
+            yield source_path
+
+async def read_user_state(media_dir):
+    global prev
+    global manual
+    current_book = manual_filename
+    current_language = None
+    book_files = utility.find_files(media_dir, ('brf', 'pef'))
+    source_paths = mounted_source_paths(media_dir)
+    for source_path in source_paths:
+        main_toml = os.path.join(source_path, USER_STATE_FILE)
         if os.path.exists(main_toml):
             main_state = toml.load(main_toml)
             if 'current_book' in main_state:
                 current_book = main_state['current_book']
                 if not current_book == manual_filename:
-                    current_book = os.path.join(path, current_book)
+                    current_book = os.path.join(media_dir, current_book)
             if 'current_language' in main_state:
                 current_language = main_state['current_language']
             break
@@ -103,7 +110,7 @@ async def read_user_state(path):
     install(current_language)
     manual = Manual.create()
 
-    manual_toml = os.path.join(path, to_state_file(manual_filename))
+    manual_toml = os.path.join(media_dir, to_state_file(manual_filename))
     if os.path.exists(manual_toml):
         t = toml.load(manual_toml)
         if 'current_page' in t:
@@ -135,8 +142,8 @@ async def read_user_state(path):
     return user_state.copy(books=user_state['books'])
 
 
-async def read(path):
-    user_state = await read_user_state(path)
+async def read(media_dir):
+    user_state = await read_user_state(media_dir)
     return initial_state.copy(app=initial_state['app'].copy(user=user_state))
 
 
@@ -153,11 +160,12 @@ async def write(store, media_dir, sem, writes_in_flight):
             selected_book = os.path.relpath(selected_book, media_dir)
         s = toml.dumps({'current_book': selected_book,
                         'current_language': selected_lang})
-        config = config_loader.load()
-        sd_card_dir = config.get('files', 'sd_card_dir')
-        path = os.path.join(media_dir, sd_card_dir, USER_STATE_FILE)
-        async with aiofiles.open(path, 'w') as f:
-            await f.write(s)
+        source_paths = mounted_source_paths(media_dir)
+        for source_path in source_paths:
+            path = os.path.join(source_path, USER_STATE_FILE)
+            async with aiofiles.open(path, 'w') as f:
+                await f.write(s)
+            
     for filename in books:
         book = books[filename]
         if filename in prev['books']:
