@@ -8,10 +8,10 @@ media_dir = /media
 sd_card_dir = sd-card
 
 # Additional books made available on the USB ports will (for now at
-# least) be visible in the library.  Further, in the absence of a state
-# file on the SD card, a state file on a USB medium will get read (but
-# will not be updated).  Neither of these behaviours are officially
-# supported and they may change at any time so shouldn't be relied upon.
+# least) be visible in the library.  The current state will be written
+# to all mount points that are active, however the state file on the
+# SD card will take precedence, followed by lib_1 and finally lib_2.
+# These behaviours may change at any time so shouldn't be relied upon.
 #
 # These paths are relative to media_dir.
 # These config values are optional.
