@@ -95,14 +95,17 @@ async def read_user_state(media_dir):
     for source_path in source_paths:
         main_toml = os.path.join(source_path, USER_STATE_FILE)
         if os.path.exists(main_toml):
-            main_state = toml.load(main_toml)
-            if 'current_book' in main_state:
-                current_book = main_state['current_book']
-                if not current_book == manual_filename:
-                    current_book = os.path.join(media_dir, current_book)
-            if 'current_language' in main_state:
-                current_language = main_state['current_language']
-            break
+            try:
+                main_state = toml.load(main_toml)
+                if 'current_book' in main_state:
+                    current_book = main_state['current_book']
+                    if not current_book == manual_filename:
+                        current_book = os.path.join(media_dir, current_book)
+                if 'current_language' in main_state:
+                    current_language = main_state['current_language']
+                break
+            except Exception:
+                log.warning('user state loading failed for {}, ignoring'.format(main_toml))
 
     if not current_language or current_language == OLD_DEFAULT_LOCALE:
         current_language = DEFAULT_LOCALE.code
@@ -112,24 +115,31 @@ async def read_user_state(media_dir):
 
     manual_toml = os.path.join(media_dir, to_state_file(manual_filename))
     if os.path.exists(manual_toml):
-        t = toml.load(manual_toml)
-        if 'current_page' in t:
-            manual = manual._replace(page_number=t['current_page'] - 1)
-        if 'bookmarks' in t:
-            manual = manual._replace(bookmarks=tuple(sorted(manual.bookmarks + tuple(
-                bm - 1 for bm in t['bookmarks']))))
+        try:
+            t = toml.load(manual_toml)
+            if 'current_page' in t:
+                manual = manual._replace(page_number=t['current_page'] - 1)
+            if 'bookmarks' in t:
+                manual = manual._replace(bookmarks=tuple(sorted(manual.bookmarks + tuple(
+                    bm - 1 for bm in t['bookmarks']))))
+        except Exception:
+            log.warning('manual state loading failed for {}, ignoring'.format(manual_toml))
 
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
         book = BookFile(filename=book_file, width=40, height=9)
         if os.path.exists(toml_file):
-            t = toml.load(toml_file)
-            if 'current_page' in t:
-                book = book._replace(page_number=t['current_page'] - 1)
-            if 'bookmarks' in t:
-                book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
-                    bm - 1 for bm in t['bookmarks']))))
+            try:
+                t = toml.load(toml_file)
+                if 'current_page' in t:
+                    book = book._replace(page_number=t['current_page'] - 1)
+                if 'bookmarks' in t:
+                    book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
+                        bm - 1 for bm in t['bookmarks']))))
+            except Exception:
+                log.warning('book state loading failed for {}, ignoring'.format(toml_file))
+
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
 
