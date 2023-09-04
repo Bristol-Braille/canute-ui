@@ -1,4 +1,4 @@
 [target.arm-unknown-linux-gnueabihf]
-linker = "arm-linux-gnueabihf-gcc"
+linker = "/rpi_tools/arm-bcm2708/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc"
 # Strip the ARM library to shave off some load milliseconds.
 rustflags = [ "-C", "link-arg=-s" ]
