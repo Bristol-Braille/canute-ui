@@ -30,6 +30,14 @@ For Homebrew:
     pip3 install -r requirements.txt
 
 
+brew install qt5
+export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"
+python3 -m venv ve
+. ve/bin/activate
+pip install pyqt5 --config-settings --confirm-license= --verbose
+pip install -r requirements.txt
+
+
 ## Deploying to Raspberry Pi
 
 Install requirements:

@@ -8,3 +8,4 @@ config.rc
 books/*.txt
 __pycache__
 target/
+ve/
