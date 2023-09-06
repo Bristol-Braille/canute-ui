@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from frozendict import frozendict, FrozenOrderedDict
 from collections import OrderedDict
 from . import utility
@@ -22,32 +23,32 @@ log = logging.getLogger(__name__)
 
 class AppReducers():
     def set_user_state(self, state, value):
-        return state.copy(user=value)
+        return state.set('user', value)
 
     def trigger(self, state, value):
         '''bit ugly but gives the ability to trigger any state subscribers'''
-        return state.copy()
+        return frozendict(deepcopy(dict(state)))
 
     def set_dimensions(self, state, value):
         dimensions = frozendict(width=value[0], height=value[1])
-        return state.copy(dimensions=dimensions)
+        return state.set('dimensions', dimensions)
 
     def go_to_library(self, state, _):
-        return state.copy(location='library')
+        return state.set('location', 'library')
 
     def go_to_system_menu(self, state, _):
-        return state.copy(location='system_menu')
+        return state.set('location', 'system_menu')
 
     def go_to_bookmarks_menu(self, state, _):
-        return state.copy(location='bookmarks_menu')
+        return state.set('location', 'bookmarks_menu')
 
     def go_to_language_menu(self, state, _):
-        return state.copy(location='language')
+        return state.set('location', 'language')
 
     def toggle_help_menu(self, state, _):
         visible = state['help_menu']['visible']
         help_menu = frozendict(visible=not visible, page=0)
-        return state.copy(help_menu=help_menu)
+        return state.set('help_menu', help_menu)
 
     def close_menu(self, state, value):
         books = state['user']['books']
@@ -59,11 +60,12 @@ class AppReducers():
             book = book._replace(bookmarks=bookmarks)
             changed_books[filename] = book
         bookmarks_menu = state['bookmarks_menu']
-        return state.copy(location='book',
-                          bookmarks_menu=bookmarks_menu.copy(page=0),
-                          home_menu_visible=False, go_to_page_selection='',
-                          help_menu=frozendict({'visible': False, 'page': 0}),
-                          user=state['user'].copy(books=FrozenOrderedDict(changed_books)))
+        new_state = state.set('location', 'book')
+        new_state = new_state.set('bookmarks_menu', bookmarks_menu.set('page', 0))
+        new_state = new_state.set('home_menu_visible', False)
+        new_state = new_state.set('go_to_page_selection', '')
+        new_state = new_state.set('help_menu', frozendict({'visible': False, 'page': 0}))
+        return new_state.set('user', state['user'].set('books', FrozenOrderedDict(changed_books)))
 
     def go_to_page(self, state, page):
         width, height = state_helpers.dimensions(state)
@@ -84,14 +86,14 @@ class AppReducers():
             elif page < 0:
                 page = 0
             library = frozendict({'page': page})
-            return state.copy(library=library)
+            return state.set('library', library)
         elif location == 'book':
             book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
             books = OrderedDict(state['user']['books'])
             book = book.set_page(page)
             books[book_n] = book
-            return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
+            return state.set('user', state['user'].set('books', FrozenOrderedDict(books)))
         elif location == 'bookmarks_menu':
             book_n = state['user']['current_book']
             book = state['user']['books'][book_n]
@@ -101,13 +103,13 @@ class AppReducers():
             num_pages = (len(bookmarks_data) + (effective_height-1)) // effective_height
             if page >= num_pages - 1:
                 page = num_pages - 1
-            bookmarks_menu = state['bookmarks_menu'].copy(page=page)
-            return state.copy(bookmarks_menu=bookmarks_menu)
+            bookmarks_menu = state['bookmarks_menu'].set('page', page)
+            return state.set('bookmarks_menu', bookmarks_menu)
         elif location == 'language':
             lang_n = state['user'].get('current_language', 'en_GB:en')
             lang = list(state['languages']['available'].keys())[lang_n]
-            language_menu = state['user'].copy(current_language=lang)
-            return state.copy(language=language_menu)
+            language_menu = state['user'].set('current_language', lang)
+            return state.set('language', language_menu)
         elif location == 'help_menu':
 
             # To calculate help page bounds and ensure we stay within
@@ -129,7 +131,7 @@ class AppReducers():
                 num_pages = len(help_getter(width, height)) // height
             if page >= num_pages:
                 page = num_pages - 1
-            return state.copy(help_menu=state['help_menu'].copy(page=page))
+            return state.set('help_menu', state['help_menu'].set('page', page))
         return state
 
     def skip_pages(self, state, value):
@@ -166,13 +168,13 @@ class AppReducers():
         if state['backing_up_log'] == 'in progress' and value != 'done':
             return state
         else:
-            return state.copy(backing_up_log=value)
+            return state.set('backing_up_log', value)
 
     def shutdown(self, state, value):
-        return state.copy(shutting_down=True)
+        return state.set('shutting_down', True)
 
     def load_books(self, state, value):
-        return state.copy(load_books=value)
+        return state.set('load_books', value)
 
     def do_nothing(self, state, value):
         return state
@@ -183,13 +185,13 @@ class HardwareReducers():
         if state['warming_up'] == 'in progress' and value != 'done':
             return state
         else:
-            return state.copy(warming_up=value)
+            return state.set('warming_up', value)
 
     def reset_display(self, state, value):
         if state['resetting_display'] == 'in progress' and value != 'done':
             return state
         else:
-            return state.copy(resetting_display=value)
+            return state.set('resetting_display', value)
 
 
 def make_action_method(name):

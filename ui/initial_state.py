@@ -165,12 +165,12 @@ async def read_user_state(media_dir):
     user_state = frozendict(books=FrozenOrderedDict(
         books), current_book=current_book, current_language=current_language)
     prev = user_state
-    return user_state.copy(books=user_state['books'])
+    return user_state.set('books', user_state['books'])
 
 
 async def read(media_dir):
     user_state = await read_user_state(media_dir)
-    return initial_state.copy(app=initial_state['app'].copy(user=user_state))
+    return initial_state.set('app', initial_state['app'].set('user', user_state))
 
 
 async def write(store, media_dir, sem, writes_in_flight):

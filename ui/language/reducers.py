@@ -11,8 +11,10 @@ class LanguageReducers():
             locale = keys[lang]
             install(locale)
             manual = Manual.create()
-            books = state['user']['books'].copy(**{manual_filename: manual})
-            user = state['user'].copy(current_language=locale, books=books)
-            return state.copy(location='book', user=user)
+            books = state['user']['books'].set('manual_filename', manual)
+            user = state['user'].set('current_language', locale)
+            user = user.set('books', books)
+            new_state = state.set('location', 'book')
+            return new_state.set('user', user)
         else:
             return state

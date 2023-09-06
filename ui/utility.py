@@ -57,7 +57,7 @@ def pad_line(w, line):
 def get_methods(cls):
     methods = [
         x for x in dir(cls)
-        if isinstance(getattr(cls, x), collections.Callable)
+        if isinstance(getattr(cls, x), collections.abc.Callable)
     ]
     return [x for x in methods if not x.startswith('__')]
 

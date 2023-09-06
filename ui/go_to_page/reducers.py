@@ -19,14 +19,15 @@ class GoToPageReducers():
         num_width = state_helpers.get_page_num_width(state)
         selection = selection[-num_width:]
 
-        go_to_page = go_to_page.copy(selection=selection, keys_pressed='')
-        return state.copy(go_to_page=go_to_page)
+        go_to_page = go_to_page.set('selection', selection)
+        go_to_page = go_to_page.set('keys_pressed', '')
+        return state.set('go_to_page', go_to_page)
 
     def go_to_page_key_press(self, state, value):
         go_to_page = state['go_to_page']
         keys_pressed = go_to_page['keys_pressed'] + str(value)
-        go_to_page = go_to_page.copy(keys_pressed=keys_pressed)
-        return state.copy(go_to_page=go_to_page)
+        go_to_page = go_to_page.set('keys_pressed', keys_pressed)
+        return state.set('go_to_page', go_to_page)
 
     def go_to_page_confirm(self, state, value):
         state = self.go_to_page_set_selection(state, None)
@@ -34,12 +35,12 @@ class GoToPageReducers():
         selection = go_to_page['selection']
         if selection == '':
             return state
-        go_to_page = go_to_page.copy(selection='')
+        go_to_page = go_to_page.set('selection', '')
         page = int(selection) - 1
         set_book_page = BookReducers().set_book_page
-        return set_book_page(state.copy(go_to_page=go_to_page), page)
+        return set_book_page(state.set('go_to_page', go_to_page), page)
 
     def go_to_page_delete(self, state, value):
         go_to_page = state['go_to_page']
         selection = go_to_page['selection'][0:-1]
-        return state.copy(go_to_page=go_to_page.copy(selection=selection))
+        return state.set('go_to_page', go_to_page.set('selection', selection))

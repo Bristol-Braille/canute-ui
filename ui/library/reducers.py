@@ -19,14 +19,16 @@ class LibraryReducers():
         except Exception:
             log.debug('no book at {}'.format(number))
             return state
-        user = state['user'].copy(current_book=book.filename)
-        return state.copy(location='book', user=user, home_menu_visible=False)
+        user = state['user'].set('current_book', book.filename)
+        new_state = state.set('location', 'book')
+        new_state = new_state.set('user', user)
+        return new_state.set('home_menu_visible', False)
 
     def add_or_replace(self, state, book):
         books = OrderedDict(state['user']['books'])
         books[book.filename] = book
         books = sort_books(books)
-        return state.copy(user=state['user'].copy(books=books))
+        return state.set('user', state['user'].set('books', books))
 
     def set_book_loading(self, state, book):
         book = book._replace(load_state=book_file.LoadState.LOADING)
@@ -37,13 +39,14 @@ class LibraryReducers():
         if book.filename in books:
             del books[book.filename]
         books = FrozenOrderedDict(books)
-        return state.copy(user=state['user'].copy(books=books))
+        return state.set('user', state['user'].set('books', books))
 
     def replace_library(self, state, value):
         if state['replacing_library'] == 'in progress' and value is False:
             return state
         else:
-            return state.copy(replacing_library=value, location='library')
+            new_state = state.set('replacing_library', value)
+            return new_state.set('location', 'library')
 
 
 def sort_books(books):

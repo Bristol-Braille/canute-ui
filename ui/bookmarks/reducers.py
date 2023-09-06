@@ -25,7 +25,7 @@ class BookmarksReducers():
         bookmarks = bookmarks[0:line] + tuple(changed_bookmarks) \
             + bookmarks[line + height:len(bookmarks)]
         books[book_n] = book._replace(bookmarks=bookmarks)
-        return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
+        return state.set('user', state['user'].set('books', FrozenOrderedDict(books)))
 
     def go_to_bookmark(self, state, n):
         width, height = state_helpers.dimensions(state)

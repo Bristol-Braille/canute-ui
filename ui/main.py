@@ -157,8 +157,8 @@ async def run_async(driver, config, loop):
     media_dir = config.get('files', 'media_dir')
     state = await initial_state.read(media_dir)
     width, height = driver.get_dimensions()
-    state = state.copy(app=state['app'].copy(
-        display=frozendict({'width': width, 'height': height})))
+    state = state.set('app', state['app'].set(
+        'display', frozendict({'width': width, 'height': height})))
 
     thunk_middleware = aioredux.middleware.thunk_middleware
     create_store = aioredux.apply_middleware(

@@ -21,14 +21,15 @@ class BookReducers():
         bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
         book = book._replace(bookmarks=bookmarks)
         books[book_n] = book
-        return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)),
+        return state.set('user', state['user'].set('books', FrozenOrderedDict(books)),
                           location='book', home_menu_visible=False)
 
     def enter_go_to_page(self, state, value):
-        return state.copy(home_menu_visible=False, location='go_to_page')
+        new_state = state.set('home_menu_visible', False)
+        return new_state.set('location', 'go_to_page')
 
     def toggle_home_menu(self, state, value):
-        return state.copy(home_menu_visible=not state['home_menu_visible'])
+        return state.set('home_menu_visible', not state['home_menu_visible'])
 
     def insert_bookmark(self, state, _):
         number = state['user']['current_book']
@@ -39,5 +40,5 @@ class BookReducers():
             bookmarks = sorted(book.bookmarks + tuple([page]))
             book = book._replace(bookmarks=tuple(bookmarks))
             books[number] = book
-            return state.copy(user=state['user'].copy(books=FrozenOrderedDict(books)))
+            return state.set('user', state['user'].set('books', FrozenOrderedDict(books)))
         return state
