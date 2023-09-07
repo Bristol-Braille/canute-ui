@@ -31,7 +31,14 @@ async def _read_pages2(book, background=False):
     if book.load_state == book_file.LoadState.DONE:
         return book
     try:
-        (r, w) = os.pipe2(os.O_CLOEXEC)
+        try:
+            (r, w) = os.pipe2(os.O_CLOEXEC)
+        except AttributeError:
+            # macOS workaround as pipe2 not supported
+            import fcntl
+            (r, w) = os.pipe()
+            fcntl.fcntl(r, fcntl.F_SETFD, fcntl.FD_CLOEXEC)
+            fcntl.fcntl(w, fcntl.F_SETFD, fcntl.FD_CLOEXEC)
         indexer.trigger_load(book.filename, w)
         buf = None
         if background:
@@ -57,7 +64,7 @@ async def _read_pages2(book, background=False):
                              num_pages=indexer.get_page_count(book.filename),
                              indexed=True)
     except Exception:
-        log.warning('book loading failed for {}'.format(book.filename))
+        log.warning(f"book loading 2 failed for {book.filename}", exc_info=True)
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
@@ -133,7 +140,7 @@ async def _read_pages(book, background=False):
                              bookmarks=bookmarks,
                              indexed=False)
     except Exception:
-        log.warning('book loading failed for {}'.format(book.filename))
+        log.warning(f"book loading failed for {book.filename}", exc_info=True)
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
