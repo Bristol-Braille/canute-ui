@@ -33,6 +33,26 @@ def truncate_middle(string, width):
 
 # test code
 
+def truncate_location(string, width):
+    if len(string) < width:
+        return string + '/'
+    dirs = string.split(os.sep)
+    last = dirs[-1]
+    depth = len(dirs) - 1
+    if len(last) + depth + 5 < width:
+        spare = width - (len(last) + depth + 1)
+        first = dirs[0]
+        if len(first) < spare:
+            extra = spare - len(first)
+            if depth > 1 and extra > 5:
+                parent = dirs[-2]
+                return first + (depth - 1) * '/' + truncate_middle(parent, extra) + '/' + last + '/'
+        if spare > 5:
+            return truncate_middle(first, spare) + depth * '/' + last + '/'
+    # no room for anything other than depth and dir name
+    return depth * '/' + truncate_middle(last, width - depth - 1) +'/'
+
+
 def atoi(text):
     return int(text) if text.isdigit() else text.lower()
 
@@ -44,6 +64,60 @@ def natural_keys(text):
     '''
     return [ atoi(c) for c in re.split(r'(\d+)', text) ]
 
+class Directory:
+    def __init__(self, name, parent = None):
+        self.parent = parent
+        self.name = name
+        self.files = []
+
+    @property
+    def relpath(self):
+        if self.parent is None:
+            return self.name
+        return os.path.join(self.parent.relpath, self.name)
+
+    @property
+    def files_count(self):
+        return len(self.files)
+
+    @property
+    def _depth(self):
+        depth = 1
+        if self.parent is not None:
+            depth += self.parent._depth
+        return depth
+
+    def display_text(self, show_count=True):
+        extra = 0
+        if show_count:
+            count = self.files_count
+            if count > 0:
+                count_str = str(count)
+                # 4 = ' - #' suffix
+                extra = 4 + len(count_str)
+        depth = self._depth
+        # 39 takes into account the trailing slash
+        title = truncate_middle(self.name.replace('_', ' '), 39 - depth - extra)
+        display = depth * '-' + f"{to_display_text(from_ascii(title))}/"
+        if extra > 0:
+            # 41 takes into account the hyphen in extra
+            pad = 41 - len(display) - extra
+            display += ' ' + pad * '-' + ' #' + count_str
+        return display
+
+
+class File:
+    def __init__(self, name, directory):
+        self.directory = directory
+        self.name = name
+
+    @property
+    def title(self):
+        title = os.path.splitext(self.name)[0].replace('_', ' ')
+        return truncate_middle(title, 40)
+    
+    def display_text(self):
+        return to_display_text(from_ascii(self.title))
 
 class Library:
     '''
@@ -51,24 +125,54 @@ class Library:
     while being viewed (this is reasonable on a Canute)
     '''
     def __init__(self, start_dir):
-        self.start_dir = os.path.abspath(start_dir)
-        self.dir_count = self.count_dirs()
-        self.files_dir = None
+        self.start_dir = os.path.abspath(os.path.split(start_dir)[0])
+        root = Directory(os.path.basename(start_dir))
+        self.walk(root)
+        self.prune(root)
+        self.dirs = []
+        self.flatten(root)
+        self.files_dir_index = None
         self.files_count = 0
 
-    def walk(self):
-        for root, dirs, files in os.walk(self.start_dir):
-            # remove 'hidden' dot dirs
-            dirs[:] = [d for d in dirs if not d[0] == '.']
-            # sort into human alpha num order
-            dirs.sort(key=natural_keys)
-            yield root, dirs, files
+    def walk(self, root):
+        '''
+        Walk the file system looking for brfs and pefs
+        '''
+        dirs = []
+        files = []
+        for entry in os.scandir(os.path.join(self.start_dir, root.relpath)):
+            if entry.is_dir(follow_symlinks=False) and \
+                    entry.name[0] != '.' and entry.name[0] != '$':
+                dirs.append(entry.name)
+            elif entry.is_file():
+                ext = os.path.splitext(entry.name)[1].lower()
+                if ext == '.brf' or ext == '.pef':
+                    files.append(entry.name)
 
-    def count_dirs(self):
-        count = 0
-        for root, dirs, files in self.walk():
-            count += 1
-        return count
+        dirs.sort(key=natural_keys)
+        root.dirs = [Directory(dir, root) for dir in dirs]
+        for dir in root.dirs:
+            self.walk(dir)
+
+        files.sort(key=natural_keys)
+        root.files = [File(f, root) for f in files]
+
+    def prune(self, root):
+        '''
+        Remove any folders with 0 files in (depth first)
+        '''
+        root.dirs[:] = [dir for dir in root.dirs if not self.prune(dir)]
+        return len(root.dirs) == 0 and root.files_count == 0
+
+    def flatten(self, root):
+        '''
+        Populate the self.dirs list (breadth first)
+        '''
+        self.dirs.append(root)
+        for dir in root.dirs:
+            self.flatten(dir)
+        # tidy up, as we no longer need a two-way tree
+        del root.dirs
 
     @property
     def pages(self):
@@ -76,59 +180,73 @@ class Library:
 
     @property
     def rows(self):
-        return self.dir_count + self.files_count
+        return self.dir_count #+ self.files_count
 
     def _page_title(self, dir):
-        path = os.path.relpath(dir, os.path.split(self.start_dir)[0])
         title = ',,LIBR>Y M5U'
-        if not path == '.':
-            title += ' - ' + path + '/'
+        if dir is not None:
+            title += ' - ' + truncate_location(dir.relpath, 25)
         return title
 
+    @property
+    def _files_page_open(self):
+        return self.files_dir_index is not None
 
-    def get_page(self, start):
-        count = 0
-        for root, dirs, files in self.walk():
-            count += 1
+    @property
+    def _files_page_start(self):
+        '''only valid if files_dir_index is open'''
+        return math.ceil(self.files_dir_index / 8)
 
-            if count > start:
-                if count == start + 1:
-                    title = self._page_title(os.path.split(root)[0])
-                    yield to_display_text(from_ascii(title)), None
+    @property
+    def _files_pages(self):
+        return math.ceil(self.files_count / 8)
 
-                rel_path = os.path.relpath(root, self.start_dir)
-                segments = rel_path.split(os.sep)
-                depth = 1 if rel_path == '.' else len(segments) + 1
-                title = truncate_middle(os.path.basename(root).replace('_', ' '), 40 - depth - 2)
-                display = depth * '-' + f"{to_display_text(from_ascii(title))}/"
-                yield display, root
-                if count == start + 8:
-                    return
+    def _is_files_page(self, page_num):
+        if self._files_page_open:
+            files_pages = self._files_pages
+            files_start = self._files_page_start
+            return page_num >= files_start and page_num < files_start + files_pages
+        return False
 
-            if root == self.files_dir:
-                files = [f for f in files if not f[0] == '.']
-                files.sort(key=natural_keys)
-                for file in files:
-                    count += 1
-                    if count > start:
-                        if count == start + 1:
-                            title = self._page_title(root)
-                            yield to_display_text(from_ascii(title)), None
-                        title = truncate_middle(os.path.splitext(file)[0].replace('_', ' '), 40)
-                        yield to_display_text(from_ascii(title)), None
-                        if count == start + 8:
-                            return
+    def canonical_dir_page(self, page_num):
+        if self._files_page_open and page_num >= self._files_page_start:
+            # remove one extra to 'split' the current menu page and show it
+            # before and after the current file list
+            page_num -= min(self._files_pages, page_num - self._files_page_start) + 1
+        return page_num
 
-    def set_files_dir(self, files_dir):
-        self.files_dir = files_dir
-        if files_dir is None:
+    def get_page(self, page_num):
+        if self._is_files_page(page_num):
+            offset = (page_num - self._files_page_start) * 8
+            dir = self.dirs[self.files_dir_index]
+            title = self._page_title(dir)
+            yield to_display_text(from_ascii(title)), None
+            for file in dir.files[offset:offset+8]:
+                yield file.display_text(), None
+            return
+
+        page_num = self.canonical_dir_page(page_num)
+        start = page_num * 8    
+        for i in range(start, min(start + 8, len(self.dirs))):
+            dir = self.dirs[i]
+            if i == start:
+                title = self._page_title(dir.parent)
+                yield to_display_text(from_ascii(title)), None
+                
+            yield dir.display_text(self.files_dir_index != i), i if dir.files_count > 0 else None
+
+    def set_files_dir_index(self, index):
+        old_count = self.files_count
+        self.files_dir_index = index
+        if index is None:
             self.files_count = 0
         else:
-            self.files_count = len(os.listdir(files_dir))
+            self.files_count = self.dirs[index].files_count
+        return self._files_page_start if self._files_page_open else None
 
 
 def main(stdscr):
-    row = 0
+    page = 0
     library = Library(sys.argv[1])
     key = ''
 
@@ -137,24 +255,28 @@ def main(stdscr):
         i = 0
         dirs = []
         # stdscr.addstr(0, 0, key)
-        for display, dir in library.get_page(row):
+        for display, dir_index in library.get_page(page):
             stdscr.addstr(i, 0, display)
-            dirs.append(dir)
+            dirs.append(dir_index)
             i += 1
 
         stdscr.refresh()
         key = stdscr.getkey()
         if (key == 'KEY_LEFT' or key == 'KEY_UP'):
-            row -= 8
-            if row < 0:
-                row = 0
+            page -= 1
+            if page < 0:
+                page = 0
         elif key == 'KEY_RIGHT' or key == 'KEY_DOWN':
-            row += 8
+            page += 1
         elif key.isdigit():
             option = atoi(key) - 1
-            library.set_files_dir(dirs[option])
+            dir_page = library.canonical_dir_page(page)
             # align display to top of file list
-            row += option
+            new_page = library.set_files_dir_index(dirs[option])
+            if new_page is not None:
+                page = new_page
+            else:
+                page = dir_page
 
 if __name__ == '__main__':
     curses.wrapper(main)
