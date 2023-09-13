@@ -30,6 +30,8 @@ def truncate_middle(string, width):
     if width_available < 3:
         return string[0:width - 3] + '...'
     return string[0:width_available] + '... ' + last
+#   ^^^ adjust to trim away whitespace before '...' ?
+
 
 # test code
 
@@ -81,6 +83,10 @@ class Directory:
         return len(self.files)
 
     @property
+    def files_pages(self):
+        return math.ceil(self.files_count / Library.PAGE_SIZE)
+
+    @property
     def _depth(self):
         depth = 1
         if self.parent is not None:
@@ -124,6 +130,8 @@ class Library:
     Makes the assumption that the filesystem _won't_ change
     while being viewed (this is reasonable on a Canute)
     '''
+    PAGE_SIZE = 8
+
     def __init__(self, start_dir):
         self.start_dir = os.path.abspath(os.path.split(start_dir)[0])
         root = Directory(os.path.basename(start_dir))
@@ -131,6 +139,7 @@ class Library:
         self.prune(root)
         self.dirs = []
         self.flatten(root)
+        self.dir_count = len(self.dirs)
         self.files_dir_index = None
         self.files_count = 0
 
@@ -176,17 +185,19 @@ class Library:
 
     @property
     def pages(self):
-        return math.ceil(self.rows / 8)
+        pages = self._dirs_pages
+        if self.files_count > 0:
+            # + 1 for the extra dir page before/after
+            pages += self._files_pages + 1
+        return pages
 
-    @property
-    def rows(self):
-        return self.dir_count #+ self.files_count
-
-    def _page_title(self, dir):
+    def _page_display_text(self, dir, page, of_pages):
         title = ',,LIBR>Y M5U'
+        progress = f"#{page}/#{of_pages}"
         if dir is not None:
-            title += ' - ' + truncate_location(dir.relpath, 25)
-        return title
+            title += ' - ' + truncate_location(dir.relpath, 25 - len(progress) - 3)
+        title += ' ' + (40 - len(title) - len(progress) - 2) * '-' + ' ' + progress
+        return to_display_text(from_ascii(title))
 
     @property
     def _files_page_open(self):
@@ -195,11 +206,15 @@ class Library:
     @property
     def _files_page_start(self):
         '''only valid if files_dir_index is open'''
-        return math.ceil(self.files_dir_index / 8)
+        return math.ceil(self.files_dir_index / Library.PAGE_SIZE)
 
     @property
     def _files_pages(self):
-        return math.ceil(self.files_count / 8)
+        return math.ceil(self.files_count / Library.PAGE_SIZE)
+
+    @property
+    def _dirs_pages(self):
+        return math.ceil(self.dir_count / Library.PAGE_SIZE)
 
     def _is_files_page(self, page_num):
         if self._files_page_open:
@@ -217,22 +232,20 @@ class Library:
 
     def get_page(self, page_num):
         if self._is_files_page(page_num):
-            offset = (page_num - self._files_page_start) * 8
+            page_num -= self._files_page_start
+            offset = page_num * Library.PAGE_SIZE
             dir = self.dirs[self.files_dir_index]
-            title = self._page_title(dir)
-            yield to_display_text(from_ascii(title)), None
-            for file in dir.files[offset:offset+8]:
+            yield self._page_display_text(dir, page_num + 1, dir.files_pages), None
+            for file in dir.files[offset:offset+Library.PAGE_SIZE]:
                 yield file.display_text(), None
             return
 
         page_num = self.canonical_dir_page(page_num)
-        start = page_num * 8    
-        for i in range(start, min(start + 8, len(self.dirs))):
+        start = page_num * Library.PAGE_SIZE
+        for i in range(start, min(start + Library.PAGE_SIZE, len(self.dirs))):
             dir = self.dirs[i]
             if i == start:
-                title = self._page_title(dir.parent)
-                yield to_display_text(from_ascii(title)), None
-                
+                yield self._page_display_text(dir.parent, page_num + 1, self._dirs_pages), None                
             yield dir.display_text(self.files_dir_index != i), i if dir.files_count > 0 else None
 
     def set_files_dir_index(self, index):
@@ -268,6 +281,8 @@ def main(stdscr):
                 page = 0
         elif key == 'KEY_RIGHT' or key == 'KEY_DOWN':
             page += 1
+            if page >= library.pages:
+                page = library.pages - 1
         elif key.isdigit():
             option = atoi(key) - 1
             dir_page = library.canonical_dir_page(page)
