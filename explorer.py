@@ -84,7 +84,7 @@ class Directory:
 
     @property
     def files_pages(self):
-        return math.ceil(self.files_count / Library.PAGE_SIZE)
+        return math.ceil(self.files_count / Library.FILES_PAGE_SIZE)
 
     @property
     def _depth(self):
@@ -98,9 +98,12 @@ class Directory:
         if show_count:
             count = self.files_count
             if count > 0:
-                count_str = str(count)
-                # 4 = ' - #' suffix
-                extra = 4 + len(count_str)
+                count_str = '#' + str(count)
+                # 3 = ' - ' suffix
+                extra = 3 + len(count_str)
+        else:
+            count_str = 'GO TO BOOK LIST'
+            extra = 3 + len(count_str)
         depth = self._depth
         # 39 takes into account the trailing slash
         title = truncate_middle(self.name.replace('_', ' '), 39 - depth - extra)
@@ -108,7 +111,7 @@ class Directory:
         if extra > 0:
             # 41 takes into account the hyphen in extra
             pad = 41 - len(display) - extra
-            display += ' ' + pad * '-' + ' #' + count_str
+            display += ' ' + pad * '-' + ' ' + count_str
         return display
 
 
@@ -130,7 +133,8 @@ class Library:
     Makes the assumption that the filesystem _won't_ change
     while being viewed (this is reasonable on a Canute)
     '''
-    PAGE_SIZE = 6
+    DIRS_PAGE_SIZE = 8
+    FILES_PAGE_SIZE = 7
 
     def __init__(self, start_dir):
         self.start_dir = os.path.abspath(os.path.split(start_dir)[0])
@@ -206,15 +210,15 @@ class Library:
     @property
     def _files_page_start(self):
         '''only valid if files_dir_index is open'''
-        return math.ceil((self.files_dir_index + 1) / Library.PAGE_SIZE)
+        return math.ceil((self.files_dir_index + 1) / Library.DIRS_PAGE_SIZE)
 
     @property
     def _files_pages(self):
-        return math.ceil(self.files_count / Library.PAGE_SIZE)
+        return math.ceil(self.files_count / Library.FILES_PAGE_SIZE)
 
     @property
     def _dirs_pages(self):
-        return math.ceil(self.dir_count / Library.PAGE_SIZE)
+        return math.ceil(self.dir_count / Library.DIRS_PAGE_SIZE)
 
     def _is_files_page(self, page_num):
         if self._files_page_open:
@@ -230,57 +234,48 @@ class Library:
             page_num -= min(self._files_pages, page_num - self._files_page_start) + 1
         return page_num
 
-    def _prev_display_text(self, enabled):
-        if enabled:
-            prev = 35 * '-' + ' prev'
-        else:
-            prev = ''
+    def _back_display_text(self):
+        prev = 17 * '-' + ' back to directory list'
         return to_display_text(from_ascii(prev))
 
-    def _next_display_text(self, enabled):
-        if enabled:
-            next = 35 * '-' + ' next'
-        else:
-            next = ''
+    def _directories_display_text(self):
+        next = 23 * '-' + ' more directories'
         return to_display_text(from_ascii(next))
 
     def get_page(self, page_num):
-        prev = page_num != 0
-        next = page_num != self.pages - 1
         begin = 0
-        end = Library.PAGE_SIZE
+        end = Library.DIRS_PAGE_SIZE
         if self._files_page_open:
             if page_num == self._files_page_start - 1:
-                end = self.files_dir_index % Library.PAGE_SIZE + 1
+                end = self.files_dir_index % Library.DIRS_PAGE_SIZE + 1
             if page_num == self._files_page_start + self._files_pages:
-                begin = self.files_dir_index % Library.PAGE_SIZE + 1
+                begin = self.files_dir_index % Library.DIRS_PAGE_SIZE
 
         if self._is_files_page(page_num):
             page_num -= self._files_page_start
-            offset = page_num * Library.PAGE_SIZE
+            offset = page_num * Library.FILES_PAGE_SIZE
             dir = self.dirs[self.files_dir_index]
             yield self._page_display_text(dir, page_num + 1, dir.files_pages), None
-            yield self._prev_display_text(prev), True if prev else None
-            for i in range(0, Library.PAGE_SIZE):
+            yield self._back_display_text(), None
+            for i in range(0, Library.FILES_PAGE_SIZE):
                 if i >= begin and i < end and offset + i < len(dir.files):
                     yield dir.files[offset + i].display_text(), None
                 else:
                     yield '', None
-            yield self._next_display_text(next), True if next else None
             return
 
         page_num = self.canonical_dir_page(page_num)
-        start = page_num * Library.PAGE_SIZE
+        start = page_num * Library.DIRS_PAGE_SIZE
         yield self._page_display_text(self.dirs[start + begin].parent, page_num + 1, self._dirs_pages), None
-        yield self._prev_display_text(prev), True if prev else None
-        for i in range(0, Library.PAGE_SIZE):
+        for i in range(0, Library.DIRS_PAGE_SIZE):
             index = start + i
             if i >= begin and i < end and index < len(self.dirs):
                 dir = self.dirs[index]
                 yield dir.display_text(self.files_dir_index != index), index if dir.files_count > 0 else None
+            elif (i == 0 or i == Library.DIRS_PAGE_SIZE - 1) and index < len(self.dirs):
+                yield self._directories_display_text(), None
             else:
                 yield '', None
-        yield self._next_display_text(next), True if next else None
 
     def set_files_dir_index(self, index):
         old_count = self.files_count
@@ -321,18 +316,12 @@ def main(stdscr):
             option = atoi(key) - 1
             dir_page = library.canonical_dir_page(page)
             action = dirs[option]
-            if action is True:
-                if option == 1:
-                    page -= 1
-                elif option == 8:
-                    page += 1
+            # align display to top of file list
+            new_page = library.set_files_dir_index(action)
+            if new_page is not None:
+                page = new_page
             else:
-                # align display to top of file list
-                new_page = library.set_files_dir_index(action)
-                if new_page is not None:
-                    page = new_page
-                else:
-                    page = dir_page
+                page = dir_page
 
 if __name__ == '__main__':
     curses.wrapper(main)
