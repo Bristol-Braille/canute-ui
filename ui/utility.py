@@ -1,12 +1,11 @@
-'''
+"""
 Utility
 =======
 
 contains various utility methods used by many of the modules
-'''
+"""
 
 import os
-import re
 import logging
 from collections import OrderedDict
 from frozendict import frozendict, FrozenOrderedDict
@@ -15,11 +14,11 @@ log = logging.getLogger(__name__)
 
 
 def find_ui_update(config):
-    '''
+    """
     recursively look for firmware in the usb_dir,
     firmware file is called canute-ui.tar.gz
     returns first one found
-    '''
+    """
     usb_dir = config.get('files', 'usb_dir')
     ui_file = 'canute-ui.tar.gz'
 
@@ -27,10 +26,11 @@ def find_ui_update(config):
     for root, dirnames, filenames in os.walk(usb_dir):
         for filename in filenames:
             if filename == ui_file:
-                return(os.path.join(root, filename))
+                return (os.path.join(root, filename))
 
-def flatten(l):
-    return [item for sublist in l for item in sublist]
+
+def flatten(list):
+    return [item for sublist in list for item in sublist]
 
 
 def pad_line(w, line):

@@ -27,13 +27,13 @@ LINE_PUBLISHING_PORT = '5556'
 
 
 class Pi(Driver):
-    '''driver class for use with the Raspberry Pi
+    """driver class for use with the Raspberry Pi
 
     connects to the display via serial and knows how to send and receive data
     to it
 
     :param port: the serial port the display is plugged into
-    '''
+    """
 
     def __init__(self, port=None, timeout=60):
         self.timeout = timeout
@@ -58,12 +58,12 @@ class Pi(Driver):
         super(Pi, self).__init__()
 
     def setup_serial(self, port):
-        '''sets up the serial port with a timeout and flushes it.
+        """sets up the serial port with a timeout and flushes it.
         Timeout is set to 60s, as this is well beyond a full page refresh of
         the hardware
 
         :param port: the serial port the display is plugged into
-        '''
+        """
         try:
             serial_port = serial.Serial()
             serial_port.port = port
@@ -78,8 +78,8 @@ class Pi(Driver):
             exit(1)
 
     def is_ok(self):
-        '''checks the serial connection. There doesn't seem to be a specific
-        method in pyserial so we're using getCD()'''
+        """checks the serial connection. There doesn't seem to be a specific
+        method in pyserial so we're using getCD()"""
         try:
             self.port.getCD()
             return True
@@ -91,10 +91,10 @@ class Pi(Driver):
             return False
 
     def get_buttons(self):
-        '''get button states
+        """get button states
 
         :rtype: dict of elements either set to 'down' or 'up'
-        '''
+        """
         mapping = {
             '0': 'R',
             '1': '1',
@@ -129,21 +129,21 @@ class Pi(Driver):
         return buttons
 
     def send_error_sound(self):
-        '''make the hardware make an error sound'''
+        """make the hardware make an error sound"""
         log.debug('error sound')
         self.send_data(comms.CMD_SEND_ERROR)
 
     def send_ok_sound(self):
-        '''make the hardware make an ok sound'''
+        """make the hardware make an ok sound"""
         log.debug('ok sound')
         self.send_data(comms.CMD_SEND_OK)
 
     def send_data(self, cmd, data=[]):
-        '''send data to the hardware
+        """send data to the hardware
 
         :param cmd: command byte
         :param data: list of bytes
-        '''
+        """
         payload = struct.pack('%sb' % (len(data) + 1), cmd, *data)
         if self.port:
             if cmd == comms.CMD_SEND_LINE:
@@ -162,16 +162,17 @@ class Pi(Driver):
             self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
         brl = ''.join([braille.pin_num_to_unicode(ch) for ch in content])
         brf = ''.join(braille.pin_nums_to_alphas(content))
-        self.socket.send_pyobj({'line_number': row, 'visual': brf, 'braille': brl})
+        self.socket.send_pyobj(
+            {'line_number': row, 'visual': brf, 'braille': brl})
 
     async def async_get_data(self, expected_cmd):
-        '''gets 2 bytes of data from the hardware
+        """gets 2 bytes of data from the hardware
 
         :param expected_cmd: what command we're expecting (error raised
         otherwise)
 
         :rtype: an integer return value
-        '''
+        """
         # 4s is roughly the max amount of time it takes to render a line.
         # The MCUs will reply instantly to a single SEND_LINE but when a second
         # is sent immediately after the first it'll be blocked (unacknowledged)
@@ -187,13 +188,13 @@ class Pi(Driver):
         return self.get_data(expected_cmd)
 
     def get_data(self, expected_cmd):
-        '''gets 2 bytes of data from the hardware
+        """gets 2 bytes of data from the hardware
 
         :param expected_cmd: what command we're expecting (error raised
         otherwise)
 
         :rtype: an integer return value
-        '''
+        """
         try:
             self.HDLC.readFrame(4)
         except ValueError as e:
@@ -233,7 +234,7 @@ class Pi(Driver):
             raise
 
     def _save_actuations(self):
-        '''Update EEPROM with actuations from the last period'''
+        """Update EEPROM with actuations from the last period"""
         # We loaded actuations from EEPROM so we can simply write.
         start_address = struct.pack('>H', DUTY_RECORD_ADDR)
 
@@ -247,7 +248,7 @@ class Pi(Driver):
         log.debug('Duty cycles written back to EEPROM')
 
     def _read_actuations(self):
-        '''Extract past actuations from EEPROM'''
+        """Extract past actuations from EEPROM"""
         start_address = struct.pack('>H', DUTY_RECORD_ADDR)
 
         write = smbus2.i2c_msg.write(0x50, start_address)
@@ -266,12 +267,12 @@ class Pi(Driver):
                 self.row_actuations[i] += saved_actuations
 
     def _log_row_actuation(self, row):
-        '''Increment cached actuation count for :row:.
-           Cache will be periodically written to EEPROM in background.'''
+        """Increment cached actuation count for :row:.
+           Cache will be periodically written to EEPROM in background."""
         self.row_actuations[row] += 1
 
     def __exit__(self, ex_type, ex_value, traceback):
-        '''__exit__ method allows us to shut down the port properly'''
+        """__exit__ method allows us to shut down the port properly"""
         if ex_type is not None:
             log.error('%s : %s' % (ex_type.__name__, ex_value))
         if self.port:
@@ -283,7 +284,7 @@ class Pi(Driver):
             self.button_thread.join()
 
     def __enter__(self):
-        '''method required for using the `with` statement'''
+        """method required for using the `with` statement"""
         return self
 
 

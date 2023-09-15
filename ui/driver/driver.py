@@ -11,8 +11,8 @@ class DriverError(Exception):
 
 
 class Driver(object, metaclass=abc.ABCMeta):
-    '''Abstract base class of the braille device's capabilities.
-    '''
+    """Abstract base class of the braille device's capabilities.
+    """
 
     def __init__(self):
         self.status = 0
@@ -23,19 +23,19 @@ class Driver(object, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def is_ok(self):
-        '''checks the display is online
+        """checks the display is online
         :rtype: True or False
-        '''
+        """
         return
 
     @abc.abstractmethod
     def send_error_sound(self):
-        '''make the hardware make an error sound'''
+        """make the hardware make an error sound"""
         return
 
     @abc.abstractmethod
     def send_ok_sound(self):
-        '''make the hardware make an ok sound'''
+        """make the hardware make an ok sound"""
         return
 
     @abc.abstractmethod
@@ -68,12 +68,12 @@ class Driver(object, metaclass=abc.ABCMeta):
         return True
 
     def get_dimensions(self):
-        '''
+        """
         returns dimensions of the display
 
         :rtype: a tuple containing 2 integers: number of cells and number of
         rows
-        '''
+        """
         self.send_data(comms.CMD_GET_CHARS)
         chars = self.get_data(comms.CMD_GET_CHARS)
         self.send_data(comms.CMD_GET_ROWS)
@@ -81,11 +81,11 @@ class Driver(object, metaclass=abc.ABCMeta):
         return (chars, rows)
 
     def get_page_length(self):
-        '''
+        """
         returns length of data required to fill a full page
 
         :rtype: an integer
-        '''
+        """
         return self.page_length
 
     def clear_page(self):
@@ -94,17 +94,17 @@ class Driver(object, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_buttons(self):
-        '''
+        """
         returns an object of the button states
 
         :rtype: object of the buttons  {id: state} where state is
         set to 'single', 'long' or 'double' (or the id is not present if
         unpressed)
-        '''
+        """
         return
 
     def set_braille(self, data):
-        '''send braille data to the display
+        """send braille data to the display
         each cell is represented by a number from 0 to 63:
 
         .. code-block:: none
@@ -138,7 +138,7 @@ class Driver(object, metaclass=abc.ABCMeta):
         :param data: a list of cells. The length of data will be cells * rows
         as returned by :func:`get_dimensions`
 
-        '''
+        """
 
         log.debug('setting page of braille:')
 

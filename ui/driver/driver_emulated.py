@@ -12,12 +12,7 @@ log = logging.getLogger(__name__)
 
 
 class Emulated(Driver):
-
-    # hardware defs
-    CHARS = 40
-    ROWS = 9
-
-    '''driver class that emulates the machine with a GUI
+    """driver class that emulates the machine with a GUI
 
     we fake the :func:`send_data` and :func:`get_data` functions
 
@@ -25,7 +20,11 @@ class Emulated(Driver):
     look and provide buttons.
 
     message passing is done with queues
-    '''
+    """
+
+    # hardware defs
+    CHARS = 40
+    ROWS = 9
 
     prev_data = [(0,) * 40] * 9
 
@@ -51,8 +50,8 @@ class Emulated(Driver):
         log.info('started qt_display.py with process id %d' % self.process.pid)
 
     def is_ok(self):
-        '''The UI needs to know when to quit, so the GUI can tell it using this
-        method'''
+        """The UI needs to know when to quit, so the GUI can tell it using this
+        method"""
         return self.process.is_alive()
 
     def send_error_sound(self):
@@ -62,7 +61,7 @@ class Emulated(Driver):
         log.info('ok sound!')
 
     def __exit__(self, ex_type, ex_value, traceback):
-        '''__exit__ method allows us to shut down the threads properly'''
+        """__exit__ method allows us to shut down the threads properly"""
         if ex_type is not None:
             log.error('%s : %s' % (ex_type.__name__, ex_value))
         if self.process.is_alive() is None:
@@ -71,15 +70,16 @@ class Emulated(Driver):
         log.info('done')
 
     def __enter__(self):
-        '''method required for using the `with` statement'''
+        """method required for using the `with` statement"""
         return self
 
     def get_buttons(self):
-        '''Return the current button state and reset to all unpressed
+        """
+        Return the current button state and reset to all unpressed
 
         :rtype: list of 8 elements either set to False (unpressed) or one of
         single, double, long
-        '''
+        """
         try:
             msg = self.receive_queue.get(timeout=0.01)
             log.debug('got button msg %s' % msg)
@@ -93,13 +93,14 @@ class Emulated(Driver):
         return ret
 
     def send_data(self, cmd, data=[]):
-        '''send data to the hardware. We fake the return data by making a note
+        """
+        send data to the hardware. We fake the return data by making a note
         of the command the only thing we really do is if the command is to send
         data. Then we pass on to the display emulator
 
         :param cmd: command byte
         :param data: list of bytes
-        '''
+        """
         if cmd == comms.CMD_GET_CHARS:
             self.data = Emulated.CHARS
         elif cmd == comms.CMD_GET_ROWS:
@@ -119,23 +120,23 @@ class Emulated(Driver):
             self.data = 0
 
     def get_data(self, expected_cmd):
-        '''gets 2 bytes of data from the hardware - we're faking this so the
+        """gets 2 bytes of data from the hardware - we're faking this so the
         driver doesn't complain
 
         :param expected_cmd: what command we're expecting (error raised
         otherwise)
         :rtype: an integer return value
-        '''
+        """
         return self.data
 
     async def async_get_data(self, expected_cmd):
-        '''gets 2 bytes of data from the hardware - we're faking this so the
+        """gets 2 bytes of data from the hardware - we're faking this so the
         driver doesn't complain
 
         :param expected_cmd: what command we're expecting (error raised
         otherwise)
         :rtype: an integer return value
-        '''
+        """
         await asyncio.sleep(self.delay / 1000.0)
         return self.data
 

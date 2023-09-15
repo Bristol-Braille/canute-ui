@@ -30,15 +30,15 @@ def start(to_display_queue, from_display_queue, display_text):
 
 
 def get_all(t, cls):
-    return [y for x, y in list(cls.__dict__.items()) if type(y) == t]
+    return [y for x, y in list(cls.__dict__.items()) if type(y) is t]
 
 
 class Display(QtWidgets.QMainWindow, Ui_MainWindow):
-    '''shows an emulation of the braille machine'''
+    """shows an emulation of the braille machine"""
 
     def __init__(self, to_display_queue,
                  from_display_queue, display_text=False):
-        '''create the display object'''
+        """create the display object"""
         self.display_text = display_text
 
         super(Display, self).__init__()
@@ -92,16 +92,16 @@ class Display(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sendKeys(e, 'up')
 
     def send_button_msg(self, button_id, button_type):
-        '''send the button number to the parent via the queue'''
+        """send the button number to the parent via the queue"""
         log.debug('sending %s button = %s' % (button_type, button_id))
         self.send_queue.put_nowait({'id': button_id, 'type': button_type})
 
     def print_braille(self, data):
-        '''print braille to the display
+        """print braille to the display
 
         :param data: a list of characters to display.  Assumed to be the right
         length and filled with numbers from 1 to 64
-        '''
+        """
         log.debug('printing data: %s' % data)
 
         for row in range(ROWS):
@@ -117,9 +117,9 @@ class Display(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_rows[row].setText(label_text)
 
     def check_msg(self):
-        '''check for a message in the queue, if so display it as braille using
+        """check for a message in the queue, if so display it as braille using
         :func:`print_braille`
-        '''
+        """
         try:
             msg = self.receive_queue.get_nowait()
             if msg is not None:

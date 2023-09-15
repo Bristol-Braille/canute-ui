@@ -27,37 +27,37 @@ class TestDriverPi(unittest.TestCase):
         FRAME_BOUNDARY = 0x7E
 
         self.assertEqual(self.get_message(5), bytes([
-          FRAME_BOUNDARY,
-          comms.CMD_GET_CHARS,
-          0x78, 0xF0,  # CRC LSB, MSB
-          FRAME_BOUNDARY
+            FRAME_BOUNDARY,
+            comms.CMD_GET_CHARS,
+            0x78, 0xF0,  # CRC LSB, MSB
+            FRAME_BOUNDARY
         ]))
 
         # send chars (can pretend to be any size we like)
         # [data bytearray], cmd
         self.send_message(bytes([
-          FRAME_BOUNDARY,
-          comms.CMD_GET_CHARS,
-          24, 0,       # num cols LSB, MSB
-          0x9D, 0x9D,  # CRC LSB, MSB
-          FRAME_BOUNDARY
+            FRAME_BOUNDARY,
+            comms.CMD_GET_CHARS,
+            24, 0,       # num cols LSB, MSB
+            0x9D, 0x9D,  # CRC LSB, MSB
+            FRAME_BOUNDARY
         ]))
 
         # receive the get rows message
         self.assertEqual(self.get_message(5), bytes([
-          FRAME_BOUNDARY,
-          comms.CMD_GET_ROWS,
-          0xF1, 0xE1,  # CRC LSB, MSB
-          FRAME_BOUNDARY
+            FRAME_BOUNDARY,
+            comms.CMD_GET_ROWS,
+            0xF1, 0xE1,  # CRC LSB, MSB
+            FRAME_BOUNDARY
         ]))
 
         # send rows
         self.send_message(bytes([
-          FRAME_BOUNDARY,
-          comms.CMD_GET_ROWS,
-          4, 0,        # num rows LSB, MSB
-          0x70, 0xFB,  # CRC LSB, MSB
-          FRAME_BOUNDARY
+            FRAME_BOUNDARY,
+            comms.CMD_GET_ROWS,
+            4, 0,        # num rows LSB, MSB
+            0x70, 0xFB,  # CRC LSB, MSB
+            FRAME_BOUNDARY
         ]))
 
     @classmethod

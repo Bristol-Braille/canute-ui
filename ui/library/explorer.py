@@ -2,19 +2,22 @@ import os
 import re
 import math
 
+
 def atoi(text):
     return int(text) if text.isdigit() else text.lower()
 
+
 def natural_keys(text):
-    '''
+    """
     alist.sort(key=natural_keys) sorts in human order
     http://nedbatchelder.com/blog/200712/human_sorting.html
     (See Toothy's implementation in the comments)
-    '''
-    return [ atoi(c) for c in re.split(r'(\d+)', text) ]
+    """
+    return [atoi(c) for c in re.split(r'(\d+)', text)]
+
 
 class Directory:
-    def __init__(self, name, parent = None):
+    def __init__(self, name, parent=None):
         self.parent = parent
         self.name = name
         self.files = []
@@ -48,10 +51,10 @@ class File:
 
 
 class Library:
-    '''
+    """
     Makes the assumption that the filesystem _won't_ change
     while being viewed (this is reasonable on a Canute)
-    '''
+    """
     DIRS_PAGE_SIZE = 8
     FILES_PAGE_SIZE = 7
 
@@ -63,7 +66,7 @@ class Library:
         for source_dir, name in source_dirs:
             # if os.path.ismount(os.path.join(self.media_dir, source_dir)):
             # not needed as unmounted devices will be empty and so pruned
-            root = Directory(source_dir) # name
+            root = Directory(source_dir)  # name
             self.walk(root)
             self.prune(root)
             self.flatten(root)
@@ -73,10 +76,10 @@ class Library:
         self.files_count = 0
 
     def walk(self, root):
-        '''
+        """
         Walk the file system looking for brfs and pefs, avoid hidden files and
         OS recycling directories
-        '''
+        """
         dirs = []
         files = []
         for entry in os.scandir(os.path.join(self.media_dir, root.relpath)):
@@ -99,16 +102,16 @@ class Library:
         root.files = [File(f, root) for f in files]
 
     def prune(self, root):
-        '''
+        """
         Remove any folders with 0 files in (depth first)
-        '''
+        """
         root.dirs[:] = [dir for dir in root.dirs if not self.prune(dir)]
         return len(root.dirs) == 0 and root.files_count == 0
 
     def flatten(self, root):
-        '''
+        """
         Populate the self.dirs list (breadth first)
-        '''
+        """
         self.dirs.append(root)
         for dir in root.dirs:
             self.flatten(dir)
@@ -119,5 +122,6 @@ class Library:
         books = []
         for dir in self.dirs:
             for file in dir.files:
-                books.append(os.path.join(self.media_dir, dir.relpath, file.name))
+                books.append(os.path.join(
+                    self.media_dir, dir.relpath, file.name))
         return books

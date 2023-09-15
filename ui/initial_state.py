@@ -72,6 +72,7 @@ def to_state_file(book_path):
     dirname = os.path.dirname(book_path)
     return os.path.join(dirname, 'canute.' + basename + '.txt')
 
+
 def configured_source_dirs():
     config = config_loader.load()
     state_sources = [('sd_card_dir', 'SD')]
@@ -81,15 +82,18 @@ def configured_source_dirs():
         state_sources.append(('additional_lib_2', 'USB2'))
     return [(config.get('files', source), name) for source, name in state_sources]
 
+
 def mounted_source_paths(media_dir):
     for source_dir, name in configured_source_dirs():
         source_path = os.path.join(media_dir, source_dir)
         if os.path.ismount(source_path):
             yield source_path
 
+
 def swap_library(media_dir, current_book):
     config = config_loader.load()
-    if config.has_option('files', 'additional_lib_1') and config.has_option('files', 'additional_lib_2'):
+    if config.has_option('files', 'additional_lib_1') and \
+            config.has_option('files', 'additional_lib_2'):
         lib1 = os.path.join(media_dir, config.get('files', 'additional_lib_1'))
         lib2 = os.path.join(media_dir, config.get('files', 'additional_lib_2'))
         if current_book.startswith(lib1):
@@ -98,12 +102,13 @@ def swap_library(media_dir, current_book):
             return lib1 + current_book[len(lib2):]
     return current_book
 
+
 async def read_user_state(media_dir):
     global prev
     global manual
     current_book = manual_filename
     current_language = None
-    
+
     library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
     book_files = library.book_files()
 
@@ -121,7 +126,8 @@ async def read_user_state(media_dir):
                     current_language = main_state['current_language']
                 break
             except Exception:
-                log.warning('user state loading failed for {}, ignoring'.format(main_toml))
+                log.warning(
+                    'user state loading failed for {}, ignoring'.format(main_toml))
 
     if not current_language or current_language == OLD_DEFAULT_LOCALE:
         current_language = DEFAULT_LOCALE.code
@@ -139,7 +145,8 @@ async def read_user_state(media_dir):
                 manual = manual._replace(bookmarks=tuple(sorted(manual.bookmarks + tuple(
                     bm - 1 for bm in t['bookmarks']))))
         except Exception:
-            log.warning('manual state loading failed for {}, ignoring'.format(manual_toml))
+            log.warning(
+                'manual state loading failed for {}, ignoring'.format(manual_toml))
 
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
@@ -154,7 +161,8 @@ async def read_user_state(media_dir):
                     book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
                         bm - 1 for bm in t['bookmarks']))))
             except Exception:
-                log.warning('book state loading failed for {}, ignoring'.format(toml_file))
+                log.warning(
+                    'book state loading failed for {}, ignoring'.format(toml_file))
 
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
@@ -196,7 +204,7 @@ async def write(store, media_dir, sem, writes_in_flight):
             path = os.path.join(source_path, USER_STATE_FILE)
             async with aiofiles.open(path, 'w') as f:
                 await f.write(s)
-            
+
     for filename in books:
         book = books[filename]
         if filename in prev['books']:

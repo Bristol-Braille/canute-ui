@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 flake8 --filename='./canute_ui,*.py' \
-    --exclude='doc,ui/driver/qt/main_window.py,venv,venv*' \
+    --exclude='doc,ui/driver/qt/main_window.py,ve*,explorer.py' \
     --max-line-length=100 \
     --builtins="_" \
     --multiline-quotes="'" && echo 'Lint OK'

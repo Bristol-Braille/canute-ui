@@ -52,7 +52,8 @@ class Display():
             status = await driver.async_set_braille_row(row, braille)
             if status != 0:
                 if failure_status == 0:
-                    log.warning('line send failed with status %d, retrying' % status)
+                    log.warning(
+                        'line send failed with status %d, retrying' % status)
                 failure_status = status
                 # FIXME: Horrible to have an unnamed constant here.
                 # This is REPLY_WARM_RESET, but, should display really
@@ -61,7 +62,8 @@ class Display():
                 # corresponding driver failure codes?
                 if not warm_reset and status == 0xDD:
                     warm_reset = True
-                    log.warning('line refused because motors busy doing warm reset')
+                    log.warning(
+                        'line refused because motors busy doing warm reset')
             else:
                 if warm_reset:
                     # If we waited out a warm reset, invalidate display

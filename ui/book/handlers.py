@@ -22,10 +22,10 @@ NS = {'pef': 'http://www.daisy.org/ns/2008/pef'}
 
 
 async def _read_pages2(book, background=False):
-    '''Index `book`.
+    """Index `book`.
     If `background` is True, yield during long operations.
     If `book` is already loaded, does nothing.
-    Upon return `book` will be in state DONE or FAILED.'''
+    Upon return `book` will be in state DONE or FAILED."""
     if book.filename == manual_filename:
         return book
     if book.load_state == book_file.LoadState.DONE:
@@ -64,7 +64,8 @@ async def _read_pages2(book, background=False):
                              num_pages=indexer.get_page_count(book.filename),
                              indexed=True)
     except Exception:
-        log.warning(f"book loading 2 failed for {book.filename}", exc_info=True)
+        log.warning(
+            f'book loading 2 failed for {book.filename}', exc_info=True)
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
@@ -140,7 +141,7 @@ async def _read_pages(book, background=False):
                              bookmarks=bookmarks,
                              indexed=False)
     except Exception:
-        log.warning(f"book loading failed for {book.filename}", exc_info=True)
+        log.warning(f'book loading failed for {book.filename}', exc_info=True)
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
@@ -176,7 +177,7 @@ async def get_page_data(book, store, page_number=None):
                     lines.append(braille.from_ascii(line))
             else:
                 # FIXME: is it OK to assert?  Must state extensions and check call sites.
-                assert(book.ext == '.pef')
+                assert book.ext == '.pef'
                 # Expand self-closing tags.
                 page = re.sub(r'<row */>', r'<row></row>', page)
                 # Get contents of all rows.
@@ -201,14 +202,16 @@ async def _load(book, store, background=False):
 # changes, and since loading a book may take a while, be aware there may
 # be multiple instances running concurrently (but not in parallel).
 async def load_books(store, ev):
-    '''Index all books discovered on media.
+    """Index all books discovered on media.
     The current book is loaded first, without yielding.
     Books visible on the current page of the library menu then get loaded
     asynchronously.  Finally all other books get loaded asynchronously.
     Upon completion all books will be in state DONE or state FAILED.
     `sem` is an async.Semaphore for limiting concurrency.  If it can't be
     acquired, the function returns.
-    '''
+    """
+    log.info('loading books')
+
     try:
         state = store.state['app']
 
@@ -226,7 +229,8 @@ async def load_books(store, ev):
             ev.clear()
             state = store.state['app']
             books = state_helpers.get_books_for_lib_page(state)
-            to_load = [b for b in books if b.load_state == book_file.LoadState.INITIAL]
+            to_load = [b for b in books if b.load_state ==
+                       book_file.LoadState.INITIAL]
             if not to_load:
                 break
             await _load(to_load[0], store, background=background)
@@ -242,7 +246,8 @@ async def load_books(store, ev):
             ev.clear()
             state = store.state['app']
             books = state_helpers.get_books(state)
-            to_load = [b for b in books if b.load_state == book_file.LoadState.INITIAL]
+            to_load = [b for b in books if b.load_state ==
+                       book_file.LoadState.INITIAL]
             if not to_load:
                 break
             await _load(to_load[0], store, background=background)
