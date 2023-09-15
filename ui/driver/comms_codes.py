@@ -1,6 +1,6 @@
-'''
+"""
 define the command codes used in communicating with the hardware
-'''
+"""
 CMD_GET_CHARS = 0x00
 CMD_GET_ROWS = 0x01
 CMD_SEND_PAGE = 0x02

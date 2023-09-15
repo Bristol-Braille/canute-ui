@@ -22,7 +22,7 @@ class BookReducers():
         book = book._replace(bookmarks=bookmarks)
         books[book_n] = book
         return state.set('user', state['user'].set('books', FrozenOrderedDict(books)),
-                          location='book', home_menu_visible=False)
+                         location='book', home_menu_visible=False)
 
     def enter_go_to_page(self, state, value):
         new_state = state.set('home_menu_visible', False)

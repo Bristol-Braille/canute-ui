@@ -26,7 +26,7 @@ class AppReducers():
         return state.set('user', value)
 
     def trigger(self, state, value):
-        '''bit ugly but gives the ability to trigger any state subscribers'''
+        """bit ugly but gives the ability to trigger any state subscribers"""
         return frozendict(deepcopy(dict(state)))
 
     def set_dimensions(self, state, value):
@@ -61,10 +61,12 @@ class AppReducers():
             changed_books[filename] = book
         bookmarks_menu = state['bookmarks_menu']
         new_state = state.set('location', 'book')
-        new_state = new_state.set('bookmarks_menu', bookmarks_menu.set('page', 0))
+        new_state = new_state.set(
+            'bookmarks_menu', bookmarks_menu.set('page', 0))
         new_state = new_state.set('home_menu_visible', False)
         new_state = new_state.set('go_to_page_selection', '')
-        new_state = new_state.set('help_menu', frozendict({'visible': False, 'page': 0}))
+        new_state = new_state.set(
+            'help_menu', frozendict({'visible': False, 'page': 0}))
         return new_state.set('user', state['user'].set('books', FrozenOrderedDict(changed_books)))
 
     def go_to_page(self, state, page):
@@ -100,7 +102,8 @@ class AppReducers():
             bookmarks_data = book.bookmarks
             # Account for title line.
             effective_height = height - 1
-            num_pages = (len(bookmarks_data) + (effective_height-1)) // effective_height
+            num_pages = (len(bookmarks_data) +
+                         (effective_height-1)) // effective_height
             if page >= num_pages - 1:
                 page = num_pages - 1
             bookmarks_menu = state['bookmarks_menu'].set('page', page)
@@ -195,7 +198,7 @@ class HardwareReducers():
 
 
 def make_action_method(name):
-    '''Returns a method that returns a dict to be passed to dispatch'''
+    """Returns a method that returns a dict to be passed to dispatch"""
     def action_method(value=None):
         return {'type': name, 'value': value}
     return action_method
@@ -211,7 +214,7 @@ action_types.extend(utility.get_methods(BookmarksReducers))
 
 
 def actions():
-    '''just an empty object'''
+    """just an empty object"""
     pass
 
 

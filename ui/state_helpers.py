@@ -1,9 +1,9 @@
-'''
+"""
 State helpers
 =======
 
 contains various utility methods for getting information on the state
-'''
+"""
 from .book.book_file import LoadState
 
 

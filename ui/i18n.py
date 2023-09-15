@@ -15,6 +15,7 @@ def install(locale_code):
         log.warning(e)
         translations = gettext.NullTranslations()
     translations.install()
+    return translations
 
 
 # Before having installed _() we need extractors to see language titles.
@@ -47,7 +48,9 @@ del _
 
 DEFAULT_LOCALE = ueb2
 
-install(DEFAULT_LOCALE.code)
+translations = install(DEFAULT_LOCALE.code)
+# this will've already been installed globally, but this keeps flake8 happy
+_ = translations.gettext
 
 # Rely on dedup.
 BUILTIN_LANGUAGES = OrderedDict([

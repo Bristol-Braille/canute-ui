@@ -12,7 +12,7 @@ def create():
 
 
 def brailleify(rel):
-    '''Turn 1.3.45 or AKPR54633-1PHI into UEB'''
+    """Turn 1.3.45 or AKPR54633-1PHI into UEB"""
     # FIXME: if we do this at all it should be in braille.py, and we
     # probably shouldn't be trying to do liblouis-level translation at
     # all.

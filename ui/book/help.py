@@ -5,7 +5,7 @@ def _render(width, height, text):
     # text must already be i18n-ed to Unicode.
     data = []
 
-    lines = tuple(from_unicode(l) for l in text.split('\n'))
+    lines = tuple(from_unicode(line) for line in text.split('\n'))
 
     for line in lines:
         data.append(line)

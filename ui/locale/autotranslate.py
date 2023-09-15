@@ -40,8 +40,10 @@ variants = [
     # It's assumed that the current system text uses British English
     # spellings and idioms; perhaps, again, there's not enough material
     # that anyone would notice.
-    Variant('British English, UEB grade 1', 'en-ueb-g1.ctb', 'en_GB.UTF-8@ueb1'),
-    Variant('British English, UEB grade 2', 'en-ueb-g2.ctb', 'en_GB.UTF-8@ueb2'),
+    Variant('British English, UEB grade 1',
+            'en-ueb-g1.ctb', 'en_GB.UTF-8@ueb1'),
+    Variant('British English, UEB grade 2',
+            'en-ueb-g2.ctb', 'en_GB.UTF-8@ueb2'),
 ]
 
 for variant in variants:
@@ -54,7 +56,8 @@ for variant in variants:
     for src_entry in valid_entries:
         # unicode.dis still uses ASCII spaces.
         if src_entry.msgid.find('  ') != -1:
-            print('Warning: embedded double-space:\n' + str(src_entry.occurrences))
+            print('Warning: embedded double-space:\n' +
+                  str(src_entry.occurrences))
         translation = louis.translateString(
             ['unicode.dis', variant.table],
             src_entry.msgid

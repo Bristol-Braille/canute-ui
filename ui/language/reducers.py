@@ -1,4 +1,4 @@
-from ..manual import Manual, manual_filename
+from ..manual import Manual
 from ..i18n import install
 
 

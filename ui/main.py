@@ -86,8 +86,10 @@ def main():
                 run(driver, config)
         except RuntimeError as err:
             if err.args[0] == 'readFrame timeout':
-                log.info('passthrough serial disconnected, USB B probably in use, exiting')
+                log.info(
+                    'passthrough serial disconnected, USB B probably in use, exiting')
                 sys.exit(2)
+
 
 def run(driver, config):
     loop = asyncio.get_event_loop()
@@ -114,10 +116,11 @@ async def handle_media_changes():
     if 'TRAVIS' in os.environ:
         media_helper = '/bin/cat'
     proc = await asyncio.create_subprocess_exec(
-                    media_helper, stdout=asyncio.subprocess.PIPE)
+        media_helper, stdout=asyncio.subprocess.PIPE)
 
     # avoid leaving zombie processes on exits
     asyncio.create_task(proc.wait())
+
     def stop_helper(*args):
         proc.terminate()
         if len(args) > 0:
@@ -135,6 +138,7 @@ async def handle_media_changes():
             # supervision to restart us, at which point we'll rescan the
             # library.
             sys.exit(0)
+
 
 async def run_async(driver, config, loop):
     # Last-minute hack: to clear as many errors as possible, without
