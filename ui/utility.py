@@ -29,23 +29,6 @@ def find_ui_update(config):
             if filename == ui_file:
                 return(os.path.join(root, filename))
 
-
-def find_files(directory, extensions):
-    '''recursively look for files that end in the extensions tuple (case
-    insensitive)'''
-    matches = []
-    for root, dirnames, filenames in os.walk(directory):
-        for d in dirnames[:]:
-            if d.startswith('.') or d == 'RECYCLE' or d == '$Recycle':
-                dirnames.remove(d)
-        for filename in filenames:
-            for ext in extensions:
-                if re.search(r'\.' + ext + '$', filename, re.I):
-                    matches.append(os.path.join(root, filename))
-                    break
-    return matches
-
-
 def flatten(l):
     return [item for sublist in l for item in sublist]
 

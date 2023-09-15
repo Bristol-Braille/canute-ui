@@ -9,6 +9,7 @@ from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
+from .library.explorer import Library
 from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
 
 from . import config_loader
@@ -71,16 +72,17 @@ def to_state_file(book_path):
     dirname = os.path.dirname(book_path)
     return os.path.join(dirname, 'canute.' + basename + '.txt')
 
-def mounted_source_paths(media_dir):
+def configured_source_dirs():
     config = config_loader.load()
-    state_sources = ['sd_card_dir']
+    state_sources = [('sd_card_dir', 'SD')]
     if config.has_option('files', 'additional_lib_1'):
-        state_sources.append('additional_lib_1')
+        state_sources.append(('additional_lib_1', 'USB1'))
     if config.has_option('files', 'additional_lib_2'):
-        state_sources.append('additional_lib_2')
+        state_sources.append(('additional_lib_2', 'USB2'))
+    return [(config.get('files', source), name) for source, name in state_sources]
 
-    for source in state_sources:
-        source_dir = config.get('files', source)
+def mounted_source_paths(media_dir):
+    for source_dir, name in configured_source_dirs():
         source_path = os.path.join(media_dir, source_dir)
         if os.path.ismount(source_path):
             yield source_path
@@ -101,7 +103,10 @@ async def read_user_state(media_dir):
     global manual
     current_book = manual_filename
     current_language = None
-    book_files = utility.find_files(media_dir, ('brf', 'pef'))
+    
+    library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
+    book_files = library.book_files()
+
     source_paths = mounted_source_paths(media_dir)
     for source_path in source_paths:
         main_toml = os.path.join(source_path, USER_STATE_FILE)
@@ -155,7 +160,7 @@ async def read_user_state(media_dir):
     books[cleaning_filename] = CleaningAndTesting.create()
 
     if current_book not in books:
-        # let's just check that's not simply that they're using a differnt USB port
+        # let's check that they're not just using a different USB port
         log.info('current book not in original library {}'.format(current_book))
         current_book = swap_library(media_dir, current_book)
         if current_book not in books:
