@@ -43,6 +43,10 @@ class BookFile(BookData):
         else:
             return len(self.pages)
 
+    @property
+    def page_num_width(self):
+        return len(str(self.get_num_pages()))
+
     def set_page(self, page):
         if page < 0:
             page = 0
