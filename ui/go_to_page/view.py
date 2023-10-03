@@ -25,10 +25,10 @@ by pressing the large back button on the front surface.\
 
 
 def render(width, height, state):
-    if state['help_menu']['visible']:
+    if state.app.help_menu.visible:
         all_lines = render_help(width, height)
         num_pages = len(all_lines) // height
-        page_num = min(state['help_menu']['page'], num_pages - 1)
+        page_num = min(state.app.help_menu.page, num_pages - 1)
         first_line = page_num * height
         off_end = first_line + height
         page = all_lines[first_line:off_end]
@@ -37,7 +37,7 @@ def render(width, height, state):
     data = [from_unicode(_('enter page number using the side buttons'))]
 
     try:
-        book = state['user']['books'][state['user']['current_book']]
+        book = state.app.user.book
     except IndexError:
         book = None
 
@@ -53,7 +53,7 @@ def render(width, height, state):
     data.append(format_title(
         title_text, width, page, total_pages))
 
-    selection = state['go_to_page']['selection']
+    selection = state.app.go_to_page_menu.selection
     if selection == '':
         selection = -1
     else:

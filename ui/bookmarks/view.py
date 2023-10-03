@@ -3,19 +3,19 @@ from ..book.handlers import get_page_data
 from .help import render_help
 
 
-async def render(width, height, state, store):
-    help_menu = state['help_menu']['visible']
+async def render(width, height, state):
+    help_menu = state.app.help_menu.visible
     if help_menu:
         all_lines = render_help(width, height)
         num_pages = len(all_lines) // height
-        page_num = min(state['help_menu']['page'], num_pages - 1)
+        page_num = min(state.app.help_menu.page, num_pages - 1)
         first_line = page_num * height
         off_end = first_line + height
         page = all_lines[first_line:off_end]
         return page
 
-    book = state['user']['books'][state['user']['current_book']]
-    page = state['bookmarks_menu']['page']
+    book = state.app.user.book
+    page = state.app.bookmarks_menu.page
 
     line_n = page * (height - 1)
     bookmarks = book.bookmarks[line_n:line_n + (height - 1)]
@@ -38,7 +38,7 @@ async def render(width, height, state, store):
         elif bm == 'deleted':
             data.append(tuple())
         else:
-            lines = await get_page_data(book, store, page_number=bm)
+            lines = await get_page_data(book, state, page_number=bm)
             line = lines[0]
             n = from_ascii(to_ueb_number(bm + 1) + ' ')
             data.append(n + tuple(line))

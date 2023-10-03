@@ -5,7 +5,6 @@ import re
 import os
 import xml.etree.cElementTree as ElementTree
 
-from ..actions import actions
 from ..manual import manual_filename
 from .. import braille
 from .. import state_helpers
@@ -145,14 +144,14 @@ async def _read_pages(book, background=False):
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
-async def get_page_data(book, store, page_number=None):
+async def get_page_data(book, state, page_number=None):
     if page_number is None:
         page_number = book.page_number
 
     while book.load_state != book_file.LoadState.DONE:
         await asyncio.sleep(0)
         # accessing store.state will get a fresh state
-        book = store.state['app']['user']['books'][book.filename]
+        book = state.app.user.books[book.filename]
 
     if not book.indexed:
         if page_number >= book.get_num_pages():
@@ -188,20 +187,20 @@ async def get_page_data(book, store, page_number=None):
             return tuple(lines)
 
 
-async def _load(book, store, background=False):
-    await store.dispatch(actions.set_book_loading(book))
+async def _load(book, state, background=False):
+    state.app.library.set_book_loading(book)
     if background:
         log.info('background loading {}'.format(book.filename))
     else:
         log.info('priority loading {}'.format(book.filename))
     book = await _read_pages2(book, background=background)
-    await store.dispatch(actions.add_or_replace(book))
+    state.app.library.add_or_replace(book)
 
 
 # Since handle_changes() spawns a new instance of this every time state
 # changes, and since loading a book may take a while, be aware there may
 # be multiple instances running concurrently (but not in parallel).
-async def load_books(store, ev):
+async def load_books(state, ev):
     """Index all books discovered on media.
     The current book is loaded first, without yielding.
     Books visible on the current page of the library menu then get loaded
@@ -213,30 +212,22 @@ async def load_books(store, ev):
     log.info('loading books')
 
     try:
-        state = store.state['app']
-
-        current_book = state_helpers.get_current_book(state)
+        current_book = state.app.user.book
 
         if current_book.load_state == book_file.LoadState.INITIAL:
-            await _load(current_book, store)
-            # Reload state in case we yielded.
-            state = store.state['app']
+            await _load(current_book, state)
 
-        background = not state['location'] == 'library'
+        background = not state.app.location == 'library'
 
         while True:
             await ev.wait()
             ev.clear()
-            state = store.state['app']
             books = state_helpers.get_books_for_lib_page(state)
             to_load = [b for b in books if b.load_state ==
                        book_file.LoadState.INITIAL]
             if not to_load:
                 break
-            await _load(to_load[0], store, background=background)
-            # Reload state, in case we yielded and because _load() always updates
-            # state.
-            state = store.state['app']
+            await _load(to_load[0], state, background=background)
             if books_loaded(state, state_helpers.get_books_for_lib_page(state)):
                 log.info('all books on current library page indexed')
                 break
@@ -244,16 +235,12 @@ async def load_books(store, ev):
         while True:
             await ev.wait()
             ev.clear()
-            state = store.state['app']
             books = state_helpers.get_books(state)
             to_load = [b for b in books if b.load_state ==
                        book_file.LoadState.INITIAL]
             if not to_load:
                 break
-            await _load(to_load[0], store, background=background)
-            # Reload state, in case we yielded and because _load() always updates
-            # state.
-            state = store.state['app']
+            await _load(to_load[0], state, background=background)
             if books_loaded(state):
                 log.info('all books indexed')
                 return

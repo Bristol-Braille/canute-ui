@@ -1,35 +1,33 @@
 import asyncio
-from ..actions import actions
+from ..state import state
 from .. import state_helpers
 
 
 def queue_key_press(key):
     async def thunk(dispatch, get_state):
-        state = get_state()['app']
-
-        selection = state['go_to_page']['selection']
-        keys_pressed = state['go_to_page']['keys_pressed']
+        selection = state.app.go_to_page_menu.selection
+        keys_pressed = state.app.go_to_page_menu.keys_pressed
 
         # ignore any initial zero presses or deletes
         if (key == 0 or key == '<') and selection + keys_pressed == '':
             return
 
-        await dispatch(actions.go_to_page_key_press(key))
+        state.app.go_to_page_menu.go_to_page_key_press(key)
 
         num_width = state_helpers.get_page_num_width(state)
         if len(keys_pressed) < num_width:
             await asyncio.sleep(0.5)
 
-        keys_pressed = get_state()['app']['go_to_page']['keys_pressed']
+        keys_pressed = state.app.go_to_page_menu.keys_pressed
         if keys_pressed != '':
-            await dispatch(actions.go_to_page_set_selection())
+            state.app.go_to_page_menu.go_to_page_set_selection()
 
     return thunk
 
 
 go_to_page_buttons = {
     'single': {
-        'L': actions.close_menu(),
+        'L': state.app.close_menu,
         '1': queue_key_press(1),
         '2': queue_key_press(2),
         '3': queue_key_press(3),
@@ -41,11 +39,11 @@ go_to_page_buttons = {
         '9': queue_key_press(9),
         'X': queue_key_press(0),
         '<': queue_key_press('<'),
-        '>': actions.go_to_page_confirm(),
-        'R': actions.toggle_help_menu(),
+        '>': state.app.go_to_page_menu.go_to_page_confirm,
+        'R': state.app.help_menu.toggle,
     },
     'long': {
-        'L': actions.close_menu(),
+        'L': state.app.close_menu,
         '1': queue_key_press(1),
         '2': queue_key_press(2),
         '3': queue_key_press(3),
@@ -57,7 +55,7 @@ go_to_page_buttons = {
         '9': queue_key_press(9),
         'X': queue_key_press(0),
         '<': queue_key_press('<'),
-        '>': actions.go_to_page_confirm(),
-        'R': actions.toggle_help_menu(),
+        '>': state.app.go_to_page_menu.go_to_page_confirm,
+        'R': state.app.help_menu.toggle,
     },
 }

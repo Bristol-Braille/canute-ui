@@ -18,9 +18,9 @@ class Display():
         self.buffer = []
         self.up_to_date = True
 
-    async def render_to_buffer(self, state, store):
-        width, height = state_helpers.dimensions(state)
-        location = state['location']
+    async def render_to_buffer(self, state):
+        width, height = state.app.dimensions
+        location = state.app.location
         page_data = None
         if location == 'library':
             page_data = library_view.render(width, height, state)
@@ -31,9 +31,9 @@ class Display():
         elif location == 'language':
             page_data = language_view.render(width, height, state)
         elif location == 'book':
-            page_data = await book_view.render(width, height, state, store)
+            page_data = await book_view.render(width, height, state)
         elif location == 'bookmarks_menu':
-            page_data = await bookmarks_view.render(width, height, state, store)
+            page_data = await bookmarks_view.render(width, height, state)
         if page_data:
             self._set_buffer(page_data)
 
