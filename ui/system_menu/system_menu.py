@@ -52,8 +52,10 @@ else:
     release = brailleify(_('emulated'))
     serial = release
 
+
 def do_nothing():
     pass
+
 
 def system_menu():
     return OrderedDict([

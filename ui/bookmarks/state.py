@@ -1,14 +1,17 @@
+from .. import state
+
+
 class BookmarksState:
-    def __init__(self, root):
+    def __init__(self, root: 'state.RootState'):
         self.root = root
         self.page = 0
 
     def delete_bookmark(self, state, n):
-        width, height = self.root.dimensions
+        width, height = self.root.app.dimensions
         # adjust for title
         height -= 1
         page = self.page
-        book = self.root.user.book
+        book = self.root.app.user.book
         bookmarks = book.bookmarks
         line = page * height
         # don't delete go-to-start end and go-to-end bookmarks
@@ -21,18 +24,18 @@ class BookmarksState:
         bookmarks = bookmarks[0:line] + tuple(changed_bookmarks) \
             + bookmarks[line + height:len(bookmarks)]
         book = book._replace(bookmarks=bookmarks)
-        self.root.user.books[self.root.user.current_book] = book
+        self.root.app.user.books[self.root.app.user.current_book] = book
 
     def go_to_bookmark(self, n):
-        width, height = self.root.dimensions
+        width, height = self.root.app.dimensions
         # adjust for title
         height -= 1
         page = self.page
-        book = self.root.user.book
+        book = self.root.app.user.book
         bookmarks = book.bookmarks[page * height:(page * height) + height]
         if n >= len(bookmarks):
             return
         bookmark = bookmarks[n]
         if bookmark == 'deleted':
             return
-        set_book_page = self.user.set_book_page(bookmark)
+        self.root.app.user.set_book_page(bookmark)

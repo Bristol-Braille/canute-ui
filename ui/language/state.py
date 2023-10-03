@@ -1,8 +1,10 @@
 from ..i18n import BUILTIN_LANGUAGES, install
 from ..manual import Manual
+from .. import state
+
 
 class LanguageState:
-    def __init__(self, root):
+    def __init__(self, root: 'state.RootState'):
         self.root = root
         self.available = BUILTIN_LANGUAGES
         self.selection = ''
@@ -15,7 +17,7 @@ class LanguageState:
             locale = keys[lang]
             install(locale)
             manual = Manual.create()
-            self.root.user.books.set('manual_filename', manual)
-            self.root.user.current_language = locale
-            self.root.location = 'book'
-            # trigger redraw
+            self.root.app.user.books.set('manual_filename', manual)
+            self.root.app.user.current_language = locale
+            self.root.app.location = 'book'
+            self.root.refresh_display()

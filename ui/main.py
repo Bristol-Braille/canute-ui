@@ -177,6 +177,8 @@ async def run_async(driver, config, loop):
     state.app.load_books('start')
     loader = asyncio.ensure_future(load_books(state, loader_limit))
 
+    state.refresh_display()
+
     try:
         while 1:
             if (await handle_hardware(driver, state, media_dir)):
@@ -223,12 +225,15 @@ def handle_events(config, state):
         if not config_limit.locked():
             writes_in_flight[0] += 1
             asyncio.create_task(initial_state.write(state, media_dir,
-                                                      config_limit, writes_in_flight))
+                                                    config_limit, writes_in_flight))
 
     def on_backup_log():
         asyncio.create_task(change_files(config, state))
 
-    state.refresh_display += lambda: display.render_to_buffer(state)
+    def on_refresh_display():
+        asyncio.create_task(display.render_to_buffer(state))
+
+    state.refresh_display += on_refresh_display
     state.save_state += on_save_state
     state.backup_log += on_backup_log
 

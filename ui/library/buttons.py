@@ -1,9 +1,11 @@
 from ..state import state
 
+
 # create a function to call when the button is pressed
 # (otherwise the function call happens immediately)
 def go_to_book(number):
-    return lambda: state.app.libray.go_to_book(number)
+    return lambda: state.app.library.go_to_book(number)
+
 
 library_buttons = {
     'single': {

@@ -1,12 +1,15 @@
 from ..state import state
 
+
 # create functions to call when the button is pressed
 # (otherwise the function call happens immediately)
 def go_to_bookmark(number):
     return lambda: state.app.bookmarks_menu.go_to_bookmark(number)
 
+
 def delete_bookmark(number):
     return lambda: state.app.bookmarks_menu.delete_bookmark(number)
+
 
 bookmarks_buttons = {
     'single': {
