@@ -8,7 +8,6 @@ from .book.book_file import LoadState
 
 
 def get_page_num_width(state):
-    width, height = state.app.dimensions
     book = state.app.user.book
     max_pages = book.get_num_pages()
     return len(str(max_pages))

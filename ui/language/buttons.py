@@ -1,9 +1,11 @@
 from ..state import state
 
+
 # create a function to call when the button is pressed
 # (otherwise the function call happens immediately)
 def select_language(index):
     return lambda: state.app.languages.select_language(index)
+
 
 language_buttons = {
     'single': {

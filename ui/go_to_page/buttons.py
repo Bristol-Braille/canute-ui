@@ -1,10 +1,10 @@
-import asyncio
+# import asyncio
 from ..state import state
-from .. import state_helpers
+# from .. import state_helpers
 
 
 def queue_key_press(key):
-    async def thunk(dispatch, get_state):
+    def thunk():
         selection = state.app.go_to_page_menu.selection
         keys_pressed = state.app.go_to_page_menu.keys_pressed
 
@@ -14,9 +14,9 @@ def queue_key_press(key):
 
         state.app.go_to_page_menu.go_to_page_key_press(key)
 
-        num_width = state_helpers.get_page_num_width(state)
-        if len(keys_pressed) < num_width:
-            await asyncio.sleep(0.5)
+        # num_width = state_helpers.get_page_num_width(state)
+        # if len(keys_pressed) < num_width:
+        #     await asyncio.sleep(0.5)
 
         keys_pressed = state.app.go_to_page_menu.keys_pressed
         if keys_pressed != '':

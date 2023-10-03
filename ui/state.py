@@ -1,6 +1,5 @@
 from collections import OrderedDict
 
-from .i18n import DEFAULT_LOCALE
 from .book.state import UserState
 from .library.state import LibraryState
 from .go_to_page.state import GoToPageState
@@ -48,7 +47,9 @@ class SystemMenuState:
 
 
 class AppState:
-    def __init__(self, root):
+    def __init__(self, root: 'RootState'):
+        self.root = root
+
         self.location = 'book'
         self.help_menu = HelpState(root)
         self.system_menu = SystemMenuState(root)
@@ -75,29 +76,25 @@ class AppState:
     def location_or_help_menu(self):
         return 'help_menu' if self.help_menu.visible else self.location
 
-    def trigger(self, state, value):
-        """bit ugly but gives the ability to trigger any state subscribers"""
-        return frozendict(deepcopy(dict(state)))
-
     def set_dimensions(self, value):
         self._width = value[0]
         self._height = value[1]
 
     def go_to_library(self):
         self.location = 'library'
-        # trigger redraw
+        self.root.refresh_display()
 
     def go_to_system_menu(self):
         self.location = 'system_menu'
-        # trigger redraw
+        self.root.refresh_display()
 
     def go_to_bookmarks_menu(self):
         self.location = 'bookmarks_menu'
-        # trigger redraw
+        self.root.refresh_display()
 
     def go_to_language_menu(self):
         self.location = 'language'
-        # trigger redraw
+        self.root.refresh_display()
 
     def close_menu(self):
         books = self.user.books
@@ -115,7 +112,7 @@ class AppState:
         self.help_menu.visible = False
         self.help_menu.page = 0
         self.user.books = changed_books
-        # trigger redraw
+        self.root.refresh_display()
 
     def go_to_page(self, page):
         width, height = self.dimensions
@@ -136,7 +133,9 @@ class AppState:
         elif location == 'book':
             book_n = self.user.current_book
             book = self.user.books[book_n]
-            book.set_page(page)
+            book = book.set_page(page)
+            # book files are frozen, so you have to replace
+            self.user.books[book_n] = book
         elif location == 'bookmarks_menu':
             book_n = self.user.current_book
             book = self.user.books[book_n]
@@ -173,8 +172,8 @@ class AppState:
                 num_pages = len(help_getter(width, height)) // height
             if page >= num_pages:
                 page = num_pages - 1
-            self.help_menu.page = page        
-        # trigger redraw
+            self.help_menu.page = page
+        self.root.refresh_display()
 
     def skip_pages(self, value):
         location = self.location_or_help_menu
@@ -182,23 +181,22 @@ class AppState:
         if location == 'library':
             self.go_to_page(self.library.page + value)
         elif location == 'book':
-            book_n = self.user.current_book
-            page = self.user.books[book_n].page_number + value
+            page = self.user.book.page_number + value
             self.go_to_page(page)
         elif location == 'bookmarks_menu':
             self.go_to_page(self.bookmarks_menu.page + value)
-        elif location == 'language_menu':
-            self.go_to_page(self.language_menu.page + value)
+        elif location == 'language':
+            self.go_to_page(self.languages.page + value)
         elif location == 'help_menu':
             self.go_to_page(self.help_menu.page + value)
 
     def next_page(self):
-        self.skip_pages(state, 1)
+        self.skip_pages(1)
 
     def previous_page(self):
-        self.skip_pages(state, -1)
+        self.skip_pages(-1)
 
-    def backup_log(self, value = 'start'):
+    def backup_log(self, value='start'):
         if self.backing_up_log != 'in progress' or value == 'done':
             self.backing_up_log = value
 
@@ -219,7 +217,7 @@ class HardwareState:
         if self.warming_up != 'in progress' or value == 'done':
             self.warming_up = value
 
-    def reset_display(self, value = 'start'):
+    def reset_display(self, value='start'):
         if self.resetting_display != 'in progress' or value == 'done':
             self.resetting_display = value
 
@@ -232,5 +230,6 @@ class RootState:
         self.refresh_display = Event()
         self.save_state = Event()
         self.backup_log = Event()
+
 
 state = RootState()

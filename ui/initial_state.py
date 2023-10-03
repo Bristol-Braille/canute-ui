@@ -1,10 +1,9 @@
 import logging
 import aiofiles
 from collections import OrderedDict
-from frozendict import FrozenOrderedDict
 import toml
 import os
-from frozendict import frozendict
+
 from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
