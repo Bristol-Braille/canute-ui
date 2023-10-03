@@ -40,7 +40,7 @@ preset built in for formatting.\
 
 
 def render_library(width, height, state):
-    page = state['library']['page']
+    page = state.app.library.page
     books = get_books(state)
     # subtract title from page height
     data_height = height - 1
@@ -60,10 +60,10 @@ def render_library(width, height, state):
 
 
 def render(width, height, state):
-    if state['help_menu']['visible']:
+    if state.app.help_menu.visible:
         all_lines = render_help(width, height)
         num_pages = len(all_lines) // height
-        page_num = min(state['help_menu']['page'], num_pages - 1)
+        page_num = min(state.app.help_menu.page, num_pages - 1)
         first_line = page_num * height
         off_end = first_line + height
         page = all_lines[first_line:off_end]

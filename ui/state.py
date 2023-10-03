@@ -14,8 +14,26 @@ from .language.view import render_help as render_language_help
 from .go_to_page.view import render_help as render_gtp_help
 from .bookmarks.help import render_help as render_bookmarks_help
 
+
+class Event(object):
+    def __init__(self):
+        self.handlers = []
+
+    def __iadd__(self, handler):
+        self.handlers.append(handler)
+        return self
+
+    def __isub__(self, handler):
+        self.handlers.remove(handler)
+        return self
+
+    def __call__(self, *args, **kwargs):
+        for handler in self.handlers:
+            handler(*args, **kwargs)
+
+
 class HelpState:
-    def __init__(self), root:
+    def __init__(self, root):
         self.visible = False
         self.page = 0
 
@@ -56,9 +74,6 @@ class AppState:
     @property
     def location_or_help_menu(self):
         return 'help_menu' if self.help_menu.visible else self.location
-
-    def set_user_state(self, value):
-       self.user = value
 
     def trigger(self, state, value):
         """bit ugly but gives the ability to trigger any state subscribers"""
@@ -150,7 +165,7 @@ class AppState:
                 'bookmarks_menu': render_bookmarks_help,
                 'go_to_page': render_gtp_help,
             }
-            if state['home_menu_visible']:
+            if state.app.home_menu_visible:
                 mapping['book'] = render_home_menu_help
             help_getter = mapping.get(self.location)
             num_pages = 1
@@ -183,7 +198,7 @@ class AppState:
     def previous_page(self):
         self.skip_pages(state, -1)
 
-    def backup_log(self, value):
+    def backup_log(self, value = 'start'):
         if self.backing_up_log != 'in progress' or value == 'done':
             self.backing_up_log = value
 
@@ -193,9 +208,6 @@ class AppState:
     def load_books(self, value):
         # pretty certain this doesn't do anything
         self.loading_books = value
-
-    def do_nothing(self):
-        pass
 
 
 class HardwareState:
@@ -207,7 +219,7 @@ class HardwareState:
         if self.warming_up != 'in progress' or value == 'done':
             self.warming_up = value
 
-    def reset_display(self, value):
+    def reset_display(self, value = 'start'):
         if self.resetting_display != 'in progress' or value == 'done':
             self.resetting_display = value
 
@@ -217,5 +229,8 @@ class RootState:
         self.app = AppState(self)
         self.hardware = HardwareState(self)
 
+        self.refresh_display = Event()
+        self.save_state = Event()
+        self.backup_log = Event()
 
 state = RootState()

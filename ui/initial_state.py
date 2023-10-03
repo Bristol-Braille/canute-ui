@@ -103,7 +103,7 @@ def swap_library(media_dir, current_book):
     return current_book
 
 
-async def read_user_state(media_dir):
+async def read_user_state(media_dir, state):
     global prev
     global manual
     current_book = manual_filename
@@ -175,25 +175,22 @@ async def read_user_state(media_dir):
             log.warn('current book not found {}, ignoring'.format(current_book))
             current_book = manual_filename
 
-    user_state = frozendict(books=FrozenOrderedDict(
-        books), current_book=current_book, current_language=current_language)
-    prev = user_state
-    return user_state.set('books', user_state['books'])
+    state.app.user.books = books
+    state.app.user.current_book = current_book
+    state.app.user.current_language = current_language
 
 
-async def read(media_dir):
-    user_state = await read_user_state(media_dir)
-    return initial_state.set('app', initial_state['app'].set('user', user_state))
+async def read(media_dir, state):
+    await read_user_state(media_dir, state)
 
 
-async def write(store, media_dir, sem, writes_in_flight):
+async def write(state, media_dir, sem, writes_in_flight):
     global prev
     await sem.acquire()
-    state = store.state
-    user_state = state['app']['user']
-    books = user_state['books']
-    selected_book = user_state['current_book']
-    selected_lang = user_state['current_language']
+    user_state = state.app.user
+    books = user_state.books
+    selected_book = user_state.current_book
+    selected_lang = user_state.current_language
     if selected_book != prev['current_book'] or selected_lang != prev['current_language']:
         if not selected_book == manual_filename:
             selected_book = os.path.relpath(selected_book, media_dir)

@@ -20,18 +20,18 @@ then change to your selected language.\
 
 
 def render(width, height, state):
-    help_menu = state['help_menu']['visible']
+    help_menu = state.app.help_menu.visible
     if help_menu:
         all_lines = render_help(width, height)
         num_pages = len(all_lines) // height
-        page_num = min(state['help_menu']['page'], num_pages - 1)
+        page_num = min(state.app.help_menu.page, num_pages - 1)
         first_line = page_num * height
         off_end = first_line + height
         page = all_lines[first_line:off_end]
         return page
 
-    lang = state['user'].get('current_language', None)
-    languages = state['languages']['available']
+    lang = state.app.user.current_language
+    languages = state.app.languages.available
     current_lang = languages.get(lang, 'English Grade 1')
 
     try:

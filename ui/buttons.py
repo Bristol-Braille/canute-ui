@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from .actions import actions
+from .state import state
 from .system_menu.system_menu import system_menu
 from .library.buttons import library_buttons
 from .book.buttons import book_buttons
@@ -20,32 +20,32 @@ bindings = {
     'language': language_buttons,
     'help_menu': {
         'single': {
-            'L': actions.close_menu(),
-            '>': actions.next_page(),
-            '<': actions.previous_page(),
-            'R': actions.toggle_help_menu(),
+            'L': state.app.close_menu,
+            '>': state.app.next_page,
+            '<': state.app.previous_page,
+            'R': state.app.help_menu.toggle,
         },
         'long': {
-            'L': actions.close_menu(),
-            '>': actions.next_page(),
-            '<': actions.previous_page(),
-            'R': actions.toggle_help_menu(),
-            'X': actions.reset_display('start'),
+            'L': state.app.close_menu,
+            '>': state.app.next_page,
+            '<': state.app.previous_page,
+            'R': state.app.help_menu.toggle,
+            'X': state.hardware.reset_display,
         },
     },
     'system_menu': {
         'single': {
-            'R': actions.toggle_help_menu(),
-            '>': actions.next_page(),
-            '<': actions.previous_page(),
-            'L': actions.close_menu(),
+            'R': state.app.help_menu.toggle,
+            '>': state.app.next_page,
+            '<': state.app.previous_page,
+            'L': state.app.close_menu,
         },
         'long': {
-            'R': actions.toggle_help_menu(),
-            '>': actions.next_page(),
-            '<': actions.previous_page(),
-            'L': actions.close_menu(),
-            'X': actions.reset_display('start'),
+            'R': state.app.help_menu.toggle,
+            '>': state.app.next_page,
+            '<': state.app.previous_page,
+            'L': state.app.close_menu,
+            'X': state.hardware.reset_display,
         },
     }
 }
@@ -57,24 +57,21 @@ for i, item in enumerate(sys_menu):
     bindings['system_menu']['single'][str(i + 2)] = action
 
 
-async def dispatch_button(key, press_type, state, dispatch):
-    if state['help_menu']['visible']:
-        location = 'help_menu'
-    else:
-        location = state['location']
+async def dispatch_button(key, press_type, state):
+    location = state.app.location_or_help_menu
     try:
         action = bindings[location][press_type][key]
     except KeyError:
         log.debug('no binding for key {}, {} press'.format(key, press_type))
     else:
-        await dispatch(action)
+        action()
 
 
 prev_buttons = {}
 long_buttons = {}
 
 
-async def check(driver, state, dispatch):
+async def check(driver, state):
     # this is a hack for now until we change the protocol, we read the buttons
     # twice so we don't miss the release of short presses
     for _ in range(2):
@@ -90,11 +87,11 @@ async def check(driver, state, dispatch):
                 else:
                     if key in prev_buttons:
                         del prev_buttons[key]
-                    await dispatch_button(key, 'single', state, dispatch)
+                    await dispatch_button(key, 'single', state)
 
         for key in prev_buttons:
             diff = (datetime.now() - prev_buttons[key]).total_seconds()
             if diff > 0.5:
                 prev_buttons[key] = datetime.now()
                 long_buttons[key] = True
-                await dispatch_button(key, 'long', state, dispatch)
+                await dispatch_button(key, 'long', state)
