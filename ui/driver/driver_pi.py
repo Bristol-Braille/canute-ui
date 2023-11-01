@@ -69,7 +69,12 @@ class Pi(Driver):
             serial_port.port = port
             serial_port.timeout = float(self.timeout)
             serial_port.baudrate = 9600
-            serial_port.open()
+            try:
+                serial_port.open()
+            except OSError as e:
+                # ioctl errors thrown on macOS in unit tests if opened on pty
+                # without setting dsrdtr and rtscts to True (but port is open)
+                log.warn('error opening serial port %s, ignoring', e)
             serial_port.flush()
             self.HDLC = simple_hdlc.HDLC(serial_port)
             return serial_port
