@@ -6,7 +6,7 @@ class BookmarksState:
         self.root = root
         self.page = 0
 
-    def delete_bookmark(self, state, n):
+    def delete_bookmark(self, n):
         width, height = self.root.app.dimensions
         # adjust for title
         height -= 1
@@ -16,7 +16,7 @@ class BookmarksState:
         line = page * height
         # don't delete go-to-start end and go-to-end bookmarks
         if (line + n) == 0 or (line + n) == (len(bookmarks) - 1):
-            return state
+            return
         changed_bookmarks = list(bookmarks[line:line + height])
         if n >= len(changed_bookmarks):
             return
@@ -25,6 +25,7 @@ class BookmarksState:
             + bookmarks[line + height:len(bookmarks)]
         book = book._replace(bookmarks=bookmarks)
         self.root.app.user.books[self.root.app.user.current_book] = book
+        self.root.refresh_display()
 
     def go_to_bookmark(self, n):
         width, height = self.root.app.dimensions

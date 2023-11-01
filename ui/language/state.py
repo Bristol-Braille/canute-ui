@@ -1,5 +1,5 @@
 from ..i18n import BUILTIN_LANGUAGES, install
-from ..manual import Manual
+from ..manual import Manual, manual_filename
 from .. import state
 
 
@@ -17,7 +17,7 @@ class LanguageState:
             locale = keys[lang]
             install(locale)
             manual = Manual.create()
-            self.root.app.user.books.set('manual_filename', manual)
+            self.root.app.user.books[manual_filename] = manual
             self.root.app.user.current_language = locale
             self.root.app.location = 'book'
             self.root.refresh_display()

@@ -33,12 +33,15 @@ class Event(object):
 
 class HelpState:
     def __init__(self, root):
+        self.root = root
+
         self.visible = False
         self.page = 0
 
     def toggle(self):
         self.visible = not self.visible
         self.page = 0
+        self.root.refresh_display()
 
 
 class SystemMenuState:
