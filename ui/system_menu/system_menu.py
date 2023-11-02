@@ -60,7 +60,7 @@ def do_nothing():
 def system_menu():
     return OrderedDict([
         (_('shutdown'), state.app.shutdown),
-        (_('backup log to USB stick'), state.root.backup_log),
+        (_('backup log to USB stick'), state.backup_log),
         (_('select language and code'), state.app.go_to_language_menu),
         ((''), do_nothing),
         ((' '), do_nothing),

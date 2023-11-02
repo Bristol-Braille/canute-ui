@@ -93,7 +93,7 @@ def main():
 
 def run(driver, config):
     loop = asyncio.get_event_loop()
-    log.info('running loop')
+    log.debug('running loop')
     loop.run_until_complete(run_async(driver, config, loop))
     pending = asyncio.Task.all_tasks()
     loop.run_until_complete(asyncio.gather(*pending))
@@ -146,19 +146,19 @@ async def run_async(driver, config, loop):
     # risking hanging up the UI by having it start comms with the MCUs
     # while they're resetting, have the UI issue a reset as its first
     # act, synchronously.
-    log.info('resetting display')
+    log.debug('resetting display')
     driver.reset_display()
-    log.info('display reset')
+    log.debug('display reset')
 
     # process these imports while resetting as they are slow
     from . import buttons
     from .state import state
     from .book.handlers import load_books
 
-    log.info('waiting for motion')
+    log.debug('waiting for motion')
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
-    log.info('motion complete')
+    log.debug('motion complete')
     media_handler = asyncio.ensure_future(handle_media_changes())
     duty_logger = asyncio.ensure_future(driver.track_duty())
 
@@ -228,6 +228,8 @@ def handle_events(config, state):
                                                     config_limit, writes_in_flight))
 
     def on_backup_log():
+        log.info(f'backup log requested')
+        state.app.backup_log()
         asyncio.create_task(change_files(config, state))
 
     def on_refresh_display():
@@ -243,7 +245,7 @@ async def change_files(config, state):
         state.app.backup_log('in progress')
         # async?
         backup_log(config)
-        state.backup_log('done')
+        state.app.backup_log('done')
 
 
 async def handle_hardware(driver, state, media_dir):
