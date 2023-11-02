@@ -162,15 +162,15 @@ async def run_async(driver, config, loop):
     media_handler = asyncio.ensure_future(handle_media_changes())
     duty_logger = asyncio.ensure_future(driver.track_duty())
 
+    width, height = driver.get_dimensions()
+    state.app.set_dimensions((width, height))
+
+    queue, worker = handle_events(config, state)
+
     media_dir = config.get('files', 'media_dir')
     log.info(f'reading initial state from {media_dir}')
     await initial_state.read(media_dir, state)
-    log.info('read initial state')
-    width, height = driver.get_dimensions()
-    state.app.set_dimensions((width, height))
     log.info('created store')
-
-    handle_events(config, state)
 
     log.info('loading books')
     loader_limit = asyncio.Event()
@@ -210,22 +210,27 @@ async def run_async(driver, config, loop):
     except asyncio.CancelledError:
         media_handler.cancel()
         duty_logger.cancel()
+        await queue.join()
+        worker.cancel()
         raise
 
 
 def handle_events(config, state):
     media_dir = config.get('files', 'media_dir')
-    # Limit the number of book indexing tasks in flight at once, because
-    # they may well be IO-bound and because we index all books on media,
-    # not just the ones visible in the current library menu page.
-    config_limit = asyncio.Semaphore(1)
-    writes_in_flight = [0]
+    queue = asyncio.Queue()
+    worker = asyncio.create_task(initial_state.write(media_dir, queue))
 
-    def on_save_state():
-        if not config_limit.locked():
-            writes_in_flight[0] += 1
-            asyncio.create_task(initial_state.write(state, media_dir,
-                                                    config_limit, writes_in_flight))
+    def on_save_state(book=None):
+        # queue a snapshot of the state we want to save, theoretically we
+        # might want to remove existing save jobs for the same file from
+        # the queue, but it's very unlikely the human+mechanics will be
+        # that much faster than a filesystem write
+        if book is None:
+            log.debug('queuing user state file save')
+            queue.put_nowait((None, state.app.user.to_file(media_dir)))
+        else:
+            log.debug(f'queuing {book.filename} state file save')
+            queue.put_nowait((book.filename, book.to_file()))
 
     def on_backup_log():
         log.info(f'backup log requested')
@@ -238,6 +243,8 @@ def handle_events(config, state):
     state.refresh_display += on_refresh_display
     state.save_state += on_save_state
     state.backup_log += on_backup_log
+
+    return queue, worker
 
 
 async def change_files(config, state):

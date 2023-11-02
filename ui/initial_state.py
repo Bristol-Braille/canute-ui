@@ -147,10 +147,12 @@ async def read_user_state(media_dir, state):
             log.warning(
                 'manual state loading failed for {}, ignoring'.format(manual_toml))
 
+    width, height = state.app.dimensions
+
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
-        book = BookFile(filename=book_file, width=40, height=9)
+        book = BookFile(filename=book_file, width=width, height=height)
         if os.path.exists(toml_file):
             try:
                 t = toml.load(toml_file)
@@ -159,10 +161,12 @@ async def read_user_state(media_dir, state):
                 if 'bookmarks' in t:
                     book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
                         bm - 1 for bm in t['bookmarks']))))
-            except Exception:
+            except Exception as err:
+                log.error(err)
                 log.warning(
                     'book state loading failed for {}, ignoring'.format(toml_file))
-
+        else:
+            state.save_state(book)
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
 
@@ -177,49 +181,37 @@ async def read_user_state(media_dir, state):
     state.app.user.books = books
     state.app.user.current_book = current_book
     state.app.user.current_language = current_language
+    state.save_state()
 
 
 async def read(media_dir, state):
     await read_user_state(media_dir, state)
 
 
-async def write(state, media_dir, sem, writes_in_flight):
-    global prev
-    await sem.acquire()
-    user_state = state.app.user
-    books = user_state.books
-    selected_book = user_state.current_book
-    selected_lang = user_state.current_language
-    if selected_book != prev['current_book'] or selected_lang != prev['current_language']:
-        if not selected_book == manual_filename:
-            selected_book = os.path.relpath(selected_book, media_dir)
-        s = toml.dumps({'current_book': selected_book,
-                        'current_language': selected_lang})
-        source_paths = mounted_source_paths(media_dir)
-        for source_path in source_paths:
-            path = os.path.join(source_path, USER_STATE_FILE)
+async def write(media_dir, queue):
+    log.info('save file worker started')
+    while True:
+        (filename, data) = await queue.get()
+        s = toml.dumps(data)
+
+        if filename is None:
+            # main user state file
+            source_paths = mounted_source_paths(media_dir)
+            for source_path in source_paths:
+                path = os.path.join(source_path, USER_STATE_FILE)
+                log.debug('writing user state file save to {path}')
+                async with aiofiles.open(path, 'w') as f:
+                    await f.write(s)
+
+        else:
+            # book state file
+            if filename == manual_filename:
+                path = os.path.join(media_dir, path)
+            else:
+                path = to_state_file(filename)
+            log.debug(f'writing {filename} state file save to {path}')
             async with aiofiles.open(path, 'w') as f:
                 await f.write(s)
 
-    for filename in books:
-        book = books[filename]
-        if filename in prev['books']:
-            prev_book = prev['books'][filename]
-        else:
-            prev_book = BookFile()
-        if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
-            path = to_state_file(book.filename)
-            if book.filename == manual_filename:
-                path = os.path.join(media_dir, path)
-            bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
-            # remove start-of-book and end-of-book bookmarks
-            bms = bms[1:-1]
-            # ordered to make sure current_page comes before bookmarks
-            d = OrderedDict([['current_page', book.page_number + 1],
-                             ['bookmarks', bms]])
-            s = toml.dumps(d)
-            async with aiofiles.open(path, 'w') as f:
-                await f.write(s)
-    prev = user_state
-    sem.release()
-    writes_in_flight[0] -= 1
+        log.debug(f'state file save complete')
+        queue.task_done()
