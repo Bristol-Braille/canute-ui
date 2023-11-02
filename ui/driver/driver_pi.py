@@ -7,6 +7,8 @@ import serial
 import serial.tools.list_ports
 import struct
 import smbus2
+import traceback
+
 from .. import braille
 
 log = logging.getLogger(__name__)
@@ -276,10 +278,10 @@ class Pi(Driver):
            Cache will be periodically written to EEPROM in background."""
         self.row_actuations[row] += 1
 
-    def __exit__(self, ex_type, ex_value, traceback):
+    def __exit__(self, ex_type, ex_value, tb):
         """__exit__ method allows us to shut down the port properly"""
         if ex_type is not None:
-            log.error('%s : %s' % (ex_type.__name__, ex_value))
+            log.error(traceback.format_exception(ex_type, ex_value, tb))
         if self.port:
             log.error('closing serial port')
             self.port.close()
