@@ -233,7 +233,7 @@ def handle_events(config, state):
             queue.put_nowait((book.filename, book.to_file()))
 
     def on_backup_log():
-        log.info(f'backup log requested')
+        log.info('backup log requested')
         state.app.backup_log()
         asyncio.create_task(change_files(config, state))
 
