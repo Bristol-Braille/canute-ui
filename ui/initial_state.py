@@ -213,5 +213,5 @@ async def write(media_dir, queue):
             async with aiofiles.open(path, 'w') as f:
                 await f.write(s)
 
-        log.debug(f'state file save complete')
+        log.debug('state file save complete')
         queue.task_done()
