@@ -27,6 +27,7 @@ class LibraryState:
         self.root.app.location = 'book'
         self.root.app.home_menu_visible = False
         self.root.refresh_display()
+        self.root.save_state()
 
     def add_or_replace(self, book):
         self.root.app.user.books[book.filename] = book

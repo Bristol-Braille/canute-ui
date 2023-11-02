@@ -21,3 +21,4 @@ class LanguageState:
             self.root.app.user.current_language = locale
             self.root.app.location = 'book'
             self.root.refresh_display()
+            self.root.save_state()

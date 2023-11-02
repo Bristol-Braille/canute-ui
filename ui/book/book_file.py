@@ -1,5 +1,5 @@
 import os
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from enum import Enum
 import logging
 
@@ -35,6 +35,13 @@ class BookFile(BookData):
         title = os.path.splitext(basename)[0].replace('_', ' ')
         return title
 
+    @property
+    def bookmarks_pruned(self):
+        if 'deleted' in self.bookmarks:
+            return tuple(bm for bm in self.bookmarks if bm != 'deleted')
+        else:
+            return self.bookmarks
+
     def get_num_pages(self):
         if self.load_state != LoadState.DONE:
             log.warning('get pages on not-yet-loaded book')
@@ -53,3 +60,12 @@ class BookFile(BookData):
         elif page >= self.get_num_pages():
             page = self.get_num_pages() - 1
         return self._replace(page_number=page)
+
+    def to_file(self):
+        # remove deleted, start-of-book and end-of-book bookmarks
+        bms = self.bookmarks_pruned[1:-1]
+        # ordered to make sure current_page comes before bookmarks
+        return OrderedDict([
+            ['current_page', self.page_number + 1],
+            ['bookmarks', list(bms)]
+        ])
