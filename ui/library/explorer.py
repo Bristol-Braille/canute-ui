@@ -90,7 +90,7 @@ class Library:
                 dirs.append(entry.name)
             elif entry.is_file():
                 ext = os.path.splitext(entry.name)[1].lower()
-                if ext[1:] in self.file_exts:
+                if entry.name[0] != '.' and ext[1:] in self.file_exts:
                     files.append(entry.name)
 
         dirs.sort(key=natural_keys)

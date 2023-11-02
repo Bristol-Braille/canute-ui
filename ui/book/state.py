@@ -1,3 +1,4 @@
+import os
 from collections import OrderedDict
 
 from .book_file import LoadState
@@ -36,15 +37,20 @@ class UserState:
 
     def set_book_page(self, page):
         book = self.book
-        book = book.set_page(page)
 
-        bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
-        book = book._replace(bookmarks=bookmarks)
+        # if user selects bookmark straight after deleting (rather than
+        # closing menu) we may need to prune here
+        bookmarks = book.bookmarks_pruned
+        if bookmarks is not book.bookmarks:
+            book = book._replace(bookmarks=bookmarks)
+
+        book = book.set_page(page)
         self.books[self.current_book] = book
 
         self.root.app.location = 'book'
         self.root.app.home_menu_visible = False
         self.root.refresh_display()
+        self.root.save_state(book)
 
     def enter_go_to_page(self):
         self.root.app.home_menu_visible = False
@@ -62,3 +68,13 @@ class UserState:
             bookmarks = sorted(book.bookmarks + tuple([page]))
             book = book._replace(bookmarks=tuple(bookmarks))
             self.books[self.current_book] = book
+            self.root.save_state(book)
+
+    def to_file(self, media_dir):
+        current_book = self.current_book
+        if not current_book == manual_filename:
+            current_book = os.path.relpath(current_book, media_dir)
+        return {
+            'current_book': current_book,
+            'current_language': self.current_language
+        }

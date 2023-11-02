@@ -7,6 +7,8 @@ import serial
 import serial.tools.list_ports
 import struct
 import smbus2
+import traceback
+
 from .. import braille
 
 log = logging.getLogger(__name__)
@@ -69,7 +71,12 @@ class Pi(Driver):
             serial_port.port = port
             serial_port.timeout = float(self.timeout)
             serial_port.baudrate = 9600
-            serial_port.open()
+            try:
+                serial_port.open()
+            except OSError as e:
+                # ioctl errors thrown on macOS in unit tests if opened on pty
+                # without setting dsrdtr and rtscts to True (but port is open)
+                log.warn('error opening serial port %s, ignoring', e)
             serial_port.flush()
             self.HDLC = simple_hdlc.HDLC(serial_port)
             return serial_port
@@ -271,10 +278,10 @@ class Pi(Driver):
            Cache will be periodically written to EEPROM in background."""
         self.row_actuations[row] += 1
 
-    def __exit__(self, ex_type, ex_value, traceback):
+    def __exit__(self, ex_type, ex_value, tb):
         """__exit__ method allows us to shut down the port properly"""
         if ex_type is not None:
-            log.error('%s : %s' % (ex_type.__name__, ex_value))
+            log.error(traceback.format_exception(ex_type, ex_value, tb))
         if self.port:
             log.error('closing serial port')
             self.port.close()

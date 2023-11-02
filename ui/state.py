@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from .book.state import UserState
 from .library.state import LibraryState
 from .go_to_page.state import GoToPageState
@@ -33,12 +31,15 @@ class Event(object):
 
 class HelpState:
     def __init__(self, root):
+        self.root = root
+
         self.visible = False
         self.page = 0
 
     def toggle(self):
         self.visible = not self.visible
         self.page = 0
+        self.root.refresh_display()
 
 
 class SystemMenuState:
@@ -96,22 +97,20 @@ class AppState:
         self.location = 'language'
         self.root.refresh_display()
 
-    def close_menu(self):
-        books = self.user.books
-        # fully delete deleted bookmarks
-        changed_books = OrderedDict()
-        for filename in books:
-            book = books[filename]
-            bookmarks = tuple(bm for bm in book.bookmarks if bm != 'deleted')
-            book = book._replace(bookmarks=bookmarks)
-            changed_books[filename] = book
+    def close_menu(self, prune_bookmarks=False):
+        # fully delete deleted bookmarks if required
+        if prune_bookmarks:
+            book = self.user.book
+            bookmarks = book.bookmarks_pruned
+            if bookmarks is not book.bookmarks:
+                book = book._replace(bookmarks=bookmarks)
+                self.user.books[self.user.current_book] = book
         self.location = 'book'
         self.bookmarks_menu.page = 0
         self.home_menu_visible = False
         self.go_to_page_menu.selection = ''
         self.help_menu.visible = False
         self.help_menu.page = 0
-        self.user.books = changed_books
         self.root.refresh_display()
 
     def go_to_page(self, page):
@@ -121,6 +120,7 @@ class AppState:
             page = 0
 
         location = self.location_or_help_menu
+        save_book = None
 
         if location == 'library':
             books = self.user.books
@@ -136,6 +136,7 @@ class AppState:
             book = book.set_page(page)
             # book files are frozen, so you have to replace
             self.user.books[book_n] = book
+            save_book = book
         elif location == 'bookmarks_menu':
             book_n = self.user.current_book
             book = self.user.books[book_n]
@@ -148,6 +149,7 @@ class AppState:
                 page = num_pages - 1
             self.bookmarks_menu.page = page
         elif location == 'language':
+            # TODO check if this is still used - replaced by select_language?
             lang_n = self.user.current_language  # default to 'en_GB:en' ?
             lang = list(self.languages.available.keys())[lang_n]
             self.user.current_language = lang
@@ -173,7 +175,11 @@ class AppState:
             if page >= num_pages:
                 page = num_pages - 1
             self.help_menu.page = page
+
         self.root.refresh_display()
+
+        if save_book is not None:
+            self.root.save_state(save_book)
 
     def skip_pages(self, value):
         location = self.location_or_help_menu

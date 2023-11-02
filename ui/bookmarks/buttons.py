@@ -11,6 +11,10 @@ def delete_bookmark(number):
     return lambda: state.app.bookmarks_menu.delete_bookmark(number)
 
 
+def close_menu():
+    return lambda: state.app.close_menu(True)
+
+
 bookmarks_buttons = {
     'single': {
         'L': state.app.close_menu,
