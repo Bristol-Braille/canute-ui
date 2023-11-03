@@ -108,6 +108,7 @@ async def read_user_state(media_dir, state):
     current_book = manual_filename
     current_language = None
 
+    # walk the available filesystems for directories and braille files
     library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
     book_files = library.book_files()
 
@@ -165,8 +166,7 @@ async def read_user_state(media_dir, state):
                 log.error(err)
                 log.warning(
                     'book state loading failed for {}, ignoring'.format(toml_file))
-        else:
-            state.save_state(book)
+        # else: no file exists, so just use the defaults
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
 
@@ -179,6 +179,7 @@ async def read_user_state(media_dir, state):
             current_book = manual_filename
 
     state.app.user.books = books
+    state.app.library.dirs = library.dirs
     state.app.user.current_book = current_book
     state.app.user.current_language = current_language
     state.save_state()

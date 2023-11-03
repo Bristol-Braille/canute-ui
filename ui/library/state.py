@@ -11,7 +11,24 @@ log = logging.getLogger(__name__)
 class LibraryState:
     def __init__(self, root: 'state.RootState'):
         self.root = root
+
         self.page = 0
+        self.dirs = []
+        # index of directory that is currently expanded, if any
+        self.files_dir_index = None
+        self.files_count = 0
+
+    @property
+    def dir_count(self):
+        return len(self.dirs)
+
+    @property
+    def open_dir(self):
+        return self.dirs[self.files_dir_index] if self.files_page_open else None
+
+    @property
+    def files_page_open(self):
+        return self.files_dir_index is not None
 
     def go_to_book(self, number):
         width, height = self.root.app.dimensions
