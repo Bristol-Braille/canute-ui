@@ -179,6 +179,7 @@ async def read_user_state(media_dir, state):
             current_book = manual_filename
 
     state.app.user.books = books
+    state.app.library.media_dir = media_dir
     state.app.library.dirs = library.dirs
     state.app.user.current_book = current_book
     state.app.user.current_language = current_language
