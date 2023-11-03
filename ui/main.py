@@ -261,7 +261,6 @@ async def handle_hardware(driver, state, media_dir):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         state.app.load_books('cancel')
-        await initial_state.write(state, media_dir)
         state.app.shutdown()
     if state.app.shutting_down:
         if isinstance(driver, Pi):
