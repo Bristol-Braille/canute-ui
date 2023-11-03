@@ -85,7 +85,7 @@ def configured_source_dirs():
 def mounted_source_paths(media_dir):
     for source_dir, name in configured_source_dirs():
         source_path = os.path.join(media_dir, source_dir)
-        if os.path.ismount(source_path):
+        if os.path.ismount(source_path) or 'TRAVIS' in os.environ:
             yield source_path
 
 
@@ -181,9 +181,7 @@ async def read_user_state(media_dir, state):
     state.app.user.books = books
     state.app.library.media_dir = media_dir
     state.app.library.dirs = library.dirs
-    state.app.user.current_book = current_book
-    state.app.user.current_language = current_language
-    state.save_state()
+    state.app.user.load(current_book, current_language)
 
 
 async def read(media_dir, state):

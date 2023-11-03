@@ -135,6 +135,22 @@ class LibraryState:
             self.page = dir_page
         self.root.refresh_display()
 
+    def show_files_dir(self, book):
+        """open the folder that this book is in"""
+        path = os.path.relpath(book, start=self.media_dir)
+        relpath = os.path.dirname(path)
+        name = os.path.basename(path)
+        for index, dir in enumerate(self.dirs):
+            if dir.relpath == relpath:
+                self.files_dir_index = index
+                self.files_count = dir.files_count
+                for index, file in enumerate(dir.files):
+                    if file.name == name:
+                        file_page = math.floor(index / self.FILES_PAGE_SIZE)
+                        self.page = self._files_page_start + file_page
+                        break
+                break
+
     def go_to_book(self, number):
         width, height = self.root.app.dimensions
         page = self.page

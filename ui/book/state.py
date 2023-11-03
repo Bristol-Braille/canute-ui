@@ -27,6 +27,12 @@ class UserState:
         # should this be a (generator)?
         return [b for b in self.books.values() if b.load_state != LoadState.FAILED]
 
+    def load(self, current_book, current_language):
+        self.current_book = current_book
+        if not self.current_book == manual_filename:
+            self.root.app.library.show_files_dir(self.current_book)
+        self.current_language = current_language
+
     def go_to_start(self):
         self.set_book_page(0)
 
