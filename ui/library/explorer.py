@@ -82,7 +82,8 @@ class Library:
             root = Directory(source_dir)  # name
             self.walk(root)
             self.prune(root)
-            self.flatten(root)
+            if len(root.dirs) > 0 or root.files_count > 0:
+                self.flatten(root)
 
         self.dir_count = len(self.dirs)
         self.files_dir_index = None
