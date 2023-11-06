@@ -158,20 +158,8 @@ class LibraryState:
                         break
                 break
 
-    def go_to_book(self, number):
-        width, height = self.root.app.dimensions
-        page = self.page
-        line_number = page * (height - 1)
-        books = self.root.app.user.successful_books
-        try:
-            book = books[line_number + number]
-        except Exception:
-            log.debug('no book at {}'.format(number))
-            return
-        self.open_book(book)
-
     def open_book(self, book):
-        self.root.app.user.current_book = book.filename
+        self.root.app.user.current_book = book.relpath(self.media_dir)
         self.root.app.location = 'book'
         self.root.app.home_menu_visible = False
         self.root.refresh_display()

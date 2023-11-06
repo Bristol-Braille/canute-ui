@@ -45,3 +45,6 @@ of Community Interest Companies. Company number 7518101.
         pages = tuple(tuple(from_unicode(line) for line in page)
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)
+
+    def relpath(self, media_dir):
+        return self.filename
