@@ -178,14 +178,9 @@ class LibraryState:
         self.root.save_state()
 
     def add_or_replace(self, book):
-        self.root.app.user.books[book.filename] = book
-        books = sort_books(self.root.app.user.books)
-        self.root.app.user.books = books
+        relpath = os.path.relpath(book.filename, start=self.media_dir)
+        self.root.app.user.books[relpath] = book
 
     def set_book_loading(self, book):
         book = book._replace(load_state=book_file.LoadState.LOADING)
-        return self.add_or_replace(book)
-
-
-def sort_books(books):
-    return OrderedDict(sorted(books.items(), key=lambda x: x[1].title.lower()))
+        self.add_or_replace(book)
