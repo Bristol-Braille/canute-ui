@@ -56,6 +56,14 @@ class LibraryState:
     def _dirs_pages(self):
         return math.ceil(self.dir_count / self.DIRS_PAGE_SIZE)
 
+    @property
+    def pages(self):
+        pages = self._dirs_pages
+        if self.files_page_open:
+            # + 1 for the extra dir page before/after
+            pages += self._files_pages + 1
+        return pages
+
     def _is_files_page(self, page_num):
         if self.files_page_open:
             files_pages = self._files_pages
