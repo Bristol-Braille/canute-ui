@@ -17,9 +17,10 @@ def natural_keys(text):
 
 
 class Directory:
-    def __init__(self, name, parent=None):
+    def __init__(self, name, parent=None, display=None):
         self.parent = parent
         self.name = name
+        self.display = display
         self.files = []
 
     @property
@@ -42,6 +43,16 @@ class Directory:
         if self.parent is not None:
             depth += self.parent._depth
         return depth
+
+    @property
+    def display_name(self):
+        return self.name.replace('_', ' ') if self.display is None else self.display
+
+    @property
+    def display_relpath(self):
+        if self.parent is None:
+            return self.display_name
+        return os.path.join(self.parent.display_relpath, self.display_name)
 
 
 class File:
@@ -79,7 +90,7 @@ class Library:
         for source_dir, name in source_dirs:
             # if os.path.ismount(os.path.join(self.media_dir, source_dir)):
             # not needed as unmounted devices will be empty and so pruned
-            root = Directory(source_dir)  # name
+            root = Directory(source_dir, display=name)
             self.walk(root)
             self.prune(root)
             if len(root.dirs) > 0 or root.files_count > 0:

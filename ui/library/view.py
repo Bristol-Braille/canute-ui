@@ -56,7 +56,7 @@ def dir_display_text(dir, width, show_count=True):
         count_str = unicodes_to_alphas(_('go to book list'))
         extra = 3 + len(count_str)
     depth = dir._depth
-    dir_name = dir.name.replace('_', ' ')
+    dir_name = dir.display_name
     if ord(dir_name[0]) >= UNICODE_BRAILLE_BASE:
         dir_name = unicodes_to_alphas(dir_name)
     # the 1 takes into account the trailing slash
@@ -73,7 +73,7 @@ def page_display_text(dir, page, of_pages, width):
     title = unicodes_to_alphas(_('library menu'))
     progress = f'{to_ueb_number(page)}/{to_ueb_number(of_pages)}'
     if dir is not None:
-        title += ' - ' + truncate_location(dir.relpath, width - len(title) - 3 - len(progress) - 3)
+        title += ' - ' + truncate_location(dir.display_relpath, width - len(title) - 3 - len(progress) - 3)
     title += ' ' + (width - len(title) - len(progress) - 2) * '-' + ' ' + progress
     return from_ascii(title)
 
