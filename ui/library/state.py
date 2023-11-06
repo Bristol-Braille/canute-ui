@@ -70,9 +70,8 @@ class LibraryState:
             page_num -= min(self._files_pages, page_num - self._files_page_start) + 1
         return page_num
 
-    def book_from_file(self, dir, file):
-        book_path = os.path.join(self.media_dir, dir.relpath, file.name)
-        return self.root.app.user.books[book_path]
+    def book_from_file(self, file):
+        return self.root.app.user.books[file.relpath]
 
     def action(self, button):
         """this mirrors the view render code"""
@@ -98,7 +97,7 @@ class LibraryState:
                 i = button - 2
                 if i >= begin and i < end and offset + i < len(dir.files):
                     file = dir.files[offset + i]
-                    self.open_book(self.book_from_file(dir, file))
+                    self.open_book(self.book_from_file(file))
                     return
                 else:
                     return  # blank

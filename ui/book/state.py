@@ -78,8 +78,6 @@ class UserState:
 
     def to_file(self, media_dir):
         current_book = self.current_book
-        if not current_book == manual_filename:
-            current_book = os.path.relpath(current_book, media_dir)
         return {
             'current_book': current_book,
             'current_language': self.current_language

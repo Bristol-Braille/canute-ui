@@ -49,6 +49,19 @@ class File:
         self.directory = directory
         self.name = name
 
+    @property
+    def relpath(self):
+        return os.path.join(self.directory.relpath, self.name)
+
+
+class LocalFile:
+    def __init__(self, name):
+        self.name = name
+
+    @property
+    def relpath(self):
+        return self.name
+
 
 class Library:
     """
@@ -122,6 +135,5 @@ class Library:
         books = []
         for dir in self.dirs:
             for file in dir.files:
-                books.append(os.path.join(
-                    self.media_dir, dir.relpath, file.name))
+                books.append(file.relpath)
         return books

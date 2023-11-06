@@ -111,7 +111,7 @@ def render_library(width, height, state):
         for i in range(0, library.FILES_PAGE_SIZE):
             if i >= begin and i < end and offset + i < len(dir.files):
                 file = dir.files[offset + i]
-                book = library.book_from_file(dir, file)
+                book = library.book_from_file(file)
                 yield format_title(book.title, width, book.page_number,
                                    book.get_num_pages(), capitalize=False)
             else:

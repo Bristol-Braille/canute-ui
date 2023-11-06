@@ -8,7 +8,7 @@ from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
-from .library.explorer import Library
+from .library.explorer import Library, Directory, LocalFile
 from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
 
 from . import config_loader
@@ -120,8 +120,6 @@ async def read_user_state(media_dir, state):
                 main_state = toml.load(main_toml)
                 if 'current_book' in main_state:
                     current_book = main_state['current_book']
-                    if not current_book == manual_filename:
-                        current_book = os.path.join(media_dir, current_book)
                 if 'current_language' in main_state:
                     current_language = main_state['current_language']
                 break
@@ -153,7 +151,7 @@ async def read_user_state(media_dir, state):
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
-        book = BookFile(filename=book_file, width=width, height=height)
+        book = BookFile(filename=os.path.join(media_dir, book_file), width=width, height=height)
         if os.path.exists(toml_file):
             try:
                 t = toml.load(toml_file)
@@ -169,6 +167,10 @@ async def read_user_state(media_dir, state):
         # else: no file exists, so just use the defaults
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
+
+    home_dir = Directory('canute 360')
+    home_dir.files = [LocalFile(manual_filename), LocalFile(cleaning_filename)]
+    library.dirs.insert(0, home_dir)
 
     if current_book not in books:
         # let's check that they're not just using a different USB port
