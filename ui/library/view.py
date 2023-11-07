@@ -94,13 +94,7 @@ def render_library(width, height, state):
     library = state.app.library
     page_num = library.page
 
-    begin = 0
-    end = library.DIRS_PAGE_SIZE
-    if library.files_page_open:
-        if page_num == library._files_page_start - 1:
-            end = library.files_dir_index % library.DIRS_PAGE_SIZE + 1
-        if page_num == library._files_page_start + library._files_pages:
-            begin = library.files_dir_index % library.DIRS_PAGE_SIZE
+    begin, end = library.page_begin_end(page_num)
 
     if library._is_files_page(page_num):
         page_num -= library._files_page_start

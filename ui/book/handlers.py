@@ -68,82 +68,6 @@ async def _read_pages2(book, background=False):
         return book._replace(load_state=book_file.LoadState.FAILED)
 
 
-async def _read_pages(book, background=False):
-    if book.filename == manual_filename:
-        return book
-    if book.load_state == book_file.LoadState.DONE:
-        return book
-    try:
-        if book.ext == '.pef':
-            mode = 'rb'
-        else:
-            mode = 'r'
-
-        async with aiofiles.open(book.filename, mode) as f:
-            file_contents = await f.read()
-
-        if len(file_contents) == 0:
-            log.warning('book empty {}'.format(book.filename))
-            return book._replace(load_state=book_file.LoadState.FAILED)
-
-        log.debug('reading pages {}'.format(book.filename))
-        pages = []
-        if book.ext == '.brf':
-            page = []
-            for line in file_contents.splitlines(keepends=True):
-                if FORM_FEED.match(line):
-                    # pad up to the next page
-                    while len(page) < book.height:
-                        page.append('')
-                    continue
-                if len(page) == book.height:
-                    pages.append(tuple(page))
-                    page = []
-                page.append(braille.from_ascii(line))
-                if background:
-                    await asyncio.sleep(0)
-            if len(page) > 0:
-                # pad up to the end
-                while len(page) < book.height:
-                    page.append(tuple())
-                pages.append(tuple(page))
-        elif book.ext == '.pef':
-            xml_doc = ElementTree.fromstring(file_contents)
-            if background:
-                await asyncio.sleep(0)
-            xml_pages = xml_doc.findall('.//pef:page', NS)
-            if background:
-                await asyncio.sleep(0)
-            lines = []
-            for page in xml_pages:
-                for row in page.findall('.//pef:row', NS):
-                    line = ''.join(row.itertext()).rstrip()
-                    lines.append(braille.from_unicode(line))
-                if background:
-                    await asyncio.sleep(0)
-            for i in range(len(lines))[::book.height]:
-                page = lines[i:i + book.height]
-                # pad up to the end
-                while len(page) < book.height:
-                    page.append(tuple())
-                pages.append(tuple(page))
-        else:
-            raise BookFileError(
-                'Unexpected extension: {}'.format(book.ext))
-        bookmarks = book.bookmarks
-        if len(pages) > 1:
-            # add an end-of-book bookmark
-            bookmarks += (len(pages) - 1,)
-        log.info('loading complete for {}'.format(book.filename))
-        return book._replace(pages=tuple(pages),
-                             load_state=book_file.LoadState.DONE,
-                             bookmarks=bookmarks,
-                             indexed=False)
-    except Exception:
-        log.warning(f'book loading failed for {book.filename}', exc_info=True)
-        return book._replace(load_state=book_file.LoadState.FAILED)
-
-
 async def get_page_data(book, state, page_number=None):
     if page_number is None:
         page_number = book.page_number
@@ -187,7 +111,7 @@ async def get_page_data(book, state, page_number=None):
             return tuple(lines)
 
 
-async def _load(book, state, background=False):
+async def load_book(book, state, background=False):
     state.app.library.set_book_loading(book)
     if background:
         log.info('background loading {}'.format(book.filename))
@@ -197,55 +121,16 @@ async def _load(book, state, background=False):
     state.app.library.add_or_replace(book)
 
 
-# Since handle_changes() spawns a new instance of this every time state
-# changes, and since loading a book may take a while, be aware there may
-# be multiple instances running concurrently (but not in parallel).
-async def load_books(state, ev):
-    """Index all books discovered on media.
-    The current book is loaded first, without yielding.
-    Books visible on the current page of the library menu then get loaded
-    asynchronously.  Finally all other books get loaded asynchronously.
-    Upon completion all books will be in state DONE or state FAILED.
-    `sem` is an async.Semaphore for limiting concurrency.  If it can't be
-    acquired, the function returns.
-    """
-    log.info('loading books')
-
-    try:
-        current_book = state.app.user.book
-
-        if current_book.load_state == book_file.LoadState.INITIAL:
-            await _load(current_book, state)
-
-        background = not state.app.location == 'library'
-
-        while True:
-            await ev.wait()
-            ev.clear()
-            books = state_helpers.get_books_for_lib_page(state)
-            to_load = [b for b in books if b.load_state ==
-                       book_file.LoadState.INITIAL]
-            if not to_load:
-                break
-            await _load(to_load[0], state, background=background)
-            if books_loaded(state, state_helpers.get_books_for_lib_page(state)):
-                log.info('all books on current library page indexed')
-                break
-
-        while True:
-            await ev.wait()
-            ev.clear()
-            books = state_helpers.get_books(state)
-            to_load = [b for b in books if b.load_state ==
-                       book_file.LoadState.INITIAL]
-            if not to_load:
-                break
-            await _load(to_load[0], state, background=background)
-            if books_loaded(state):
-                log.info('all books indexed')
-                return
-    finally:
-        pass
+async def load_book_worker(state, queue):
+    log.info('book indexing worker started')
+    while True:
+        relpath = await queue.get()
+        book = state.app.user.books[relpath]
+        if book.load_state == book_file.LoadState.INITIAL:
+            log.debug(f'indexing book {relpath}')
+            await load_book(book, state, background=True)
+            log.debug('file indexing complete')
+        queue.task_done()
 
 
 def books_loaded(state, books=None):

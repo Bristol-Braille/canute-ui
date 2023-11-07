@@ -81,10 +81,7 @@ class LibraryState:
     def book_from_file(self, file):
         return self.root.app.user.books[file.relpath]
 
-    def action(self, button):
-        """this mirrors the view render code"""
-        page_num = self.page
-
+    def page_begin_end(self, page_num):
         begin = 0
         end = self.DIRS_PAGE_SIZE
         if self.files_page_open:
@@ -92,6 +89,13 @@ class LibraryState:
                 end = self.files_dir_index % self.DIRS_PAGE_SIZE + 1
             if page_num == self._files_page_start + self._files_pages:
                 begin = self.files_dir_index % self.DIRS_PAGE_SIZE
+        return begin, end
+
+    def action(self, button):
+        """this mirrors the view render code"""
+        page_num = self.page
+
+        begin, end = self.page_begin_end(page_num)
 
         if self._is_files_page(page_num):
             page_num -= self._files_page_start
@@ -171,3 +175,51 @@ class LibraryState:
     def set_book_loading(self, book):
         book = book._replace(load_state=book_file.LoadState.LOADING)
         self.add_or_replace(book)
+
+    def _books_on(self, page_num):
+        begin, end = self.page_begin_end(page_num)
+
+        if self._is_files_page(page_num):
+            page_num -= self._files_page_start
+            offset = page_num * self.FILES_PAGE_SIZE
+            dir = self.open_dir
+            for i in range(0, self.FILES_PAGE_SIZE):
+                if i >= begin and i < end and offset + i < len(dir.files):
+                    file = dir.files[offset + i]
+                    book = self.book_from_file(file)
+                    yield book
+
+    def books_to_index(self):
+        now = [self.root.app.user.book]
+
+        if self.root.app.location == 'library':
+            now += list(self._books_on(self.page))
+
+            # cache any books needed for reachable directory pages
+            later = []
+            page_num = self.page
+            if not self._is_files_page(page_num):
+                page_num = self.canonical_dir_page(page_num)
+                start = page_num * self.DIRS_PAGE_SIZE
+                begin, end = self.page_begin_end(page_num)
+                for i in range(0, self.DIRS_PAGE_SIZE):
+                    index = start + i
+                    if i >= begin and i < end and index < self.dir_count:
+                        dir = self.dirs[index]
+                        for i in range(0, min(dir.files_count, self.FILES_PAGE_SIZE)):
+                            file = dir.files[i]
+                            book = self.book_from_file(file)
+                            later.append(book)
+
+            # and any reachable by next/prev
+            for page in [page_num-5, page_num-1, page_num+1, page_num+5]:
+                if page > 0 and page < self.pages:
+                    later += list(self._books_on(page))
+        else:
+            # not looking at a library page, so only need to cache current page
+            later = list(self._books_on(self.page))
+
+        now = [b for b in now if b.load_state == book_file.LoadState.INITIAL]
+        later = [b for b in later if b.load_state == book_file.LoadState.INITIAL]
+
+        return now, later

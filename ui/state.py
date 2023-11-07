@@ -12,7 +12,7 @@ from .go_to_page.view import render_help as render_gtp_help
 from .bookmarks.help import render_help as render_bookmarks_help
 
 
-class Event(object):
+class StateEvent(object):
     def __init__(self):
         self.handlers = []
 
@@ -26,7 +26,7 @@ class Event(object):
 
     def __call__(self, *args, **kwargs):
         for handler in self.handlers:
-            handler(*args, **kwargs)
+            res = handler(*args, **kwargs)
 
 
 class HelpState:
@@ -231,9 +231,9 @@ class RootState:
         self.app = AppState(self)
         self.hardware = HardwareState(self)
 
-        self.refresh_display = Event()
-        self.save_state = Event()
-        self.backup_log = Event()
+        self.refresh_display = StateEvent()
+        self.save_state = StateEvent()
+        self.backup_log = StateEvent()
 
 
 state = RootState()

@@ -155,7 +155,6 @@ async def run_async(driver, config, loop):
     # process these imports while resetting as they are slow
     from . import buttons
     from .state import state
-    from .book.handlers import load_books
 
     log.debug('waiting for motion')
     while not driver.is_motion_complete():
@@ -167,17 +166,13 @@ async def run_async(driver, config, loop):
     width, height = driver.get_dimensions()
     state.app.set_dimensions((width, height))
 
-    queue, worker = handle_events(config, state)
+    queue, save_worker = handle_save_events(config, state)
+    load_worker = handle_display_events(config, state)
 
     media_dir = config.get('files', 'media_dir')
     log.info(f'reading initial state from {media_dir}')
     await initial_state.read(media_dir, state)
     log.info('created store')
-
-    log.info('loading books')
-    loader_limit = asyncio.Event()
-    state.app.load_books('start')
-    loader = asyncio.ensure_future(load_books(state, loader_limit))
 
     state.refresh_display()
 
@@ -201,8 +196,6 @@ async def run_async(driver, config, loop):
 
             if not display.is_up_to_date():
                 await display.send_line(driver)
-            elif not loader.done() and not loader_limit.is_set():
-                loader_limit.set()
             # in the emulated driver we can be too agressive in checking buttons
             # and sending lines if we don't have any delay
             if not isinstance(driver, Pi):
@@ -213,11 +206,12 @@ async def run_async(driver, config, loop):
         media_handler.cancel()
         duty_logger.cancel()
         await queue.join()
-        worker.cancel()
+        save_worker.cancel()
+        load_worker.cancel()
         raise
 
 
-def handle_events(config, state):
+def handle_save_events(config, state):
     media_dir = config.get('files', 'media_dir')
     queue = asyncio.Queue()
     worker = asyncio.create_task(initial_state.write(media_dir, queue))
@@ -239,14 +233,46 @@ def handle_events(config, state):
         state.app.backup_log()
         asyncio.create_task(change_files(config, state))
 
-    def on_refresh_display():
-        asyncio.create_task(display.render_to_buffer(state))
-
-    state.refresh_display += on_refresh_display
     state.save_state += on_save_state
     state.backup_log += on_backup_log
 
     return queue, worker
+
+
+def handle_display_events(config, state):
+    from .book.handlers import load_book, load_book_worker
+
+    media_dir = config.get('files', 'media_dir')
+    queue = asyncio.Queue()
+    worker = asyncio.create_task(load_book_worker(state, queue))
+
+    async def load_render_cache():
+        now, later = state.app.library.books_to_index()
+        
+        # make sure we have all the info we need and then display
+        for book in now:
+            await load_book(book, state)
+
+        # drain any outstanding book indexing tasks
+        while not queue.empty():
+            try:
+                queue.get_nowait()
+            except asyncio.QueueEmpty:
+                continue
+            queue.task_done()
+
+        # now queue up indexing tasks to cache 
+        for book in later:
+            queue.put_nowait(book.relpath(media_dir))
+
+        await display.render_to_buffer(state)
+
+    def on_refresh_display():
+        asyncio.create_task(load_render_cache())
+
+    state.refresh_display += on_refresh_display
+
+    return worker
 
 
 async def change_files(config, state):
