@@ -144,9 +144,8 @@ class LibraryState:
 
     def show_files_dir(self, book):
         """open the folder that this book is in"""
-        path = os.path.relpath(book, start=self.media_dir)
-        relpath = os.path.dirname(path)
-        name = os.path.basename(path)
+        relpath = os.path.dirname(book)
+        name = os.path.basename(book)
         for index, dir in enumerate(self.dirs):
             if dir.relpath == relpath:
                 self.files_dir_index = index
