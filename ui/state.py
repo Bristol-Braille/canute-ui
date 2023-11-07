@@ -26,7 +26,7 @@ class StateEvent(object):
 
     def __call__(self, *args, **kwargs):
         for handler in self.handlers:
-            res = handler(*args, **kwargs)
+            handler(*args, **kwargs)
 
 
 class HelpState:

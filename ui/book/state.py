@@ -1,4 +1,3 @@
-import os
 from collections import OrderedDict
 
 from .book_file import LoadState

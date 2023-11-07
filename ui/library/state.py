@@ -1,7 +1,6 @@
 import os
 import math
 import logging
-from collections import OrderedDict
 
 from ..book import book_file
 from .. import state

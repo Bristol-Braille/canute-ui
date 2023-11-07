@@ -248,7 +248,7 @@ def handle_display_events(config, state):
 
     async def load_render_cache():
         now, later = state.app.library.books_to_index()
-        
+
         # make sure we have all the info we need and then display
         for book in now:
             await load_book(book, state)
@@ -261,7 +261,7 @@ def handle_display_events(config, state):
                 continue
             queue.task_done()
 
-        # now queue up indexing tasks to cache 
+        # now queue up indexing tasks to cache
         for book in later:
             queue.put_nowait(book.relpath(media_dir))
 

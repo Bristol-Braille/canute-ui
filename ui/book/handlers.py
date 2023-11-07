@@ -3,7 +3,6 @@ import asyncio
 import logging
 import re
 import os
-import xml.etree.cElementTree as ElementTree
 
 from ..manual import manual_filename
 from .. import braille
