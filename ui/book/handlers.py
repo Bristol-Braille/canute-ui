@@ -50,6 +50,8 @@ async def _read_pages2(book, background=False):
         else:
             os.set_blocking(r, True)
             buf = os.read(r, 10)
+        os.close(r)
+        os.close(w)
         if buf != b'ok':
             raise BookFileError(
                 'loading failed: {}'.format(book.filename))
