@@ -1,14 +1,14 @@
 import logging
 import aiofiles
 from collections import OrderedDict
-from frozendict import FrozenOrderedDict
 import toml
 import os
-from frozendict import frozendict
+
 from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
+from .library.explorer import Library
 from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
 
 from . import config_loader
@@ -71,23 +71,28 @@ def to_state_file(book_path):
     dirname = os.path.dirname(book_path)
     return os.path.join(dirname, 'canute.' + basename + '.txt')
 
-def mounted_source_paths(media_dir):
-    config = config_loader.load()
-    state_sources = ['sd_card_dir']
-    if config.has_option('files', 'additional_lib_1'):
-        state_sources.append('additional_lib_1')
-    if config.has_option('files', 'additional_lib_2'):
-        state_sources.append('additional_lib_2')
 
-    for source in state_sources:
-        source_dir = config.get('files', source)
+def configured_source_dirs():
+    config = config_loader.load()
+    state_sources = [('sd_card_dir', 'SD')]
+    if config.has_option('files', 'additional_lib_1'):
+        state_sources.append(('additional_lib_1', 'USB1'))
+    if config.has_option('files', 'additional_lib_2'):
+        state_sources.append(('additional_lib_2', 'USB2'))
+    return [(config.get('files', source), name) for source, name in state_sources]
+
+
+def mounted_source_paths(media_dir):
+    for source_dir, name in configured_source_dirs():
         source_path = os.path.join(media_dir, source_dir)
         if os.path.ismount(source_path):
             yield source_path
 
+
 def swap_library(media_dir, current_book):
     config = config_loader.load()
-    if config.has_option('files', 'additional_lib_1') and config.has_option('files', 'additional_lib_2'):
+    if config.has_option('files', 'additional_lib_1') and \
+            config.has_option('files', 'additional_lib_2'):
         lib1 = os.path.join(media_dir, config.get('files', 'additional_lib_1'))
         lib2 = os.path.join(media_dir, config.get('files', 'additional_lib_2'))
         if current_book.startswith(lib1):
@@ -96,12 +101,16 @@ def swap_library(media_dir, current_book):
             return lib1 + current_book[len(lib2):]
     return current_book
 
-async def read_user_state(media_dir):
+
+async def read_user_state(media_dir, state):
     global prev
     global manual
     current_book = manual_filename
     current_language = None
-    book_files = utility.find_files(media_dir, ('brf', 'pef'))
+
+    library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
+    book_files = library.book_files()
+
     source_paths = mounted_source_paths(media_dir)
     for source_path in source_paths:
         main_toml = os.path.join(source_path, USER_STATE_FILE)
@@ -116,7 +125,8 @@ async def read_user_state(media_dir):
                     current_language = main_state['current_language']
                 break
             except Exception:
-                log.warning('user state loading failed for {}, ignoring'.format(main_toml))
+                log.warning(
+                    'user state loading failed for {}, ignoring'.format(main_toml))
 
     if not current_language or current_language == OLD_DEFAULT_LOCALE:
         current_language = DEFAULT_LOCALE.code
@@ -134,12 +144,15 @@ async def read_user_state(media_dir):
                 manual = manual._replace(bookmarks=tuple(sorted(manual.bookmarks + tuple(
                     bm - 1 for bm in t['bookmarks']))))
         except Exception:
-            log.warning('manual state loading failed for {}, ignoring'.format(manual_toml))
+            log.warning(
+                'manual state loading failed for {}, ignoring'.format(manual_toml))
+
+    width, height = state.app.dimensions
 
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
-        book = BookFile(filename=book_file, width=40, height=9)
+        book = BookFile(filename=book_file, width=width, height=height)
         if os.path.exists(toml_file):
             try:
                 t = toml.load(toml_file)
@@ -148,69 +161,57 @@ async def read_user_state(media_dir):
                 if 'bookmarks' in t:
                     book = book._replace(bookmarks=tuple(sorted(book.bookmarks + tuple(
                         bm - 1 for bm in t['bookmarks']))))
-            except Exception:
-                log.warning('book state loading failed for {}, ignoring'.format(toml_file))
-
+            except Exception as err:
+                log.error(err)
+                log.warning(
+                    'book state loading failed for {}, ignoring'.format(toml_file))
+        else:
+            state.save_state(book)
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
 
     if current_book not in books:
-        # let's just check that's not simply that they're using a differnt USB port
+        # let's check that they're not just using a different USB port
         log.info('current book not in original library {}'.format(current_book))
         current_book = swap_library(media_dir, current_book)
         if current_book not in books:
             log.warn('current book not found {}, ignoring'.format(current_book))
             current_book = manual_filename
 
-    user_state = frozendict(books=FrozenOrderedDict(
-        books), current_book=current_book, current_language=current_language)
-    prev = user_state
-    return user_state.copy(books=user_state['books'])
+    state.app.user.books = books
+    state.app.user.current_book = current_book
+    state.app.user.current_language = current_language
+    state.save_state()
 
 
-async def read(media_dir):
-    user_state = await read_user_state(media_dir)
-    return initial_state.copy(app=initial_state['app'].copy(user=user_state))
+async def read(media_dir, state):
+    await read_user_state(media_dir, state)
 
 
-async def write(store, media_dir, sem, writes_in_flight):
-    global prev
-    await sem.acquire()
-    state = store.state
-    user_state = state['app']['user']
-    books = user_state['books']
-    selected_book = user_state['current_book']
-    selected_lang = user_state['current_language']
-    if selected_book != prev['current_book'] or selected_lang != prev['current_language']:
-        if not selected_book == manual_filename:
-            selected_book = os.path.relpath(selected_book, media_dir)
-        s = toml.dumps({'current_book': selected_book,
-                        'current_language': selected_lang})
-        source_paths = mounted_source_paths(media_dir)
-        for source_path in source_paths:
-            path = os.path.join(source_path, USER_STATE_FILE)
-            async with aiofiles.open(path, 'w') as f:
-                await f.write(s)
-            
-    for filename in books:
-        book = books[filename]
-        if filename in prev['books']:
-            prev_book = prev['books'][filename]
+async def write(media_dir, queue):
+    log.info('save file worker started')
+    while True:
+        (filename, data) = await queue.get()
+        s = toml.dumps(data)
+
+        if filename is None:
+            # main user state file
+            source_paths = mounted_source_paths(media_dir)
+            for source_path in source_paths:
+                path = os.path.join(source_path, USER_STATE_FILE)
+                log.debug('writing user state file save to {path}')
+                async with aiofiles.open(path, 'w') as f:
+                    await f.write(s)
+
         else:
-            prev_book = BookFile()
-        if book.page_number != prev_book.page_number or book.bookmarks != prev_book.bookmarks:
-            path = to_state_file(book.filename)
-            if book.filename == manual_filename:
+            # book state file
+            if filename == manual_filename:
                 path = os.path.join(media_dir, path)
-            bms = [bm + 1 for bm in book.bookmarks if bm != 'deleted']
-            # remove start-of-book and end-of-book bookmarks
-            bms = bms[1:-1]
-            # ordered to make sure current_page comes before bookmarks
-            d = OrderedDict([['current_page', book.page_number + 1],
-                             ['bookmarks', bms]])
-            s = toml.dumps(d)
+            else:
+                path = to_state_file(filename)
+            log.debug(f'writing {filename} state file save to {path}')
             async with aiofiles.open(path, 'w') as f:
                 await f.write(s)
-    prev = user_state
-    sem.release()
-    writes_in_flight[0] -= 1
+
+        log.debug('state file save complete')
+        queue.task_done()

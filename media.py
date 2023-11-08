@@ -16,7 +16,7 @@ from gi.repository import GLib
 
 
 def stringify(enc):
-    '''Turn NUL-terminated array-of-int into a str'''
+    """Turn NUL-terminated array-of-int into a str"""
     return ''.join(map(chr, enc[:-1]))
 
 
@@ -89,7 +89,7 @@ class Media:
                            signal_fired=self.handle_device_shrinks)
 
     def synthesize_insertions(self, ud_api):
-        '''Generate an insertion event for each mounted medium'''
+        """Generate an insertion event for each mounted medium"""
         existing_media = ud_api.GetManagedObjects()
         for (obj, properties) in existing_media.items():
             if 'org.freedesktop.UDisks2.Filesystem' in properties:
@@ -102,7 +102,7 @@ class Media:
                 self.handle_mounts(None, obj, None, None, params)
 
     def handle_medium_insertion(self, object_path, properties):
-        '''Handle medium insertion in external ports'''
+        """Handle medium insertion in external ports"""
         # Gets callback from pydbus for any new block device.
         #
         # For new media, add UDisks2 object mappings and subscribe to
@@ -136,7 +136,7 @@ class Media:
                 self.obj2sym[table] = sym
 
     def handle_medium_removal(self, object_path, lost_interfaces):
-        '''Handle media disappearing from external ports'''
+        """Handle media disappearing from external ports"""
         # Pretty much all we can use is the object path.
         # We may or may not be interested in this object.
         if 'org.freedesktop.UDisks2.Block' not in lost_interfaces:
@@ -157,7 +157,7 @@ class Media:
         return False
 
     def handle_mounts(self, sender, obj, iface, signal, params):
-        '''Handle mounts of newly inserted media'''
+        """Handle mounts of newly inserted media"""
         (ud_iface, changed, invalidated) = params
         if ud_iface != 'org.freedesktop.UDisks2.Filesystem':
             return
@@ -169,7 +169,7 @@ class Media:
         if not self.known_mountpoint(mountpoint):
             return
         sym = self.obj2sym[obj]
-        assert(sym not in self.mounted)
+        assert sym not in self.mounted
         self.mounted.append(sym)
         if not self.synthetic:
             print('inserted %s' % EXTERNAL_PORT_PATHS[sym])

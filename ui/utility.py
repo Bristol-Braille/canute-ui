@@ -1,12 +1,11 @@
-'''
+"""
 Utility
 =======
 
 contains various utility methods used by many of the modules
-'''
+"""
 
 import os
-import re
 import logging
 from collections import OrderedDict
 from frozendict import frozendict, FrozenOrderedDict
@@ -15,11 +14,11 @@ log = logging.getLogger(__name__)
 
 
 def find_ui_update(config):
-    '''
+    """
     recursively look for firmware in the usb_dir,
     firmware file is called canute-ui.tar.gz
     returns first one found
-    '''
+    """
     usb_dir = config.get('files', 'usb_dir')
     ui_file = 'canute-ui.tar.gz'
 
@@ -27,27 +26,11 @@ def find_ui_update(config):
     for root, dirnames, filenames in os.walk(usb_dir):
         for filename in filenames:
             if filename == ui_file:
-                return(os.path.join(root, filename))
+                return (os.path.join(root, filename))
 
 
-def find_files(directory, extensions):
-    '''recursively look for files that end in the extensions tuple (case
-    insensitive)'''
-    matches = []
-    for root, dirnames, filenames in os.walk(directory):
-        for d in dirnames[:]:
-            if d.startswith('.') or d == 'RECYCLE' or d == '$Recycle':
-                dirnames.remove(d)
-        for filename in filenames:
-            for ext in extensions:
-                if re.search(r'\.' + ext + '$', filename, re.I):
-                    matches.append(os.path.join(root, filename))
-                    break
-    return matches
-
-
-def flatten(l):
-    return [item for sublist in l for item in sublist]
+def flatten(list):
+    return [item for sublist in list for item in sublist]
 
 
 def pad_line(w, line):
@@ -57,7 +40,7 @@ def pad_line(w, line):
 def get_methods(cls):
     methods = [
         x for x in dir(cls)
-        if isinstance(getattr(cls, x), collections.Callable)
+        if isinstance(getattr(cls, x), collections.abc.Callable)
     ]
     return [x for x in methods if not x.startswith('__')]
 

@@ -1,33 +1,40 @@
-from ..actions import actions
+from ..state import state
+
+
+# create a function to call when the button is pressed
+# (otherwise the function call happens immediately)
+def select_language(index):
+    return lambda: state.app.languages.select_language(index)
+
 
 language_buttons = {
     'single': {
-        'L': actions.close_menu(),
-        '2': actions.select_language(0),
-        '3': actions.select_language(1),
-        '4': actions.select_language(2),
-        '5': actions.select_language(3),
-        '6': actions.select_language(4),
-        '7': actions.select_language(5),
-        '8': actions.select_language(6),
-        '9': actions.select_language(7),
-        '<': actions.previous_page(),
-        '>': actions.next_page(),
-        'R': actions.toggle_help_menu(),
+        'L': state.app.close_menu,
+        '2': select_language(0),
+        '3': select_language(1),
+        '4': select_language(2),
+        '5': select_language(3),
+        '6': select_language(4),
+        '7': select_language(5),
+        '8': select_language(6),
+        '9': select_language(7),
+        '<': state.app.previous_page,
+        '>': state.app.next_page,
+        'R': state.app.help_menu.toggle
     },
     'long': {
-        'L': actions.close_menu(),
-        '2': actions.select_language(0),
-        '3': actions.select_language(1),
-        '4': actions.select_language(2),
-        '5': actions.select_language(3),
-        '6': actions.select_language(4),
-        '7': actions.select_language(5),
-        '8': actions.select_language(6),
-        '9': actions.select_language(7),
-        '<': actions.previous_page(),
-        '>': actions.next_page(),
-        'R': actions.toggle_help_menu(),
-        'X': actions.reset_display('start')
+        'L': state.app.close_menu,
+        '2': select_language(0),
+        '3': select_language(1),
+        '4': select_language(2),
+        '5': select_language(3),
+        '6': select_language(4),
+        '7': select_language(5),
+        '8': select_language(6),
+        '9': select_language(7),
+        '<': state.app.previous_page,
+        '>': state.app.next_page,
+        'R': state.app.help_menu.toggle,
+        'X': state.hardware.reset_display
     }
 }

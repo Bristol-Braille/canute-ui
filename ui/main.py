@@ -1,6 +1,5 @@
 import os
 import sys
-from frozendict import frozendict
 import time
 import atexit
 import signal
@@ -14,7 +13,6 @@ from . import initial_state
 from .driver.driver_pi import Pi
 from .driver.driver_dummy import Dummy
 from .setup_logs import setup_logs
-from .actions import actions
 from .display import Display
 
 display = Display()
@@ -69,7 +67,9 @@ def main():
         log.info('running with emulated hardware')
         from .driver.driver_emulated import Emulated
         with Emulated(delay=args.delay, display_text=args.text) as driver:
+            log.info('running')
             run(driver, config)
+            log.info('run')
     elif args.emulated and args.both:
         log.info('running with both emulated and real hardware on port %s'
                  % args.tty)
@@ -86,11 +86,14 @@ def main():
                 run(driver, config)
         except RuntimeError as err:
             if err.args[0] == 'readFrame timeout':
-                log.info('passthrough serial disconnected, USB B probably in use, exiting')
+                log.info(
+                    'passthrough serial disconnected, USB B probably in use, exiting')
                 sys.exit(2)
+
 
 def run(driver, config):
     loop = asyncio.get_event_loop()
+    log.debug('running loop')
     loop.run_until_complete(run_async(driver, config, loop))
     pending = asyncio.Task.all_tasks()
     loop.run_until_complete(asyncio.gather(*pending))
@@ -114,10 +117,11 @@ async def handle_media_changes():
     if 'TRAVIS' in os.environ:
         media_helper = '/bin/cat'
     proc = await asyncio.create_subprocess_exec(
-                    media_helper, stdout=asyncio.subprocess.PIPE)
+        media_helper, stdout=asyncio.subprocess.PIPE)
 
     # avoid leaving zombie processes on exits
     asyncio.create_task(proc.wait())
+
     def stop_helper(*args):
         proc.terminate()
         if len(args) > 0:
@@ -136,52 +140,48 @@ async def handle_media_changes():
             # library.
             sys.exit(0)
 
+
 async def run_async(driver, config, loop):
     # Last-minute hack: to clear as many errors as possible, without
     # risking hanging up the UI by having it start comms with the MCUs
     # while they're resetting, have the UI issue a reset as its first
     # act, synchronously.
+    log.debug('resetting display')
     driver.reset_display()
+    log.debug('display reset')
 
     # process these imports while resetting as they are slow
-    import aioredux
-    import aioredux.middleware
     from . import buttons
-    from .store import main_reducer
+    from .state import state
     from .book.handlers import load_books
 
+    log.debug('waiting for motion')
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
+    log.debug('motion complete')
     media_handler = asyncio.ensure_future(handle_media_changes())
     duty_logger = asyncio.ensure_future(driver.track_duty())
-    media_dir = config.get('files', 'media_dir')
-    state = await initial_state.read(media_dir)
+
     width, height = driver.get_dimensions()
-    state = state.copy(app=state['app'].copy(
-        display=frozendict({'width': width, 'height': height})))
+    state.app.set_dimensions((width, height))
 
-    thunk_middleware = aioredux.middleware.thunk_middleware
-    create_store = aioredux.apply_middleware(
-        thunk_middleware)(aioredux.create_store)
-    store = await create_store(main_reducer, state)
+    queue, worker = handle_events(config, state)
 
-    await store.dispatch(actions.load_books('start'))
+    media_dir = config.get('files', 'media_dir')
+    log.info(f'reading initial state from {media_dir}')
+    await initial_state.read(media_dir, state)
+    log.info('created store')
 
-    store.subscribe(handle_changes(driver, config, store))
-
-    # since handle_changes subscription happens after init and library.sync it
-    # may not have triggered. so we trigger it here. if we put it before init
-    # it will start of by rendering a possibly invalid state. library.sync
-    # won't dispatch if the library is already in sync so there would be no
-    # guarantee of the subscription triggering if subscribed before that.
-    await store.dispatch(actions.trigger())
+    log.info('loading books')
     loader_limit = asyncio.Event()
-    loader = asyncio.ensure_future(load_books(store, loader_limit))
+    state.app.load_books('start')
+    loader = asyncio.ensure_future(load_books(state, loader_limit))
+
+    state.refresh_display()
 
     try:
         while 1:
-            state = store.state
-            if (await handle_hardware(driver, state, store, media_dir)):
+            if (await handle_hardware(driver, state, media_dir)):
                 media_handler.cancel()
                 try:
                     await media_handler
@@ -195,8 +195,7 @@ async def run_async(driver, config, loop):
 
                 break
 
-            await buttons.check(driver, state['app'],
-                                store.dispatch)
+            await buttons.check(driver, state)
 
             if not display.is_up_to_date():
                 await display.send_line(driver)
@@ -211,43 +210,58 @@ async def run_async(driver, config, loop):
     except asyncio.CancelledError:
         media_handler.cancel()
         duty_logger.cancel()
+        await queue.join()
+        worker.cancel()
         raise
 
 
-def handle_changes(driver, config, store):
+def handle_events(config, state):
     media_dir = config.get('files', 'media_dir')
-    # Limit the number of book indexing tasks in flight at once, because
-    # they may well be IO-bound and because we index all books on media,
-    # not just the ones visible in the current library menu page.
-    config_limit = asyncio.Semaphore(1)
-    writes_in_flight = [0]
+    queue = asyncio.Queue()
+    worker = asyncio.create_task(initial_state.write(media_dir, queue))
 
-    def listener():
-        state = store.state
-        asyncio.ensure_future(display.render_to_buffer(state['app'], store))
-        asyncio.ensure_future(change_files(config, state['app'], store))
-        if not config_limit.locked():
-            writes_in_flight[0] += 1
-            asyncio.ensure_future(initial_state.write(store, media_dir,
-                                                      config_limit, writes_in_flight))
-    return listener
+    def on_save_state(book=None):
+        # queue a snapshot of the state we want to save, theoretically we
+        # might want to remove existing save jobs for the same file from
+        # the queue, but it's very unlikely the human+mechanics will be
+        # that much faster than a filesystem write
+        if book is None:
+            log.debug('queuing user state file save')
+            queue.put_nowait((None, state.app.user.to_file(media_dir)))
+        else:
+            log.debug(f'queuing {book.filename} state file save')
+            queue.put_nowait((book.filename, book.to_file()))
+
+    def on_backup_log():
+        log.info('backup log requested')
+        state.app.backup_log()
+        asyncio.create_task(change_files(config, state))
+
+    def on_refresh_display():
+        asyncio.create_task(display.render_to_buffer(state))
+
+    state.refresh_display += on_refresh_display
+    state.save_state += on_save_state
+    state.backup_log += on_backup_log
+
+    return queue, worker
 
 
-async def change_files(config, state, store):
-    state = store.state['app']
-    if state['backing_up_log'] == 'start':
-        await store.dispatch(actions.backup_log('in progress'))
+async def change_files(config, state):
+    if state.app.backing_up_log == 'start':
+        state.app.backup_log('in progress')
+        # async?
         backup_log(config)
-        await store.dispatch(actions.backup_log('done'))
+        state.app.backup_log('done')
 
 
-async def handle_hardware(driver, state, store, media_dir):
+async def handle_hardware(driver, state, media_dir):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
-        await store.dispatch(actions.load_books('cancel'))
-        await initial_state.write(store, media_dir)
-        await store.dispatch(actions.shutdown())
-    if state['app']['shutting_down']:
+        state.load_books('cancel')
+        await initial_state.write(state, media_dir)
+        state.app.shutdown()
+    if state.app.shutting_down:
         if isinstance(driver, Pi):
             driver.port.close()
             os.system('/home/pi/util/shutdown-stage-1.py')
@@ -257,13 +271,13 @@ async def handle_hardware(driver, state, store, media_dir):
         elif isinstance(driver, Dummy):
             return False
         return True
-    elif state['hardware']['resetting_display'] == 'start':
+    elif state.hardware.resetting_display == 'start':
         log.warning('long-press of square: exiting to cause reset')
         sys.exit(0)
-    elif state['hardware']['warming_up'] == 'start':
-        store.dispatch(actions.warm_up('in progress'))
+    elif state.hardware.warming_up == 'start':
+        state.hardware.warm_up('in progress')
         driver.warm_up()
-        await store.dispatch(actions.warm_up(False))
+        state.hardware.warm_up(False)
 
 
 def backup_log(config):

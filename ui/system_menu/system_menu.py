@@ -3,7 +3,7 @@ import os
 import curses.ascii as ASCII
 
 from ..braille import from_unicode, alpha_to_unicode, ueb_number_mapping
-from ..actions import actions
+from ..state import state
 
 
 def create():
@@ -12,7 +12,7 @@ def create():
 
 
 def brailleify(rel):
-    '''Turn 1.3.45 or AKPR54633-1PHI into UEB'''
+    """Turn 1.3.45 or AKPR54633-1PHI into UEB"""
     # FIXME: if we do this at all it should be in braille.py, and we
     # probably shouldn't be trying to do liblouis-level translation at
     # all.
@@ -53,14 +53,18 @@ else:
     serial = release
 
 
+def do_nothing():
+    pass
+
+
 def system_menu():
     return OrderedDict([
-        (_('shutdown'), actions.shutdown()),
-        (_('backup log to USB stick'), actions.backup_log('start')),
-        (_('select language and code'), actions.go_to_language_menu()),
-        ((''), actions.do_nothing()),
-        ((' '), actions.do_nothing()),
-        (('  '), actions.do_nothing()),
-        (_('release:') + ' ' + release, actions.do_nothing()),
-        (_('serial:') + ' ' + serial, actions.do_nothing()),
+        (_('shutdown'), state.app.shutdown),
+        (_('backup log to USB stick'), state.backup_log),
+        (_('select language and code'), state.app.go_to_language_menu),
+        ((''), do_nothing),
+        ((' '), do_nothing),
+        (('  '), do_nothing),
+        (_('release:') + ' ' + release, do_nothing),
+        (_('serial:') + ' ' + serial, do_nothing),
     ])

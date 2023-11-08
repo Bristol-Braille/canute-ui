@@ -1,5 +1,4 @@
 import logging
-from . import state_helpers
 from .library import view as library_view
 from .system_menu import view as system_menu_view
 from .go_to_page import view as go_to_page_view
@@ -18,9 +17,9 @@ class Display():
         self.buffer = []
         self.up_to_date = True
 
-    async def render_to_buffer(self, state, store):
-        width, height = state_helpers.dimensions(state)
-        location = state['location']
+    async def render_to_buffer(self, state):
+        width, height = state.app.dimensions
+        location = state.app.location
         page_data = None
         if location == 'library':
             page_data = library_view.render(width, height, state)
@@ -31,9 +30,9 @@ class Display():
         elif location == 'language':
             page_data = language_view.render(width, height, state)
         elif location == 'book':
-            page_data = await book_view.render(width, height, state, store)
+            page_data = await book_view.render(width, height, state)
         elif location == 'bookmarks_menu':
-            page_data = await bookmarks_view.render(width, height, state, store)
+            page_data = await bookmarks_view.render(width, height, state)
         if page_data:
             self._set_buffer(page_data)
 
@@ -52,7 +51,8 @@ class Display():
             status = await driver.async_set_braille_row(row, braille)
             if status != 0:
                 if failure_status == 0:
-                    log.warning('line send failed with status %d, retrying' % status)
+                    log.warning(
+                        'line send failed with status %d, retrying' % status)
                 failure_status = status
                 # FIXME: Horrible to have an unnamed constant here.
                 # This is REPLY_WARM_RESET, but, should display really
@@ -61,7 +61,8 @@ class Display():
                 # corresponding driver failure codes?
                 if not warm_reset and status == 0xDD:
                     warm_reset = True
-                    log.warning('line refused because motors busy doing warm reset')
+                    log.warning(
+                        'line refused because motors busy doing warm reset')
             else:
                 if warm_reset:
                     # If we waited out a warm reset, invalidate display

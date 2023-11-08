@@ -4,10 +4,10 @@ from .help import render_help
 
 
 def render(width, height, state):
-    if state['help_menu']['visible']:
+    if state.app.help_menu.visible:
         all_lines = render_help(width, height)
         num_pages = len(all_lines) // height
-        page_num = min(state['help_menu']['page'], num_pages - 1)
+        page_num = min(state.app.help_menu.page, num_pages - 1)
         first_line = page_num * height
         off_end = first_line + height
         page = all_lines[first_line:off_end]
@@ -15,7 +15,7 @@ def render(width, height, state):
 
     menu_titles = create()
 
-    page = state['system_menu']['page']
+    page = state.app.system_menu.page
     data = list(menu_titles)
     # subtract title from page height
     data_height = height - 1

@@ -6,14 +6,14 @@ UNICODE_BRAILLE_BASE = 0x2800
 
 
 def format_title(title, width, page_number, total_pages, capitalize=True):
-    '''
+    """
     format a title like this:
         * title on the top line.
         * use two dot-six characters to indicate all uppercase for the title.
         * page numbers all the way at the right,
         e.g. ',,library menu               #1/#3'.
     `title` may be given as a mixture of Unicode Braille and SimBraille.
-    '''
+    """
     if ord(title[0]) >= UNICODE_BRAILLE_BASE:
         title = unicodes_to_alphas(title)
 
@@ -68,12 +68,12 @@ def to_ueb_number(n):
 
 
 def unicode_to_pin_num(uni_char):
-    '''
+    """
     converts a unicode braille character to a decimal number
 
     used to convert PEF format to CANUTE format
     http://en.wikipedia.org/wiki/Braille_Patterns
-    '''
+    """
     int_code = ord(uni_char) - UNICODE_BRAILLE_BASE
     pin_num = 0
     pins = [0] * 6
@@ -106,9 +106,9 @@ def unicode_to_pin_num(uni_char):
 
 
 def pin_num_to_unicode(pin_num):
-    '''
+    """
     used by the gui to display braille
-    '''
+    """
     return chr(pin_num + UNICODE_BRAILLE_BASE)
 
 
@@ -118,20 +118,20 @@ mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
 
 
 def pin_num_to_alpha(numeric):
-    ''' for sorting & debugging '''
+    """ for sorting & debugging """
     return mapping[numeric]
 
 
 def pin_nums_to_alphas(numerics):
-    ''' used to convert plain text to pin pattern numbers '''
+    """ used to convert plain text to pin pattern numbers """
     return list(map(pin_num_to_alpha, numerics))
 
 
 def alpha_to_pin_num(alpha):
-    '''
+    """
     convert a single alpha, digit or some punctuation to 6 pin braille
     unknown characters will be logged and a space will be returned.
-    '''
+    """
     # This gets around a common Braille ASCII encoding ambiguity where
     # some translation software produces `{|} and lower-case
     # alphabeticals, which map to the same dot patterns as @[\] and
@@ -150,25 +150,25 @@ def alpha_to_pin_num(alpha):
 
 
 def from_ascii(alphas):
-    '''
+    """
     convert a list or string of alphas to pin numbers using
     :meth:`alpha_to_pin_num` form feed and line feed characters are supressed
-    '''
+    """
     return tuple(alpha_to_pin_num(a) for a in alphas)
 
 
 def from_unicode(alphas):
-    '''
+    """
     convert a list or string of unicode chars to pin numbers using
     :meth:`unicode_to_pin_num` form feed and line feed characters are supressed
-    '''
+    """
     return tuple(unicode_to_pin_num(a) for a in alphas)
 
 
 def alpha_to_unicode(alpha):
-    '''
+    """
     Convert an alpha to a Unicode character.
-    '''
+    """
     alpha = alpha.upper()
     try:
         if ASCII.isprint(alpha):  # includes ASCII space, 0x20
@@ -182,26 +182,26 @@ def alpha_to_unicode(alpha):
 
 
 def alphas_to_unicodes(alphas):
-    '''
+    """
     Convert an alpha string to a Unicode string.
-    '''
+    """
     return ''.join(map(alpha_to_unicode, alphas))
 
 
 def unicode_to_alpha(uni):
-    '''
+    """
     Convert a six-dot Unicode Braille character to a SimBraille one.
     Printable ASCII is returned unchanged.  Unprintable ASCII not allowed.
-    '''
+    """
     if ASCII.isprint(uni):
         return uni
     return mapping[ord(uni) - UNICODE_BRAILLE_BASE]
 
 
 def unicodes_to_alphas(unis):
-    '''
+    """
     Convert a six-dot Unicode Braille string to a SimBraille one.
     Printable ASCII chars are left unchanged.  Unprintable ASCII not
     allowed.
-    '''
+    """
     return ''.join(map(unicode_to_alpha, unis))

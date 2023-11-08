@@ -1,9 +1,9 @@
-'''
+"""
 This module defines the DriverBoth class that combines the emulated and real
 driver (Pi) allowing you to run them at the same time. Methods are sent to both
 drivers values from the emulated one are returned. This means, for instance,
 that only the button presses from the emulated GUI are registered.
-'''
+"""
 import logging
 from .driver import Driver
 from .driver_emulated import Emulated
@@ -27,7 +27,7 @@ class DriverBoth():
         pass
 
     def __enter__(self):
-        '''method required for using the `with` statement'''
+        """method required for using the `with` statement"""
         return self
 
 
