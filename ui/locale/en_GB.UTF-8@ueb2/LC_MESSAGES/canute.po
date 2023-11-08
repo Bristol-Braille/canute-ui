@@ -3,21 +3,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-10-08 16:12+0100\n"
-"PO-Revision-Date: 2019-10-08 15:12+0000\n"
+"POT-Creation-Date: 2023-11-08 10:00+0000\n"
+"PO-Revision-Date: 2023-11-08 11:18+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.13.1\n"
 
 #. TRANSLATORS: This is a language name menu item, so should always appear
 #. in the language it denotes so that it remains readable to those who
 #. speak only that language, just as "Deutsch" should always be left as
 #. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
 #. appropriate, if possible.
-#: ui/i18n.py:37
+#: ui/i18n.py:38
 msgid "English, UEB grade 1"
 msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
 
@@ -26,7 +26,7 @@ msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
 #. speak only that language, just as "Deutsch" should always be left as
 #. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
 #. appropriate, if possible.
-#: ui/i18n.py:44
+#: ui/i18n.py:45
 msgid "English, UEB grade 2"
 msgstr "⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃"
 
@@ -114,19 +114,19 @@ msgstr ""
 msgid "go to page"
 msgstr "⠛ ⠞⠕ ⠏⠁⠛⠑"
 
-#: ui/book/view.py:14
+#: ui/book/view.py:13
 msgid "insert bookmark at current page"
 msgstr "⠔⠎⠻⠞ ⠃⠕⠕⠅⠍⠜⠅ ⠁⠞ ⠉⠥⠗⠗⠢⠞ ⠏⠁⠛⠑"
 
-#: ui/book/view.py:15
+#: ui/book/view.py:14
 msgid "choose from existing bookmarks"
 msgstr "⠡⠕⠕⠎⠑ ⠋ ⠑⠭⠊⠌⠬ ⠃⠕⠕⠅⠍⠜⠅⠎"
 
-#: ui/book/view.py:17
+#: ui/book/view.py:16
 msgid "view system menu"
 msgstr "⠧⠊⠑⠺ ⠎⠽⠌⠑⠍ ⠍⠢⠥"
 
-#: ui/book/view.py:18
+#: ui/book/view.py:17
 msgid "view library menu"
 msgstr "⠧⠊⠑⠺ ⠇⠊⠃⠗⠜⠽ ⠍⠢⠥"
 
@@ -223,7 +223,7 @@ msgstr ""
 msgid "languages:"
 msgstr "⠇⠁⠝⠛⠥⠁⠛⠑⠎⠒"
 
-#: ui/library/view.py:7
+#: ui/library/view.py:12
 msgid ""
 "This is the library menu. From this menu you can view and select from the files on the memory stick or SD card. You can choose a file by pressing the line select button to the left of the file name. Canute 360 will then show your chosen file on the display. You can navigate forward and backwards within the library menu using the large buttons labelled \"forward\" and \"back\" on the front panel. You can return to the file you are currently reading by pressing the large central button labelled \"menu\".\n"
 "\n"
@@ -264,9 +264,21 @@ msgstr ""
 "⠕⠝⠇⠔⠑ ⠗⠕⠃⠕⠤⠃⠗⠇ ⠎⠻⠧⠊⠉⠑ ⠃⠕⠹ ⠓ ⠁ ⠠⠉⠁⠝⠥⠞⠑\n"
 "⠼⠉⠋⠚ ⠏⠗⠑⠎⠑⠞ ⠃⠥⠊⠇⠞ ⠔ ⠿ ⠿⠍⠁⠞⠞⠬⠲"
 
-#: ui/library/view.py:48
+#: ui/library/view.py:56
+msgid "go to book list"
+msgstr "⠛⠀⠞⠕⠀⠃⠕⠕⠅⠀⠇⠊⠌"
+
+#: ui/library/view.py:73
 msgid "library menu"
 msgstr "⠇⠊⠃⠗⠜⠽ ⠍⠢⠥"
+
+#: ui/library/view.py:83
+msgid "back to directory list"
+msgstr "⠃⠁⠉⠅⠀⠞⠕⠀⠙⠊⠗⠑⠉⠞⠕⠗⠽⠀⠇⠊⠌"
+
+#: ui/library/view.py:89
+msgid "more directories"
+msgstr "⠍⠀⠙⠊⠗⠑⠉⠞⠕⠗⠊⠑⠎"
 
 #: ui/system_menu/help.py:6
 msgid ""
@@ -287,23 +299,23 @@ msgstr ""
 msgid "emulated"
 msgstr "⠑⠍⠥⠇⠁⠞⠫"
 
-#: ui/system_menu/system_menu.py:58
+#: ui/system_menu/system_menu.py:62
 msgid "shutdown"
 msgstr "⠩⠥⠞⠙⠪⠝"
 
-#: ui/system_menu/system_menu.py:59
+#: ui/system_menu/system_menu.py:63
 msgid "backup log to USB stick"
 msgstr "⠃⠁⠉⠅⠥⠏ ⠇⠕⠛ ⠞⠕ ⠠⠠⠥⠎⠃ ⠌⠊⠉⠅"
 
-#: ui/system_menu/system_menu.py:60
+#: ui/system_menu/system_menu.py:64
 msgid "select language and code"
 msgstr "⠎⠑⠇⠑⠉⠞ ⠇⠁⠝⠛⠥⠁⠛⠑ ⠯ ⠉⠕⠙⠑"
 
-#: ui/system_menu/system_menu.py:64
+#: ui/system_menu/system_menu.py:68
 msgid "release:"
 msgstr "⠗⠑⠇⠂⠎⠑⠒"
 
-#: ui/system_menu/system_menu.py:65
+#: ui/system_menu/system_menu.py:69
 msgid "serial:"
 msgstr "⠎⠻⠊⠁⠇⠒"
 

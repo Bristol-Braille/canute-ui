@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #
 # Do a naive, likely one-off automated translation from English print to
 # the built-in supported English Braille variants.
