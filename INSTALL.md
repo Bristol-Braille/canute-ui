@@ -26,17 +26,19 @@ For MacPorts:
 
 For Homebrew:
 
-    brew install python3
-    pip3 install -r requirements.txt
+    brew install python@3.12
+    brew install qt5
+    export PATH="$(brew --prefix qt5)/bin:$PATH"
+    brew install pyqt@5
+    export PYTHONPATH="$(brew --prefix pyqt@5)/lib/python3.12/site-packages:$PYTHONPATH"
+    python3.12 -m venv ve
+    . ve/bin/activate
+    pip install -r requirements.txt
 
-
-brew install qt5
-export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"
-python3 -m venv ve
-. ve/bin/activate
-pip install pyqt5 --config-settings --confirm-license= --verbose
-pip install -r requirements.txt
-
+    brew install liblouis
+    cd ui/locale
+    pip install -r requirements-translate.txt
+    export PYTHONPATH="$(brew --prefix liblouis)/lib/python3.12/site-packages:$PYTHONPATH"
 
 ## Deploying to Raspberry Pi
 

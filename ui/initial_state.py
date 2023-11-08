@@ -4,7 +4,6 @@ from collections import OrderedDict
 import toml
 import os
 
-from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
@@ -19,51 +18,6 @@ USER_STATE_FILE = 'canute_state.txt'
 manual = Manual.create()
 
 log = logging.getLogger(__name__)
-
-initial_state = utility.freeze({
-    'app': {
-        'user': {
-            'current_book': manual_filename,
-            'books': OrderedDict({manual_filename: manual}),
-            'current_language': DEFAULT_LOCALE.code,
-        },
-        'location': 'book',
-        'library': {
-            'page': 0,
-        },
-        'load_books': False,
-        'system_menu': {
-            'page': 0
-        },
-        'bookmarks_menu': {
-            'page': 0
-        },
-        'languages': {
-            'available': BUILTIN_LANGUAGES,
-            'selection': '',
-            'keys_pressed': '',
-        },
-        'go_to_page': {
-            'selection': '',
-            'keys_pressed': '',
-        },
-        'help_menu': {
-            'visible': False,
-            'page': 0,
-        },
-        'replacing_library': False,
-        'backing_up_log': False,
-        'shutting_down': False,
-        'dimensions': {'width': 40, 'height': 9},
-        'home_menu_visible': False,
-    },
-    'hardware': {
-        'warming_up': False,
-        'resetting_display': False,
-    },
-})
-
-prev = initial_state['app']['user']
 
 
 def to_state_file(book_path):
@@ -103,7 +57,6 @@ def swap_library(current_book):
 
 
 async def read_user_state(media_dir, state):
-    global prev
     global manual
     current_book = manual_filename
     current_language = None
