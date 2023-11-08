@@ -73,7 +73,8 @@ def page_display_text(dir, page, of_pages, width):
     title = unicodes_to_alphas(_('library menu'))
     progress = f'{to_ueb_number(page)}/{to_ueb_number(of_pages)}'
     if dir is not None:
-        title += ' - ' + truncate_location(dir.display_relpath, width - len(title) - 3 - len(progress) - 3)
+        title += ' - ' + truncate_location(dir.display_relpath,
+                                           width - len(title) - 3 - len(progress) - 3)
     title += ' ' + (width - len(title) - len(progress) - 2) * '-' + ' ' + progress
     return from_ascii(title)
 
@@ -94,13 +95,7 @@ def render_library(width, height, state):
     library = state.app.library
     page_num = library.page
 
-    begin = 0
-    end = library.DIRS_PAGE_SIZE
-    if library.files_page_open:
-        if page_num == library._files_page_start - 1:
-            end = library.files_dir_index % library.DIRS_PAGE_SIZE + 1
-        if page_num == library._files_page_start + library._files_pages:
-            begin = library.files_dir_index % library.DIRS_PAGE_SIZE
+    begin, end = library.page_begin_end(page_num)
 
     if library._is_files_page(page_num):
         page_num -= library._files_page_start
