@@ -1,5 +1,10 @@
-from ..braille import format_title, from_unicode
-from ..state_helpers import get_books
+import logging
+
+from ..braille import from_unicode, from_ascii, truncate_middle, \
+    truncate_location, to_ueb_number, UNICODE_BRAILLE_BASE, \
+    unicodes_to_alphas, format_title
+
+log = logging.getLogger(__name__)
 
 
 def render_help(width, height):
@@ -39,24 +44,95 @@ preset built in for formatting.\
     return tuple(data)
 
 
+def dir_display_text(dir, width, show_count=True):
+    extra = 0
+    if show_count:
+        count = dir.files_count
+        if count > 0:
+            count_str = to_ueb_number(count)
+            # 3 = ' - ' suffix
+            extra = 3 + len(count_str)
+    else:
+        count_str = unicodes_to_alphas(_('go to book list'))
+        extra = 3 + len(count_str)
+    depth = dir._depth
+    dir_name = dir.display_name
+    if ord(dir_name[0]) >= UNICODE_BRAILLE_BASE:
+        dir_name = unicodes_to_alphas(dir_name)
+    # the 1 takes into account the trailing slash
+    title = truncate_middle(dir_name, width - 1 - depth - extra)
+    display = depth * '-' + title
+    if extra > 0:
+        # 1 takes into account the hyphen in extra
+        pad = width + 1 - len(display) - extra
+        display += ' ' + pad * '-' + ' ' + count_str
+    return from_ascii(display)
+
+
+def page_display_text(dir, page, of_pages, width):
+    title = unicodes_to_alphas(_('library menu'))
+    progress = f'{to_ueb_number(page)}/{to_ueb_number(of_pages)}'
+    if dir is not None:
+        title += ' - ' + truncate_location(dir.display_relpath, width - len(title) - 3 - len(progress) - 3)
+    title += ' ' + (width - len(title) - len(progress) - 2) * '-' + ' ' + progress
+    return from_ascii(title)
+
+
+def back_display_text(width):
+    back = unicodes_to_alphas(_('back to directory list'))
+    prev = (width - len(back) - 1) * '-' + ' ' + back
+    return from_ascii(prev)
+
+
+def directories_display_text(width):
+    more = unicodes_to_alphas(_('more directories'))
+    next = (width - len(more) - 1) * '-' + ' ' + more
+    return from_ascii(next)
+
+
 def render_library(width, height, state):
-    page = state.app.library.page
-    books = get_books(state)
-    # subtract title from page height
-    data_height = height - 1
-    max_pages = (len(books) // data_height) + 1
-    title = format_title(_('library menu'), width, page, max_pages)
-    data = [title]
-    n = page * data_height
-    for book in books[n:n + data_height]:
-        data.append(format_title(book.title, width, book.page_number,
-                                 book.get_num_pages(), capitalize=False))
+    library = state.app.library
+    page_num = library.page
 
-    # pad page with empty rows
-    while len(data) < height:
-        data.append(tuple())
+    begin = 0
+    end = library.DIRS_PAGE_SIZE
+    if library.files_page_open:
+        if page_num == library._files_page_start - 1:
+            end = library.files_dir_index % library.DIRS_PAGE_SIZE + 1
+        if page_num == library._files_page_start + library._files_pages:
+            begin = library.files_dir_index % library.DIRS_PAGE_SIZE
 
-    return tuple(data)
+    if library._is_files_page(page_num):
+        page_num -= library._files_page_start
+        offset = page_num * library.FILES_PAGE_SIZE
+        dir = library.open_dir
+        yield page_display_text(dir, page_num + 1, dir.files_pages, width)
+        yield back_display_text(width)
+        for i in range(0, library.FILES_PAGE_SIZE):
+            if i >= begin and i < end and offset + i < len(dir.files):
+                file = dir.files[offset + i]
+                book = library.book_from_file(file)
+                yield format_title(book.title, width, book.page_number,
+                                   book.get_num_pages(), capitalize=False)
+            else:
+                yield tuple()
+        return
+
+    page_num = library.canonical_dir_page(page_num)
+    start = page_num * library.DIRS_PAGE_SIZE
+    yield page_display_text(
+        library.dirs[start + begin].parent,
+        page_num + 1, library._dirs_pages, width)
+    for i in range(0, library.DIRS_PAGE_SIZE):
+        index = start + i
+        if i >= begin and i < end and index < library.dir_count:
+            dir = library.dirs[index]
+            yield dir_display_text(dir, width,
+                                   library.files_dir_index != index)
+        elif (i == 0 or i == library.DIRS_PAGE_SIZE - 1) and index < library.dir_count:
+            yield directories_display_text(width)
+        else:
+            yield tuple()
 
 
 def render(width, height, state):
@@ -69,4 +145,4 @@ def render(width, height, state):
         page = all_lines[first_line:off_end]
         return page
     else:
-        return render_library(width, height, state)
+        return tuple(render_library(width, height, state))

@@ -1,5 +1,7 @@
+import os
 import logging
 import curses.ascii as ASCII
+
 log = logging.getLogger(__name__)
 
 UNICODE_BRAILLE_BASE = 0x2800
@@ -55,6 +57,27 @@ def truncate_middle(string, width):
         return string[0:width - 3] + '...'
 
     return string[0:width_available] + '... ' + last
+#   ^^^ adjust to trim away whitespace before '...' ?
+
+
+def truncate_location(string, width):
+    if len(string) < width:
+        return string + '/'
+    dirs = string.split(os.sep)
+    last = dirs[-1]
+    depth = len(dirs) - 1
+    if len(last) + depth + 5 < width:
+        spare = width - (len(last) + depth + 1)
+        first = dirs[0]
+        if len(first) < spare:
+            extra = spare - len(first)
+            if depth > 1 and extra > 5:
+                parent = dirs[-2]
+                return first + (depth - 1) * '/' + truncate_middle(parent, extra) + '/' + last + '/'
+        if spare > 5:
+            return truncate_middle(first, spare) + depth * '/' + last + '/'
+    # no room for anything other than depth and dir name
+    return depth * '/' + truncate_middle(last, width - depth - 1) + '/'
 
 
 ueb_number_mapping = 'JABCDEFGHI'

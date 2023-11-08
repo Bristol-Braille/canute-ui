@@ -95,8 +95,10 @@ def run(driver, config):
     loop = asyncio.get_event_loop()
     log.debug('running loop')
     loop.run_until_complete(run_async(driver, config, loop))
-    pending = asyncio.Task.all_tasks()
-    loop.run_until_complete(asyncio.gather(*pending))
+    pending = asyncio.all_tasks(loop=loop)
+    for task in pending:
+        task.cancel()
+    loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
     loop.close()
 
 
@@ -258,8 +260,7 @@ async def change_files(config, state):
 async def handle_hardware(driver, state, media_dir):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
-        state.load_books('cancel')
-        await initial_state.write(state, media_dir)
+        state.app.load_books('cancel')
         state.app.shutdown()
     if state.app.shutting_down:
         if isinstance(driver, Pi):

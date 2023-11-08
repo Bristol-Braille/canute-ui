@@ -36,7 +36,7 @@ class BookmarksState:
 
     def go_to_bookmark(self, n):
         width, height = self.root.app.dimensions
-        log.info(f'go to bookmark {n}')
+        log.debug(f'go to bookmark {n}')
         # adjust for title
         height -= 1
         page = self.page
@@ -45,7 +45,7 @@ class BookmarksState:
         if n >= len(bookmarks):
             return
         bookmark = bookmarks[n]
-        log.info(f'bookmark is page {bookmark}')
+        log.debug(f'bookmark is page {bookmark}')
         if bookmark == 'deleted':
             return
         self.root.app.user.set_book_page(bookmark)

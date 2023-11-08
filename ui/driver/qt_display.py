@@ -131,5 +131,5 @@ class Display(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.print_braille_row(msg[0], msg[1:])
         except Empty:
             pass
-        except Exception:
-            log.error('check_msg ERROR')
+        except Exception as err:
+            log.error(f'check_msg ERROR {err}')

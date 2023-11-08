@@ -123,10 +123,8 @@ class AppState:
         save_book = None
 
         if location == 'library':
-            books = self.user.books
-            max_pages = (len(books) - 1) // (height - 1)
-            if page > max_pages:
-                page = max_pages
+            if page >= self.library.pages:
+                page = self.library.pages - 1
             elif page < 0:
                 page = 0
             self.library.page = page

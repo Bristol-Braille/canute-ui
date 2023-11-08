@@ -17,9 +17,10 @@ def natural_keys(text):
 
 
 class Directory:
-    def __init__(self, name, parent=None):
+    def __init__(self, name, parent=None, display=None):
         self.parent = parent
         self.name = name
+        self.display = display
         self.files = []
 
     @property
@@ -43,11 +44,34 @@ class Directory:
             depth += self.parent._depth
         return depth
 
+    @property
+    def display_name(self):
+        return self.name.replace('_', ' ') if self.display is None else self.display
+
+    @property
+    def display_relpath(self):
+        if self.parent is None:
+            return self.display_name
+        return os.path.join(self.parent.display_relpath, self.display_name)
+
 
 class File:
     def __init__(self, name, directory):
         self.directory = directory
         self.name = name
+
+    @property
+    def relpath(self):
+        return os.path.join(self.directory.relpath, self.name)
+
+
+class LocalFile:
+    def __init__(self, name):
+        self.name = name
+
+    @property
+    def relpath(self):
+        return self.name
 
 
 class Library:
@@ -66,10 +90,11 @@ class Library:
         for source_dir, name in source_dirs:
             # if os.path.ismount(os.path.join(self.media_dir, source_dir)):
             # not needed as unmounted devices will be empty and so pruned
-            root = Directory(source_dir)  # name
+            root = Directory(source_dir, display=name)
             self.walk(root)
             self.prune(root)
-            self.flatten(root)
+            if len(root.dirs) > 0 or root.files_count > 0:
+                self.flatten(root)
 
         self.dir_count = len(self.dirs)
         self.files_dir_index = None
@@ -122,6 +147,5 @@ class Library:
         books = []
         for dir in self.dirs:
             for file in dir.files:
-                books.append(os.path.join(
-                    self.media_dir, dir.relpath, file.name))
+                books.append(file.relpath)
         return books

@@ -8,7 +8,7 @@ from . import utility
 from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
-from .library.explorer import Library
+from .library.explorer import Library, Directory, LocalFile
 from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
 
 from . import config_loader
@@ -85,16 +85,16 @@ def configured_source_dirs():
 def mounted_source_paths(media_dir):
     for source_dir, name in configured_source_dirs():
         source_path = os.path.join(media_dir, source_dir)
-        if os.path.ismount(source_path):
+        if os.path.ismount(source_path) or 'TRAVIS' in os.environ:
             yield source_path
 
 
-def swap_library(media_dir, current_book):
+def swap_library(current_book):
     config = config_loader.load()
     if config.has_option('files', 'additional_lib_1') and \
             config.has_option('files', 'additional_lib_2'):
-        lib1 = os.path.join(media_dir, config.get('files', 'additional_lib_1'))
-        lib2 = os.path.join(media_dir, config.get('files', 'additional_lib_2'))
+        lib1 = config.get('files', 'additional_lib_1')
+        lib2 = config.get('files', 'additional_lib_2')
         if current_book.startswith(lib1):
             return lib2 + current_book[len(lib1):]
         elif current_book.startswith(lib2):
@@ -108,6 +108,7 @@ async def read_user_state(media_dir, state):
     current_book = manual_filename
     current_language = None
 
+    # walk the available filesystems for directories and braille files
     library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
     book_files = library.book_files()
 
@@ -119,8 +120,6 @@ async def read_user_state(media_dir, state):
                 main_state = toml.load(main_toml)
                 if 'current_book' in main_state:
                     current_book = main_state['current_book']
-                    if not current_book == manual_filename:
-                        current_book = os.path.join(media_dir, current_book)
                 if 'current_language' in main_state:
                     current_language = main_state['current_language']
                 break
@@ -152,7 +151,7 @@ async def read_user_state(media_dir, state):
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
         toml_file = to_state_file(book_file)
-        book = BookFile(filename=book_file, width=width, height=height)
+        book = BookFile(filename=os.path.join(media_dir, book_file), width=width, height=height)
         if os.path.exists(toml_file):
             try:
                 t = toml.load(toml_file)
@@ -165,23 +164,26 @@ async def read_user_state(media_dir, state):
                 log.error(err)
                 log.warning(
                     'book state loading failed for {}, ignoring'.format(toml_file))
-        else:
-            state.save_state(book)
+        # else: no file exists, so just use the defaults
         books[book_file] = book
     books[cleaning_filename] = CleaningAndTesting.create()
+
+    home_dir = Directory('canute 360')
+    home_dir.files = [LocalFile(manual_filename), LocalFile(cleaning_filename)]
+    library.dirs.insert(0, home_dir)
 
     if current_book not in books:
         # let's check that they're not just using a different USB port
         log.info('current book not in original library {}'.format(current_book))
-        current_book = swap_library(media_dir, current_book)
+        current_book = swap_library(current_book)
         if current_book not in books:
             log.warn('current book not found {}, ignoring'.format(current_book))
             current_book = manual_filename
 
     state.app.user.books = books
-    state.app.user.current_book = current_book
-    state.app.user.current_language = current_language
-    state.save_state()
+    state.app.library.media_dir = media_dir
+    state.app.library.dirs = library.dirs
+    state.app.user.load(current_book, current_language)
 
 
 async def read(media_dir, state):
