@@ -5,7 +5,7 @@ autopep8==2.0.4
 pyserial==3.0
 async-timeout==4.0.3
 aiofiles==23.2.1
-pyqt5==5.15.9
+pyqt5==5.15.10
 toml==0.9.4
 crcmod==1.7
 pyzmq==25.1.1
