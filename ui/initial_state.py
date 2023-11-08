@@ -103,8 +103,9 @@ async def read_user_state(media_dir, state):
 
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
-        toml_file = to_state_file(book_file)
-        book = BookFile(filename=os.path.join(media_dir, book_file), width=width, height=height)
+        filename = os.path.join(media_dir, book_file)
+        toml_file = to_state_file(filename)
+        book = BookFile(filename=filename, width=width, height=height)
         if os.path.exists(toml_file):
             try:
                 t = toml.load(toml_file)
