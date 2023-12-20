@@ -15,7 +15,7 @@ If you want to test and develop the direct button interface (`--pi-buttons`) the
     pip3 install --user -r requirements-pi.txt
 
 ## Mac
-For the Mac, installation is slightly different depending on whether you want to use Macports or Homwbrew.
+For the Mac, installation is slightly different depending on whether you want to use Macports or Homebrew.
 
 Evdev is for Linux only so the `--pi-buttons` option will not be usable on Mac.
 
