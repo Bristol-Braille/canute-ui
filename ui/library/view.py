@@ -70,6 +70,7 @@ def dir_display_text(dir, width, show_count=True):
 
 
 def page_display_text(dir, page, of_pages, width):
+    # (other menu titles are capitalised by braille.format_title)
     title = unicodes_to_alphas(_('LIBRARY menu'))
     progress = f'{to_ueb_number(page)}/{to_ueb_number(of_pages)}'
     if dir is not None:
