@@ -12,6 +12,9 @@ To compile the resulting POT file into a set of useable MO files, use:
     cd ui/locale
     ./autotranslate.py
 
+(Note the `requirements-translate.txt` file can be used to create a locale
+virtual environment for this - refer to INSTALL.md.)
+
 This generates a PO for each braille code from the POT using `liblouis`, then
 compiles each PO to a MO.  Sometimes the autotranslated PO needs manual tweaks,
 like adjusting inter-paragraph spacing so that paragraphs break across pages in

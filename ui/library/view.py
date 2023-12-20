@@ -70,7 +70,7 @@ def dir_display_text(dir, width, show_count=True):
 
 
 def page_display_text(dir, page, of_pages, width):
-    title = unicodes_to_alphas(_('library menu'))
+    title = unicodes_to_alphas(_('LIBRARY menu'))
     progress = f'{to_ueb_number(page)}/{to_ueb_number(of_pages)}'
     if dir is not None:
         title += ' - ' + truncate_location(dir.display_relpath,

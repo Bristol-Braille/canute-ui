@@ -20,7 +20,7 @@ def render(width, height, state):
     # subtract title from page height
     data_height = height - 1
     max_pages = 1
-    title = format_title(_('system menu'), width, page, max_pages)
+    title = format_title(_('SYSTEM menu'), width, page, max_pages)
     n = page * data_height
     data = data[n: n + data_height]
     # pad page with empty rows

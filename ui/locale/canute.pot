@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-08 10:00+0000\n"
+"POT-Creation-Date: 2023-12-20 15:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -210,7 +210,7 @@ msgid "go to book list"
 msgstr ""
 
 #: ui/library/view.py:73
-msgid "library menu"
+msgid "LIBRARY menu"
 msgstr ""
 
 #: ui/library/view.py:83
@@ -257,6 +257,6 @@ msgid "serial:"
 msgstr ""
 
 #: ui/system_menu/view.py:23
-msgid "system menu"
+msgid "SYSTEM menu"
 msgstr ""
 
