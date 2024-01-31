@@ -269,8 +269,8 @@ msgid "go to book list"
 msgstr "⠛⠀⠞⠕⠀⠃⠕⠕⠅⠀⠇⠊⠌"
 
 #: ui/library/view.py:73
-msgid "library menu"
-msgstr "⠇⠊⠃⠗⠜⠽ ⠍⠢⠥"
+msgid "LIBRARY menu"
+msgstr "⠠⠠⠇⠊⠃⠗⠜⠽⠀⠍⠢⠥"
 
 #: ui/library/view.py:83
 msgid "back to directory list"
