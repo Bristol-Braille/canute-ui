@@ -14,6 +14,6 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
     - name: Build docker images
-      run: docker build -t bristol-braille/bookindex:latest Dockerfile
+      run: docker build -t bristol-braille/bookindex:latest .
     - name: Run tests
       run: docker run -t -e "HOME=/work" -w /work -v "$PWD:/work" bristol-braille/bookindex:latest
