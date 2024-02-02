@@ -17,9 +17,7 @@ jobs:
       run: docker build -t bristol-braille/bookindex:latest .
     - name: Build library
       run: |
-        docker run -t -e "HOME=/work" -w /work -v "$PWD:/work" bristol-braille/bookindex:latest
-        ls -l .
-        ls -l target/arm-unknown-linux-gnueabihf/release/
+        docker run -t -u "$(id -u):$(id -g)" -e "HOME=/work" -w /work -v "$PWD:/work" bristol-braille/bookindex:latest
         mv target/arm-unknown-linux-gnueabihf/release/libbookindex.so .
     - name: Make tarball
       run: tar czvf canute-ui.tar.gz README.md LICENSE requirements-pi.txt canute_ui ui libbookindex.so config.rc.in run.sh books
