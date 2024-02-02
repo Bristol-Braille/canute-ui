@@ -1,6 +1,6 @@
 # Based on https://github.com/mdirkse/rust_armv6
-# We use buster to match glibc versions with raspios old stable
-FROM rust:slim-buster
+# We use bullseye to match glibc versions with raspios old stable
+FROM --platform=linux/amd64 rust:slim-bullseye
 
 # Prevent any error messages about there not being a terminal
 ENV DEBIAN_FRONTEND noninteractive
