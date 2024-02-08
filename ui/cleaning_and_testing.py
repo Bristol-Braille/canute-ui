@@ -28,5 +28,5 @@ class CleaningAndTesting(BookFile):
         return CleaningAndTesting(cleaning_filename, NUM_COLS, NUM_ROWS,
                                   pages=pages, load_state=LoadState.DONE)
 
-    def relpath(self, media_dir):
+    def relpath(self):
         return self.filename

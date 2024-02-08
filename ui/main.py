@@ -25,7 +25,7 @@ def main():
     args = argparser.parser.parse_args()
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
-    timeout = config.get('comms', 'timeout')
+    timeout = config.get('comm', {}).get('timeout', 60)
 
     if args.fuzz_duration:
         log.info('running fuzz test')
@@ -169,16 +169,14 @@ async def run_async(driver, config, loop):
     queue, save_worker = handle_save_events(config, state)
     load_worker = handle_display_events(config, state)
 
-    media_dir = config.get('files', 'media_dir')
-    log.info(f'reading initial state from {media_dir}')
-    await initial_state.read(media_dir, state)
+    await initial_state.read(state)
     log.info('created store')
 
     state.refresh_display()
 
     try:
         while 1:
-            if (await handle_hardware(driver, state, media_dir)):
+            if (await handle_hardware(driver, state)):
                 media_handler.cancel()
                 try:
                     await media_handler
@@ -212,9 +210,8 @@ async def run_async(driver, config, loop):
 
 
 def handle_save_events(config, state):
-    media_dir = config.get('files', 'media_dir')
     queue = asyncio.Queue()
-    worker = asyncio.create_task(initial_state.write(media_dir, queue))
+    worker = asyncio.create_task(initial_state.write(queue))
 
     def on_save_state(book=None):
         # queue a snapshot of the state we want to save, theoretically we
@@ -223,7 +220,7 @@ def handle_save_events(config, state):
         # that much faster than a filesystem write
         if book is None:
             log.debug('queuing user state file save')
-            queue.put_nowait((None, state.app.user.to_file(media_dir)))
+            queue.put_nowait((None, state.app.user.to_file()))
         else:
             log.debug(f'queuing {book.filename} state file save')
             queue.put_nowait((book.filename, book.to_file()))
@@ -242,7 +239,6 @@ def handle_save_events(config, state):
 def handle_display_events(config, state):
     from .book.handlers import load_book, load_book_worker
 
-    media_dir = config.get('files', 'media_dir')
     queue = asyncio.Queue()
     worker = asyncio.create_task(load_book_worker(state, queue))
 
@@ -263,7 +259,7 @@ def handle_display_events(config, state):
 
         # now queue up indexing tasks to cache
         for book in later:
-            queue.put_nowait(book.relpath(media_dir))
+            queue.put_nowait(book.relpath())
 
         await display.render_to_buffer(state)
 
@@ -283,7 +279,7 @@ async def change_files(config, state):
         state.app.backup_log('done')
 
 
-async def handle_hardware(driver, state, media_dir):
+async def handle_hardware(driver, state):
     if not driver.is_ok():
         log.debug('shutting down due to GUI closed')
         state.app.load_books('cancel')
@@ -308,18 +304,16 @@ async def handle_hardware(driver, state, media_dir):
 
 
 def backup_log(config):
-    sd_card_dir = config.get('files', 'sd_card_dir')
-    media_dir = config.get('files', 'media_dir')
-    sd_card_dir = os.path.join(media_dir, sd_card_dir)
-    log_file = config.get('files', 'log_file')
-    # make a filename based on the date
-    backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
-    log.debug('backing up log to USB stick: {}'.format(backup_file))
-    try:
-        import shutil
-        shutil.copyfile(log_file, backup_file)
-    except IOError as e:
-        log.warning("couldn't backup log file: {}".format(e))
+    mounted_dirs = initial_state.mounted_source_paths()
+    if len(mounted_dirs) > 0:
+        # make a filename based on the date and save to first path
+        backup_file = os.path.join(mounted_dirs[0], time.strftime('%Y%m%d%M_log.txt'))
+        log.debug('backing up log to USB stick: {}'.format(backup_file))
+        try:
+            import shutil
+            shutil.copyfile(log_file, backup_file)
+        except IOError as e:
+            log.warning("couldn't backup log file: {}".format(e))
 
 
 async def log_markers():

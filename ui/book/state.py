@@ -75,7 +75,7 @@ class UserState:
             self.books[self.current_book] = book
             self.root.save_state(book)
 
-    def to_file(self, media_dir):
+    def to_file(self):
         current_book = self.current_book
         return {
             'current_book': current_book,
