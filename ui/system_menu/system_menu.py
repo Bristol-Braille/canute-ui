@@ -43,10 +43,14 @@ def brailleify(rel):
 # This exists on a Pi and reading it yields a useful board identifier.
 # But existence will do for right now.
 if os.path.exists('/sys/firmware/devicetree/base/model'):
-    with open('/etc/canute_release') as x:
-        release = brailleify(x.read().strip())
-    with open('/etc/canute_serial') as x:
-        serial = brailleify(x.read().strip())
+    if os.path.exists('/etc/canute_release'):
+        with open('/etc/canute_release') as x:
+            release = _('release:') + ' ' + brailleify(x.read().strip())
+        with open('/etc/canute_serial') as x:
+            serial = _('serial:') + ' ' + brailleify(x.read().strip())
+    else:
+        release = brailleify(_('run in standalone mode'))
+        serial = release
 else:
     # Assume we're being emulated.
     release = brailleify(_('emulated'))
