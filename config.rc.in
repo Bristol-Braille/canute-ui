@@ -16,3 +16,15 @@ library = [
 [comms]
 # serial timeout in seconds
 timeout = 1000
+
+[hardware]
+# count row actuations (motor wear) when running on Canute 360
+log_duty = true
+
+# minumum number of samples of button down to count as a press
+button_debounce = 1
+
+# shutdown mode
+shutdown_on_exit = true
+
+# versions

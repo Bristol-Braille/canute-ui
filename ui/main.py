@@ -82,7 +82,8 @@ def main():
         log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
         try:
-            with Pi(port=args.tty, timeout=timeout) as driver:
+            debounce = config.get('hardware', {}).get('button_debounce', 1)
+            with Pi(port=args.tty, timeout=timeout, button_threshold=debounce) as driver:
                 run(driver, config)
         except RuntimeError as err:
             if err.args[0] == 'readFrame timeout':
@@ -161,7 +162,11 @@ async def run_async(driver, config, loop):
         await asyncio.sleep(0.01)
     log.debug('motion complete')
     media_handler = asyncio.ensure_future(handle_media_changes())
-    duty_logger = asyncio.ensure_future(driver.track_duty())
+
+    if config.get('hardware', {}).get('log_duty', False):
+        duty_logger = asyncio.ensure_future(driver.track_duty())
+    else:
+        duty_logger = None
 
     width, height = driver.get_dimensions()
     state.app.set_dimensions((width, height))
@@ -182,11 +187,12 @@ async def run_async(driver, config, loop):
                     await media_handler
                 except asyncio.CancelledError:
                     pass
-                duty_logger.cancel()
-                try:
-                    await duty_logger
-                except asyncio.CancelledError:
-                    pass
+                if duty_logger is not None:
+                    duty_logger.cancel()
+                    try:
+                        await duty_logger
+                    except asyncio.CancelledError:
+                        pass
 
                 break
 
@@ -202,7 +208,8 @@ async def run_async(driver, config, loop):
                 await asyncio.sleep(0)
     except asyncio.CancelledError:
         media_handler.cancel()
-        duty_logger.cancel()
+        if duty_logger is not None:
+            duty_logger.cancel()
         await queue.join()
         save_worker.cancel()
         load_worker.cancel()
