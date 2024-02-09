@@ -122,7 +122,6 @@ class Pi(Driver):
         buttons = {}
         self.send_data(comms.CMD_SEND_BUTTONS)
         read_buttons = self.get_data(comms.CMD_SEND_BUTTONS)
-        down = self.previous_buttons
         for i, n in enumerate(reversed(list('{:0>14b}'.format(read_buttons)))):
             name = mapping[str(i)]
             if n == '1':
@@ -136,8 +135,6 @@ class Pi(Driver):
                 if self.previous_buttons[name] > self.button_threshold:
                     buttons[name] = 'up'
                 del self.previous_buttons[name]
-
-        self.previous_buttons = tuple(down)
 
         return buttons
 

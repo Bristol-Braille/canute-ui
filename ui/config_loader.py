@@ -13,6 +13,6 @@ def load(config_file=config_file):
     # expand any ~ home dirs in media_dir
     files_section = config.get('files', {})
     media_dir = files_section.get('media_dir', '/media')
-    files_section.set('media_dir', os.path.expanduser(media_dir))
+    files_section['media_dir'] = os.path.expanduser(media_dir)
 
     return config

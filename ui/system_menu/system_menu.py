@@ -45,9 +45,9 @@ def brailleify(rel):
 if os.path.exists('/sys/firmware/devicetree/base/model'):
     if os.path.exists('/etc/canute_release'):
         with open('/etc/canute_release') as x:
-            release = _('release:') + ' ' + brailleify(x.read().strip())
+            release = brailleify(x.read().strip())
         with open('/etc/canute_serial') as x:
-            serial = _('serial:') + ' ' + brailleify(x.read().strip())
+            serial = brailleify(x.read().strip())
     else:
         release = brailleify(_('run in standalone mode'))
         serial = release
