@@ -4,7 +4,7 @@ import logging
 
 
 def setup_logs(config, loglevel):
-    log_file = config.get('files', 'log_file')
+    log_file = config.get('files', {}).get('log_file')
     log_format = logging.Formatter(
         '%(asctime)s - %(name)-16s - %(levelname)-8s - %(message)s')
     # configure the client logging

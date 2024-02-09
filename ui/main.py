@@ -25,7 +25,7 @@ def main():
     args = argparser.parser.parse_args()
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
-    timeout = config.get('comms', 'timeout')
+    timeout = config.get('comm', {}).get('timeout', 60)
 
     if args.fuzz_duration:
         log.info('running fuzz test')
@@ -82,7 +82,8 @@ def main():
         log.info('running with real hardware on port %s, timeout %s' %
                  (args.tty, timeout))
         try:
-            with Pi(port=args.tty, timeout=timeout) as driver:
+            debounce = config.get('hardware', {}).get('button_debounce', 1)
+            with Pi(port=args.tty, timeout=timeout, button_threshold=debounce) as driver:
                 run(driver, config)
         except RuntimeError as err:
             if err.args[0] == 'readFrame timeout':
@@ -112,12 +113,7 @@ async def run_async_timeout(driver, config, duration, loop):
 
 # This is a task in its own right that listens to an external process for media
 # change notifications, and handles them.
-async def handle_media_changes():
-    # For now, under Travis, don't launch it.  It requires pygi which is hard
-    # to make accessible to a virtualenv.
-    media_helper = './media.py'
-    if 'TRAVIS' in os.environ:
-        media_helper = '/bin/cat'
+async def handle_media_changes(media_helper):
     proc = await asyncio.create_subprocess_exec(
         media_helper, stdout=asyncio.subprocess.PIPE)
 
@@ -160,8 +156,17 @@ async def run_async(driver, config, loop):
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
     log.debug('motion complete')
-    media_handler = asyncio.ensure_future(handle_media_changes())
-    duty_logger = asyncio.ensure_future(driver.track_duty())
+
+    media_helper = config.get('filese', {}).get('media_helper')
+    if media_helper is not None:
+        media_handler = asyncio.ensure_future(handle_media_changes(media_helper))
+    else:
+        media_handler = None
+
+    if config.get('hardware', {}).get('log_duty', False):
+        duty_logger = asyncio.ensure_future(driver.track_duty())
+    else:
+        duty_logger = None
 
     width, height = driver.get_dimensions()
     state.app.set_dimensions((width, height))
@@ -169,7 +174,7 @@ async def run_async(driver, config, loop):
     queue, save_worker = handle_save_events(config, state)
     load_worker = handle_display_events(config, state)
 
-    media_dir = config.get('files', 'media_dir')
+    media_dir = config.get('files', {}).get('media_dir')
     log.info(f'reading initial state from {media_dir}')
     await initial_state.read(media_dir, state)
     log.info('created store')
@@ -179,16 +184,18 @@ async def run_async(driver, config, loop):
     try:
         while 1:
             if (await handle_hardware(driver, state, media_dir)):
-                media_handler.cancel()
-                try:
-                    await media_handler
-                except asyncio.CancelledError:
-                    pass
-                duty_logger.cancel()
-                try:
-                    await duty_logger
-                except asyncio.CancelledError:
-                    pass
+                if media_handler is not None:
+                    media_handler.cancel()
+                    try:
+                        await media_handler
+                    except asyncio.CancelledError:
+                        pass
+                if duty_logger is not None:
+                    duty_logger.cancel()
+                    try:
+                        await duty_logger
+                    except asyncio.CancelledError:
+                        pass
 
                 break
 
@@ -203,8 +210,10 @@ async def run_async(driver, config, loop):
             else:
                 await asyncio.sleep(0)
     except asyncio.CancelledError:
-        media_handler.cancel()
-        duty_logger.cancel()
+        if media_handler is not None:
+            media_handler.cancel()
+        if duty_logger is not None:
+            duty_logger.cancel()
         await queue.join()
         save_worker.cancel()
         load_worker.cancel()
@@ -212,7 +221,7 @@ async def run_async(driver, config, loop):
 
 
 def handle_save_events(config, state):
-    media_dir = config.get('files', 'media_dir')
+    media_dir = config.get('files', {}).get('media_dir')
     queue = asyncio.Queue()
     worker = asyncio.create_task(initial_state.write(media_dir, queue))
 
@@ -242,7 +251,7 @@ def handle_save_events(config, state):
 def handle_display_events(config, state):
     from .book.handlers import load_book, load_book_worker
 
-    media_dir = config.get('files', 'media_dir')
+    media_dir = config.get('files', {}).get('media_dir')
     queue = asyncio.Queue()
     worker = asyncio.create_task(load_book_worker(state, queue))
 
@@ -291,8 +300,8 @@ async def handle_hardware(driver, state, media_dir):
     if state.app.shutting_down:
         if isinstance(driver, Pi):
             driver.port.close()
-            os.system('/home/pi/util/shutdown-stage-1.py')
             if not sys.stdout.isatty():
+                os.system('/home/pi/util/shutdown-stage-1.py')
                 os.system('sudo shutdown -h now')
         # never exit from Dummy driver
         elif isinstance(driver, Dummy):
@@ -308,18 +317,16 @@ async def handle_hardware(driver, state, media_dir):
 
 
 def backup_log(config):
-    sd_card_dir = config.get('files', 'sd_card_dir')
-    media_dir = config.get('files', 'media_dir')
-    sd_card_dir = os.path.join(media_dir, sd_card_dir)
-    log_file = config.get('files', 'log_file')
-    # make a filename based on the date
-    backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
-    log.debug('backing up log to USB stick: {}'.format(backup_file))
-    try:
-        import shutil
-        shutil.copyfile(log_file, backup_file)
-    except IOError as e:
-        log.warning("couldn't backup log file: {}".format(e))
+    mounted_dirs = initial_state.mounted_source_paths()
+    if len(mounted_dirs) > 0:
+        # make a filename based on the date and save to first path
+        backup_file = os.path.join(mounted_dirs[0][0], time.strftime('%Y%m%d%M_log.txt'))
+        log.debug('backing up log to USB stick: {}'.format(backup_file))
+        try:
+            import shutil
+            shutil.copyfile(log_file, backup_file)
+        except IOError as e:
+            log.warning("couldn't backup log file: {}".format(e))
 
 
 async def log_markers():

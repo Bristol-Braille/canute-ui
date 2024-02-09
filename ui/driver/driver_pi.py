@@ -37,8 +37,9 @@ class Pi(Driver):
     :param port: the serial port the display is plugged into
     """
 
-    def __init__(self, port=None, timeout=60):
+    def __init__(self, port=None, timeout=60, button_threshold=1):
         self.timeout = timeout
+        self.button_threshold = button_threshold
         # get serial connection
         if port is None:
             ports = serial.tools.list_ports.comports()
@@ -53,7 +54,7 @@ class Pi(Driver):
         else:
             self.port = None
 
-        self.previous_buttons = tuple()
+        self.previous_buttons = dict()
 
         self.row_actuations = [0] * N_ROWS
 
@@ -121,17 +122,19 @@ class Pi(Driver):
         buttons = {}
         self.send_data(comms.CMD_SEND_BUTTONS)
         read_buttons = self.get_data(comms.CMD_SEND_BUTTONS)
-        down = list(self.previous_buttons)
         for i, n in enumerate(reversed(list('{:0>14b}'.format(read_buttons)))):
             name = mapping[str(i)]
-            if n == '1' and (name not in self.previous_buttons):
-                buttons[name] = 'down'
-                down.append(name)
+            if n == '1':
+                if name in self.previous_buttons:
+                    self.previous_buttons[name] += 1
+                else:
+                    self.previous_buttons[name] = 1                
+                if self.previous_buttons[name] == self.button_threshold:
+                    buttons[name] = 'down'
             elif n == '0' and (name in self.previous_buttons):
-                buttons[name] = 'up'
-                down.remove(name)
-
-        self.previous_buttons = tuple(down)
+                if self.previous_buttons[name] >= self.button_threshold:
+                    buttons[name] = 'up'
+                del self.previous_buttons[name]
 
         return buttons
 

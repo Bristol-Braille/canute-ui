@@ -28,32 +28,57 @@ def to_state_file(book_path):
 
 def configured_source_dirs():
     config = config_loader.load()
-    state_sources = [('sd_card_dir', 'SD')]
-    if config.has_option('files', 'additional_lib_1'):
-        state_sources.append(('additional_lib_1', 'USB1'))
-    if config.has_option('files', 'additional_lib_2'):
-        state_sources.append(('additional_lib_2', 'USB2'))
-    return [(config.get('files', source), name) for source, name in state_sources]
+    return config.get('files', {}).get('library', [])
 
 
 def mounted_source_paths(media_dir):
-    for source_dir, name in configured_source_dirs():
-        source_path = os.path.join(media_dir, source_dir)
-        if os.path.ismount(source_path) or 'TRAVIS' in os.environ:
-            yield source_path
+    for source_dir in configured_source_dirs():
+        source_path = os.path.join(media_dir, source_dir.get('path'))
+        if not source_dir.get('mountpoint', False) or os.path.ismount(source_path):
+            yield source_path, source_dir.get('swappable', False)
 
 
-def swap_library(current_book):
+def swappable_usb(data):
+    """
+    The state file contains part of the book path (e.g. usb0) and so if we want
+    to maintain compatibility with the old standalone setup, we need to convert
+    it to something it understands.  So here we fix any 'swappable' path (i.e.
+    USB removable media) to 'front-usb' and rely on the function below to find
+    the correct prefix on app startup.
+    """
+    book = data.get('current_book')
+    for source_dir in configured_source_dirs():
+        if source_dir.get('swappable', False):
+            prefix = source_dir.get('path') + os.sep
+            if book.startswith(prefix):
+                book = os.path.join('front-usb', book[len(prefix):])
+                # modifying data is safe as a new dict is created each time
+                data.set('current_book', book)
+                break
+    return data
+
+
+def swap_library(current_book, books):
+    """
+    The current_book path includes a mount-point subpath (if on removable media)
+    so try to cope with user accidentally swapping slots
+    """
     config = config_loader.load()
-    if config.has_option('files', 'additional_lib_1') and \
-            config.has_option('files', 'additional_lib_2'):
-        lib1 = config.get('files', 'additional_lib_1')
-        lib2 = config.get('files', 'additional_lib_2')
-        if current_book.startswith(lib1):
-            return lib2 + current_book[len(lib1):]
-        elif current_book.startswith(lib2):
-            return lib1 + current_book[len(lib2):]
-    return current_book
+    library = config.get('files', {}).get('library', [])
+
+    # check for expected path, for backward compatibility with standalone unit
+    for path in ['front-usb' + os.path.sep, 'back-usb' + os.path.sep]:
+        if current_book.startswith(path):
+            rel_book = current_book[len(path):]
+            break
+
+    # see if we can find it on a different swappable device path
+    for lib in library:
+        if lib.get('swappable', False):
+            path = lib['path']
+            book = os.path.join(path, rel_book)
+            if book in books:
+                return book
 
 
 async def read_user_state(media_dir, state):
@@ -66,7 +91,7 @@ async def read_user_state(media_dir, state):
     book_files = library.book_files()
 
     source_paths = mounted_source_paths(media_dir)
-    for source_path in source_paths:
+    for source_path, swappable in source_paths:
         main_toml = os.path.join(source_path, USER_STATE_FILE)
         if os.path.exists(main_toml):
             try:
@@ -129,7 +154,7 @@ async def read_user_state(media_dir, state):
     if current_book not in books:
         # let's check that they're not just using a different USB port
         log.info('current book not in original library {}'.format(current_book))
-        current_book = swap_library(current_book)
+        current_book = swap_library(current_book, books)
         if current_book not in books:
             log.warn('current book not found {}, ignoring'.format(current_book))
             current_book = manual_filename
@@ -148,12 +173,12 @@ async def write(media_dir, queue):
     log.info('save file worker started')
     while True:
         (filename, data) = await queue.get()
-        s = toml.dumps(data)
+        s = toml.dumps(swappable_usb(data))
 
         if filename is None:
             # main user state file
             source_paths = mounted_source_paths(media_dir)
-            for source_path in source_paths:
+            for source_path, swappable in source_paths:
                 path = os.path.join(source_path, USER_STATE_FILE)
                 log.debug('writing user state file save to {path}')
                 async with aiofiles.open(path, 'w') as f:
