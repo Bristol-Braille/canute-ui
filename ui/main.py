@@ -25,7 +25,7 @@ def main():
     args = argparser.parser.parse_args()
     config = config_loader.load()
     log = setup_logs(config, args.loglevel)
-    timeout = config.get('comms', 'timeout')
+    timeout = config.get('comm', {}).get('timeout', 60)
 
     if args.fuzz_duration:
         log.info('running fuzz test')
@@ -174,7 +174,7 @@ async def run_async(driver, config, loop):
     queue, save_worker = handle_save_events(config, state)
     load_worker = handle_display_events(config, state)
 
-    media_dir = config.get('files', 'media_dir')
+    media_dir = config.get('files', {}).get('media_dir')
     log.info(f'reading initial state from {media_dir}')
     await initial_state.read(media_dir, state)
     log.info('created store')
@@ -219,7 +219,7 @@ async def run_async(driver, config, loop):
 
 
 def handle_save_events(config, state):
-    media_dir = config.get('files', 'media_dir')
+    media_dir = config.get('files', {}).get('media_dir')
     queue = asyncio.Queue()
     worker = asyncio.create_task(initial_state.write(media_dir, queue))
 
@@ -249,7 +249,7 @@ def handle_save_events(config, state):
 def handle_display_events(config, state):
     from .book.handlers import load_book, load_book_worker
 
-    media_dir = config.get('files', 'media_dir')
+    media_dir = config.get('files', {}).get('media_dir')
     queue = asyncio.Queue()
     worker = asyncio.create_task(load_book_worker(state, queue))
 
@@ -315,18 +315,16 @@ async def handle_hardware(driver, state, media_dir):
 
 
 def backup_log(config):
-    sd_card_dir = config.get('files', 'sd_card_dir')
-    media_dir = config.get('files', 'media_dir')
-    sd_card_dir = os.path.join(media_dir, sd_card_dir)
-    log_file = config.get('files', 'log_file')
-    # make a filename based on the date
-    backup_file = os.path.join(sd_card_dir, time.strftime('%Y%m%d%M_log.txt'))
-    log.debug('backing up log to USB stick: {}'.format(backup_file))
-    try:
-        import shutil
-        shutil.copyfile(log_file, backup_file)
-    except IOError as e:
-        log.warning("couldn't backup log file: {}".format(e))
+    mounted_dirs = initial_state.mounted_source_paths()
+    if len(mounted_dirs) > 0:
+        # make a filename based on the date and save to first path
+        backup_file = os.path.join(mounted_dirs[0], time.strftime('%Y%m%d%M_log.txt'))
+        log.debug('backing up log to USB stick: {}'.format(backup_file))
+        try:
+            import shutil
+            shutil.copyfile(log_file, backup_file)
+        except IOError as e:
+            log.warning("couldn't backup log file: {}".format(e))
 
 
 async def log_markers():

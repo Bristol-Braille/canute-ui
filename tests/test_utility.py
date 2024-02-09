@@ -4,7 +4,7 @@ import os
 from ui.library.explorer import Library
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-test_books_dir = [('test-books', 'test dir')]
+test_books_dir = [{ 'path': 'test-books', 'name': 'test dir' }]
 
 
 class TestUtility(unittest.TestCase):

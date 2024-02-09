@@ -87,14 +87,15 @@ class Library:
         self.file_exts = file_exts
         self.dirs = []
 
-        for source_dir, name in source_dirs:
-            # if os.path.ismount(os.path.join(self.media_dir, source_dir)):
-            # not needed as unmounted devices will be empty and so pruned
-            root = Directory(source_dir, display=name)
-            self.walk(root)
-            self.prune(root)
-            if len(root.dirs) > 0 or root.files_count > 0:
-                self.flatten(root)
+        for source_dir in source_dirs:
+            source_path = source_dir.get('path')
+            if not source_dir.get('mountpoint', False) or \
+                    os.path.ismount(os.path.join(self.media_dir, source_path)):
+                root = Directory(source_path, display=source_dir.get('name'))
+                self.walk(root)
+                self.prune(root)
+                if len(root.dirs) > 0 or root.files_count > 0:
+                    self.flatten(root)
 
         self.dir_count = len(self.dirs)
         self.files_dir_index = None
