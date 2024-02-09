@@ -298,8 +298,8 @@ async def handle_hardware(driver, state, media_dir):
     if state.app.shutting_down:
         if isinstance(driver, Pi):
             driver.port.close()
-            os.system('/home/pi/util/shutdown-stage-1.py')
             if not sys.stdout.isatty():
+                os.system('/home/pi/util/shutdown-stage-1.py')
                 os.system('sudo shutdown -h now')
         # never exit from Dummy driver
         elif isinstance(driver, Dummy):
