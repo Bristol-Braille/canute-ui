@@ -70,5 +70,5 @@ class BookFile(BookData):
             ['bookmarks', list(bms)]
         ])
 
-    def relpath(self):
-        return self.filename
+    def relpath(self, media_dir):
+        return os.path.relpath(self.filename, start=media_dir)

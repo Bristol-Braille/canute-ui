@@ -14,6 +14,7 @@ class LibraryState:
         self.root = root
 
         self.page = 0
+        self.media_dir = ''
         self.dirs = []
         # index of directory that is currently expanded, if any
         self.files_dir_index = None
@@ -160,14 +161,14 @@ class LibraryState:
                 break
 
     def open_book(self, book):
-        self.root.app.user.current_book = book.relpath()
+        self.root.app.user.current_book = book.relpath(self.media_dir)
         self.root.app.location = 'book'
         self.root.app.home_menu_visible = False
         self.root.refresh_display()
         self.root.save_state()
 
     def add_or_replace(self, book):
-        relpath = book.filename
+        relpath = os.path.relpath(book.filename, start=self.media_dir)
         self.root.app.user.books[relpath] = book
 
     def set_book_loading(self, book):

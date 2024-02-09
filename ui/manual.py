@@ -46,5 +46,5 @@ of Community Interest Companies. Company number 7518101.
                       for page in pages)
         return Manual(manual_filename, 40, 9, pages=pages, load_state=LoadState.DONE)
 
-    def relpath(self):
+    def relpath(self, media_dir):
         return self.filename

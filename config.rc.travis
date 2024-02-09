@@ -1,15 +1,11 @@
 [files]
 # relative path to where log is kept
 log_file = canute.log
-
-# Book Directories
-# Additional books made available on the USB ports will be made visible
-# in the library.  The current state will be written to all mount points
-# that are active.  The first state file found (based on the order in the
-# list) will take precedence if they differ.
-library = [
-  { name = 'SD', path = '~/canute-media/sd-card' }
-]
+# book directory
+# where usb sticks and sd-cards will be automounted
+media_dir = ~/canute-media
+# the exact sub mount-point directory name of the sd-card
+sd_card_dir = sd-card
 
 [comms]
 # serial timeout in seconds

@@ -28,53 +28,44 @@ def to_state_file(book_path):
 
 def configured_source_dirs():
     config = config_loader.load()
-    return config.get('files', {}).get('library', [])
+    state_sources = [('sd_card_dir', 'SD')]
+    if config.has_option('files', 'additional_lib_1'):
+        state_sources.append(('additional_lib_1', 'USB1'))
+    if config.has_option('files', 'additional_lib_2'):
+        state_sources.append(('additional_lib_2', 'USB2'))
+    return [(config.get('files', source), name) for source, name in state_sources]
 
-def mounted_source_paths():
-    for source_dir in configured_source_dirs():
-        source_path = source_dir.get('path')
-        if not source_dir.get('mountpoint', False) or os.path.ismount(source_path):
+
+def mounted_source_paths(media_dir):
+    for source_dir, name in configured_source_dirs():
+        source_path = os.path.join(media_dir, source_dir)
+        if os.path.ismount(source_path) or 'TRAVIS' in os.environ:
             yield source_path
 
 
-def swap_library(current_book, books):
-    """
-    The current_book path includes a mount-point path (if on removable media)
-    so try to cope with user accidentally swapping slots
-    """
+def swap_library(current_book):
     config = config_loader.load()
-    library = config.get('files', {}).get('library', [])
-
-    for lib in library:
-        path = lib['path']
-        if current_book.startswith(path):
-            rel_book = current_book[len(path):]
-            break
-        # provide backwards compatibility, where the media_dir isn't included
-        path = os.path.relpath(path, '/media')
-        if current_book.startswith(path):
-            rel_book = current_book[len(path):]
-            break
-
-    for lib in library:
-        path = lib['path']
-        book = os.path.join(path, rel_book)
-        if book in books:
-            return book
-
+    if config.has_option('files', 'additional_lib_1') and \
+            config.has_option('files', 'additional_lib_2'):
+        lib1 = config.get('files', 'additional_lib_1')
+        lib2 = config.get('files', 'additional_lib_2')
+        if current_book.startswith(lib1):
+            return lib2 + current_book[len(lib1):]
+        elif current_book.startswith(lib2):
+            return lib1 + current_book[len(lib2):]
     return current_book
 
 
-async def read_user_state(state):
+async def read_user_state(media_dir, state):
     global manual
     current_book = manual_filename
     current_language = None
 
     # walk the available filesystems for directories and braille files
-    library = Library(configured_source_dirs(), ('brf', 'pef'))
+    library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
     book_files = library.book_files()
 
-    source_paths = mounted_source_paths()
+    source_paths = mounted_source_paths(media_dir)
     for source_path in source_paths:
         main_toml = os.path.join(source_path, USER_STATE_FILE)
         if os.path.exists(main_toml):
@@ -95,7 +86,7 @@ async def read_user_state(state):
     install(current_language)
     manual = Manual.create()
 
-    manual_toml = to_state_file(manual_filename)
+    manual_toml = os.path.join(media_dir, to_state_file(manual_filename))
     if os.path.exists(manual_toml):
         try:
             t = toml.load(manual_toml)
@@ -112,7 +103,7 @@ async def read_user_state(state):
 
     books = OrderedDict({manual_filename: manual})
     for book_file in book_files:
-        filename = book_file
+        filename = os.path.join(media_dir, book_file)
         toml_file = to_state_file(filename)
         book = BookFile(filename=filename, width=width, height=height)
         if os.path.exists(toml_file):
@@ -138,21 +129,22 @@ async def read_user_state(state):
     if current_book not in books:
         # let's check that they're not just using a different USB port
         log.info('current book not in original library {}'.format(current_book))
-        current_book = swap_library(current_book, books)
+        current_book = swap_library(current_book)
         if current_book not in books:
             log.warn('current book not found {}, ignoring'.format(current_book))
             current_book = manual_filename
 
     state.app.user.books = books
+    state.app.library.media_dir = media_dir
     state.app.library.dirs = library.dirs
     state.app.user.load(current_book, current_language)
 
 
-async def read(state):
-    await read_user_state(state)
+async def read(media_dir, state):
+    await read_user_state(media_dir, state)
 
 
-async def write(queue):
+async def write(media_dir, queue):
     log.info('save file worker started')
     while True:
         (filename, data) = await queue.get()
@@ -160,7 +152,7 @@ async def write(queue):
 
         if filename is None:
             # main user state file
-            source_paths = mounted_source_paths()
+            source_paths = mounted_source_paths(media_dir)
             for source_path in source_paths:
                 path = os.path.join(source_path, USER_STATE_FILE)
                 log.debug('writing user state file save to {path}')
@@ -169,11 +161,13 @@ async def write(queue):
 
         else:
             # book state file
-            if filename != manual_filename:
+            if filename == manual_filename:
+                path = os.path.join(media_dir, path)
+            else:
                 path = to_state_file(filename)
-                log.debug(f'writing {filename} state file save to {path}')
-                async with aiofiles.open(path, 'w') as f:
-                    await f.write(s)
+            log.debug(f'writing {filename} state file save to {path}')
+            async with aiofiles.open(path, 'w') as f:
+                await f.write(s)
 
         log.debug('state file save complete')
         queue.task_done()

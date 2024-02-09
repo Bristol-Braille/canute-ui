@@ -82,18 +82,19 @@ class Library:
     DIRS_PAGE_SIZE = 8
     FILES_PAGE_SIZE = 7
 
-    def __init__(self, source_dirs, file_exts):
+    def __init__(self, media_dir, source_dirs, file_exts):
+        self.media_dir = os.path.abspath(media_dir)
         self.file_exts = file_exts
         self.dirs = []
 
-        for source_dir in source_dirs:
-            source_path = source_dir.get('path')
-            if not source_dir.get('mountpoint', False) or os.path.ismount(source_path):
-                root = Directory(source_path, display=source_dir.get('name'))
-                self.walk(root)
-                self.prune(root)
-                if len(root.dirs) > 0 or root.files_count > 0:
-                    self.flatten(root)
+        for source_dir, name in source_dirs:
+            # if os.path.ismount(os.path.join(self.media_dir, source_dir)):
+            # not needed as unmounted devices will be empty and so pruned
+            root = Directory(source_dir, display=name)
+            self.walk(root)
+            self.prune(root)
+            if len(root.dirs) > 0 or root.files_count > 0:
+                self.flatten(root)
 
         self.dir_count = len(self.dirs)
         self.files_dir_index = None
@@ -106,7 +107,7 @@ class Library:
         """
         dirs = []
         files = []
-        for entry in os.scandir(root.relpath):
+        for entry in os.scandir(os.path.join(self.media_dir, root.relpath)):
             if entry.is_dir(follow_symlinks=False) and \
                     entry.name[0] != '.' and \
                     entry.name != 'RECYCLE' and \
