@@ -113,12 +113,7 @@ async def run_async_timeout(driver, config, duration, loop):
 
 # This is a task in its own right that listens to an external process for media
 # change notifications, and handles them.
-async def handle_media_changes():
-    # For now, under Travis, don't launch it.  It requires pygi which is hard
-    # to make accessible to a virtualenv.
-    media_helper = './media.py'
-    if 'TRAVIS' in os.environ:
-        media_helper = '/bin/cat'
+async def handle_media_changes(media_helper):
     proc = await asyncio.create_subprocess_exec(
         media_helper, stdout=asyncio.subprocess.PIPE)
 
@@ -161,7 +156,12 @@ async def run_async(driver, config, loop):
     while not driver.is_motion_complete():
         await asyncio.sleep(0.01)
     log.debug('motion complete')
-    media_handler = asyncio.ensure_future(handle_media_changes())
+
+    media_helper = config.get('filese', {}).get('media_helper')
+    if media_helper is not None:
+        media_handler = asyncio.ensure_future(handle_media_changes(media_helper))
+    else:
+        media_handler = None
 
     if config.get('hardware', {}).get('log_duty', False):
         duty_logger = asyncio.ensure_future(driver.track_duty())
@@ -184,11 +184,12 @@ async def run_async(driver, config, loop):
     try:
         while 1:
             if (await handle_hardware(driver, state, media_dir)):
-                media_handler.cancel()
-                try:
-                    await media_handler
-                except asyncio.CancelledError:
-                    pass
+                if media_handler is not None:
+                    media_handler.cancel()
+                    try:
+                        await media_handler
+                    except asyncio.CancelledError:
+                        pass
                 if duty_logger is not None:
                     duty_logger.cancel()
                     try:
@@ -209,7 +210,8 @@ async def run_async(driver, config, loop):
             else:
                 await asyncio.sleep(0)
     except asyncio.CancelledError:
-        media_handler.cancel()
+        if media_handler is not None:
+            media_handler.cancel()
         if duty_logger is not None:
             duty_logger.cancel()
         await queue.join()
