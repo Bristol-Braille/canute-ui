@@ -132,7 +132,7 @@ class Pi(Driver):
                 if self.previous_buttons[name] == self.button_threshold:
                     buttons[name] = 'down'
             elif n == '0' and (name in self.previous_buttons):
-                if self.previous_buttons[name] > self.button_threshold:
+                if self.previous_buttons[name] >= self.button_threshold:
                     buttons[name] = 'up'
                 del self.previous_buttons[name]
 
