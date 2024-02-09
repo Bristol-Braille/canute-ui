@@ -318,7 +318,7 @@ def backup_log(config):
     mounted_dirs = initial_state.mounted_source_paths()
     if len(mounted_dirs) > 0:
         # make a filename based on the date and save to first path
-        backup_file = os.path.join(mounted_dirs[0], time.strftime('%Y%m%d%M_log.txt'))
+        backup_file = os.path.join(mounted_dirs[0][0], time.strftime('%Y%m%d%M_log.txt'))
         log.debug('backing up log to USB stick: {}'.format(backup_file))
         try:
             import shutil
