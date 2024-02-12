@@ -47,14 +47,15 @@ def swappable_usb(data):
     the correct prefix on app startup.
     """
     book = data.get('current_book')
-    for source_dir in configured_source_dirs():
-        if source_dir.get('swappable', False):
-            prefix = source_dir.get('path') + os.sep
-            if book.startswith(prefix):
-                book = os.path.join('front-usb', book[len(prefix):])
-                # modifying data is safe as a new dict is created each time
-                data.set('current_book', book)
-                break
+    if book is not None:
+        for source_dir in configured_source_dirs():
+            if source_dir.get('swappable', False):
+                prefix = source_dir.get('path') + os.sep
+                if book.startswith(prefix):
+                    book = os.path.join('front-usb', book[len(prefix):])
+                    # modifying data is safe as a new dict is created each time
+                    data['current_book'] = book
+                    break
     return data
 
 
@@ -100,10 +101,10 @@ async def read_user_state(media_dir, state):
                     current_book = main_state['current_book']
                 if 'current_language' in main_state:
                     current_language = main_state['current_language']
+                log.info(f'loaded {main_toml}')
                 break
             except Exception:
-                log.warning(
-                    'user state loading failed for {}, ignoring'.format(main_toml))
+                log.warning(f'user state loading failed for {main_toml}, ignoring')
 
     if not current_language or current_language == OLD_DEFAULT_LOCALE:
         current_language = DEFAULT_LOCALE.code
@@ -173,6 +174,7 @@ async def write(media_dir, queue):
     log.info('save file worker started')
     while True:
         (filename, data) = await queue.get()
+        log.debug(f'save requested for {filename}')
         s = toml.dumps(swappable_usb(data))
 
         if filename is None:
