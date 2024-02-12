@@ -317,11 +317,13 @@ async def handle_hardware(driver, state, media_dir):
 
 
 def backup_log(config):
-    mounted_dirs = initial_state.mounted_source_paths()
-    if len(mounted_dirs) > 0:
+    media_dir = config.get('files', {}).get('media_dir')
+    log_file = config.get('files', {}).get('log_file')
+    source_paths = initial_state.mounted_source_paths(media_dir, only_mounted=True)
+    for source_path, swappable in source_paths:
         # make a filename based on the date and save to first path
-        backup_file = os.path.join(mounted_dirs[0][0], time.strftime('%Y%m%d%M_log.txt'))
-        log.debug('backing up log to USB stick: {}'.format(backup_file))
+        backup_file = os.path.join(source_path, time.strftime('%Y%m%d%M_log.txt'))
+        log.info(f'backing up log to USB stick: {backup_file}')
         try:
             import shutil
             shutil.copyfile(log_file, backup_file)

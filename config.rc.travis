@@ -1,7 +1,7 @@
 [files]
 # relative path to where log is kept
-log_file = canute.log
-media_dir = ~/canute-media
+log_file = 'canute.log'
+media_dir = '~/canute-media'
 
 # Book Directories
 # Additional books made available on the USB ports will be made visible

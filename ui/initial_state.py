@@ -31,10 +31,14 @@ def configured_source_dirs():
     return config.get('files', {}).get('library', [])
 
 
-def mounted_source_paths(media_dir):
+def mounted_source_paths(media_dir, only_mounted=False):
+    """
+    return mounted mount points and, by default, any non-mountpoint paths
+    """
     for source_dir in configured_source_dirs():
         source_path = os.path.join(media_dir, source_dir.get('path'))
-        if not source_dir.get('mountpoint', False) or os.path.ismount(source_path):
+        if (source_dir.get('mountpoint', False) and os.path.ismount(source_path)) or \
+                (not only_mounted and not source_dir.get('mountpoint', False)):
             yield source_path, source_dir.get('swappable', False)
 
 
