@@ -32,8 +32,3 @@ log_duty = true
 
 # minumum number of samples of button down to count as a press
 button_debounce = 1
-
-# shutdown mode
-shutdown_on_exit = true
-
-# versions
