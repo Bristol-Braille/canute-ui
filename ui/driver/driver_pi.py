@@ -163,13 +163,14 @@ class Pi(Driver):
 
             self.HDLC.sendFrame(payload)
 
+            if cmd == comms.CMD_RESET and not hasattr(self, 'context'):
+                # defer this 'til after the initial reset is sent as it slows startup
+                import zmq
+                self.context = zmq.Context()
+                self.socket = self.context.socket(zmq.PUB)
+                self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
+
     def _publish_line(self, row, content):
-        if not hasattr(self, 'context'):
-            # defer this 'til needed as it slows startup
-            import zmq
-            self.context = zmq.Context()
-            self.socket = self.context.socket(zmq.PUB)
-            self.socket.bind('tcp://*:%s' % LINE_PUBLISHING_PORT)
         brl = ''.join([braille.pin_num_to_unicode(ch) for ch in content])
         brf = ''.join(braille.pin_nums_to_alphas(content))
         self.socket.send_pyobj(
