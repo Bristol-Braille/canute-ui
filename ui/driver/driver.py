@@ -46,6 +46,11 @@ class Driver(object, metaclass=abc.ABCMeta):
     def send_data(self, cmd, data=[]):
         return
 
+    def restarting(self, restart):
+        # indicates we're starting a restart to reset the display / re-read
+        # data / reconnect after timeout
+        return
+
     @abc.abstractmethod
     async def async_get_data(self, cmd, data=[]):
         return

@@ -84,7 +84,18 @@ def main():
         try:
             debounce = config.get('hardware', {}).get('button_debounce', 1)
             with Pi(port=args.tty, timeout=timeout, button_threshold=debounce) as driver:
-                run(driver, config)
+                try:
+                    run(driver, config)
+                except ValueError as err:
+                    if err.args[0] == 'Invalid Frame (CRC FAIL)':
+                        log.info('USB B I/O error, canute probably switched off')
+                        driver.restarting('disconnected')
+                        sys.exit(0)
+                except OSError as err:
+                    if err.errno == 5:
+                        log.info('USB B I/O error, canute probably switched off')
+                        driver.restarting('disconnected')
+                        sys.exit(0)
         except RuntimeError as err:
             if err.args[0] == 'readFrame timeout':
                 log.info(
@@ -113,7 +124,7 @@ async def run_async_timeout(driver, config, duration, loop):
 
 # This is a task in its own right that listens to an external process for media
 # change notifications, and handles them.
-async def handle_media_changes(media_helper):
+async def handle_media_changes(media_helper, driver):
     proc = await asyncio.create_subprocess_exec(
         media_helper, stdout=asyncio.subprocess.PIPE)
 
@@ -136,6 +147,7 @@ async def handle_media_changes(media_helper):
             # For now we do nothing more sophisticated than die and allow
             # supervision to restart us, at which point we'll rescan the
             # library.
+            driver.restarting('media')
             sys.exit(0)
 
 
@@ -159,9 +171,14 @@ async def run_async(driver, config, loop):
 
     media_helper = config.get('filese', {}).get('media_helper')
     if media_helper is not None:
-        media_handler = asyncio.ensure_future(handle_media_changes(media_helper))
+        media_handler = asyncio.ensure_future(handle_media_changes(media_helper, driver))
     else:
         media_handler = None
+        def sighup_helper(*args):
+            log.debug('shutting down for library rescan')
+            driver.restarting('media')
+            sys.exit(0)
+        signal.signal(signal.SIGHUP, sighup_helper)
 
     if config.get('hardware', {}).get('log_duty', False):
         duty_logger = asyncio.ensure_future(driver.track_duty())
@@ -309,6 +326,7 @@ async def handle_hardware(driver, state, media_dir):
         return True
     elif state.hardware.resetting_display == 'start':
         log.warning('long-press of square: exiting to cause reset')
+        driver.restarting('reset')
         sys.exit(0)
     elif state.hardware.warming_up == 'start':
         state.hardware.warm_up('in progress')

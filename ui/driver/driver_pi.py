@@ -1,3 +1,4 @@
+import sys
 import time
 from .driver import Driver
 import asyncio
@@ -83,7 +84,8 @@ class Pi(Driver):
             return serial_port
         except IOError as e:
             log.error('check usb connection to arduino %s', e)
-            exit(1)
+            self.restarting('no-connection')
+            sys.exit(1)
 
     def is_ok(self):
         """checks the serial connection. There doesn't seem to be a specific
@@ -176,6 +178,10 @@ class Pi(Driver):
         self.socket.send_pyobj(
             {'line_number': row, 'visual': brf, 'braille': brl})
 
+    def restarting(self, reason):
+        if hasattr(self, 'context'):
+            self.socket.send_pyobj({'restarting': reason})
+
     async def async_get_data(self, expected_cmd):
         """gets 2 bytes of data from the hardware
 
@@ -212,6 +218,9 @@ class Pi(Driver):
             # Got a frame but CRC incorrect.  Punt for now and see
             # where it lands, since this interface makes no allowance
             # for failure.
+            raise e
+        except OSError as e:
+            # Input/output error
             raise e
         except RuntimeError as e:
             # No complete frame within timeout.  Same again.
