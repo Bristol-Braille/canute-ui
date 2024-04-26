@@ -2,11 +2,11 @@ import logging
 import signal
 from datetime import datetime
 from .state import state
-from .system_menu.system_menu import system_menu
 from .library.buttons import library_buttons
 from .book.buttons import book_buttons
 from .go_to_page.buttons import go_to_page_buttons
 from .bookmarks.buttons import bookmarks_buttons
+from .system_menu.buttons import system_buttons
 from .language.buttons import language_buttons
 
 
@@ -18,6 +18,7 @@ bindings = {
     'book': book_buttons,
     'go_to_page': go_to_page_buttons,
     'bookmarks_menu': bookmarks_buttons,
+    'system_menu': system_buttons,
     'language': language_buttons,
     'help_menu': {
         'single': {
@@ -33,29 +34,8 @@ bindings = {
             'R': state.app.help_menu.toggle,
             'X': state.hardware.reset_display,
         },
-    },
-    'system_menu': {
-        'single': {
-            'R': state.app.help_menu.toggle,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'L': state.app.close_menu,
-        },
-        'long': {
-            'R': state.app.help_menu.toggle,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'L': state.app.close_menu,
-            'X': state.hardware.reset_display,
-        },
     }
 }
-
-sys_menu = system_menu()
-
-for i, item in enumerate(sys_menu):
-    action = sys_menu[item]
-    bindings['system_menu']['single'][str(i + 2)] = action
 
 # add a signal handler to manage going to the system menu when the rear
 # button is pressed (generates a usr1 signal)

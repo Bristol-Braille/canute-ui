@@ -228,3 +228,33 @@ def unicodes_to_alphas(unis):
     allowed.
     """
     return ''.join(map(unicode_to_alpha, unis))
+
+
+def brailleify(rel):
+    """
+    Used to format version and serial numbers
+    turning 1.3.45 or AKPR54633-1PHI into UEB
+    """
+    # FIXME: we probably shouldn't be trying to do liblouis-level translation
+    ret = u''
+    digits = False
+    for c in rel:
+        if ASCII.isdigit(c):
+            if not digits:
+                ret += u'⠼'
+                digits = True
+            c = ueb_number_mapping[int(c)]
+            ret += alpha_to_unicode(c)
+        elif c == '.':
+            ret += u'⠲'
+        elif ASCII.isalpha(c):
+            if digits:
+                # UEB 'guidelines for technical material' suggests capital
+                # letter marker, not letter sign
+                ret += u'⠠'
+                digits = False
+            ret += alpha_to_unicode(c)
+        else:  # e.g. dash in serial
+            digits = False
+            ret += alpha_to_unicode(c)
+    return ret
