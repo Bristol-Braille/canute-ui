@@ -1,4 +1,5 @@
 import logging
+import signal
 from datetime import datetime
 from .state import state
 from .system_menu.system_menu import system_menu
@@ -56,6 +57,11 @@ for i, item in enumerate(sys_menu):
     action = sys_menu[item]
     bindings['system_menu']['single'][str(i + 2)] = action
 
+# add a signal handler to manage going to the system menu when the rear
+# button is pressed (generates a usr1 signal)
+def sigusr1_helper(*args):
+    state.app.go_to_system_menu()
+signal.signal(signal.SIGUSR1, sigusr1_helper)
 
 async def dispatch_button(key, press_type, state):
     location = state.app.location_or_help_menu
