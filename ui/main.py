@@ -169,7 +169,7 @@ async def run_async(driver, config, loop):
         await asyncio.sleep(0.01)
     log.debug('motion complete')
 
-    media_helper = config.get('filese', {}).get('media_helper')
+    media_helper = config.get('files', {}).get('media_helper')
     if media_helper is not None:
         media_handler = asyncio.ensure_future(handle_media_changes(media_helper, driver))
     else:
