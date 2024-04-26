@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2023 ORGANIZATION
+# Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-12-20 14:35+0000\n"
+"POT-Creation-Date: 2024-04-26 15:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,15 +209,15 @@ msgstr ""
 msgid "go to book list"
 msgstr ""
 
-#: ui/library/view.py:73
+#: ui/library/view.py:74
 msgid "LIBRARY menu"
 msgstr ""
 
-#: ui/library/view.py:83
+#: ui/library/view.py:84
 msgid "back to directory list"
 msgstr ""
 
-#: ui/library/view.py:89
+#: ui/library/view.py:90
 msgid "more directories"
 msgstr ""
 
@@ -232,31 +232,39 @@ msgid ""
 "files in the library."
 msgstr ""
 
-#: ui/system_menu/system_menu.py:52
+#: ui/system_menu/view.py:15
+msgid "run in standalone mode"
+msgstr ""
+
+#: ui/system_menu/view.py:19
 msgid "emulated"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:62
+#: ui/system_menu/view.py:34
 msgid "shutdown"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:63
+#: ui/system_menu/view.py:35
 msgid "backup log to USB stick"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:64
+#: ui/system_menu/view.py:36
 msgid "select language and code"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:68
+#: ui/system_menu/view.py:37
+msgid "install upgrade from "
+msgstr ""
+
+#: ui/system_menu/view.py:40
 msgid "release:"
 msgstr ""
 
-#: ui/system_menu/system_menu.py:69
+#: ui/system_menu/view.py:41
 msgid "serial:"
 msgstr ""
 
-#: ui/system_menu/view.py:23
+#: ui/system_menu/view.py:49
 msgid "system menu"
 msgstr ""
 
