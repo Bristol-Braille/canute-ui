@@ -1,14 +1,11 @@
 import logging
-from .library import view as library_view
-from .system_menu import view as system_menu_view
-from .go_to_page import view as go_to_page_view
-from .language import view as language_view
-from .book import view as book_view
-from .bookmarks import view as bookmarks_view
+from .config_loader import import_pages
 
 
 log = logging.getLogger(__name__)
 
+
+page_views = import_pages('view')
 
 class Display():
     def __init__(self):
@@ -20,21 +17,11 @@ class Display():
     async def render_to_buffer(self, state):
         width, height = state.app.dimensions
         location = state.app.location
-        page_data = None
-        if location == 'library':
-            page_data = library_view.render(width, height, state)
-        elif location == 'system_menu':
-            page_data = system_menu_view.render(width, height, state)
-        elif location == 'go_to_page':
-            page_data = go_to_page_view.render(width, height, state)
-        elif location == 'language':
-            page_data = language_view.render(width, height, state)
-        elif location == 'book':
-            page_data = await book_view.render(width, height, state)
-        elif location == 'bookmarks_menu':
-            page_data = await bookmarks_view.render(width, height, state)
-        if page_data:
+        try:
+            page_data = await page_views[location].render(width, height, state)
             self._set_buffer(page_data)
+        except:
+            log.warn('unknown page location')
 
     async def send_line(self, driver):
         row = self.row

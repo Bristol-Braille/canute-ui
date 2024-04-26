@@ -15,7 +15,7 @@ def close_menu():
     return lambda: state.app.close_menu(True)
 
 
-bookmarks_buttons = {
+buttons = {
     'single': {
         'L': state.app.close_menu,
         '2': go_to_bookmark(0),

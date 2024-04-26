@@ -1,6 +1,6 @@
 from ..state import state
 
-system_buttons = {
+buttons = {
     'single': {
         '2': state.app.shutdown,
         '3': state.app.go_to_language_menu,

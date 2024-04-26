@@ -19,7 +19,7 @@ then change to your selected language.\
     return tuple(data)
 
 
-def render(width, height, state):
+async def render(width, height, state):
     help_menu = state.app.help_menu.visible
     if help_menu:
         all_lines = render_help(width, height)

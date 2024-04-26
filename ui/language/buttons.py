@@ -7,7 +7,7 @@ def select_language(index):
     return lambda: state.app.languages.select_language(index)
 
 
-language_buttons = {
+buttons = {
     'single': {
         'L': state.app.close_menu,
         '2': select_language(0),

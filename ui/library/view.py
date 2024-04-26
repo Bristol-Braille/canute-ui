@@ -131,7 +131,7 @@ def render_library(width, height, state):
             yield tuple()
 
 
-def render(width, height, state):
+async def render(width, height, state):
     if state.app.help_menu.visible:
         all_lines = render_help(width, height)
         num_pages = len(all_lines) // height

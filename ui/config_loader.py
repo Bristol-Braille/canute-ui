@@ -16,3 +16,20 @@ def load(config_file=config_file):
     files_section['media_dir'] = os.path.expanduser(media_dir)
 
     return config
+
+def import_pages(module):
+    """
+    return a dictionary of location -> module (such as buttons or view)
+    from a list of subpackages
+    """
+    config = load()
+    ui_section = config.get('ui', {})
+    pages = ui_section.get('pages', [
+        'library',
+        'book',
+        'go_to_page',
+        'bookmarks_menu',
+        'system_menu',
+        'language'
+    ])
+    return { p:__import__(f'.{p}.{module}') for p in pages }

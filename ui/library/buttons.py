@@ -7,7 +7,7 @@ def library_action(number):
     return lambda: state.app.library.action(number - 1)
 
 
-library_buttons = {
+buttons = {
     'single': {
         '2': library_action(2),
         '3': library_action(3),

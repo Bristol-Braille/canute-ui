@@ -2,39 +2,27 @@ import logging
 import signal
 from datetime import datetime
 from .state import state
-from .library.buttons import library_buttons
-from .book.buttons import book_buttons
-from .go_to_page.buttons import go_to_page_buttons
-from .bookmarks.buttons import bookmarks_buttons
-from .system_menu.buttons import system_buttons
-from .language.buttons import language_buttons
-
+from .config_loader import import_pages
 
 log = logging.getLogger(__name__)
 
+page_buttons = import_pages('buttons')
 
-bindings = {
-    'library': library_buttons,
-    'book': book_buttons,
-    'go_to_page': go_to_page_buttons,
-    'bookmarks_menu': bookmarks_buttons,
-    'system_menu': system_buttons,
-    'language': language_buttons,
-    'help_menu': {
-        'single': {
-            'L': state.app.close_menu,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'R': state.app.help_menu.toggle,
-        },
-        'long': {
-            'L': state.app.close_menu,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'R': state.app.help_menu.toggle,
-            'X': state.hardware.reset_display,
-        },
-    }
+bindings = { p:p.buttons for p in page_buttons }
+bindings['help_menu'] = {
+    'single': {
+        'L': state.app.close_menu,
+        '>': state.app.next_page,
+        '<': state.app.previous_page,
+        'R': state.app.help_menu.toggle,
+    },
+    'long': {
+        'L': state.app.close_menu,
+        '>': state.app.next_page,
+        '<': state.app.previous_page,
+        'R': state.app.help_menu.toggle,
+        'X': state.hardware.reset_display,
+    },
 }
 
 # add a signal handler to manage going to the system menu when the rear

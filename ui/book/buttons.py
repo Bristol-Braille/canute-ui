@@ -1,6 +1,6 @@
 from ..state import state
 
-book_buttons = {
+buttons = {
     'single': {
         '2': state.app.user.enter_go_to_page,
         '5': state.app.user.insert_bookmark,
