@@ -32,4 +32,4 @@ def import_pages(module):
         'system_menu',
         'language'
     ])
-    return { p:__import__(f'.{p}.{module}') for p in pages }
+    return { p:__import__(f'{p}.{module}', globals(), fromlist=[None], level=1) for p in pages }

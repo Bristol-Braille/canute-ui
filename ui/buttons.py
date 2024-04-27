@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 page_buttons = import_pages('buttons')
 
-bindings = { p:p.buttons for p in page_buttons }
+bindings = { p:m.buttons for p, m in page_buttons.items() }
 bindings['help_menu'] = {
     'single': {
         'L': state.app.close_menu,
