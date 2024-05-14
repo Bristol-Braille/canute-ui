@@ -12,7 +12,13 @@
 import sys
 import os
 import pydbus
+import signal
 from gi.repository import GLib
+
+# ignore the SIGUSR1 signal, we don't want to quit if we get this
+def sigusr1_helper(*args):
+    pass
+signal.signal(signal.SIGUSR1, sigusr1_helper)
 
 
 def stringify(enc):
