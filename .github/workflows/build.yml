@@ -23,7 +23,7 @@ jobs:
     - name: Create version file
       run: echo "$GITHUB_REF_NAME" > VERSION
     - name: Make tarball
-      run: tar czvf canute-ui.tar.gz --transform "s,^,canute-ui-$GITHUB_REF_NAME/," README.md LICENSE requirements-pi.txt canute_ui ui libbookindex.so config.rc.in run.sh media.py books VERSION
+      run: tar czvf canute-ui.tar.gz --transform "s,^,canute-ui-$GITHUB_REF_NAME/," README.md LICENSE requirements-pi.txt canute_ui ui libbookindex.so config.rc.in run.sh books VERSION
     - name: Release (if tagged)
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
