@@ -19,9 +19,6 @@ library = [
   { name = 'USB2', path = 'usb1', mountpoint = true, swappable = true }
 ]
 
-# if required, a program to look for changes to removable media
-media_helper = './media.py'
-
 [comms]
 # serial timeout in seconds
 timeout = 1000
