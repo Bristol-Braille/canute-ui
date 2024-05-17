@@ -1,5 +1,5 @@
 import os
-from ..braille import format_title, brailleify, from_unicode
+from ..braille import format_title, brailleify, from_unicode, alphas_to_unicodes
 from . import upgrade
 from .help import render_help
 
@@ -34,7 +34,7 @@ async def render(width, height, state):
         _('shutdown'),
         _('backup log to USB stick'),
         _('select language and code'),
-        _('install upgrade from ') + upgrade.source_name if upgrade.available else '',
+        _('install upgrade from ') + alphas_to_unicodes(upgrade.source_name) if upgrade.available else '',
         '',
         '',
         _('release:') + ' ' + release,

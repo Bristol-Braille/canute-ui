@@ -21,6 +21,4 @@ for source_path, source_name in source_paths:
             break
 
 def upgrade():
-    go_file = os.path.join(source_path, 'sysupgrade-now.txt')
-    open(go_file, 'a').close()
-    os.system('sudo shutdown -r now')
+    os.system('sudo systemctl start system-upgrade')
