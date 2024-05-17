@@ -1,6 +1,6 @@
 import logging
 import signal
-from datetime import datetime
+from datetime import datetime, timedelta
 from .state import state
 from .config_loader import import_pages
 
@@ -65,7 +65,11 @@ async def check(driver, state):
 
         for key in prev_buttons:
             diff = (datetime.now() - prev_buttons[key]).total_seconds()
-            if diff > 0.5:
-                prev_buttons[key] = datetime.now()
+            threshold = 0.5 if key in long_buttons else 1
+            if diff > threshold:
+                prev_buttons[key] = datetime.now() 
+                # wait three seconds before repeating every half second
+                if key not in long_buttons:
+                    prev_buttons[key] += timedelta(seconds=2)
                 long_buttons[key] = True
                 await dispatch_button(key, 'long', state)
