@@ -45,7 +45,7 @@ variants = [
     Variant('British English, UEB grade 2',
             'en-ueb-g2.ctb', 'en_GB.UTF-8@ueb2'),
     Variant('Deutsch, UEB grade 2',
-            'de-g1.ctb', 'de_DE.UTF-8@ueb1'),
+            'de-g1-detailed.ctb', 'de_DE.UTF-8@ueb1'),
     Variant('Deutsch, UEB grade 2',
             'de-g2.ctb', 'de_DE.UTF-8@ueb2'),
 ]
