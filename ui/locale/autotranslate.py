@@ -44,6 +44,10 @@ variants = [
             'en-ueb-g1.ctb', 'en_GB.UTF-8@ueb1'),
     Variant('British English, UEB grade 2',
             'en-ueb-g2.ctb', 'en_GB.UTF-8@ueb2'),
+    Variant('Deutsch, UEB grade 2',
+            'de-g1-detailed.ctb', 'de_DE.UTF-8@ueb1'),
+    Variant('Deutsch, UEB grade 2',
+            'de-g2.ctb', 'de_DE.UTF-8@ueb2'),
 ]
 
 for variant in variants:
@@ -86,6 +90,10 @@ for variant in variants:
             dest_entry.msgstr = '⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁'
         elif dest_entry.msgid == 'English, UEB grade 2':
             dest_entry.msgstr = '⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃'
+        elif dest_entry.msgid == 'Deutsch, UEB grade 1':
+            dest_entry.msgstr = '⠙⠣⠞⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠁'
+        elif dest_entry.msgid == 'Deutsch, UEB grade 2':
+            dest_entry.msgstr = '⠙⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠃'
         dest.append(dest_entry)
 
     destdir = os.path.join(variant.locale, 'LC_MESSAGES')

@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-26 15:25+0100\n"
-"PO-Revision-Date: 2024-04-26 14:27+0000\n"
+"POT-Creation-Date: 2024-05-20 13:12+0100\n"
+"PO-Revision-Date: 2024-05-20 12:25+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,18 +17,24 @@ msgstr ""
 #. speak only that language, just as "Deutsch" should always be left as
 #. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
 #. appropriate, if possible.
-#: ui/i18n.py:38
+#: ui/i18n.py:39
 msgid "English, UEB grade 1"
 msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
 
-#. TRANSLATORS: This is a language name menu item, so should always appear
-#. in the language it denotes so that it remains readable to those who
-#. speak only that language, just as "Deutsch" should always be left as
-#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
-#. appropriate, if possible.
-#: ui/i18n.py:45
+#. TRANSLATORS: This is a language name menu item.
+#: ui/i18n.py:41
 msgid "English, UEB grade 2"
 msgstr "⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃"
+
+#. TRANSLATORS: This is a language name menu item.
+#: ui/i18n.py:43
+msgid "Deutsch, UEB grade 1"
+msgstr "⠙⠣⠞⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠁"
+
+#. TRANSLATORS: This is a language name menu item.
+#: ui/i18n.py:45
+msgid "Deutsch, UEB grade 2"
+msgstr "⠙⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠃"
 
 #: ui/manual.py:34
 msgid ""
@@ -130,7 +136,7 @@ msgstr "⠧⠊⠑⠺ ⠎⠽⠌⠑⠍ ⠍⠢⠥"
 msgid "view library menu"
 msgstr "⠧⠊⠑⠺ ⠇⠊⠃⠗⠜⠽ ⠍⠢⠥"
 
-#: ui/bookmarks/help.py:7
+#: ui/bookmarks_menu/help.py:7
 msgid ""
 "To navigate to a bookmark within a file press the line select button "
 "immediately to the left of your chosen bookmark. From the bookmark menu you "
@@ -154,17 +160,17 @@ msgstr ""
 "⠦⠢⠙ ⠷ ⠃⠕⠕⠅⠴ ⠃⠕⠕⠅⠍⠜⠅⠎⠲"
 
 #. TRANSLATORS: Bookmarks menu title; gets followed by book name
-#: ui/bookmarks/view.py:27
+#: ui/bookmarks_menu/view.py:27
 msgid "bookmarks:"
 msgstr "⠃⠕⠕⠅⠍⠜⠅⠎⠒"
 
-#: ui/bookmarks/view.py:35
+#: ui/bookmarks_menu/view.py:35
 msgid "start of book"
-msgstr "⠌⠜⠞ ⠷ ⠃⠕⠕⠅"
+msgstr "⠌⠜⠞⠀⠷⠀⠃⠕⠕⠅"
 
-#: ui/bookmarks/view.py:37
+#: ui/bookmarks_menu/view.py:37
 msgid "end of book"
-msgstr "⠢⠙ ⠷ ⠃⠕⠕⠅"
+msgstr "⠢⠙⠀⠷⠀⠃⠕⠕⠅"
 
 #: ui/go_to_page/view.py:6
 msgid ""
@@ -313,7 +319,7 @@ msgstr "⠃⠁⠉⠅⠥⠏ ⠇⠕⠛ ⠞⠕ ⠠⠠⠥⠎⠃ ⠌⠊⠉⠅"
 
 #: ui/system_menu/view.py:36
 msgid "select language and code"
-msgstr "⠎⠑⠇⠑⠉⠞ ⠇⠁⠝⠛⠥⠁⠛⠑ ⠯ ⠉⠕⠙⠑"
+msgstr "⠎⠑⠇⠑⠉⠞⠀⠇⠁⠝⠛⠥⠁⠛⠑⠀⠯⠀⠉⠕⠙⠑"
 
 #: ui/system_menu/view.py:37
 msgid "install upgrade from "
