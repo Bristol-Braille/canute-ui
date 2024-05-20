@@ -49,14 +49,13 @@ del _
 
 DEFAULT_LOCALE = 'en_GB.UTF-8@ueb2'
 
+translations = install(DEFAULT_LOCALE)
+# this will've already been installed globally, but this keeps flake8 happy
+_ = translations.gettext
+
 BUILTIN_LANGUAGES = OrderedDict([
     (lang.code, _(lang.title)) for lang in builtin
 ])
-
-translations = install(BUILTIN_LANGUAGES[DEFAULT_LOCALE])
-
-# this will've already been installed globally, but this keeps flake8 happy
-_ = translations.gettext
 
 # For detecting the default language of older installations, which
 # didn't really have switchable language but did add a default
