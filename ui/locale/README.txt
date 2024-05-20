@@ -25,3 +25,10 @@ corresponding MO, e.g.:
     pybabel compile -f -D canute -d . -l en_GB.UTF-8@ueb1 -i en_GB.UTF-8@ueb1/LC_MESSAGES/canute.po
 
 To see tweaks applied in the past, check the git diff.
+___
+
+If you get the error `ModuleNotFoundError: No module named 'louis'` you may
+need to run something like the following first:
+
+    export PYTHONPATH="$(brew --prefix liblouis)/lib/python3.12/site-packages:$PYTHONPATH"
+
