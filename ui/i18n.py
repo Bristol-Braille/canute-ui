@@ -30,15 +30,18 @@ Builtin = namedtuple('BuiltinLang', ['code', 'title'])
 # might be irrelevant if there are no British-isms in this small
 # collection of text, (3) US users might object on principle.
 
-# TRANSLATORS: This is a language name menu item, so should always appear
-# in the language it denotes so that it remains readable to those who
-# speak only that language, just as "Deutsch" should always be left as
-# "Deutsch" in a language menu.  Addition of a Braille grade marker seems
-# appropriate, if possible.
 builtin = [
+    # TRANSLATORS: This is a language name menu item, so should always appear
+    # in the language it denotes so that it remains readable to those who
+    # speak only that language, just as "Deutsch" should always be left as
+    # "Deutsch" in a language menu.  Addition of a Braille grade marker seems
+    # appropriate, if possible.
     Builtin(code='en_GB.UTF-8@ueb1', title=_('English, UEB grade 1')),
+    # TRANSLATORS: This is a language name menu item.
     Builtin(code='en_GB.UTF-8@ueb2', title=_('English, UEB grade 2')),
+    # TRANSLATORS: This is a language name menu item.
     Builtin(code='de_DE.UTF-8@ueb1', title=_('Deutsch, UEB grade 1')),
+    # TRANSLATORS: This is a language name menu item.
     Builtin(code='de_DE.UTF-8@ueb2', title=_('Deutsch, UEB grade 2'))
 ]
 
