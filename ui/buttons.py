@@ -1,61 +1,35 @@
 import logging
-from datetime import datetime
+import signal
+from datetime import datetime, timedelta
 from .state import state
-from .system_menu.system_menu import system_menu
-from .library.buttons import library_buttons
-from .book.buttons import book_buttons
-from .go_to_page.buttons import go_to_page_buttons
-from .bookmarks.buttons import bookmarks_buttons
-from .language.buttons import language_buttons
-
+from .config_loader import import_pages
 
 log = logging.getLogger(__name__)
 
+page_buttons = import_pages('buttons')
 
-bindings = {
-    'library': library_buttons,
-    'book': book_buttons,
-    'go_to_page': go_to_page_buttons,
-    'bookmarks_menu': bookmarks_buttons,
-    'language': language_buttons,
-    'help_menu': {
-        'single': {
-            'L': state.app.close_menu,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'R': state.app.help_menu.toggle,
-        },
-        'long': {
-            'L': state.app.close_menu,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'R': state.app.help_menu.toggle,
-            'X': state.hardware.reset_display,
-        },
+bindings = { p:m.buttons for p, m in page_buttons.items() }
+bindings['help_menu'] = {
+    'single': {
+        'L': state.app.close_menu,
+        '>': state.app.next_page,
+        '<': state.app.previous_page,
+        'R': state.app.help_menu.toggle,
     },
-    'system_menu': {
-        'single': {
-            'R': state.app.help_menu.toggle,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'L': state.app.close_menu,
-        },
-        'long': {
-            'R': state.app.help_menu.toggle,
-            '>': state.app.next_page,
-            '<': state.app.previous_page,
-            'L': state.app.close_menu,
-            'X': state.hardware.reset_display,
-        },
-    }
+    'long': {
+        'L': state.app.close_menu,
+        '>': state.app.next_page,
+        '<': state.app.previous_page,
+        'R': state.app.help_menu.toggle,
+        'X': state.hardware.reset_display,
+    },
 }
 
-sys_menu = system_menu()
-
-for i, item in enumerate(sys_menu):
-    action = sys_menu[item]
-    bindings['system_menu']['single'][str(i + 2)] = action
-
+# add a signal handler to manage going to the system menu when the rear
+# button is pressed (generates a usr1 signal)
+def sigusr1_helper(*args):
+    state.app.go_to_system_menu()
+signal.signal(signal.SIGUSR1, sigusr1_helper)
 
 async def dispatch_button(key, press_type, state):
     location = state.app.location_or_help_menu
@@ -91,7 +65,11 @@ async def check(driver, state):
 
         for key in prev_buttons:
             diff = (datetime.now() - prev_buttons[key]).total_seconds()
-            if diff > 0.5:
-                prev_buttons[key] = datetime.now()
+            threshold = 0.5 if key in long_buttons else 1
+            if diff > threshold:
+                prev_buttons[key] = datetime.now() 
+                # wait three seconds before repeating every half second
+                if key not in long_buttons:
+                    prev_buttons[key] += timedelta(seconds=2)
                 long_buttons[key] = True
                 await dispatch_button(key, 'long', state)

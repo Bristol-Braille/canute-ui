@@ -25,7 +25,7 @@ def queue_key_press(key):
     return thunk
 
 
-go_to_page_buttons = {
+buttons = {
     'single': {
         'L': state.app.close_menu,
         '1': queue_key_press(1),

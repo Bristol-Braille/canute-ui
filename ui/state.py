@@ -1,7 +1,7 @@
 from .book.state import UserState
 from .library.state import LibraryState
 from .go_to_page.state import GoToPageState
-from .bookmarks.state import BookmarksState
+from .bookmarks_menu.state import BookmarksState
 from .language.state import LanguageState
 
 from .book.help import render_book_help, render_home_menu_help
@@ -9,7 +9,7 @@ from .library.view import render_help as render_library_help
 from .system_menu.help import render_help as render_system_help
 from .language.view import render_help as render_language_help
 from .go_to_page.view import render_help as render_gtp_help
-from .bookmarks.help import render_help as render_bookmarks_help
+from .bookmarks_menu.help import render_help as render_bookmarks_help
 
 
 class StateEvent(object):

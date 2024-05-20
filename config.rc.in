@@ -15,12 +15,9 @@ media_dir = '/media'
 # and the swappable flag means USB media that is interchangeable.
 library = [
   { name = 'SD', path = 'sd-card', mountpoint = true },
-  { name = 'USB1', path = 'front-usb', mountpoint = true, swappable = true },
-  { name = 'USB2', path = 'back-usb', mountpoint = true, swappable = true }
+  { name = 'USB1', path = 'usb0', mountpoint = true, swappable = true },
+  { name = 'USB2', path = 'usb1', mountpoint = true, swappable = true }
 ]
-
-# if required, a program to look for changes to removable media
-media_helper = './media.py'
 
 [comms]
 # serial timeout in seconds
