@@ -7,8 +7,6 @@ class LanguageState:
     def __init__(self, root: 'state.RootState'):
         self.root = root
         self.available = BUILTIN_LANGUAGES
-        self.selection = ''
-        self.keys_pressed = ''
 
     def select_language(self, value):
         lang = abs(int(value))

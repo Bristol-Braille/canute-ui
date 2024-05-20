@@ -3,11 +3,13 @@ from .library.state import LibraryState
 from .go_to_page.state import GoToPageState
 from .bookmarks_menu.state import BookmarksState
 from .language.state import LanguageState
+from .encoding.state import EncodingState
 
 from .book.help import render_book_help, render_home_menu_help
 from .library.view import render_help as render_library_help
 from .system_menu.help import render_help as render_system_help
 from .language.view import render_help as render_language_help
+from .encoding.view import render_help as render_encoding_help
 from .go_to_page.view import render_help as render_gtp_help
 from .bookmarks_menu.help import render_help as render_bookmarks_help
 
@@ -62,6 +64,7 @@ class AppState:
         self.library = LibraryState(root)
         self.bookmarks_menu = BookmarksState(root)
         self.languages = LanguageState(root)
+        self.encoding = EncodingState(root)
         self.go_to_page_menu = GoToPageState(root)
 
         self.loading_books = False
@@ -96,6 +99,11 @@ class AppState:
     def go_to_language_menu(self):
         self.location = 'language'
         self.root.refresh_display()
+
+    def go_to_encoding_menu(self):
+        self.location = 'encoding'
+        self.root.refresh_display()
+
 
     def close_menu(self, prune_bookmarks=False):
         # fully delete deleted bookmarks if required
@@ -146,11 +154,6 @@ class AppState:
             if page >= num_pages - 1:
                 page = num_pages - 1
             self.bookmarks_menu.page = page
-        elif location == 'language':
-            # TODO check if this is still used - replaced by select_language?
-            lang_n = self.user.current_language  # default to 'en_GB:en' ?
-            lang = list(self.languages.available.keys())[lang_n]
-            self.user.current_language = lang
         elif location == 'help_menu':
 
             # To calculate help page bounds and ensure we stay within
@@ -161,6 +164,7 @@ class AppState:
                 'library': render_library_help,
                 'system_menu': render_system_help,
                 'language': render_language_help,
+                'encoding': render_encoding_help,
                 'bookmarks_menu': render_bookmarks_help,
                 'go_to_page': render_gtp_help,
             }
@@ -189,8 +193,6 @@ class AppState:
             self.go_to_page(page)
         elif location == 'bookmarks_menu':
             self.go_to_page(self.bookmarks_menu.page + value)
-        elif location == 'language':
-            self.go_to_page(self.languages.page + value)
         elif location == 'help_menu':
             self.go_to_page(self.help_menu.page + value)
 

@@ -32,10 +32,10 @@ async def render(width, height, state):
 
     menu_titles = tuple(map(from_unicode, (
         _('shutdown'),
-        _('backup log to USB stick'),
         _('select language and code'),
+        _('choose BRF encoding'),
+        _('backup log to USB stick'),
         _('install upgrade from ') + alphas_to_unicodes(upgrade.source_name) if upgrade.available else '',
-        '',
         '',
         _('release:') + ' ' + release,
         _('serial:') + ' ' + serial,

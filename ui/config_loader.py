@@ -30,6 +30,7 @@ def import_pages(module):
         'go_to_page',
         'bookmarks_menu',
         'system_menu',
-        'language'
+        'language',
+        'encoding'
     ])
     return { p:__import__(f'{p}.{module}', globals(), fromlist=[None], level=1) for p in pages }

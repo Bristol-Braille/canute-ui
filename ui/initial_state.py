@@ -9,6 +9,7 @@ from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
 from .library.explorer import Library, Directory, LocalFile
 from .i18n import install, DEFAULT_LOCALE, OLD_DEFAULT_LOCALE
+from .braille import set_encoding, DEFAULT_ENCODING
 
 from . import config_loader
 
@@ -90,6 +91,7 @@ async def read_user_state(media_dir, state):
     global manual
     current_book = manual_filename
     current_language = None
+    current_encoding = None
 
     # walk the available filesystems for directories and braille files
     library = Library(media_dir, configured_source_dirs(), ('brf', 'pef'))
@@ -105,6 +107,8 @@ async def read_user_state(media_dir, state):
                     current_book = main_state['current_book']
                 if 'current_language' in main_state:
                     current_language = main_state['current_language']
+                if 'current_encoding' in main_state:
+                    current_encoding = main_state['current_encoding']
                 log.info(f'loaded {main_toml}')
                 break
             except Exception:
@@ -112,6 +116,11 @@ async def read_user_state(media_dir, state):
 
     if not current_language or current_language == OLD_DEFAULT_LOCALE:
         current_language = DEFAULT_LOCALE
+
+    if not current_encoding:
+        current_encoding = DEFAULT_ENCODING
+    else:
+        set_encoding(current_encoding)
 
     install(current_language)
     manual = Manual.create()
@@ -167,7 +176,7 @@ async def read_user_state(media_dir, state):
     state.app.user.books = books
     state.app.library.media_dir = media_dir
     state.app.library.dirs = library.dirs
-    state.app.user.load(current_book, current_language)
+    state.app.user.load(current_book, current_language, current_encoding)
 
 
 async def read(media_dir, state):
