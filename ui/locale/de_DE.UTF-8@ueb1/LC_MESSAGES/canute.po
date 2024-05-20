@@ -1,0 +1,447 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-06-15 19:52+0100\n"
+"PO-Revision-Date: 2024-05-08 10:35+0200\n"
+"Last-Translator: Ulf Beckmann <beckmann@flusoft.de>\n"
+"Language-Team: German (Germany) (https://www.transifex.com/bristol-braille-technology/teams/87456/de_DE/)\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.6.0\n"
+"X-Generator: Poedit 3.4\n"
+
+#: ui/i18n.py:44
+msgid "English, UEB grade 1"
+msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
+
+msgid "English, UEB grade 2"
+msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃"
+
+#: ui/i18n.py:37
+msgid "Deutsch, UEB grade 1"
+msgstr "⠙⠣⠞⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠁"
+
+#: ui/i18n.py:44
+msgid "Deutsch, UEB grade 2"
+msgstr "⠙⠣⠞⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠃"
+
+#: ui/manual.py:34
+msgid ""
+"Canute 360 by Bristol Braille Technology\n"
+"\n"
+"Bristol Braille Technology is a not-for-profit organisation dedicated to serving the Braille reading community.\n"
+"\n"
+"Founded in 2011. Registered in the United Kingdom with the Regulator of Community Interest Companies. Company number 7518101.\n"
+msgstr ""
+"⠉⠁⠝⠥⠞⠑⠀⠼⠉⠋⠚⠀⠧⠕⠝⠀⠃⠗⠊⠾⠕⠇⠀⠃⠗⠁⠊⠇⠇⠑⠀⠞⠑⠹⠝⠕⠇⠕⠛⠽\n"
+"⠃⠗⠊⠾⠕⠇⠀⠃⠗⠁⠊⠇⠇⠑⠀⠞⠑⠹⠝⠕⠇⠕⠛⠽⠀⠊⠾⠀⠩⠝⠑\n"
+"⠛⠑⠍⠩⠝⠳⠞⠵⠊⠛⠑⠀⠕⠗⠛⠁⠝⠊⠎⠁⠞⠊⠕⠝⠀⠵⠥⠗⠀⠥⠝⠞⠑⠗⠾⠳⠞⠵⠥⠝⠛\n"
+"⠙⠑⠗⠀⠃⠗⠁⠊⠇⠇⠑⠀⠉⠕⠍⠍⠥⠝⠊⠞⠽⠄\n"
+"⠛⠑⠛⠗⠳⠝⠙⠑⠞⠀⠼⠃⠚⠁⠁⠄⠀⠗⠑⠛⠊⠾⠗⠬⠗⠞⠀⠊⠍⠀⠧⠑⠗⠩⠝⠊⠛⠞⠑⠝\n"
+"⠅⠪⠝⠊⠛⠗⠩⠹⠀⠍⠊⠞⠀⠙⠑⠗⠀⠗⠑⠛⠥⠇⠬⠗⠥⠝⠛⠎⠃⠑⠓⠪⠗⠙⠑⠀⠋⠳⠗\n"
+"⠥⠝⠞⠑⠗⠝⠑⠓⠍⠑⠝⠀⠧⠕⠝⠀⠛⠑⠍⠩⠝⠱⠁⠋⠞⠇⠊⠹⠑⠍⠀⠊⠝⠞⠑⠗⠑⠎⠎⠑⠄\n"
+"⠉⠕⠍⠏⠁⠝⠽⠀⠝⠥⠍⠃⠑⠗⠀⠼⠛⠑⠁⠓⠁⠚⠁⠄\n"
+
+#: ui/book/help.py:23
+msgid ""
+"With Canute 360 you can read files in Braille. You can move within a file using the three large control buttons on the front panel of Canute. Press the large button to the right of centre on the front panel labelled [forward] to move forward one page within this help file.\n"
+"\n"
+"<<<\n"
+"\n"
+"Press the large button to the left of centre, labelled \"back\" to move back one page within a file, similar to turning the pages in a physical book. You can move forwards of backwards five pages at a time by holding down the \"forward\" or \"back\" button. You can access all other Canute features, including the library menu, bookmarks and system settings by pressing the large central button labelled \"menu\" to access the main menu. Press the circular help button (labelled \"H\") at the top left of the display to return to your book."
+msgstr ""
+"⠍⠊⠞⠀⠉⠁⠝⠥⠞⠑⠀⠼⠉⠋⠚⠀⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠞⠑⠭⠞⠑⠀⠊⠝\n"
+"⠃⠗⠁⠊⠇⠇⠑⠀⠇⠑⠎⠑⠝⠄⠀⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠎⠊⠹⠀⠊⠍⠀⠞⠑⠭⠞\n"
+"⠍⠊⠞⠀⠓⠊⠇⠋⠑⠀⠙⠑⠗⠀⠋⠗⠕⠝⠞⠞⠁⠾⠑⠝⠀⠃⠑⠺⠑⠛⠑⠝⠄\n"
+"⠙⠗⠳⠉⠅⠑⠝⠀⠎⠬⠀⠙⠬⠀⠗⠑⠹⠞⠑⠀⠞⠁⠾⠑⠀⠶⠋⠕⠗⠺⠁⠗⠙⠶⠀⠥⠍\n"
+"⠩⠝⠑⠀⠎⠩⠞⠑⠀⠊⠍⠀⠞⠑⠭⠞⠀⠧⠕⠗⠺⠜⠗⠞⠎⠀⠵⠥⠀⠛⠑⠓⠑⠝⠄\n"
+"⠙⠗⠳⠉⠅⠑⠝⠀⠎⠬⠀⠙⠬⠀⠇⠊⠝⠅⠑⠀⠞⠁⠾⠑⠀⠶⠃⠁⠉⠅⠶⠀⠥⠍\n"
+"⠩⠝⠑⠀⠎⠩⠞⠑⠀⠊⠍⠀⠞⠑⠭⠞⠀⠵⠥⠗⠳⠉⠅⠀⠵⠥⠀⠛⠑⠓⠑⠝⠄\n"
+"⠺⠑⠝⠝⠀⠎⠬⠀⠙⠬⠎⠑⠀⠞⠁⠾⠑⠝⠀⠛⠑⠙⠗⠳⠉⠅⠞⠀⠓⠁⠇⠞⠑⠝⠂\n"
+"⠎⠏⠗⠊⠝⠛⠑⠝⠀⠎⠬⠀⠼⠑⠀⠎⠩⠞⠑⠝⠀⠧⠕⠗⠀⠃⠵⠺⠄⠀⠵⠥⠗⠳⠉⠅⠄\n"
+"⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠍⠑⠝⠥⠤⠞⠁⠾⠑⠀⠑⠗⠓⠁⠇⠞⠑⠝⠀⠎⠬\n"
+"⠵⠥⠛⠗⠊⠋⠋⠀⠡⠋⠀⠁⠇⠇⠑⠀⠺⠩⠞⠑⠗⠑⠝⠀⠋⠥⠝⠅⠞⠊⠕⠝⠑⠝⠂⠀⠺⠬\n"
+"⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠥⠝⠙⠀⠩⠝⠾⠑⠇⠇⠥⠝⠛⠑⠝⠄\n"
+"⠺⠑⠝⠝⠀⠎⠬⠀⠙⠬⠀⠗⠥⠝⠙⠑⠀⠓⠊⠇⠋⠑⠞⠁⠾⠑⠀⠶⠓⠶⠂⠀⠕⠃⠑⠝\n"
+"⠇⠊⠝⠅⠎⠶⠀⠚⠑⠞⠵⠞⠀⠙⠗⠳⠉⠅⠑⠝⠂⠀⠛⠑⠇⠁⠝⠛⠑⠝⠀⠎⠬⠀⠵⠥⠗⠳⠉⠅\n"
+"⠵⠥⠀⠊⠓⠗⠑⠍⠀⠃⠥⠹⠄"
+
+#: ui/book/help.py:46
+msgid ""
+"This is the main menu. From the main menu you can access the library, insert a bookmark, return to a bookmark that was previously placed within a file, or navigate to a page within a book. You can select an item from the main menu by pressing the triangular line select button to the left of the menu item on the display.\n"
+"\n"
+"You can choose a new book by pressing the line select button to the left of \"view library menu\" on the display to access the library menu. You can navigate to a page within a file by pressing the triangular line select button to the left of \"go to page\" and following the instructions on the display. You can insert a bookmark by pressing the line select button to the left of \"insert bookmark at current page\". You can retrieve a bookmark by pressing the line select button to the left of \"choose from existing bookmarks\". To make system wide changes, including changing the language or Braille code, press the line select button to the left of \"view system menu\" on the display."
+msgstr ""
+"⠙⠁⠎⠀⠊⠾⠀⠙⠁⠎⠀⠓⠡⠏⠞⠍⠑⠝⠳⠄⠀⠧⠕⠝⠀⠓⠬⠗⠀⠡⠎⠀⠅⠪⠝⠝⠑⠝\n"
+"⠎⠬⠀⠙⠬⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠀⠑⠗⠗⠩⠹⠑⠝⠂⠀⠙⠬⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝\n"
+"⠧⠑⠗⠺⠁⠇⠞⠑⠝⠀⠕⠙⠑⠗⠀⠙⠊⠗⠑⠅⠞⠀⠡⠋⠀⠩⠝⠑⠀⠎⠩⠞⠑\n"
+"⠝⠁⠧⠊⠛⠬⠗⠑⠝⠄ ⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠩⠝⠑⠝⠀⠍⠑⠝⠳⠩⠝⠞⠗⠁⠛\n"
+"⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠙⠗⠩⠑⠉⠅⠊⠛⠑⠝⠀⠞⠁⠾⠑⠀⠡⠋⠀⠙⠑⠗\n"
+"⠇⠊⠝⠅⠑⠝⠀⠎⠬⠞⠑⠀⠁⠅⠞⠊⠧⠬⠗⠑⠝⠄ ⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠩⠝⠀⠝⠣⠑⠎\n"
+"⠃⠥⠹⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠇⠊⠝⠅⠑⠝⠀⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑\n"
+"⠝⠑⠃⠑⠝⠀⠙⠑⠍⠀⠶⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠀⠍⠑⠝⠳⠶⠀⠡⠎⠺⠜⠓⠇⠑⠝⠄"
+
+#: ui/book/view.py:11
+msgid "go to page"
+msgstr "⠛⠑⠓⠑⠀⠵⠥⠗⠀⠎⠩⠞⠑"
+
+#: ui/book/view.py:14
+msgid "insert bookmark at current page"
+msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠁⠝⠀⠁⠅⠞⠥⠑⠇⠇⠑⠗⠀⠏⠕⠎⠊⠞⠊⠕⠝⠀⠩⠝⠋⠳⠛⠑⠝"
+
+#: ui/book/view.py:15
+msgid "choose from existing bookmarks"
+msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠡⠎⠺⠜⠓⠇⠑⠝"
+
+#: ui/book/view.py:17
+msgid "view system menu"
+msgstr "⠎⠽⠾⠑⠍⠍⠑⠝⠳⠀⠡⠎⠺⠜⠓⠇⠑⠝"
+
+#: ui/book/view.py:18
+msgid "view library menu"
+msgstr "⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠎⠍⠑⠝⠳⠀⠡⠎⠺⠜⠓⠇⠑⠝"
+
+#: ui/bookmarks/help.py:7
+msgid "To navigate to a bookmark within a file press the line select button immediately to the left of your chosen bookmark. From the bookmark menu you can also navigate to the beginning of your book by selecting \"start of book\", or the end of a book by selecting \"end of book\", using the line select buttons. You can delete a bookmark by pressing and holding the line select button to the left of the bookmark you wish to delete for three seconds. You cannot delete the \"start of book\" or \"end of book\" bookmarks."
+msgstr ""
+"⠥⠍⠀⠩⠝⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠡⠎⠵⠥⠺⠜⠓⠇⠑⠝⠂⠀⠙⠗⠳⠉⠅⠑⠝⠀⠎⠬\n"
+"⠙⠬⠀⠵⠩⠇⠑⠝⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑ ⠇⠊⠝⠅⠎⠀⠝⠑⠃⠑⠝⠀⠙⠑⠍\n"
+"⠛⠑⠺⠜⠓⠇⠞⠑⠝⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠄⠀⠧⠕⠍⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠍⠑⠝⠳\n"
+"⠅⠪⠝⠝⠑⠝ ⠎⠬⠀⠡⠹⠀⠵⠥⠍⠀⠾⠁⠗⠞⠀⠊⠓⠗⠑⠎⠀⠃⠥⠹⠎\n"
+"⠝⠁⠧⠊⠛⠬⠗⠑⠝⠀⠙⠥⠗⠹⠀⠡⠎⠺⠁⠓⠇⠀⠧⠕⠝⠀⠶⠾⠁⠗⠞⠀⠙⠑⠎\n"
+"⠃⠥⠹⠑⠎⠶ ⠵⠥⠍⠀⠃⠥⠹⠑⠝⠙⠑⠀⠛⠑⠇⠁⠝⠛⠑⠝⠀⠎⠬⠀⠙⠥⠹\n"
+"⠡⠎⠺⠁⠓⠇⠀⠧⠕⠝⠀⠶⠑⠝⠙⠑⠀⠙⠑⠎⠀⠃⠥⠹⠎⠶ ⠎⠬⠀⠅⠪⠝⠝⠑⠝\n"
+"⠩⠝⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠇⠪⠱⠑⠝⠀⠊⠝⠙⠑⠍⠀⠎⠬⠀⠙⠬⠀⠵⠩⠇⠑⠝⠡⠎\n"
+"⠺⠁⠓⠇⠞⠁⠾⠑⠀⠋⠳⠗⠀⠼⠉⠀⠎⠑⠅⠥⠝⠙⠑⠝⠀⠛⠑⠙⠗⠳⠉⠅⠞⠀⠓⠁⠇⠞⠑⠝⠄"
+
+#: ui/bookmarks/view.py:27
+msgid "bookmarks:"
+msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝"
+
+#: ui/bookmarks/view.py:35
+msgid "start of book"
+msgstr "⠾⠁⠗⠞⠀⠙⠑⠎⠀⠃⠥⠹⠑⠎"
+
+#: ui/bookmarks/view.py:37
+msgid "end of book"
+msgstr "⠑⠝⠙⠑⠀⠙⠑⠎⠀⠃⠥⠹⠑⠎"
+
+#: ui/go_to_page/view.py:6
+msgid ""
+"You can navigate to a page within a file by entering the page number using the line select buttons on the left hand side the display. For example, for page 10 press button 1 followed by button 0. Press the forward button to confirm your selection. Line 3 will refresh to show your selected page. Press the large forward button on the front surface to navigate to your page.\n"
+"\n"
+"If you have entered the wrong page number you can reset your selection by pressing the large back button on the front surface."
+msgstr ""
+"⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠡⠋⠀⠩⠝⠑⠀⠃⠑⠾⠊⠍⠍⠞⠑⠀⠎⠩⠞⠑⠀⠝⠁⠧⠊⠛⠬⠗⠑⠝\n"
+"⠊⠝⠙⠑⠍ ⠎⠬⠀⠎⠩⠞⠑⠝⠵⠁⠓⠇⠀⠍⠊⠞⠀⠙⠑⠝⠀⠵⠩⠇⠑⠝⠡⠎⠺⠁⠓⠇\n"
+"⠞⠁⠾⠑⠝⠀⠩⠝⠛⠑⠃⠑⠝⠄ ⠵⠥⠍⠀⠃⠩⠎⠏⠬⠇⠀⠋⠳⠗⠀⠎⠩⠞⠑⠀⠼⠁⠚\n"
+"⠙⠗⠳⠉⠅⠑⠝⠀⠎⠬⠀⠙⠬⠀⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑⠀⠼⠁⠀⠥⠝⠙⠀⠙⠁⠝⠝\n"
+"⠙⠬⠀⠼⠚⠄⠀⠙⠗⠳⠉⠅⠑⠝⠀⠎⠬⠀⠙⠁⠝⠝⠀⠙⠬⠀⠶⠋⠕⠗⠺⠁⠗⠙⠶⠤⠞⠁⠾⠑\n"
+"⠵⠥⠍⠀⠃⠑⠾⠜⠞⠊⠛⠑⠝⠄ ⠊⠝⠀⠵⠩⠇⠑⠀⠼⠉⠀⠺⠊⠗⠙⠀⠙⠬⠀⠎⠩⠞⠑⠝⠤\n"
+"⠵⠁⠓⠇⠀⠁⠝⠛⠑⠵⠩⠛⠞⠀⠥⠝⠙⠀⠙⠥⠹⠀⠶⠋⠕⠗⠺⠁⠗⠙⠶⠀⠃⠑⠾⠜⠞⠊⠛⠞⠄\n"
+"⠃⠩⠀⠩⠝⠛⠁⠃⠑⠀⠩⠝⠑⠗⠀⠋⠁⠇⠱⠑⠝⠀⠵⠁⠓⠇⠀⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠙⠬⠎\n"
+"⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠧⠕⠝⠀⠶⠃⠁⠉⠅⠶⠀⠺⠊⠙⠑⠗⠗⠥⠋⠑⠝⠄"
+
+#: ui/go_to_page/view.py:37
+msgid "enter page number using the side buttons"
+msgstr "⠃⠊⠞⠞⠑⠀⠛⠑⠃⠑⠝⠀⠎⠬⠀⠙⠬⠀⠎⠩⠞⠑⠝⠝⠥⠍⠍⠑⠗⠀⠩⠝"
+
+#: ui/go_to_page/view.py:62
+msgid "go to page number"
+msgstr "⠛⠑⠓⠑⠀⠵⠥⠀⠎⠩⠞⠑⠝⠝⠥⠍⠍⠑⠗"
+
+#: ui/go_to_page/view.py:66
+msgid "please confirm by pressing forward"
+msgstr "⠃⠊⠞⠞⠑⠀⠃⠑⠾⠜⠞⠊⠛⠑⠝⠀⠍⠊⠞⠀⠶⠋⠕⠗⠺⠁⠗⠙⠶"
+
+#: ui/go_to_page/view.py:67
+msgid "undo by pressing back"
+msgstr "⠺⠊⠙⠑⠗⠗⠥⠋⠑⠝⠀⠍⠊⠞⠀⠶⠃⠁⠉⠅⠶"
+
+#: ui/go_to_page/view.py:68
+msgid "to go back to book press middle button"
+msgstr "⠵⠥⠍⠀⠃⠥⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠎⠬⠀⠃⠊⠞⠞⠑⠀⠶⠍⠑⠝⠳⠶"
+
+#: ui/language/view.py:6
+msgid "You can change the system language or Braille code by pressing the line select button to the left of your chosen language or code. The language or code in the contextual help, menus and system text will then change to your selected language."
+msgstr ""
+"⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬⠀⠎⠽⠾⠑⠍⠎⠏⠗⠁⠹⠑⠀⠕⠙⠑⠗⠀⠙⠑⠝\n"
+"⠃⠗⠁⠊⠇⠇⠑⠅⠕⠙⠑⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑\n"
+"⠇⠊⠝⠅⠎⠀⠝⠑⠃⠑⠝⠀⠙⠑⠗⠀⠁⠝⠵⠩⠛⠑⠀⠋⠳⠗⠀⠙⠬⠀⠎⠏⠗⠁⠹⠑⠄⠀⠙⠬\n"
+"⠎⠏⠗⠁⠹⠑⠀⠃⠵⠺⠄⠀⠅⠕⠙⠑⠀⠊⠝⠀⠙⠑⠝⠀⠍⠑⠝⠳⠎⠂⠀⠎⠽⠾⠑⠍\n"
+"⠍⠑⠇⠙⠥⠝⠛⠑⠝⠀⠥⠝⠙⠀⠓⠊⠇⠋⠑⠞⠑⠭⠞⠑⠀⠺⠊⠗⠙⠀⠙⠁⠝⠝⠀⠛⠑⠜⠝⠙⠑⠗⠞⠄"
+
+#. TRANSLATORS: A menu title, to which language title is appended
+#: ui/language/view.py:43
+msgid "languages:"
+msgstr "⠎⠏⠗⠁⠹⠑⠝"
+
+#: ui/library/view.py:7
+msgid ""
+"This is the library menu. From this menu you can view and select from the files on the memory stick or SD card. You can choose a file by pressing the line select button to the left of the file name. Canute 360 will then show your chosen file on the display. You can navigate forward and backwards within the library menu using the large buttons labelled \"forward\" and \"back\" on the front panel. You can return to the file you are currently reading by pressing the large central button labelled \"menu\".\n"
+"\n"
+"To load a new file onto your Canute, first turn it off by pressing and then quickly releasing the small button to the right of the power socket on the back panel. Once the \"please wait\" text disappears, remove the memory stick or SD card you are using to store your files. Copy and paste your files, in BRF or PEF format, onto the memory stick or SD card using a computer. Finally, insert the USB stick or SD card into the slot on the side of Canute. Turn your Canute on again using the small button to the right of the power socket on the back panel. Once Canute has started your files will appear in the library menu.\n"
+"\n"
+"For best results you should format your files with forty cells per line and nine lines of Braille per page. The latest version of Duxbury DBT and the free online robo-braille service both have a Canute 360 preset built in for formatting."
+msgstr ""
+"⠙⠬⠎⠀⠊⠾⠀⠙⠁⠎⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠎⠍⠑⠝⠳⠄⠀⠧⠕⠝⠀⠓⠬⠗⠀⠡⠎\n"
+"⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠙⠬⠀⠙⠁⠞⠩⠀⠶⠃⠥⠹⠶⠀⠧⠕⠍⠀⠥⠎⠃⠤⠾⠊⠉⠅⠀⠕⠙⠑⠗\n"
+"⠎⠙⠤⠅⠁⠗⠞⠑⠀⠺⠜⠓⠇⠑⠝⠄⠀⠍⠊⠞⠀⠙⠑⠝⠀⠇⠊⠝⠅⠑⠝⠀⠡⠎⠺⠁⠓⠇\n"
+"⠞⠁⠾⠑⠝⠀⠺⠜⠓⠇⠑⠝⠀⠎⠬⠀⠙⠬⠀⠙⠁⠞⠩⠀⠙⠬⠀⠁⠝⠛⠑⠵⠩⠛⠞\n"
+"⠺⠑⠗⠙⠑⠝⠀⠎⠕⠇⠇⠄ ⠍⠊⠞⠀⠙⠑⠝⠀⠞⠁⠾⠑⠝⠀⠶⠋⠕⠗⠺⠁⠗⠙⠶\n"
+"⠥⠝⠙⠀⠶⠃⠁⠉⠅⠶⠀⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠊⠝⠀⠙⠑⠗⠀⠡⠎⠺⠁⠓⠇\n"
+"⠝⠁⠧⠊⠛⠬⠗⠑⠝⠄⠀⠍⠊⠞⠀⠙⠑⠗⠀⠠⠶⠍⠑⠝⠥⠠⠶⠤⠞⠁⠾⠑\n"
+"⠛⠑⠇⠁⠝⠛⠑⠝⠀⠎⠬⠀⠵⠥⠍⠀⠁⠅⠞⠥⠑⠇⠇⠑⠝⠀⠃⠥⠹⠀⠵⠥⠗⠳⠉⠅⠄\n"
+"\n"
+"⠺⠑⠝⠝⠀⠎⠬⠀⠩⠝⠀⠝⠣⠑⠎⠀⠃⠥⠹⠀⠡⠋⠀⠊⠓⠗⠑⠝⠀⠙⠁⠞⠑⠝⠞⠗⠜⠛⠑⠗\n"
+"⠅⠕⠏⠬⠗⠑⠝⠀⠺⠕⠇⠇⠑⠝⠀⠍⠳⠎⠎⠑⠝⠀⠎⠬⠀⠙⠑⠝⠀⠉⠁⠝⠥⠞⠑\n"
+"⠡⠎⠱⠁⠇⠞⠑⠝⠀⠃⠑⠧⠕⠗⠀⠎⠬⠀⠙⠑⠝⠀⠙⠁⠞⠑⠝⠞⠗⠜⠛⠑⠗\n"
+"⠑⠝⠞⠋⠑⠗⠝⠑⠝⠀⠥⠝⠙⠀⠙⠁⠎⠀⠃⠥⠹⠀⠡⠋⠀⠙⠬⠎⠑⠝⠀⠧⠕⠍\n"
+"⠏⠉⠀⠅⠕⠏⠬⠗⠑⠝⠄⠀⠙⠁⠝⠝⠀⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠊⠓⠝⠀⠺⠬⠙⠑⠗\n"
+"⠊⠝⠀⠙⠑⠝⠀⠉⠁⠝⠥⠞⠑⠀⠾⠑⠉⠅⠑⠝⠀⠥⠝⠙⠀⠙⠁⠎⠀⠛⠑⠗⠜⠞\n"
+"⠩⠝⠱⠁⠇⠞⠑⠝⠄⠥⠍⠀⠕⠏⠞⠊⠍⠁⠇⠑⠀⠑⠗⠛⠑⠃⠝⠊⠎⠎⠑⠀⠵⠥\n"
+"⠑⠗⠵⠬⠇⠑⠝⠂⠀⠎⠕⠇⠇⠞⠑⠝⠀⠎⠬⠀⠊⠓⠗⠑⠀⠙⠁⠞⠩⠑⠝⠀⠍⠊⠞\n"
+"⠧⠬⠗⠵⠊⠛⠀⠵⠑⠇⠇⠑⠝⠀⠏⠗⠕⠀⠵⠩⠇⠑⠀⠥⠝⠙⠀⠝⠣⠝⠀⠵⠩⠇⠑⠝\n"
+"⠃⠇⠊⠝⠙⠑⠝⠱⠗⠊⠋⠞⠀⠏⠗⠕⠀⠎⠩⠞⠑⠀⠋⠕⠗⠍⠁⠞⠬⠗⠑⠝⠄⠀⠙⠬\n"
+"⠝⠣⠑⠾⠑⠀⠧⠑⠗⠎⠊⠕⠝⠀⠧⠕⠝⠀⠙⠥⠭⠃⠥⠗⠽⠀⠙⠃⠞⠀⠥⠝⠙⠀⠙⠑⠗\n"
+"⠅⠕⠾⠑⠝⠇⠕⠎⠑⠀⠕⠝⠇⠊⠝⠑⠤⠗⠕⠃⠕⠤⠃⠗⠁⠊⠇⠇⠑⠤⠙⠬⠝⠾\n"
+"⠧⠑⠗⠋⠳⠛⠑⠝⠀⠃⠩⠙⠑⠀⠳⠃⠑⠗⠀⠩⠝⠑⠀⠊⠝⠞⠑⠛⠗⠬⠗⠞⠑\n"
+"⠉⠁⠝⠥⠞⠑⠀⠼⠉⠋⠚⠤⠧⠕⠗⠩⠝⠾⠑⠇⠇⠥⠝⠛⠀⠋⠳⠗⠀⠙⠬⠀⠋⠕⠗⠍⠁⠞⠬⠗⠥⠝⠛⠄"
+
+#: ui/library/view.py:48
+msgid "library menu"
+msgstr "⠃⠊⠃⠇⠊⠕⠞⠓⠑⠎⠍⠑⠝⠳"
+
+#: ui/system_menu/help.py:6
+msgid ""
+"This is the system menu. From the system menu you can make system wide changes to settings.\n"
+"\n"
+"You can change the language or Braille code by pressing the line select button to the left of select language. Please note this will only change the system language or Braille code, not the language or code of any files in the library."
+msgstr ""
+"⠙⠬⠎⠀⠊⠾⠀⠙⠁⠎⠀⠎⠽⠾⠑⠍⠍⠑⠝⠳⠄⠀⠳⠃⠑⠗⠀⠙⠁⠎⠀⠎⠽⠾⠑⠍⠍⠑⠝⠳\n"
+"⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠎⠽⠾⠑⠍⠺⠩⠞⠑⠀⠜⠝⠙⠑⠗⠥⠝⠛⠑⠝⠀⠁⠝⠀⠙⠑⠝\n"
+"⠩⠝⠾⠑⠇⠇⠥⠝⠛⠑⠝⠀⠧⠕⠗⠝⠑⠓⠍⠑⠝⠄\n"
+"\n"
+"⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬⠀⠎⠏⠗⠁⠹⠑⠀⠕⠙⠑⠗⠀⠙⠑⠝⠀⠃⠗⠁⠊⠇⠇⠑⠤\n"
+"⠅⠕⠙⠑⠀⠜⠝⠙⠑⠗⠝⠂⠀⠊⠝⠙⠑⠍⠀⠎⠬⠀⠙⠬⠀⠵⠩⠇⠑⠝⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑\n"
+"⠇⠊⠝⠅⠎⠀⠝⠑⠃⠑⠝⠀⠦⠎⠏⠗⠁⠹⠑⠀⠡⠎⠺⠜⠓⠇⠑⠝⠦⠀⠙⠗⠳⠉⠅⠑⠝⠄\n"
+"⠃⠊⠞⠞⠑⠀⠃⠑⠁⠹⠞⠑⠝⠀⠎⠬⠂⠀⠙⠁⠎⠎⠀⠙⠁⠙⠥⠗⠹⠀⠝⠥⠗⠀⠙⠬\n"
+"⠎⠽⠾⠑⠍⠎⠏⠗⠁⠹⠑⠀⠕⠙⠑⠗⠀⠙⠑⠗⠀⠃⠗⠁⠊⠇⠇⠑⠤⠉⠕⠙⠑\n"
+"⠛⠑⠜⠝⠙⠑⠗⠞⠀⠺⠊⠗⠙⠂⠀⠝⠊⠹⠞⠀⠚⠑⠙⠕⠹⠀⠙⠬⠀⠎⠏⠗⠁⠹⠑\n"
+"⠕⠙⠑⠗⠀⠙⠑⠗⠀⠉⠕⠙⠑⠀⠧⠕⠝⠀⠙⠁⠞⠩⠑⠝⠀⠊⠝⠀⠙⠑⠗⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠄"
+
+#: ui/system_menu/system_menu.py:52
+msgid "emulated"
+msgstr "⠑⠍⠥⠇⠬⠗⠑⠝"
+
+#: ui/system_menu/system_menu.py:58
+msgid "shutdown"
+msgstr "⠡⠎⠱⠁⠇⠞⠑⠝"
+
+#: ui/system_menu/system_menu.py:59
+msgid "backup log to USB stick"
+msgstr "⠏⠗⠕⠞⠕⠅⠕⠇⠇⠀⠡⠋⠀⠥⠎⠃⠤⠾⠊⠉⠅⠀⠎⠊⠹⠑⠗⠝"
+
+#: ui/system_menu/system_menu.py:60
+msgid "select language and code"
+msgstr "⠛⠑⠺⠜⠓⠇⠞⠑⠀⠎⠏⠗⠁⠹⠑⠀⠥⠝⠙⠀⠅⠕⠙⠑"
+
+#: ui/system_menu/system_menu.py:64
+msgid "release:"
+msgstr "⠗⠑⠇⠑⠁⠎⠑"
+
+#: ui/system_menu/system_menu.py:65
+msgid "serial:"
+msgstr "⠎⠑⠗⠊⠑⠝⠝⠥⠍⠍⠑⠗"
+
+#: ui/system_menu/view.py:23
+msgid "system menu"
+msgstr "⠎⠽⠾⠑⠍⠍⠑⠝⠳"
+
+#: ui/manual.py:6
+msgid "         canute quick help"
+msgstr "⠉⠁⠝⠥⠞⠑⠀⠱⠝⠑⠇⠇⠓⠊⠇⠋⠑"
+
+#: ui/manual.py:8
+msgid "you can also acess these German"
+msgstr "⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬⠎⠑⠀⠓⠊⠇⠋⠑⠀⠡⠹⠀⠊⠝⠀⠙⠣⠞⠱"
+
+#: ui/manual.py:9
+msgid "help texts from anywhere by pressing"
+msgstr "⠧⠑⠗⠺⠑⠝⠙⠑⠝⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠓⠊⠇⠋⠑⠞⠁⠾⠑"
+
+#: ui/manual.py:10
+msgid "the topmost side button on the left"
+msgstr "⠕⠃⠑⠝⠀⠇⠊⠝⠅⠎⠀⠡⠋⠀⠙⠑⠍⠀⠛⠑⠗⠜⠞⠄"
+
+#: ui/manual.py:16
+msgid "          book and home menu"
+msgstr "⠀⠃⠥⠹⠀⠥⠝⠙⠀⠾⠁⠗⠞⠍⠑⠝⠳"
+
+#: ui/manual.py:18
+msgid "Move through the book by pressing the"
+msgstr "⠙⠥⠗⠹⠀⠙⠁⠎⠀⠃⠥⠹⠀⠃⠑⠺⠑⠛⠑⠝⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠧⠕⠝"
+
+#: ui/manual.py:19
+msgid "arrow buttons on the front of the"
+msgstr "⠙⠑⠗⠀⠏⠋⠩⠇⠞⠁⠾⠑⠝⠀⠁⠝⠀⠙⠑⠗⠀⠧⠕⠗⠙⠑⠗⠎⠩⠞⠑⠀⠙⠑⠎"
+
+#: ui/manual.py:20
+msgid "machine. Hold them down to move #e"
+msgstr "⠛⠑⠗⠜⠞⠎⠄⠀⠙⠗⠳⠉⠅⠑⠀⠎⠬⠀⠙⠬⠎⠑⠀⠥⠍⠀⠼⠑"
+
+#: ui/manual.py:21
+msgid "pages at a time. The home menu shows"
+msgstr "⠎⠩⠞⠑⠝⠀⠵⠥⠀⠺⠑⠹⠎⠑⠇⠝⠄⠀⠙⠁⠎⠀⠍⠑⠝⠳⠀⠵⠩⠛⠞"
+
+#: ui/manual.py:22
+msgid "what you can do with the side buttons"
+msgstr "⠺⠁⠎⠀⠎⠬⠀⠍⠊⠞⠀⠙⠑⠝⠀⠎⠩⠞⠑⠝⠞⠁⠾⠑⠝⠀⠍⠁⠹⠑⠝⠀⠅⠪⠝⠝⠑⠝⠄"
+
+#: ui/manual.py:23
+msgid "from the home menu or the book. View"
+msgstr "⠧⠕⠍⠀⠾⠁⠗⠞⠍⠑⠝⠳⠀⠕⠙⠑⠗⠀⠧⠕⠍⠀⠃⠥⠹⠄⠀⠵⠩⠛⠞"
+
+#: ui/manual.py:24
+msgid "this by pressing the middle button on"
+msgstr "⠑⠎⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠍⠊⠞⠞⠇⠑⠗⠑⠀⠞⠁⠾⠑"
+
+#: ui/manual.py:26
+msgid "the front. Pressing this button again"
+msgstr "⠧⠕⠗⠝⠀⠁⠍⠀⠛⠑⠗⠜⠞⠄⠀⠙⠥⠗⠹⠀⠝⠕⠹⠍⠁⠇⠊⠛⠑⠎⠀⠙⠗⠳⠉⠅⠑⠝"
+
+#: ui/manual.py:27
+msgid "will always return you to your book."
+msgstr "⠛⠑⠇⠁⠝⠛⠑⠝⠀⠎⠬⠀⠊⠍⠍⠑⠗⠀⠵⠥⠀⠊⠓⠗⠑⠍⠀⠃⠥⠹⠄"
+
+#: ui/manual.py:30
+msgid "        bookmarks"
+msgstr "⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝"
+
+#: ui/manual.py:32
+msgid "Add a bookmark by pressing button #e"
+msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠓⠊⠝⠵⠥⠋⠳⠛⠑⠝⠀⠍⠊⠞⠀⠞⠁⠾⠑⠀⠼⠑⠀"
+
+#: ui/manual.py:33
+msgid "while in a book. Bookmarks are listed"
+msgstr "⠊⠝⠝⠑⠗⠓⠁⠇⠃⠀⠙⠑⠎⠀⠃⠥⠹⠎⠄⠀⠑⠎⠀⠅⠕⠍⠍⠞⠀⠩⠝⠑⠀⠇⠊⠾⠑"
+
+#: ui/manual.py:36
+msgid "starts with the Canute page number based"
+msgstr "⠃⠑⠛⠊⠝⠝⠞⠀⠍⠊⠞⠀⠙⠑⠗⠀⠎⠩⠞⠑⠝⠝⠥⠍⠍⠑⠗⠀⠃⠁⠎⠬⠗⠑⠝⠙"
+
+#: ui/manual.py:37
+msgid "on its #i line page. Go to the page by"
+msgstr "⠡⠋⠀⠙⠑⠗⠀⠼⠊⠄⠀⠵⠩⠇⠑⠄⠀⠛⠑⠓⠑⠀⠡⠋⠀⠎⠩⠞⠑⠀⠙⠥⠗⠹"
+
+#: ui/manual.py:38
+msgid "selecting a bookmark by pressing one of"
+msgstr "⠺⠁⠓⠇⠀⠩⠝⠑⠎⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠎⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝"
+
+#: ui/manual.py:39
+msgid "the side buttons. Holding the button"
+msgstr "⠩⠝⠑⠗⠀⠎⠩⠞⠑⠝⠞⠁⠾⠑⠄⠀⠓⠁⠇⠞⠑⠝⠀⠙⠑⠗⠀⠞⠁⠾⠑"
+
+#: ui/manual.py:40
+msgid "down will delete the bookmark."
+msgstr "⠺⠊⠗⠙⠀⠙⠁⠎⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠇⠪⠱⠑⠝⠄"
+
+#: ui/manual.py:46
+msgid "          go to page menu"
+msgstr "⠀⠵⠥⠍⠀⠎⠩⠞⠑⠝⠍⠑⠝⠳⠀⠛⠑⠓⠑⠝"
+
+#: ui/manual.py:48
+msgid "Go to a page number by keying it in with"
+msgstr "⠛⠑⠓⠑⠀⠵⠥⠗⠀⠎⠩⠞⠑⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗"
+
+#: ui/manual.py:49
+msgid "the side number buttons and pressing"
+msgstr "⠎⠩⠞⠑⠝⠞⠁⠾⠑⠝⠀⠥⠝⠙⠀⠙⠗⠳⠉⠅⠑⠝⠀⠧⠕⠝⠀⠧⠕⠗⠺⠜⠗⠞⠎"
+
+#: ui/manual.py:50
+msgid "forward. Pages are numbered based on the"
+msgstr "⠎⠩⠞⠑⠝⠀⠎⠊⠝⠙⠀⠝⠥⠍⠑⠗⠬⠗⠞⠀⠙⠥⠗⠹"
+
+#: ui/manual.py:51
+msgid "#i line page height of the Canute. You"
+msgstr "⠼⠊⠀⠵⠩⠇⠑⠝⠀⠚⠑⠀⠎⠩⠞⠑⠀⠙⠑⠎⠀⠉⠁⠝⠥⠞⠑⠄⠀⠎⠬"
+
+#: ui/manual.py:52
+msgid "can delete entered numbers by pressing"
+msgstr "⠅⠪⠝⠝⠑⠝⠀⠙⠬⠀⠩⠝⠛⠑⠛⠑⠃⠑⠝⠑⠀⠁⠝⠵⠁⠓⠇⠀⠙⠥⠗⠹"
+
+#: ui/manual.py:53
+msgid "or holding the back button. As always"
+msgstr "⠙⠗⠳⠉⠅⠑⠝⠀⠕⠙⠑⠗⠀⠓⠁⠇⠞⠑⠝⠀⠙⠑⠗⠀⠵⠥⠗⠳⠉⠅⠞⠁⠾⠑⠄"
+
+#: ui/manual.py:54
+msgid "you can go back to your current page by"
+msgstr "⠍⠊⠞⠀⠙⠑⠗⠀⠍⠑⠝⠳⠞⠁⠾⠑⠀⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠵⠥⠗"
+
+#: ui/manual.py:56
+msgid "pressing the menu button."
+msgstr "⠁⠅⠞⠊⠧⠑⠝⠀⠎⠬⠞⠑⠀⠵⠥⠗⠳⠉⠅⠀⠅⠑⠓⠗⠑⠝⠄"
+
+#: ui/manual.py:59
+msgid "          library menu"
+msgstr "⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠀⠍⠑⠝⠳"
+
+#: ui/manual.py:61
+msgid "Choose the book you wish to read by"
+msgstr "⠺⠜⠓⠇⠑⠀⠙⠁⠎⠀⠛⠑⠺⠳⠝⠱⠞⠑⠀⠃⠥⠹⠀⠙⠥⠗⠹"
+
+#: ui/manual.py:62
+msgid "pressing the button to the left of the"
+msgstr "⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠞⠁⠾⠑⠀⠝⠑⠃⠑⠝⠀⠙⠑⠍⠀⠞⠊⠞⠑⠇⠄"
+
+#: ui/manual.py:63
+msgid "title. Use the arrow buttons to page"
+msgstr "⠝⠥⠞⠵⠑⠀⠙⠬⠀⠏⠋⠩⠇⠞⠁⠾⠑⠝⠀⠵⠥⠍⠀⠃⠇⠜⠞⠞⠑⠗⠝"
+
+#: ui/manual.py:64
+msgid "through the library. You can change the"
+msgstr "⠙⠥⠗⠹⠀⠙⠬⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠄⠀⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬"
+
+#: ui/manual.py:66
+msgid "ordering of the books in the system"
+msgstr "⠗⠩⠓⠑⠝⠋⠕⠇⠛⠑⠀⠙⠑⠗⠀⠃⠳⠹⠑⠗⠀⠊⠍⠀⠎⠽⠾⠑⠍⠄"
+
+#: ui/manual.py:67
+msgid "menu."
+msgstr "⠍⠑⠝⠳⠄"
+
+#: ui/manual.py:70
+msgid "          system menu"
+msgstr "⠀⠎⠽⠾⠑⠍⠀⠍⠑⠝⠳"
+
+#: ui/manual.py:72
+msgid "Configure your preference on the sorting"
+msgstr "⠅⠕⠝⠋⠊⠛⠥⠗⠬⠗⠑⠝⠀⠎⠬⠀⠙⠬⠀⠗⠩⠓⠑⠝⠋⠕⠇⠛⠑"
+
+#: ui/manual.py:73
+msgid "order of books in the library and"
+msgstr "⠙⠑⠗⠀⠃⠳⠹⠑⠗⠀⠊⠝⠀⠙⠑⠗⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠀⠥⠝⠙"
+
+#: ui/manual.py:74
+msgid "bookmarks through the menu options. To"
+msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠊⠍⠀⠍⠑⠝⠳⠀⠕⠏⠞⠊⠕⠝⠑⠝⠄"
+
+#: ui/manual.py:76
+msgid "shutdown the Canute safely, select the"
+msgstr "⠵⠥⠍⠀⠎⠊⠹⠑⠗⠑⠝⠀⠁⠃⠱⠁⠇⠞⠑⠝⠀⠺⠜⠓⠇⠑⠝⠀⠎⠬"
+
+#: ui/manual.py:77
+msgid "shutdown option and wait for #cj"
+msgstr "⠡⠎⠱⠁⠇⠞⠑⠝⠀⠥⠝⠙⠀⠺⠁⠗⠞⠑⠝⠀⠋⠳⠗⠀⠼⠉⠚"
+
+#: ui/manual.py:78
+msgid "seconds before unplugging it."
+msgstr "⠎⠑⠅⠥⠝⠙⠑⠝⠀⠃⠊⠎⠀⠵⠥⠗⠀⠞⠗⠑⠝⠝⠥⠝⠛"
+
+#: ui/manual.py:96
+msgid "canute manual"
+msgstr "⠉⠁⠝⠥⠞⠑⠀⠓⠁⠝⠙⠃⠥⠹"
