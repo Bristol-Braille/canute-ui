@@ -13,8 +13,7 @@ class UserState:
     def __init__(self, root: 'state.RootState'):
         self.root = root
         self.current_book = manual_filename
-        # should default be en_GB:en ??
-        self.current_language = DEFAULT_LOCALE.code
+        self.current_language = DEFAULT_LOCALE
         self.books = OrderedDict({manual_filename: manual})
 
     @property

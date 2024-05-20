@@ -8,7 +8,7 @@ from .manual import Manual, manual_filename
 from .cleaning_and_testing import CleaningAndTesting, cleaning_filename
 from .book.book_file import BookFile
 from .library.explorer import Library, Directory, LocalFile
-from .i18n import install, DEFAULT_LOCALE, BUILTIN_LANGUAGES, OLD_DEFAULT_LOCALE
+from .i18n import install, DEFAULT_LOCALE, OLD_DEFAULT_LOCALE
 
 from . import config_loader
 
@@ -111,7 +111,7 @@ async def read_user_state(media_dir, state):
                 log.warning(f'user state loading failed for {main_toml}, ignoring')
 
     if not current_language or current_language == OLD_DEFAULT_LOCALE:
-        current_language = DEFAULT_LOCALE.code
+        current_language = DEFAULT_LOCALE
 
     install(current_language)
     manual = Manual.create()
