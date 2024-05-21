@@ -71,12 +71,17 @@ def swap_library(current_book, books):
     """
     config = config_loader.load()
     library = config.get('files', {}).get('library', [])
+    rel_book = None
 
     # check for expected path, for backward compatibility with standalone unit
     for path in ['front-usb' + os.path.sep, 'back-usb' + os.path.sep]:
         if current_book.startswith(path):
             rel_book = current_book[len(path):]
             break
+
+    if rel_book is None:
+        log.info(f'current book not on swappable device ({current_book})')
+        return
 
     # see if we can find it on a different swappable device path
     for lib in library:
