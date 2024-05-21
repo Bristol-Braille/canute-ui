@@ -3,6 +3,7 @@ from collections import OrderedDict
 from .book_file import LoadState
 from ..manual import Manual, manual_filename
 from ..i18n import DEFAULT_LOCALE
+from ..braille import DEFAULT_ENCODING
 from .. import state
 
 
@@ -14,6 +15,7 @@ class UserState:
         self.root = root
         self.current_book = manual_filename
         self.current_language = DEFAULT_LOCALE
+        self.current_encoding = DEFAULT_ENCODING
         self.books = OrderedDict({manual_filename: manual})
 
     @property
@@ -25,11 +27,12 @@ class UserState:
         # should this be a (generator)?
         return [b for b in self.books.values() if b.load_state != LoadState.FAILED]
 
-    def load(self, current_book, current_language):
+    def load(self, current_book, current_language, current_encoding):
         self.current_book = current_book
         if not self.current_book == manual_filename:
             self.root.app.library.show_files_dir(self.current_book)
         self.current_language = current_language
+        self.current_encoding = current_encoding
 
     def go_to_start(self):
         self.set_book_page(0)
@@ -78,5 +81,6 @@ class UserState:
         current_book = self.current_book
         return {
             'current_book': current_book,
-            'current_language': self.current_language
+            'current_language': self.current_language,
+            'current_encoding': self.current_encoding
         }

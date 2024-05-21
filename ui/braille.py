@@ -1,5 +1,6 @@
 import os
 import logging
+from collections import namedtuple, OrderedDict
 import curses.ascii as ASCII
 
 log = logging.getLogger(__name__)
@@ -134,10 +135,29 @@ def pin_num_to_unicode(pin_num):
     """
     return chr(pin_num + UNICODE_BRAILLE_BASE)
 
+# define _ as the identity function so that gettext picks up the msgids
+# but we won't actually translate until later (see encoding.view)
+def _(x): return x
+Encoding = namedtuple('BuiltinEnc', ['name', 'title', 'mapping'])
+encodings = [
+    # mapping from http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
+    Encoding(name='braille-ascii', title=_('North American Braille ASCII'),
+             mapping=' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='),
+    # see http://www.braille.ch/brlchr-e.htm
+    Encoding(name='euro-braille', title=_('Eurobraille'),
+             mapping=' A,B.K;L"CIF\\MSP!E:H*O+R>DJG@NTQ\'1?2-U:V$3960X^&<5/8)Z=[_4W7#Y]%')
+]
+del _
+BUILTIN_ENCODINGS = OrderedDict([
+    (enc.name, enc) for enc in encodings
+])
+DEFAULT_ENCODING = 'braille-ascii'
 
-# mapping from
-# http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
-mapping = ' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='
+mapping = BUILTIN_ENCODINGS[DEFAULT_ENCODING].mapping
+
+def set_encoding(encoding):
+    global mapping
+    mapping = BUILTIN_ENCODINGS[encoding].mapping
 
 
 def pin_num_to_alpha(numeric):
