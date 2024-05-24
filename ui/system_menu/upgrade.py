@@ -11,10 +11,14 @@ def mounted_paths():
         if source_dir.get('mountpoint', False) and os.path.ismount(source_path):
             yield source_path, source_dir.get('name')
 
+def upgrade_files():
+    config = load()
+    return config.get('system', {}).get('sysupgrade', [])
+
 available = False
 source_paths = mounted_paths()
 for source_path, source_name in source_paths:
-    for upgrade in ['sysupgrade', 'sysupgrade.sh']:
+    for upgrade in upgrade_files():
         upgrade_file = os.path.join(source_path, upgrade)
         if os.path.exists(upgrade_file):
             available = True

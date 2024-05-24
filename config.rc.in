@@ -29,3 +29,8 @@ log_duty = true
 
 # minumum number of samples of button down to count as a press
 button_debounce = 1
+
+[system]
+# the presence of files with these names on removable media means that an
+# upgrade is available
+sysupgrade = [ 'sysupgrade', 'sysupgrade.sh' ]

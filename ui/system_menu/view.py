@@ -1,24 +1,7 @@
-import os
-from ..braille import format_title, brailleify, from_unicode, alphas_to_unicodes
+from ..braille import format_title, from_unicode, alphas_to_unicodes
 from . import upgrade
 from .help import render_help
-
-# This exists on a Pi and reading it yields a useful board identifier.
-# But existence will do for right now.
-if os.path.exists('/sys/firmware/devicetree/base/model'):
-    if os.path.exists('/etc/canute_release'):
-        with open('/etc/canute_release') as x:
-            release = brailleify(x.read().strip())
-        with open('/etc/canute_serial') as x:
-            serial = brailleify(x.read().strip())
-    else:
-        release = _('run in standalone mode')
-        serial = release
-else:
-    # Assume we're being emulated.
-    release = _('emulated')
-    serial = release
-
+from .system import console, release, serial
 
 async def render(width, height, state):
     if state.app.help_menu.visible:
@@ -31,14 +14,14 @@ async def render(width, height, state):
         return page
 
     menu_titles = tuple(map(from_unicode, (
+        _('start console mode') if console else '',
         _('shutdown'),
-        _('select language and code'),
         _('choose BRF encoding'),
+        _('select language and code'),
         _('backup log to USB stick'),
         _('install upgrade from ') + alphas_to_unicodes(upgrade.source_name) if upgrade.available else '',
-        '',
-        _('release:') + ' ' + release,
-        _('serial:') + ' ' + serial,
+        release,
+        serial,
     )))
 
     page = state.app.system_menu.page
