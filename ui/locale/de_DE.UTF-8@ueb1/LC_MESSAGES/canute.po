@@ -17,11 +17,11 @@ msgstr ""
 
 #: ui/braille.py:144
 msgid "North American Braille ASCII"
-msgstr "⠨⠝⠕⠗⠞⠓⠀⠨⠁⠍⠑⠗⠊⠉⠁⠝⠀⠨⠃⠗⠁⠊⠇⠇⠑⠀⠘⠁⠎⠉⠊⠊"
+msgstr "⠝⠕⠗⠙⠁⠍⠑⠗⠊⠅⠁⠝⠊⠱⠑⠎⠀⠃⠗⠁⠊⠇⠇⠑⠀⠁⠎⠉⠊⠊"
 
 #: ui/braille.py:147
 msgid "Eurobraille"
-msgstr "⠨⠣⠗⠕⠃⠗⠁⠊⠇⠇⠑"
+msgstr "⠣⠗⠕⠃⠗⠁⠊⠇⠇⠑"
 
 #. TRANSLATORS: This is a language name menu item, so should always appear
 #. in the language it denotes so that it remains readable to those who
@@ -165,15 +165,14 @@ msgid ""
 "the left of your chosen encoding. The encoding will be used to display BRF "
 "files. "
 msgstr ""
-"⠨⠽⠕⠥⠀⠉⠁⠝⠀⠹⠁⠝⠛⠑⠀⠞⠓⠑⠀⠃⠗⠁⠊⠇⠇⠑⠀⠑⠝⠉⠕⠙⠊⠝⠛⠀⠃⠽⠀⠏\n"
-"⠗⠑⠎⠎⠊⠝⠛⠀⠞⠓⠑⠀⠇⠊⠝⠑⠀⠎⠑⠇⠑⠉⠞⠀⠃⠥⠞⠞⠕⠝⠀⠞⠕⠀⠞⠓⠑⠀⠇⠑\n"
-"⠋⠞⠀⠕⠋⠀⠽⠕⠥⠗⠀⠹⠕⠎⠑⠝⠀⠑⠝⠉⠕⠙⠊⠝⠛⠄⠀⠨⠞⠓⠑⠀⠑⠝⠉⠕⠙⠊⠝⠛\n"
-"⠀⠺⠊⠇⠇⠀⠃⠑⠀⠥⠎⠑⠙⠀⠞⠕⠀⠙⠊⠎⠏⠇⠁⠽⠀⠘⠃⠗⠋⠀⠋⠊⠇⠑⠎⠄⠀"
+"⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬⠀⠃⠗⠁⠊⠇⠇⠑⠅⠕⠙⠬⠗⠥⠝⠛⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠵⠩⠇⠑⠝⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑⠀⠇⠊⠝⠅⠎⠀"
+"⠝⠑⠃⠑⠝⠀⠙⠑⠗⠀⠛⠑⠺⠳⠝⠱⠞⠑⠝⠀⠅⠕⠙⠬⠗⠥⠝⠛⠀⠺⠜⠓⠇⠑⠝⠄⠀⠙⠬⠎⠑⠀⠅⠕⠙⠬⠗⠥⠝⠛⠀⠺⠊⠗⠙⠀⠃⠩⠀⠙⠑⠗⠀⠁⠝⠵⠩⠛⠑⠀"
+"⠧⠕⠝⠀⠃⠗⠋⠀⠙⠁⠞⠩⠑⠝⠀⠛⠑⠝⠥⠞⠵⠞⠄"
 
 #. TRANSLATORS: A menu title, to which the encoding title is appended
 #: ui/encoding/view.py:41
 msgid "encoding:"
-msgstr "⠑⠝⠉⠕⠙⠊⠝⠛⠒"
+msgstr "⠅⠕⠙⠬⠗⠥⠝⠃⠛⠒"
 
 #: ui/go_to_page/view.py:6
 msgid ""
@@ -260,9 +259,10 @@ msgstr ""
 "⠅⠕⠾⠑⠝⠇⠕⠎⠑⠀⠕⠝⠇⠊⠝⠑⠤⠗⠕⠃⠕⠤⠃⠗⠁⠊⠇⠇⠑⠤⠙⠬⠝⠾\n"
 "⠧⠑⠗⠋⠳⠛⠑⠝⠀⠃⠩⠙⠑⠀⠳⠃⠑⠗⠀⠩⠝⠑⠀⠊⠝⠞⠑⠛⠗⠬⠗⠞⠑\n"
 "⠉⠁⠝⠥⠞⠑⠀⠼⠉⠋⠚⠤⠧⠕⠗⠩⠝⠾⠑⠇⠇⠥⠝⠛⠀⠋⠳⠗⠀⠙⠬⠀⠋⠕⠗⠍⠁⠞⠬⠗⠥⠝⠛⠄"
+
 #: ui/library/view.py:56
 msgid "go to book list"
-msgstr "⠛⠕⠀⠞⠕⠀⠃⠕⠕⠅⠀⠇⠊⠾"
+msgstr "⠛⠑⠓⠑⠀⠵⠥⠗⠀⠃⠳⠹⠑⠗⠇⠊⠾⠑"
 
 #: ui/library/view.py:74
 msgid "LIBRARY menu"
@@ -270,11 +270,11 @@ msgstr "⠃⠊⠃⠇⠊⠕⠞⠓⠑⠎⠍⠑⠝⠳"
 
 #: ui/library/view.py:84
 msgid "back to directory list"
-msgstr "⠃⠁⠉⠅⠀⠞⠕⠀⠙⠊⠗⠑⠉⠞⠕⠗⠽⠀⠇⠊⠾"
+msgstr "⠵⠥⠗⠳⠉⠅⠀⠵⠥⠗⠀⠕⠗⠙⠝⠑⠗⠇⠊⠾⠑"
 
 #: ui/library/view.py:90
 msgid "more directories"
-msgstr "⠍⠕⠗⠑⠀⠙⠊⠗⠑⠉⠞⠕⠗⠬⠎"
+msgstr "⠺⠩⠞⠑⠗⠑⠀⠕⠗⠙⠝⠑⠗"
 
 #: ui/system_menu/help.py:6
 msgid ""
@@ -296,7 +296,7 @@ msgstr ""
 
 #: ui/system_menu/view.py:15
 msgid "run in standalone mode"
-msgstr "⠗⠥⠝⠀⠊⠝⠀⠾⠁⠝⠙⠁⠇⠕⠝⠑⠀⠍⠕⠙⠑"
+msgstr "⠁⠗⠃⠩⠞⠑⠀⠊⠍⠀⠾⠁⠝⠙⠁⠇⠕⠝⠑⠍⠕⠙⠑"
 
 #: ui/system_menu/view.py:19
 msgid "emulated"
@@ -312,7 +312,7 @@ msgstr "⠛⠑⠺⠜⠓⠇⠞⠑⠀⠎⠏⠗⠁⠹⠑⠀⠥⠝⠙⠀⠅⠕⠙⠑
 
 #: ui/system_menu/view.py:36
 msgid "choose BRF encoding"
-msgstr "⠹⠕⠕⠎⠑⠀⠘⠃⠗⠋⠀⠑⠝⠉⠕⠙⠊⠝⠛"
+msgstr "⠺⠜⠓⠇⠑⠀⠃⠗⠋⠀⠅⠕⠙⠬⠗⠥⠝⠃⠛"
 
 #: ui/system_menu/view.py:37
 msgid "backup log to USB stick"
@@ -320,7 +320,7 @@ msgstr "⠏⠗⠕⠞⠕⠅⠕⠇⠇⠀⠡⠋⠀⠥⠎⠃⠤⠾⠊⠉⠅⠀⠎⠊
 
 #: ui/system_menu/view.py:38
 msgid "install upgrade from "
-msgstr "⠊⠝⠾⠁⠇⠇⠀⠥⠏⠛⠗⠁⠙⠑⠀⠋⠗⠕⠍⠀"
+msgstr "⠊⠝⠾⠁⠇⠇⠬⠗⠑⠀⠩⠝⠀⠥⠏⠙⠁⠞⠑⠀⠧⠕⠝⠀"
 
 #: ui/system_menu/view.py:40
 msgid "release:"
