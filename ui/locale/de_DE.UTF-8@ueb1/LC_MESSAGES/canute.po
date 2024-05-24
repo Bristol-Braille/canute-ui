@@ -345,4 +345,4 @@ msgstr "⠊⠝⠾⠁⠇⠇⠬⠗⠑⠀⠩⠝⠀⠥⠏⠙⠁⠞⠑⠀⠧⠕⠝⠀
 
 #: ui/system_menu/view.py:32
 msgid "system menu"
-msgstr "⠎⠽⠾⠑⠍⠀⠍⠑⠝⠥"
+msgstr "⠎⠽⠾⠑⠍⠍⠑⠝⠳"
