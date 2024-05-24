@@ -6,8 +6,8 @@ msgstr ""
 "Last-Translator: Ulf Beckmann <beckmann@flusoft.de>\n"
 "Language-Team: German (Germany) (https://www.transifex.com/bristol-braille-technology/teams/87456/de_DE/)\n"
 "Language: de_DE\n"
-"POT-Creation-Date: 2024-05-20 18:54+0100\n"
-"PO-Revision-Date: 2024-05-20 17:58+0000\n"
+"POT-Creation-Date: 2024-05-24 17:37+0100\n"
+"PO-Revision-Date: 2024-05-24 17:07+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -294,226 +294,55 @@ msgstr ""
 "⠛⠑⠜⠝⠙⠑⠗⠞⠀⠺⠊⠗⠙⠂⠀⠝⠊⠹⠞⠀⠚⠑⠙⠕⠹⠀⠙⠬⠀⠎⠏⠗⠁⠹⠑\n"
 "⠕⠙⠑⠗⠀⠙⠑⠗⠀⠉⠕⠙⠑⠀⠧⠕⠝⠀⠙⠁⠞⠩⠑⠝⠀⠊⠝⠀⠙⠑⠗⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠄"
 
-#: ui/system_menu/view.py:15
-msgid "run in standalone mode"
-msgstr "⠁⠗⠃⠩⠞⠑⠀⠊⠍⠀⠾⠁⠝⠙⠁⠇⠕⠝⠑⠍⠕⠙⠑"
-
-#: ui/system_menu/view.py:19
-msgid "emulated"
-msgstr "⠑⠍⠥⠇⠬⠗⠑⠝"
-
-#: ui/system_menu/view.py:34
-msgid "shutdown"
-msgstr "⠡⠎⠱⠁⠇⠞⠑⠝"
-
-#: ui/system_menu/view.py:35
-msgid "select language and code"
-msgstr "⠛⠑⠺⠜⠓⠇⠞⠑⠀⠎⠏⠗⠁⠹⠑⠀⠥⠝⠙⠀⠅⠕⠙⠑"
-
-#: ui/system_menu/view.py:36
-msgid "choose BRF encoding"
-msgstr "⠺⠜⠓⠇⠑⠀⠃⠗⠋⠀⠅⠕⠙⠬⠗⠥⠝⠃⠛"
-
-#: ui/system_menu/view.py:37
-msgid "backup log to USB stick"
-msgstr "⠏⠗⠕⠞⠕⠅⠕⠇⠇⠀⠡⠋⠀⠥⠎⠃⠤⠾⠊⠉⠅⠀⠎⠊⠹⠑⠗⠝"
-
-#: ui/system_menu/view.py:38
-msgid "install upgrade from "
-msgstr "⠊⠝⠾⠁⠇⠇⠬⠗⠑⠀⠩⠝⠀⠥⠏⠙⠁⠞⠑⠀⠧⠕⠝⠀"
-
-#: ui/system_menu/view.py:40
+#: ui/system_menu/system.py:6
 msgid "release:"
-msgstr "⠗⠑⠇⠑⠁⠎⠑"
+msgstr "⠗⠑⠇⠑⠁⠎⠑⠒"
 
-#: ui/system_menu/view.py:41
+#: ui/system_menu/system.py:7
 msgid "serial:"
 msgstr "⠎⠑⠗⠊⠑⠝⠝⠥⠍⠍⠑⠗"
 
-#: ui/system_menu/view.py:49
+#. TRANSLATORS: This message is first line of a two line
+#. message shown in place of the release and serial number
+#. when the Canute 360 is connected to the console
+#: ui/system_menu/system.py:13
+msgid "Unplug from Console for release"
+msgstr "⠨⠥⠝⠏⠇⠥⠛⠀⠋⠗⠕⠍⠀⠨⠉⠕⠝⠎⠕⠇⠑⠀⠋⠕⠗⠀⠗⠑⠇⠑⠁⠎⠑"
+
+#. TRANSLATORS: This is the second line of the two line
+#. message shown when connected to the console
+#: ui/system_menu/system.py:16
+msgid "and serial numbers"
+msgstr "⠁⠝⠙⠀⠎⠑⠗⠊⠁⠇⠀⠝⠥⠍⠃⠑⠗⠎"
+
+#: ui/system_menu/system.py:29
+msgid "emulated"
+msgstr "⠑⠍⠥⠇⠬⠗⠑⠝"
+
+#: ui/system_menu/view.py:17
+msgid "start console mode"
+msgstr "⠾⠁⠗⠞⠀⠉⠕⠝⠎⠕⠇⠑⠀⠍⠕⠙⠑"
+
+#: ui/system_menu/view.py:18
+msgid "shutdown"
+msgstr "⠡⠎⠱⠁⠇⠞⠑⠝"
+
+#: ui/system_menu/view.py:19
+msgid "choose BRF encoding"
+msgstr "⠺⠜⠓⠇⠑⠀⠃⠗⠋⠀⠅⠕⠙⠬⠗⠥⠝⠃⠛"
+
+#: ui/system_menu/view.py:20
+msgid "select language and code"
+msgstr "⠛⠑⠺⠜⠓⠇⠞⠑⠀⠎⠏⠗⠁⠹⠑⠀⠥⠝⠙⠀⠅⠕⠙⠑"
+
+#: ui/system_menu/view.py:21
+msgid "backup log to USB stick"
+msgstr "⠏⠗⠕⠞⠕⠅⠕⠇⠇⠀⠡⠋⠀⠥⠎⠃⠤⠾⠊⠉⠅⠀⠎⠊⠹⠑⠗⠝"
+
+#: ui/system_menu/view.py:22
+msgid "install upgrade from "
+msgstr "⠊⠝⠾⠁⠇⠇⠬⠗⠑⠀⠩⠝⠀⠥⠏⠙⠁⠞⠑⠀⠧⠕⠝⠀"
+
+#: ui/system_menu/view.py:32
 msgid "system menu"
-msgstr "⠎⠽⠾⠑⠍⠍⠑⠝⠳"
-
-#: ui/manual.py:6
-msgid "         canute quick help"
-msgstr "⠉⠁⠝⠥⠞⠑⠀⠱⠝⠑⠇⠇⠓⠊⠇⠋⠑"
-
-#: ui/manual.py:8
-msgid "you can also acess these German"
-msgstr "⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬⠎⠑⠀⠓⠊⠇⠋⠑⠀⠡⠹⠀⠊⠝⠀⠙⠣⠞⠱"
-
-#: ui/manual.py:9
-msgid "help texts from anywhere by pressing"
-msgstr "⠧⠑⠗⠺⠑⠝⠙⠑⠝⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠓⠊⠇⠋⠑⠞⠁⠾⠑"
-
-#: ui/manual.py:10
-msgid "the topmost side button on the left"
-msgstr "⠕⠃⠑⠝⠀⠇⠊⠝⠅⠎⠀⠡⠋⠀⠙⠑⠍⠀⠛⠑⠗⠜⠞⠄"
-
-#: ui/manual.py:16
-msgid "          book and home menu"
-msgstr "⠀⠃⠥⠹⠀⠥⠝⠙⠀⠾⠁⠗⠞⠍⠑⠝⠳"
-
-#: ui/manual.py:18
-msgid "Move through the book by pressing the"
-msgstr "⠙⠥⠗⠹⠀⠙⠁⠎⠀⠃⠥⠹⠀⠃⠑⠺⠑⠛⠑⠝⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠧⠕⠝"
-
-#: ui/manual.py:19
-msgid "arrow buttons on the front of the"
-msgstr "⠙⠑⠗⠀⠏⠋⠩⠇⠞⠁⠾⠑⠝⠀⠁⠝⠀⠙⠑⠗⠀⠧⠕⠗⠙⠑⠗⠎⠩⠞⠑⠀⠙⠑⠎"
-
-#: ui/manual.py:20
-msgid "machine. Hold them down to move #e"
-msgstr "⠛⠑⠗⠜⠞⠎⠄⠀⠙⠗⠳⠉⠅⠑⠀⠎⠬⠀⠙⠬⠎⠑⠀⠥⠍⠀⠼⠑"
-
-#: ui/manual.py:21
-msgid "pages at a time. The home menu shows"
-msgstr "⠎⠩⠞⠑⠝⠀⠵⠥⠀⠺⠑⠹⠎⠑⠇⠝⠄⠀⠙⠁⠎⠀⠍⠑⠝⠳⠀⠵⠩⠛⠞"
-
-#: ui/manual.py:22
-msgid "what you can do with the side buttons"
-msgstr "⠺⠁⠎⠀⠎⠬⠀⠍⠊⠞⠀⠙⠑⠝⠀⠎⠩⠞⠑⠝⠞⠁⠾⠑⠝⠀⠍⠁⠹⠑⠝⠀⠅⠪⠝⠝⠑⠝⠄"
-
-#: ui/manual.py:23
-msgid "from the home menu or the book. View"
-msgstr "⠧⠕⠍⠀⠾⠁⠗⠞⠍⠑⠝⠳⠀⠕⠙⠑⠗⠀⠧⠕⠍⠀⠃⠥⠹⠄⠀⠵⠩⠛⠞"
-
-#: ui/manual.py:24
-msgid "this by pressing the middle button on"
-msgstr "⠑⠎⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠍⠊⠞⠞⠇⠑⠗⠑⠀⠞⠁⠾⠑"
-
-#: ui/manual.py:26
-msgid "the front. Pressing this button again"
-msgstr "⠧⠕⠗⠝⠀⠁⠍⠀⠛⠑⠗⠜⠞⠄⠀⠙⠥⠗⠹⠀⠝⠕⠹⠍⠁⠇⠊⠛⠑⠎⠀⠙⠗⠳⠉⠅⠑⠝"
-
-#: ui/manual.py:27
-msgid "will always return you to your book."
-msgstr "⠛⠑⠇⠁⠝⠛⠑⠝⠀⠎⠬⠀⠊⠍⠍⠑⠗⠀⠵⠥⠀⠊⠓⠗⠑⠍⠀⠃⠥⠹⠄"
-
-#: ui/manual.py:30
-msgid "        bookmarks"
-msgstr "⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝"
-
-#: ui/manual.py:32
-msgid "Add a bookmark by pressing button #e"
-msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠓⠊⠝⠵⠥⠋⠳⠛⠑⠝⠀⠍⠊⠞⠀⠞⠁⠾⠑⠀⠼⠑⠀"
-
-#: ui/manual.py:33
-msgid "while in a book. Bookmarks are listed"
-msgstr "⠊⠝⠝⠑⠗⠓⠁⠇⠃⠀⠙⠑⠎⠀⠃⠥⠹⠎⠄⠀⠑⠎⠀⠅⠕⠍⠍⠞⠀⠩⠝⠑⠀⠇⠊⠾⠑"
-
-#: ui/manual.py:36
-msgid "starts with the Canute page number based"
-msgstr "⠃⠑⠛⠊⠝⠝⠞⠀⠍⠊⠞⠀⠙⠑⠗⠀⠎⠩⠞⠑⠝⠝⠥⠍⠍⠑⠗⠀⠃⠁⠎⠬⠗⠑⠝⠙"
-
-#: ui/manual.py:37
-msgid "on its #i line page. Go to the page by"
-msgstr "⠡⠋⠀⠙⠑⠗⠀⠼⠊⠄⠀⠵⠩⠇⠑⠄⠀⠛⠑⠓⠑⠀⠡⠋⠀⠎⠩⠞⠑⠀⠙⠥⠗⠹"
-
-#: ui/manual.py:38
-msgid "selecting a bookmark by pressing one of"
-msgstr "⠺⠁⠓⠇⠀⠩⠝⠑⠎⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠎⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝"
-
-#: ui/manual.py:39
-msgid "the side buttons. Holding the button"
-msgstr "⠩⠝⠑⠗⠀⠎⠩⠞⠑⠝⠞⠁⠾⠑⠄⠀⠓⠁⠇⠞⠑⠝⠀⠙⠑⠗⠀⠞⠁⠾⠑"
-
-#: ui/manual.py:40
-msgid "down will delete the bookmark."
-msgstr "⠺⠊⠗⠙⠀⠙⠁⠎⠀⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠇⠪⠱⠑⠝⠄"
-
-#: ui/manual.py:46
-msgid "          go to page menu"
-msgstr "⠀⠵⠥⠍⠀⠎⠩⠞⠑⠝⠍⠑⠝⠳⠀⠛⠑⠓⠑⠝"
-
-#: ui/manual.py:48
-msgid "Go to a page number by keying it in with"
-msgstr "⠛⠑⠓⠑⠀⠵⠥⠗⠀⠎⠩⠞⠑⠀⠙⠥⠗⠹⠀⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗"
-
-#: ui/manual.py:49
-msgid "the side number buttons and pressing"
-msgstr "⠎⠩⠞⠑⠝⠞⠁⠾⠑⠝⠀⠥⠝⠙⠀⠙⠗⠳⠉⠅⠑⠝⠀⠧⠕⠝⠀⠧⠕⠗⠺⠜⠗⠞⠎"
-
-#: ui/manual.py:50
-msgid "forward. Pages are numbered based on the"
-msgstr "⠎⠩⠞⠑⠝⠀⠎⠊⠝⠙⠀⠝⠥⠍⠑⠗⠬⠗⠞⠀⠙⠥⠗⠹"
-
-#: ui/manual.py:51
-msgid "#i line page height of the Canute. You"
-msgstr "⠼⠊⠀⠵⠩⠇⠑⠝⠀⠚⠑⠀⠎⠩⠞⠑⠀⠙⠑⠎⠀⠉⠁⠝⠥⠞⠑⠄⠀⠎⠬"
-
-#: ui/manual.py:52
-msgid "can delete entered numbers by pressing"
-msgstr "⠅⠪⠝⠝⠑⠝⠀⠙⠬⠀⠩⠝⠛⠑⠛⠑⠃⠑⠝⠑⠀⠁⠝⠵⠁⠓⠇⠀⠙⠥⠗⠹"
-
-#: ui/manual.py:53
-msgid "or holding the back button. As always"
-msgstr "⠙⠗⠳⠉⠅⠑⠝⠀⠕⠙⠑⠗⠀⠓⠁⠇⠞⠑⠝⠀⠙⠑⠗⠀⠵⠥⠗⠳⠉⠅⠞⠁⠾⠑⠄"
-
-#: ui/manual.py:54
-msgid "you can go back to your current page by"
-msgstr "⠍⠊⠞⠀⠙⠑⠗⠀⠍⠑⠝⠳⠞⠁⠾⠑⠀⠅⠪⠝⠝⠑⠝⠀⠎⠬⠀⠵⠥⠗"
-
-#: ui/manual.py:56
-msgid "pressing the menu button."
-msgstr "⠁⠅⠞⠊⠧⠑⠝⠀⠎⠬⠞⠑⠀⠵⠥⠗⠳⠉⠅⠀⠅⠑⠓⠗⠑⠝⠄"
-
-#: ui/manual.py:59
-msgid "          library menu"
-msgstr "⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠀⠍⠑⠝⠳"
-
-#: ui/manual.py:61
-msgid "Choose the book you wish to read by"
-msgstr "⠺⠜⠓⠇⠑⠀⠙⠁⠎⠀⠛⠑⠺⠳⠝⠱⠞⠑⠀⠃⠥⠹⠀⠙⠥⠗⠹"
-
-#: ui/manual.py:62
-msgid "pressing the button to the left of the"
-msgstr "⠙⠗⠳⠉⠅⠑⠝⠀⠙⠑⠗⠀⠞⠁⠾⠑⠀⠝⠑⠃⠑⠝⠀⠙⠑⠍⠀⠞⠊⠞⠑⠇⠄"
-
-#: ui/manual.py:63
-msgid "title. Use the arrow buttons to page"
-msgstr "⠝⠥⠞⠵⠑⠀⠙⠬⠀⠏⠋⠩⠇⠞⠁⠾⠑⠝⠀⠵⠥⠍⠀⠃⠇⠜⠞⠞⠑⠗⠝"
-
-#: ui/manual.py:64
-msgid "through the library. You can change the"
-msgstr "⠙⠥⠗⠹⠀⠙⠬⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠄⠀⠎⠬⠀⠅⠪⠝⠝⠑⠝⠀⠙⠬"
-
-#: ui/manual.py:66
-msgid "ordering of the books in the system"
-msgstr "⠗⠩⠓⠑⠝⠋⠕⠇⠛⠑⠀⠙⠑⠗⠀⠃⠳⠹⠑⠗⠀⠊⠍⠀⠎⠽⠾⠑⠍⠄"
-
-#: ui/manual.py:67
-msgid "menu."
-msgstr "⠍⠑⠝⠳⠄"
-
-#: ui/manual.py:70
-msgid "          system menu"
-msgstr "⠀⠎⠽⠾⠑⠍⠀⠍⠑⠝⠳"
-
-#: ui/manual.py:72
-msgid "Configure your preference on the sorting"
-msgstr "⠅⠕⠝⠋⠊⠛⠥⠗⠬⠗⠑⠝⠀⠎⠬⠀⠙⠬⠀⠗⠩⠓⠑⠝⠋⠕⠇⠛⠑"
-
-#: ui/manual.py:73
-msgid "order of books in the library and"
-msgstr "⠙⠑⠗⠀⠃⠳⠹⠑⠗⠀⠊⠝⠀⠙⠑⠗⠀⠃⠊⠃⠇⠊⠕⠞⠓⠑⠅⠀⠥⠝⠙"
-
-#: ui/manual.py:74
-msgid "bookmarks through the menu options. To"
-msgstr "⠇⠑⠎⠑⠵⠩⠹⠑⠝⠀⠊⠍⠀⠍⠑⠝⠳⠀⠕⠏⠞⠊⠕⠝⠑⠝⠄"
-
-#: ui/manual.py:76
-msgid "shutdown the Canute safely, select the"
-msgstr "⠵⠥⠍⠀⠎⠊⠹⠑⠗⠑⠝⠀⠁⠃⠱⠁⠇⠞⠑⠝⠀⠺⠜⠓⠇⠑⠝⠀⠎⠬"
-
-#: ui/manual.py:77
-msgid "shutdown option and wait for #cj"
-msgstr "⠡⠎⠱⠁⠇⠞⠑⠝⠀⠥⠝⠙⠀⠺⠁⠗⠞⠑⠝⠀⠋⠳⠗⠀⠼⠉⠚"
-
-#: ui/manual.py:78
-msgid "seconds before unplugging it."
-msgstr "⠎⠑⠅⠥⠝⠙⠑⠝⠀⠃⠊⠎⠀⠵⠥⠗⠀⠞⠗⠑⠝⠝⠥⠝⠛"
-
-#: ui/manual.py:96
-msgid "canute manual"
-msgstr "⠉⠁⠝⠥⠞⠑⠀⠓⠁⠝⠙⠃⠥⠹"
+msgstr "⠎⠽⠾⠑⠍⠀⠍⠑⠝⠥"
