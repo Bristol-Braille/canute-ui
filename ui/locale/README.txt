@@ -23,6 +23,9 @@ any such tweaks to an autotranslated PO, you must then separately remake the
 corresponding MO, e.g.:
 
     pybabel compile -f -D canute -d . -l en_GB.UTF-8@ueb1 -i en_GB.UTF-8@ueb1/LC_MESSAGES/canute.po
+    pybabel compile -f -D canute -d . -l en_GB.UTF-8@ueb2 -i en_GB.UTF-8@ueb2/LC_MESSAGES/canute.po
+    pybabel compile -f -D canute -d . -l de_DE.UTF-8@ueb1 -i de_DE.UTF-8@ueb1/LC_MESSAGES/canute.po
+    pybabel compile -f -D canute -d . -l de_DE.UTF-8@ueb2 -i de_DE.UTF-8@ueb2/LC_MESSAGES/canute.po
 
 To see tweaks applied in the past, check the git diff.
 ___
