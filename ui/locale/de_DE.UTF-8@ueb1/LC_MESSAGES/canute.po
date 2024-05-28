@@ -307,13 +307,13 @@ msgstr "⠎⠑⠗⠊⠑⠝⠝⠥⠍⠍⠑⠗"
 #. when the Canute 360 is connected to the console
 #: ui/system_menu/system.py:13
 msgid "Unplug from Console for release"
-msgstr "⠨⠥⠝⠏⠇⠥⠛⠀⠋⠗⠕⠍⠀⠨⠉⠕⠝⠎⠕⠇⠑⠀⠋⠕⠗⠀⠗⠑⠇⠑⠁⠎⠑"
+msgstr "⠗⠑⠇⠑⠁⠎⠑⠒⠀⠁⠗⠃⠩⠞⠑⠀⠊⠍⠀⠾⠁⠝⠙⠁⠇⠕⠝⠑⠍⠕⠙⠑"
 
 #. TRANSLATORS: This is the second line of the two line
 #. message shown when connected to the console
 #: ui/system_menu/system.py:16
 msgid "and serial numbers"
-msgstr "⠁⠝⠙⠀⠎⠑⠗⠊⠁⠇⠀⠝⠥⠍⠃⠑⠗⠎"
+msgstr "⠎⠑⠗⠊⠑⠝⠝⠥⠍⠍⠑⠗⠀⠁⠗⠃⠩⠞⠑⠀⠊⠍⠀⠾⠁⠝⠙⠁⠇⠕⠝⠑⠍⠕⠙⠑"
 
 #: ui/system_menu/system.py:29
 msgid "emulated"
