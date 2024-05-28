@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-20 18:54+0100\n"
-"PO-Revision-Date: 2024-05-20 17:58+0000\n"
+"POT-Creation-Date: 2024-05-24 17:37+0100\n"
+"PO-Revision-Date: 2024-05-24 17:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -324,42 +324,55 @@ msgstr ""
 "⠡⠁⠝⠛⠑ ⠮ ⠎⠽⠌⠑⠍ ⠇⠁⠝⠛⠥⠁⠛⠑ ⠕⠗ ⠠⠃⠗⠇ ⠉⠕⠙⠑⠂ ⠝ ⠮\n"
 "⠇⠁⠝⠛⠥⠁⠛⠑ ⠕⠗ ⠉⠕⠙⠑ ⠷ ⠁⠝⠽ ⠋⠊⠇⠑⠎ ⠔ ⠮ ⠇⠊⠃⠗⠜⠽⠲"
 
-#: ui/system_menu/view.py:15
-msgid "run in standalone mode"
-msgstr "⠗⠥⠝⠀⠔⠀⠌⠯⠁⠇⠐⠕⠀⠍⠕⠙⠑"
-
-#: ui/system_menu/view.py:19
-msgid "emulated"
-msgstr "⠑⠍⠥⠇⠁⠞⠫"
-
-#: ui/system_menu/view.py:34
-msgid "shutdown"
-msgstr "⠩⠥⠞⠙⠪⠝"
-
-#: ui/system_menu/view.py:35
-msgid "select language and code"
-msgstr "⠎⠑⠇⠑⠉⠞⠀⠇⠁⠝⠛⠥⠁⠛⠑⠀⠯⠀⠉⠕⠙⠑"
-
-#: ui/system_menu/view.py:36
-msgid "choose BRF encoding"
-msgstr "⠡⠕⠕⠎⠑⠀⠠⠠⠃⠗⠋⠀⠢⠉⠕⠙⠬"
-
-#: ui/system_menu/view.py:37
-msgid "backup log to USB stick"
-msgstr "⠃⠁⠉⠅⠥⠏⠀⠇⠕⠛⠀⠞⠕⠀⠠⠠⠥⠎⠃⠀⠌⠊⠉⠅"
-
-#: ui/system_menu/view.py:38
-msgid "install upgrade from "
-msgstr "⠔⠌⠁⠇⠇⠀⠥⠏⠛⠗⠁⠙⠑⠀⠋⠀"
-
-#: ui/system_menu/view.py:40
+#: ui/system_menu/system.py:6
 msgid "release:"
 msgstr "⠗⠑⠇⠂⠎⠑⠒"
 
-#: ui/system_menu/view.py:41
+#: ui/system_menu/system.py:7
 msgid "serial:"
 msgstr "⠎⠻⠊⠁⠇⠒"
 
-#: ui/system_menu/view.py:49
+#. TRANSLATORS: This message is first line of a two line
+#. message shown in place of the release and serial number
+#. when the Canute 360 is connected to the console
+#: ui/system_menu/system.py:13
+msgid "Unplug from Console for release"
+msgstr "⠠⠥⠝⠏⠇⠥⠛⠀⠋⠀⠠⠒⠎⠕⠇⠑⠀⠿⠀⠗⠑⠇⠂⠎⠑"
+
+#. TRANSLATORS: This is the second line of the two line
+#. message shown when connected to the console
+#: ui/system_menu/system.py:16
+msgid "and serial numbers"
+msgstr "⠯⠀⠎⠻⠊⠁⠇⠀⠝⠥⠍⠃⠻⠎"
+
+#: ui/system_menu/system.py:29
+msgid "emulated"
+msgstr "⠑⠍⠥⠇⠁⠞⠫"
+
+#: ui/system_menu/view.py:17
+msgid "start console mode"
+msgstr "⠌⠜⠞⠀⠒⠎⠕⠇⠑⠀⠍⠕⠙⠑"
+
+#: ui/system_menu/view.py:18
+msgid "shutdown"
+msgstr "⠩⠥⠞⠙⠪⠝"
+
+#: ui/system_menu/view.py:19
+msgid "choose BRF encoding"
+msgstr "⠡⠕⠕⠎⠑⠀⠠⠠⠃⠗⠋⠀⠢⠉⠕⠙⠬"
+
+#: ui/system_menu/view.py:20
+msgid "select language and code"
+msgstr "⠎⠑⠇⠑⠉⠞⠀⠇⠁⠝⠛⠥⠁⠛⠑⠀⠯⠀⠉⠕⠙⠑"
+
+#: ui/system_menu/view.py:21
+msgid "backup log to USB stick"
+msgstr "⠃⠁⠉⠅⠥⠏⠀⠇⠕⠛⠀⠞⠕⠀⠠⠠⠥⠎⠃⠀⠌⠊⠉⠅"
+
+#: ui/system_menu/view.py:22
+msgid "install upgrade from "
+msgstr "⠔⠌⠁⠇⠇⠀⠥⠏⠛⠗⠁⠙⠑⠀⠋⠀"
+
+#: ui/system_menu/view.py:32
 msgid "system menu"
-msgstr "⠎⠽⠌⠑⠍ ⠍⠢⠥"
+msgstr "⠎⠽⠌⠑⠍⠀⠍⠢⠥"
