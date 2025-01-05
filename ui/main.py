@@ -152,51 +152,55 @@ async def handle_media_changes(media_helper, driver):
 
 
 async def run_async(driver, config, loop):
-    # Last-minute hack: to clear as many errors as possible, without
-    # risking hanging up the UI by having it start comms with the MCUs
-    # while they're resetting, have the UI issue a reset as its first
-    # act, synchronously.
-    log.debug('resetting display')
-    driver.reset_display()
-    log.debug('display reset')
+    try:
+        # Last-minute hack: to clear as many errors as possible, without
+        # risking hanging up the UI by having it start comms with the MCUs
+        # while they're resetting, have the UI issue a reset as its first
+        # act, synchronously.
+        log.debug('resetting display')
+        driver.reset_display()
+        log.debug('display reset')
 
-    # process these imports while resetting as they are slow
-    from . import buttons
-    from .state import state
+        # process these imports while resetting as they are slow
+        from . import buttons
+        from .state import state
 
-    log.debug('waiting for motion')
-    while not driver.is_motion_complete():
-        await asyncio.sleep(0.01)
-    log.debug('motion complete')
+        log.debug('waiting for motion')
+        while not driver.is_motion_complete():
+            await asyncio.sleep(0.01)
+        log.debug('motion complete')
 
-    media_helper = config.get('files', {}).get('media_helper')
-    if media_helper is not None:
-        media_handler = asyncio.ensure_future(handle_media_changes(media_helper, driver))
-    else:
-        media_handler = None
-        def sighup_helper(*args):
-            log.debug('shutting down for library rescan')
-            driver.restarting('media')
-            sys.exit(0)
-        signal.signal(signal.SIGHUP, sighup_helper)
+        media_helper = config.get('files', {}).get('media_helper')
+        if media_helper is not None:
+            media_handler = asyncio.ensure_future(handle_media_changes(media_helper, driver))
+        else:
+            media_handler = None
+            def sighup_helper(*args):
+                log.debug('shutting down for library rescan')
+                driver.restarting('media')
+                sys.exit(0)
+            signal.signal(signal.SIGHUP, sighup_helper)
 
-    if config.get('hardware', {}).get('log_duty', False):
-        duty_logger = asyncio.ensure_future(driver.track_duty())
-    else:
-        duty_logger = None
+        if config.get('hardware', {}).get('log_duty', False):
+            duty_logger = asyncio.ensure_future(driver.track_duty())
+        else:
+            duty_logger = None
 
-    width, height = driver.get_dimensions()
-    state.app.set_dimensions((width, height))
+        width, height = driver.get_dimensions()
+        state.app.set_dimensions((width, height))
 
-    queue, save_worker = handle_save_events(config, state)
-    load_worker = handle_display_events(config, state)
+        queue, save_worker = handle_save_events(config, state)
+        load_worker = handle_display_events(config, state)
 
-    media_dir = config.get('files', {}).get('media_dir')
-    log.info(f'reading initial state from {media_dir}')
-    await initial_state.read(media_dir, state)
-    log.info('created store')
+        media_dir = config.get('files', {}).get('media_dir')
+        log.info(f'reading initial state from {media_dir}')
+        await initial_state.read(media_dir, state)
+        log.info('created store')
 
-    state.refresh_display()
+        state.refresh_display()
+    except Exception as err:
+        log.error(err)
+        sys.exit(1)
 
     try:
         while 1:
