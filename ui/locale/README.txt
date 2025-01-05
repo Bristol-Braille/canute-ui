@@ -33,5 +33,5 @@ ___
 If you get the error `ModuleNotFoundError: No module named 'louis'` you may
 need to run something like the following first:
 
-    export PYTHONPATH="$(brew --prefix liblouis)/lib/python3.12/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$(brew --prefix liblouis)/lib/python3.13/site-packages:$PYTHONPATH"
 

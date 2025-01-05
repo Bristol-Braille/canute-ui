@@ -32,7 +32,7 @@ async def render(width, height, state):
 
     lang = state.app.user.current_language
     languages = state.app.languages.available
-    current_lang = languages.get(lang, 'English Grade 1')
+    current_lang = languages.get(lang, 'English, UEB Grade 2')
 
     try:
         cur_index = list(languages.keys()).index(lang)

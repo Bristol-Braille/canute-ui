@@ -23,28 +23,13 @@ msgstr "⠝⠢⠙⠁⠍⠻⠊⠅⠖⠊⠱⠿⠀⠃⠗⠁⠊⠟⠑⠀⠁⠎⠠⠉
 msgid "Eurobraille"
 msgstr "⠣⠗⠕⠃⠗⠁⠊⠟⠑"
 
-#. TRANSLATORS: This is a language name menu item, so should always appear
-#. in the language it denotes so that it remains readable to those who
-#. speak only that language, just as "Deutsch" should always be left as
-#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
-#. appropriate, if possible.
-#: ui/i18n.py:39
-msgid "English, UEB grade 1"
-msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
-
-#. TRANSLATORS: This is a language name menu item.
-#: ui/i18n.py:41
-msgid "English, UEB grade 2"
-msgstr "⠠⠢⠛⠇⠊⠩⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠃"
-
-#. TRANSLATORS: This is a language name menu item.
-#: ui/i18n.py:43
-msgid "Deutsch, UEB grade 1"
-msgstr "⠙⠣⠞⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠁"
-
-#. TRANSLATORS: This is a language name menu item.
-#: ui/i18n.py:45
-msgid "Deutsch, UEB grade 2"
+#. TRANSLATORS: This is the title/label used for this language in the
+#. language menu. It should always appear in the language it denotes so
+#. that it remains readable to those who speak only that language.
+#. Addition of a Braille grade marker is appropriate, if possible.
+#: ui/i18n.py:52
+# "Deutsch, UEB grade 2"
+msgid "Language Name, UEB grade"
 msgstr "⠙⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠃"
 
 #: ui/manual.py:34

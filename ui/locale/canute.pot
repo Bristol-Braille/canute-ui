@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2024 ORGANIZATION
+# Copyright (C) 2025 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-24 17:37+0100\n"
+"POT-Creation-Date: 2025-01-05 14:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,28 +25,12 @@ msgstr ""
 msgid "Eurobraille"
 msgstr ""
 
-#. TRANSLATORS: This is a language name menu item, so should always appear
-#. in the language it denotes so that it remains readable to those who
-#. speak only that language, just as "Deutsch" should always be left as
-#. "Deutsch" in a language menu.  Addition of a Braille grade marker seems
-#. appropriate, if possible.
-#: ui/i18n.py:39
-msgid "English, UEB grade 1"
-msgstr ""
-
-#. TRANSLATORS: This is a language name menu item.
-#: ui/i18n.py:41
-msgid "English, UEB grade 2"
-msgstr ""
-
-#. TRANSLATORS: This is a language name menu item.
-#: ui/i18n.py:43
-msgid "Deutsch, UEB grade 1"
-msgstr ""
-
-#. TRANSLATORS: This is a language name menu item.
-#: ui/i18n.py:45
-msgid "Deutsch, UEB grade 2"
+#. TRANSLATORS: This is the title/label used for this language in the
+#. language menu. It should always appear in the language it denotes so
+#. that it remains readable to those who speak only that language.
+#. Addition of a Braille grade marker is appropriate, if possible.
+#: ui/i18n.py:52
+msgid "Language Name, UEB grade"
 msgstr ""
 
 #: ui/manual.py:34

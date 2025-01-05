@@ -1,61 +1,74 @@
+import os.path
 import gettext
 import logging
+import config_loader
 from collections import namedtuple, OrderedDict
 
 log = logging.getLogger(__name__)
 
 
-def install(locale_code):
-    try:
-        translations = gettext.translation(
-            'canute', localedir='ui/locale', languages=[locale_code],
-            fallback=False
-        )
-    except OSError as e:
-        log.warning(e)
-        translations = gettext.NullTranslations()
+# search external media (sd/usb1/usb2) then built-in ui dir
+# for locale translation directories
+def locale_dirs():
+    config = config_loader.load()
+    dirs = config.get('files', {}).get('library', [])
+    dirs.append('ui')
+    return dirs
+
+
+def install(locale_code, fallback=False):
+    translations = None
+    for dir in locale_dirs():
+        localedir = os.path.join(dir, 'locale')
+        if os.path.exists(localedir):
+            try:
+                translations = gettext.translation(
+                    'canute', localedir, languages=[locale_code]
+                )
+                break
+            except OSError as e:
+                log.warning(e)
+                pass
+
+    if translations is None:
+        if fallback:
+            translations = gettext.NullTranslations()
+        else:
+            log.warning(f"Unable to install language {locale_code}, language left unchanged")
+            return
     translations.install()
     return translations
 
-
-# Before having installed _() we need extractors to see language titles.
-# It's convenient to have it act as the identity function, too.
-def _(x): return x
-
-
-Builtin = namedtuple('BuiltinLang', ['code', 'title'])
-
-# Would prefer "British English, UEB grade N" for the following but
-# (1) it's too long to be included in the languages menu title, (2) it
-# might be irrelevant if there are no British-isms in this small
-# collection of text, (3) US users might object on principle.
-
-builtin = [
-    # TRANSLATORS: This is a language name menu item, so should always appear
-    # in the language it denotes so that it remains readable to those who
-    # speak only that language, just as "Deutsch" should always be left as
-    # "Deutsch" in a language menu.  Addition of a Braille grade marker seems
-    # appropriate, if possible.
-    Builtin(code='en_GB.UTF-8@ueb1', title=_('English, UEB grade 1')),
-    # TRANSLATORS: This is a language name menu item.
-    Builtin(code='en_GB.UTF-8@ueb2', title=_('English, UEB grade 2')),
-    # TRANSLATORS: This is a language name menu item.
-    Builtin(code='de_DE.UTF-8@ueb1', title=_('Deutsch, UEB grade 1')),
-    # TRANSLATORS: This is a language name menu item.
-    Builtin(code='de_DE.UTF-8@ueb2', title=_('Deutsch, UEB grade 2'))
-]
-
-del _
-
 DEFAULT_LOCALE = 'en_GB.UTF-8@ueb2'
 
-translations = install(DEFAULT_LOCALE)
+translations = install(DEFAULT_LOCALE, True)
 # this will've already been installed globally, but this keeps flake8 happy
 _ = translations.gettext
 
-BUILTIN_LANGUAGES = OrderedDict([
-    (lang.code, _(lang.title)) for lang in builtin
-])
+# TRANSLATORS: This is the title/label used for this language in the
+# language menu. It should always appear in the language it denotes so
+# that it remains readable to those who speak only that language.
+# Addition of a Braille grade marker is appropriate, if possible.
+TRANSLATION_LANGUAGE_TITLE = _('Language Name, UEB grade')
+
+def available_languages():
+    languages = []
+    for dir in locale_dirs():
+        localedir = os.path.join(dir, 'locale')
+        if os.path.exists(localedir):
+            subfolders = [ f.name for f in os.scandir(localedir) if f.is_dir() ]
+            for lang in subfolders:
+                mofile = os.path.join(localedir, lang, 'LC_MESSAGES', 'canute.mo')
+                if os.path.exists(mofile):
+                    languages.append(lang)
+
+    menu = OrderedDict()
+    for lang in set(languages):
+        translation = gettext.translation(lang)
+        title = translation.gettext(TRANSLATION_LANGUAGE_TITLE, lang)
+        menu[lang] = title
+
+    return menu
 
 # For detecting the default language of older installations, which
 # didn't really have switchable language but did add a default
