@@ -1,8 +1,8 @@
 import os.path
 import gettext
 import logging
-import config_loader
-from collections import namedtuple, OrderedDict
+from collections import OrderedDict
+from . import config_loader
 
 log = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 # for locale translation directories
 def locale_dirs():
     config = config_loader.load()
-    dirs = config.get('files', {}).get('library', [])
+    dirs = [lib['path'] for lib in config.get('files', {}).get('library', [])]
     dirs.append('ui')
     return dirs
 
@@ -37,6 +37,7 @@ def install(locale_code, fallback=False):
             log.warning(f"Unable to install language {locale_code}, language left unchanged")
             return
     translations.install()
+    log.info(f"installed translation language {locale_code}")
     return translations
 
 DEFAULT_LOCALE = 'en_GB.UTF-8@ueb2'
