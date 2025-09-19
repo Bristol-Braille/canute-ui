@@ -61,7 +61,7 @@ TRANSLATION_LANGUAGE_TITLE = _('Language Name, UEB grade')
 del _
 
 
-DEFAULT_LOCALE = 'en_GB.UTF-8@ueb2'
+DEFAULT_LOCALE = 'en_GB.UTF-8@en-ueb-g2'
 
 translations = install(DEFAULT_LOCALE, True)
 # this will've already been installed globally, but this keeps flake8 happy
