@@ -3,12 +3,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-24 17:37+0100\n"
+"POT-Creation-Date: 2025-01-05 14:10+0000\n"
 "PO-Revision-Date: 2024-05-24 17:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
 
@@ -20,12 +21,12 @@ msgstr "⠠⠝⠕⠗⠞⠓⠀⠠⠁⠍⠑⠗⠊⠉⠁⠝⠀⠠⠃⠗⠁⠊⠇⠇
 msgid "Eurobraille"
 msgstr "⠠⠑⠥⠗⠕⠃⠗⠁⠊⠇⠇⠑"
 
+# "English, UEB grade 1"
 #. TRANSLATORS: This is the title/label used for this language in the
 #. language menu. It should always appear in the language it denotes so
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:52
-# "English, UEB grade 1"
 msgid "Language Name, UEB grade"
 msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂ ⠠⠠⠥⠑⠃ ⠛⠗⠁⠙⠑ ⠼⠁"
 
