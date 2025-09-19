@@ -27,9 +27,8 @@ src = polib.pofile(args.input)
 valid_entries = [e for e in src if not e.obsolete]
 
 dest.metadata = src.metadata
-now = datetime.now(timezone.utc).strftime('%F %H:%M%z')
-dest.metadata['PO-Revision-Date'] = now
 
+transcribed_count = 0
 for src_entry in valid_entries:
 
     dest_entry = dest.find(src_entry.msgid)
@@ -79,4 +78,10 @@ for src_entry in valid_entries:
         if 'fuzzy' in dest_entry.flags and 'fuzzy' not in src_entry.flags:
             dest_entry.flags.remove('fuzzy')
 
-dest.save(args.ouput)
+        transcribed_count += 1
+
+if transcribed_count > 0:
+    now = datetime.now(timezone.utc).strftime('%F %H:%M%z')
+    dest.metadata['PO-Revision-Date'] = now
+
+dest.save(args.output)

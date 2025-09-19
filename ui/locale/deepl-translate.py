@@ -5,10 +5,12 @@
 # python deepl-translate.py -f de_DE.po -l de
 
 import os
+import time
+from datetime import datetime, timezone
+import os.path
 import argparse
 import polib
 import deepl
-import time
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Translate .po files using DeepL")
@@ -28,17 +30,30 @@ translator = deepl.Translator(AUTH_KEY)
 def should_translate(entry):
     return 'fuzzy' in entry.flags or all(ord(c) < 0x2800 for c in entry.msgstr)
 
-# Load the .po file
-po = polib.pofile(args.input)
-total_entries = len([entry for entry in po if entry.msgid and should_translate(entry.msgstr)])
+# Load the .po files
+src = polib.pofile(args.input)
+if os.path.isfile(args.output):
+    dest = polib.pofile(args.output)
+else:
+    dest = polib.POFile()
+    dest.metadata = src.metadata
+
+total_entries = len([entry for entry in src if entry.msgid and should_translate(entry)])
 translated_count = 0
 
 # Translate entries with progress
-for i, entry in enumerate(po):
-    if entry.msgid and should_translate(entry):  
+for i, entry in enumerate(src):
+    if entry.msgid and should_translate(entry):
+        dest_entry = dest.find(entry.msgid)
+        if dest_entry is None:
+            dest_entry = entry
+            dest.append(dest_entry)
+        else:
+            dest_entry.merge(entry)
+
         try:
             translation = translator.translate_text(entry.msgid, target_lang=lang)
-            entry.msgstr = translation.text
+            dest_entry.msgstr = translation.text
             translated_count += 1
             percent_done = (translated_count / total_entries) * 100
             print(f"Progress: {translated_count}/{total_entries} ({percent_done:.2f}%)", end="\r")
@@ -47,6 +62,10 @@ for i, entry in enumerate(po):
             print(f"\nError translating '{entry.msgid}': {e}")
 
 # Save the translated .po file
-po.save(args.output)
+if translated_count > 0:
+    now = datetime.now(timezone.utc).strftime('%F %H:%M%z')
+    dest.metadata['PO-Revision-Date'] = now
+
+dest.save(args.output)
 
 print(f"\nTranslation completed: {args.output}") 
