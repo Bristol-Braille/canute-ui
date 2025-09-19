@@ -17,16 +17,16 @@ declare -a codes
 declare -a tables
 declare -a names
 while test $# -gt 0; do
-  codes+=($1)
+  codes+=("$1")
   shift
-  tables+=($1)
+  tables+=("$1")
   shift
-  names+=($1)
+  names+=("$1")
   shift
 done
 
 i=0
-for table_code in ${codes}
+for table_code in "${codes[@]}"
 do
   locale="${lang_code}.UTF-8@${table_code}"
 

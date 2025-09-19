@@ -1,0 +1,284 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-09-18 13:41+0100\n"
+"PO-Revision-Date: 2025-09-18 13:41+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.13.1\n"
+
+#: ui/braille.py:144
+msgid "North American Braille ASCII"
+msgstr "Braille nord-américain ASCII"
+
+#: ui/braille.py:147
+msgid "Eurobraille"
+msgstr "Eurobraille"
+
+#. TRANSLATORS: This is the title/label used for this language in the
+#. language menu. It should always appear in the language it denotes so
+#. that it remains readable to those who speak only that language.
+#. Addition of a Braille grade marker is appropriate, if possible.
+#: ui/i18n.py:58
+msgid "Language Name, UEB grade"
+msgstr "Nom de la langue, grade UEB"
+
+#: ui/manual.py:34
+msgid ""
+"Canute 360 by Bristol Braille Technology\n"
+"\n"
+"Bristol Braille Technology is a not-for-profit organisation dedicated to serving the Braille reading community.\n"
+"\n"
+"Founded in 2011. Registered in the United Kingdom with the Regulator of Community Interest Companies. Company number 7518101.\n"
+msgstr ""
+"Canute 360 par Bristol Braille Technology\n"
+"\n"
+"Bristol Braille Technology est une organisation à but non lucratif au service de la communauté des lecteurs de braille.\n"
+"\n"
+"Fondée en 2011. Enregistrée au Royaume-Uni auprès du régulateur des sociétés d'intérêt communautaire. Numéro d'entreprise 7518101.\n"
+
+#. TRANSLATORS: The AsciiDoc markup is used to suggest a page break
+#. in this string.
+#: ui/book/help.py:23
+msgid ""
+"With Canute 360 you can read files in Braille. You can move within a file using the three large control buttons on the front panel of Canute. Press the large button to the right of centre on the front panel labelled \"forward\" to move forward one page within this help file.\n"
+"\n"
+"<<<\n"
+"\n"
+"Press the large button to the left of centre, labelled \"back\" to move back one page within a file, similar to turning the pages in a physical book. You can move forwards of backwards five pages at a time by holding down the \"forward\" or \"back\" button. You can access all other Canute features, including the library menu, bookmarks and system settings by pressing the large central button labelled \"menu\" to access the main menu. Press the circular help button (labelled \"H\") at the top left of the display to return to your book."
+msgstr ""
+"Avec Canute 360, vous pouvez lire des fichiers en braille. Vous pouvez vous déplacer dans un fichier à l'aide des trois gros boutons de commande situés sur le panneau avant de Canute. Appuyez sur le gros bouton situé à droite du centre sur le panneau avant et intitulé \" forward \" pour avancer d'une page dans ce fichier d'aide.\n"
+"\n"
+"<<<\n"
+"\n"
+"Appuyez sur le gros bouton à gauche du centre, appelé \"back\" (retour) pour revenir en arrière d'une page dans un fichier, comme si vous tourniez les pages d'un livre physique. Vous pouvez avancer ou reculer de cinq pages à la fois en maintenant enfoncé le bouton \"avant\" ou \"arrière\". Vous pouvez accéder à toutes les autres fonctions de Canute, y compris le menu de la bibliothèque, les signets et les paramètres du système en appuyant sur le grand bouton central étiqueté \" menu \" pour accéder au menu principal. Appuyez sur le bouton d'aide circulaire (marqué \"H\") en haut à gauche de l'écran pour revenir à votre livre."
+
+#: ui/book/help.py:46
+msgid ""
+"This is the main menu. From the main menu you can access the library, insert a bookmark, return to a bookmark that was previously placed within a file, or navigate to a page within a book. You can select an item from the main menu by pressing the triangular line select button to the left of the menu item on the display.\n"
+"\n"
+"You can choose a new book by pressing the line select button to the left of \"view library menu\" on the display to access the library menu. You can navigate to a page within a file by pressing the triangular line select button to the left of \"go to page\" and following the instructions on the display. You can insert a bookmark by pressing the line select button to the left of \"insert bookmark at current page\". You can retrieve a bookmark by pressing the line select button to the left of \"choose from existing bookmarks\". To make system wide changes, including changing the language or Braille code, press the line select button to the left of \"view system menu\" on the display."
+msgstr ""
+"Il s'agit du menu principal. À partir du menu principal, vous pouvez accéder à la bibliothèque, insérer un signet, revenir à un signet précédemment placé dans un fichier ou naviguer jusqu'à une page d'un livre. Vous pouvez sélectionner un élément du menu principal en appuyant sur le bouton triangulaire de sélection de ligne situé à gauche de l'élément de menu sur l'écran.\n"
+"\n"
+"Vous pouvez choisir un nouveau livre en appuyant sur la touche de sélection de ligne située à gauche de \"afficher le menu de la bibliothèque\" sur l'écran pour accéder au menu de la bibliothèque. Vous pouvez naviguer vers une page d'un fichier en appuyant sur la touche de sélection de ligne triangulaire située à gauche de \"aller à la page\" et en suivant les instructions affichées à l'écran. Vous pouvez insérer un signet en appuyant sur la touche de sélection de ligne à gauche de \"insérer un signet à la page actuelle\". Vous pouvez récupérer un signet en appuyant sur la touche de sélection de ligne à gauche de \"choisir parmi les signets existants\". Pour apporter des modifications à l'ensemble du système, y compris le changement de langue ou de code braille, appuyez sur la touche de sélection de ligne à gauche de \"afficher le menu système\" sur l'écran."
+
+#: ui/book/view.py:10
+msgid "go to page"
+msgstr "Aller à la page"
+
+#: ui/book/view.py:13
+msgid "insert bookmark at current page"
+msgstr "insérer un signet à la page actuelle"
+
+#: ui/book/view.py:14
+msgid "choose from existing bookmarks"
+msgstr "choisir parmi les signets existants"
+
+#: ui/book/view.py:16
+msgid "view system menu"
+msgstr "afficher le menu du système"
+
+#: ui/book/view.py:17
+msgid "view library menu"
+msgstr "afficher le menu de la bibliothèque"
+
+#: ui/bookmarks_menu/help.py:7
+msgid ""
+"To navigate to a bookmark within a file press the line select button "
+"immediately to the left of your chosen bookmark. From the bookmark menu you "
+"can also navigate to the beginning of your book by selecting \"start of "
+"book\", or the end of a book by selecting \"end of book\", using the line "
+"select buttons. You can delete a bookmark by pressing and holding the line "
+"select button to the left of the bookmark you wish to delete for three "
+"seconds. You cannot delete the \"start of book\" or \"end of book\" "
+"bookmarks."
+msgstr ""
+"Pour naviguer vers un signet à l'intérieur d'un fichier, appuyez sur le "
+"bouton de sélection de ligne situé immédiatement à gauche du signet choisi. "
+"À partir du menu des signets, vous pouvez également vous rendre au début de "
+"votre livre en sélectionnant \"début du livre\", ou à la fin d'un livre en "
+"sélectionnant \"fin du livre\", à l'aide des boutons de sélection de ligne. "
+"Vous pouvez supprimer un signet en appuyant pendant trois secondes sur la "
+"touche de sélection de ligne située à gauche du signet que vous souhaitez "
+"supprimer. Vous ne pouvez pas supprimer les signets \"début de livre\" ou "
+"\"fin de livre\"."
+
+#. TRANSLATORS: Bookmarks menu title; gets followed by book name
+#: ui/bookmarks_menu/view.py:27
+msgid "bookmarks:"
+msgstr "des signets :"
+
+#: ui/bookmarks_menu/view.py:35
+msgid "start of book"
+msgstr "début du livre"
+
+#: ui/bookmarks_menu/view.py:37
+msgid "end of book"
+msgstr "fin du livre"
+
+#: ui/encoding/view.py:5
+msgid ""
+"You can change the braille encoding by pressing the line select button to "
+"the left of your chosen encoding. The encoding will be used to display BRF "
+"files. "
+msgstr ""
+"Vous pouvez modifier l'encodage braille en appuyant sur le bouton de "
+"sélection de ligne à gauche de l'encodage choisi. L'encodage sera utilisé "
+"pour afficher les fichiers BRF."
+
+#. TRANSLATORS: A menu title, to which the encoding title is appended
+#: ui/encoding/view.py:41
+msgid "encoding:"
+msgstr "encodage :"
+
+#: ui/go_to_page/view.py:6
+msgid ""
+"You can navigate to a page within a file by entering the page number using the line select buttons on the left hand side the display. For example, for page 10 press button 1 followed by button 0. Press the forward button to confirm your selection. Line 3 will refresh to show your selected page. Press the large forward button on the front surface to navigate to your page.\n"
+"\n"
+"If you have entered the wrong page number you can reset your selection by pressing the large back button on the front surface."
+msgstr ""
+"Vous pouvez naviguer jusqu'à une page d'un fichier en entrant le numéro de la page à l'aide des boutons de sélection de ligne situés sur le côté gauche de l'écran. Par exemple, pour la page 10, appuyez sur la touche 1, puis sur la touche 0. Appuyez sur la touche \"avancer\" pour confirmer votre sélection. La ligne 3 s'actualise pour afficher la page sélectionnée. Appuyez sur le grand bouton \"avancer\" de la face avant pour naviguer jusqu'à la page choisie.\n"
+"\n"
+"Si vous avez saisi un mauvais numéro de page, vous pouvez réinitialiser votre sélection en appuyant sur le grand bouton \"retour\" de la face avant."
+
+#: ui/go_to_page/view.py:37
+msgid "enter page number using the side buttons"
+msgstr "entrer le numéro de page à l'aide des boutons latéraux"
+
+#: ui/go_to_page/view.py:62
+msgid "go to page number"
+msgstr "aller au numéro de page"
+
+#: ui/go_to_page/view.py:66
+msgid "please confirm by pressing forward"
+msgstr "veuillez confirmer en appuyant sur la touche avant"
+
+#: ui/go_to_page/view.py:67
+msgid "undo by pressing back"
+msgstr "annuler en appuyant sur la touche retour"
+
+#: ui/go_to_page/view.py:68
+msgid "to go back to book press middle button"
+msgstr "pour revenir au livre, appuyez sur le bouton du milieu"
+
+#: ui/language/view.py:6
+msgid ""
+"You can change the system language or Braille code by pressing the line "
+"select button to the left of your chosen language or code. The language or "
+"code in the contextual help, menus and system text will then change to your "
+"selected language."
+msgstr ""
+"Vous pouvez changer la langue du système ou le code braille en appuyant sur "
+"le bouton de sélection de ligne à gauche de la langue ou du code choisi. La "
+"langue ou le code de l'aide contextuelle, des menus et du texte du système "
+"sera alors modifié en fonction de la langue sélectionnée."
+
+#. TRANSLATORS: A menu title, to which language title is appended
+#: ui/language/view.py:43
+msgid "languages:"
+msgstr "langues :"
+
+#: ui/library/view.py:12
+msgid ""
+"This is the library menu. From this menu you can view and select from the files on the memory stick or SD card. You can choose a file by pressing the line select button to the left of the file name. Canute 360 will then show your chosen file on the display. You can navigate forward and backwards within the library menu using the large buttons labelled \"forward\" and \"back\" on the front panel. You can return to the file you are currently reading by pressing the large central button labelled \"menu\".\n"
+"\n"
+"To load a new file onto your Canute, first turn it off by pressing and then quickly releasing the small button to the right of the power socket on the back panel. Once the \"please wait\" text disappears, remove the memory stick or SD card you are using to store your files. Copy and paste your files, in BRF or PEF format, onto the memory stick or SD card using a computer. Finally, insert the USB stick or SD card into the slot on the side of Canute. Turn your Canute on again using the small button to the right of the power socket on the back panel. Once Canute has started your files will appear in the library menu.\n"
+"\n"
+"For best results you should format your files with forty cells per line and nine lines of Braille per page. The latest version of Duxbury DBT and the free online robo-braille service both have a Canute 360 preset built in for formatting."
+msgstr ""
+"Il s'agit du menu de la bibliothèque. Ce menu permet de visualiser et de sélectionner les fichiers présents sur la clé USB ou la carte SD. Vous pouvez choisir un fichier en appuyant sur le bouton de sélection de ligne à gauche du nom du fichier. Canute 360 affichera alors le fichier choisi sur l'écran. Vous pouvez naviguer vers l'avant et vers l'arrière dans le menu de la bibliothèque en utilisant les gros boutons étiquetés \"avant\" et \"arrière\" sur le panneau avant. Vous pouvez revenir au fichier que vous êtes en train de lire en appuyant sur le gros bouton central \"menu\".\n"
+"\n"
+"Pour charger un nouveau fichier sur votre Canute, éteignez-le d'abord en appuyant sur le petit bouton situé à droite de la prise d'alimentation sur le panneau arrière, puis en le relâchant rapidement. Une fois que le texte \"Veuillez patienter\" disparaît, retirez la clé USB ou la carte SD que vous utilisez pour stocker vos fichiers. Copiez et collez vos fichiers, au format BRF ou PEF, sur la clé USB ou la carte SD à l'aide d'un ordinateur. Enfin, insérez la clé USB ou la carte SD dans la fente située sur le côté de Canute. Rallumez votre Canute en utilisant le petit bouton à droite de la prise d'alimentation sur le panneau arrière. Une fois que Canute a démarré, vos fichiers apparaissent dans le menu de la bibliothèque.\n"
+"\n"
+"Pour de meilleurs résultats, vous devez formater vos fichiers avec quarante cellules par ligne et neuf lignes de braille par page. La dernière version de Duxbury DBT et le service gratuit de robo-braille en ligne ont tous deux un préréglage Canute 360 intégré pour le formatage."
+
+#: ui/library/view.py:56
+msgid "go to book list"
+msgstr "aller à la liste des livres"
+
+#: ui/library/view.py:74
+msgid "LIBRARY menu"
+msgstr "Menu BIBLIOTHÈQUE"
+
+#: ui/library/view.py:84
+msgid "back to directory list"
+msgstr "retour à la liste de l'annuaire"
+
+#: ui/library/view.py:90
+msgid "more directories"
+msgstr "plus de répertoires"
+
+#: ui/system_menu/help.py:6
+msgid ""
+"This is the system menu. From the system menu you can make system wide changes to settings.\n"
+"\n"
+"You can change the language or Braille code by pressing the line select button to the left of select language. Please note this will only change the system language or Braille code, not the language or code of any files in the library."
+msgstr ""
+"Il s'agit du menu système. À partir du menu système, vous pouvez modifier les paramètres à l'échelle du système.\n"
+"\n"
+"Vous pouvez changer la langue ou le code braille en appuyant sur le bouton de sélection de ligne à gauche de sélectionner la langue. Veuillez noter que cette opération ne modifie que la langue ou le code braille du système, et non la langue ou le code des fichiers de la bibliothèque."
+
+#: ui/system_menu/system.py:6
+msgid "release:"
+msgstr "de la libération :"
+
+#: ui/system_menu/system.py:7
+msgid "serial:"
+msgstr "en série :"
+
+#. TRANSLATORS: This message is first line of a two line
+#. message shown in place of the release and serial number
+#. when the Canute 360 is connected to the console
+#: ui/system_menu/system.py:13
+msgid "Unplug from Console for release"
+msgstr "Débrancher la console pour la libérer"
+
+#. TRANSLATORS: This is the second line of the two line
+#. message shown when connected to the console
+#: ui/system_menu/system.py:16
+msgid "and serial numbers"
+msgstr "et numéros de série"
+
+#: ui/system_menu/system.py:29
+msgid "emulated"
+msgstr "émulé"
+
+#: ui/system_menu/view.py:17
+msgid "start console mode"
+msgstr "démarrer le mode console"
+
+#: ui/system_menu/view.py:18
+msgid "shutdown"
+msgstr "arrêt"
+
+#: ui/system_menu/view.py:19
+msgid "choose BRF encoding"
+msgstr "choisir l'encodage BRF"
+
+#: ui/system_menu/view.py:20
+msgid "select language and code"
+msgstr "sélectionner la langue et le code"
+
+#: ui/system_menu/view.py:21
+msgid "backup log to USB stick"
+msgstr "sauvegarde du journal sur une clé USB"
+
+#: ui/system_menu/view.py:22
+msgid "install upgrade from "
+msgstr "installer mettre à niveau à partir de"
+
+#: ui/system_menu/view.py:32
+msgid "system menu"
+msgstr "menu système"
