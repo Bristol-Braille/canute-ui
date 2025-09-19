@@ -28,7 +28,7 @@ translator = deepl.Translator(AUTH_KEY)
 # Only translate non braille translations - 0x2800-0x283F is 6-dot braille
 # or any that have been fuzzy matched by msgmerge
 def should_translate(entry):
-    return 'fuzzy' in entry.flags or not all(0x2800 <= ord(c) <= 0x283f for c in entry.msgstr)
+    return 'fuzzy' in entry.flags or not all(0x2800 <= ord(c) <= 0x283f or c == '\n' for c in entry.msgstr)
 
 # Load the .po files
 src = polib.pofile(args.input)

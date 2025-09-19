@@ -20,7 +20,7 @@ MENU_MSGID = 'Language Name, UEB grade'
 # Only translate non braille translations - 0x2800-0x283F is 6-dot braille
 # or any that have been fuzzy matched by msgmerge
 def should_translate(entry):
-    return 'fuzzy' in entry.flags or not all(0x2800 <= ord(c) <= 0x283f for c in entry.msgstr)
+    return 'fuzzy' in entry.flags or not all(0x2800 <= ord(c) <= 0x283f or c == '\n' for c in entry.msgstr)
 
 dest = polib.pofile(args.output)
 src = polib.pofile(args.input)
@@ -69,9 +69,6 @@ for src_entry in valid_entries:
         wrapped = ''.join(wrapped)
         # convert back to braille spaces
         wrapped = wrapped.replace(' ', '⠀')
-        dest_entry = polib.POEntry(
-            msgid=src_entry.msgid,
-        )
         dest_entry.merge(src_entry)
         dest_entry.msgstr = wrapped
 

@@ -55,7 +55,7 @@ do
     fi
   else
     # update the file in case there are template changes
-    msgmerge --lang="{lang_code}" -U "${transcribed_file}" "${template_file}"
+    msgmerge --lang="${lang_code}" -U --backup=none "${transcribed_file}" "${template_file}"
   fi
 
   # find any non-braille strings and translate and add them to the translation

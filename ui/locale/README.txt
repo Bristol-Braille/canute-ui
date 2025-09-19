@@ -1,3 +1,10 @@
+The `update-language.sh` script aims to find changes and auto translate and
+transcribe them to braille.
+
+    ./update-language.sh en_GB 'EN-GB' ueb1 en-ueb-g1.ctb 'British English, UEB grade 1' ueb2 en-ueb-g2.ctb 'British English, UEB grade 2'
+    ./update-language.sh de_DE DE ueb1 de-g1-detailed.ctb 'Deutsch, UEB grade 1' ueb2 de-g2.ctb 'Deutsch, UEB grade 2'
+    ./update-language.sh fr_FR FR ueb1 fr-bfu-comp6.utb 'Français, UEB niveau 1' ueb2 fr-bfu-g2.ctb 'Français, UEB niveau 2'
+
 Uses babel translation library.  To extract a POT file from the source, use
 (from project root):
 
