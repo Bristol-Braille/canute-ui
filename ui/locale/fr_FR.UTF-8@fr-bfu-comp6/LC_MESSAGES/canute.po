@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-09-18 13:41+0100\n"
-"PO-Revision-Date: 2025-09-19 15:19+0000\n"
+"PO-Revision-Date: 2025-09-19 16:06+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: fr_FR\n"
@@ -28,7 +28,7 @@ msgstr "⠨⠑⠥⠗⠕⠃⠗⠁⠊⠇⠇⠑"
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:58
 msgid "Language Name, UEB grade"
-msgstr "⠨⠋⠗⠁⠝⠯⠁⠊⠎⠂⠀⠨⠨⠥⠑⠃⠀⠝⠊⠧⠑⠁⠥⠀⠠⠡"
+msgstr "⠨⠋⠗⠁⠝⠯⠁⠊⠎⠂⠀⠨⠛⠠⠡"
 
 #: ui/manual.py:34
 msgid ""
