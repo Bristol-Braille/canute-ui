@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-05 14:10+0000\n"
-"PO-Revision-Date: 2024-05-24 17:07+0000\n"
+"POT-Creation-Date: 2025-09-19 15:34+0100\n"
+"PO-Revision-Date: 2025-09-19 15:34+0000\n"
 "Last-Translator: Ulf Beckmann <beckmann@flusoft.de>\n"
 "Language-Team: German (Germany) (https://www.transifex.com/bristol-braille-technology/teams/87456/de_DE/)\n"
 "Language: de_DE\n"
@@ -28,7 +28,7 @@ msgstr "⠣⠗⠕⠃⠗⠁⠊⠟⠑"
 #. language menu. It should always appear in the language it denotes so
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
-#: ui/i18n.py:52
+#: ui/i18n.py:58
 msgid "Language Name, UEB grade"
 msgstr "⠙⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠃"
 
@@ -139,11 +139,12 @@ msgstr "⠉⠙⠑⠀⠄⠀⠃⠥⠹⠿"
 msgid ""
 "You can change the braille encoding by pressing the line select button to "
 "the left of your chosen encoding. The encoding will be used to display BRF "
-"files. "
+"files.\n"
 msgstr ""
-"⠎⠀⠂⠅⠉⠀⠬⠀⠃⠗⠁⠊⠟⠑⠅⠕⠙⠬⠗⠥⠀⠹⠀⠐⠙⠨⠉⠀⠗⠀⠵⠩⠇⠉⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑⠀⠇⠔⠅⠎⠀"
-"⠝⠃⠀⠗⠀⠯⠺⠳⠝⠱⠞⠉⠀⠅⠕⠙⠬⠗⠥⠀⠺⠜⠓⠇⠉⠄⠀⠬⠑⠀⠅⠕⠙⠬⠗⠥⠀⠺⠙⠀⠃⠀⠗⠀⠖⠵⠩⠯⠀"
-"⠧⠀⠃⠗⠋⠀⠙⠁⠞⠩⠉⠀⠯⠝⠵⠞⠄"
+"⠎⠀⠂⠅⠉⠀⠬⠀⠃⠗⠁⠊⠟⠑⠅⠕⠙⠬⠗⠥⠀⠹⠀⠐⠙⠨⠉⠀⠗\n"
+"⠵⠩⠇⠉⠡⠎⠺⠁⠓⠇⠞⠁⠾⠑⠀⠇⠔⠅⠎⠀⠝⠃⠀⠗⠀⠯⠺⠳⠝⠱⠞⠉⠀⠅⠕⠙⠬⠗⠥\n"
+"⠺⠜⠓⠇⠉⠄⠀⠬⠑⠀⠅⠕⠙⠬⠗⠥⠀⠺⠙⠀⠃⠀⠗⠀⠖⠵⠩⠯⠀⠧⠀⠃⠗⠋⠀⠙⠁⠞⠩⠉\n"
+"⠯⠝⠵⠞⠄"
 
 #. TRANSLATORS: A menu title, to which the encoding title is appended
 #: ui/encoding/view.py:41

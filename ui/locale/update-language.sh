@@ -10,19 +10,16 @@ shift
 deepl_code=$1
 shift
 # find the braille tables and names such as:
-#   ueb1 fr-bfu-comp6.utb 'Français, UEB niveau 1'
-#   ueb2 fr-bfu-g2.ctb 'Français, UEB niveau 2'
-#   ueb1 en-ueb-g1.ctb 'British English, UEB grade 1'
-#   ueb2 en-ueb-g2.ctb 'British English, UEB grade 2'
-#   ueb1 de-g1-detailed.ctb 'Deutsch, UEB grade 1'
-#   ueb2 de-g2.ctb 'Deutsch, UEB grade 2'
+#   fr-bfu-comp6.utb 'Français, UEB niveau 1'
+#   fr-bfu-g2.ctb 'Français, UEB niveau 2'
+#   en-ueb-g1.ctb 'British English, UEB grade 1'
+#   en-ueb-g2.ctb 'British English, UEB grade 2'
+#   de-g1-detailed.ctb 'Deutsch, UEB grade 1'
+#   de-g2.ctb 'Deutsch, UEB grade 2'
 # note the name should be pre-translated and is shown in the languages menu
-declare -a codes
 declare -a tables
 declare -a names
 while test $# -gt 0; do
-  codes+=("$1")
-  shift
   tables+=("$1")
   shift
   names+=("$1")
@@ -30,9 +27,9 @@ while test $# -gt 0; do
 done
 
 i=0
-for table_code in "${codes[@]}"
+for table_code in "${tables[@]}"
 do
-  locale="${lang_code}.UTF-8@${table_code}"
+  locale="${lang_code}.UTF-8@${table_code%.*}"
 
   echo "Processing ${locale}"
 
@@ -62,7 +59,7 @@ do
   python3 deepl-translate.py -i "${transcribed_file}" -o "${translation_file}" -l "${deepl_code}"
 
   # use liblouis to transcribe back into original file
-  python3 liblouis-transcribe.py -i "${translation_file}" -o "${transcribed_file}" -t "${tables[$i]}" -n "${names[$i]}"
+  python3 liblouis-transcribe.py -i "${translation_file}" -o "${transcribed_file}" -t "${table_code}" -n "${names[$i]}"
 
   # compile the .mo from the .po
   pybabel compile -f -D canute -d "${locale_dir}" -l "${locale}" -i "${transcribed_file}" -o "${compiled_file}"

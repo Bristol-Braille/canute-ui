@@ -8,9 +8,9 @@ transcribe them to braille.
 
     cd ui/locale
     . ve/bin/activate
-    ./update-language.sh en_GB 'EN-GB' ueb1 en-ueb-g1.ctb 'English, UEB grade 1' ueb2 en-ueb-g2.ctb 'English, UEB grade 2'
-    ./update-language.sh de_DE DE ueb1 de-g1-detailed.ctb 'Deutsch, UEB grade 1' ueb2 de-g2.ctb 'Deutsch, UEB grade 2'
-    ./update-language.sh fr_FR FR ueb1 fr-bfu-comp6.utb 'Français, UEB niveau 1' ueb2 fr-bfu-g2.ctb 'Français, UEB niveau 2'
+    ./update-language.sh en_GB 'EN-GB' en-ueb-g1.ctb 'English, UEB grade 1' en-ueb-g2.ctb 'English, UEB grade 2'
+    ./update-language.sh de_DE DE de-g1-detailed.ctb 'Deutsch, G1' de-g2.ctb 'Deutsch, G2'
+    ./update-language.sh fr_FR FR fr-bfu-comp6.utb 'Français, G1' fr-bfu-g2.ctb 'Français, G2'
 
 (Note the `requirements-translate.txt` file can be used to create a locale
 virtual environment for this - refer to INSTALL.md.)
