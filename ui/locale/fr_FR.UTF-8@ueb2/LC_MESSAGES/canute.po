@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-09-18 13:41+0100\n"
-"PO-Revision-Date: 2025-09-18 13:41+0100\n"
+"PO-Revision-Date: 2025-09-19 15:19+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: fr_FR\n"
@@ -26,7 +26,7 @@ msgstr "⠨⠐⠗⠕⠆⠌⠸⠑"
 #. language menu. It should always appear in the language it denotes so
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
-#: ui/i18n.py:52
+#: ui/i18n.py:58
 msgid "Language Name, UEB grade"
 msgstr "⠨⠡⠂⠯⠌⠎⠂⠀⠨⠨⠥⠑⠃⠀⠝⠊⠧⠑⠅⠀⠠⠣"
 
@@ -173,7 +173,7 @@ msgstr "⠋⠔⠀⠦⠀⠇⠧"
 msgid ""
 "You can change the braille encoding by pressing the line select button to "
 "the left of your chosen encoding. The encoding will be used to display BRF "
-"files. "
+"files.\n"
 msgstr ""
 "⠨⠧⠀⠏⠳⠧⠵⠀⠍⠕⠙⠊⠋⠊⠦⠀⠇⠄⠢⠉⠕⠙⠁⠛⠑⠀⠆⠇⠀⠢⠀⠁⠏⠏⠥⠽⠹⠀⠓\n"
 "⠇⠀⠃⠳⠞⠬⠀⠙⠀⠎⠿⠇⠑⠉⠞⠼⠀⠙⠀⠇⠶⠀⠷⠀⠛⠅⠷⠑⠀⠙⠀⠇⠄⠢⠉⠕⠙⠁⠛⠑\n"

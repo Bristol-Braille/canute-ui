@@ -45,6 +45,10 @@ translated_count = 0
 for i, entry in enumerate(src):
     if entry.msgid and should_translate(entry):
         dest_entry = dest.find(entry.msgid)
+
+        if dest_entry is None and 'fuzzy' in entry.flags:
+            dest_entry = dest.find(entry.previous_msgid)
+
         if dest_entry is None:
             dest_entry = entry
             dest.append(dest_entry)

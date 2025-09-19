@@ -1,23 +1,16 @@
-The `update-language.sh` script aims to find changes and auto translate and
-transcribe them to braille.
-
-    ./update-language.sh en_GB 'EN-GB' ueb1 en-ueb-g1.ctb 'British English, UEB grade 1' ueb2 en-ueb-g2.ctb 'British English, UEB grade 2'
-    ./update-language.sh de_DE DE ueb1 de-g1-detailed.ctb 'Deutsch, UEB grade 1' ueb2 de-g2.ctb 'Deutsch, UEB grade 2'
-    ./update-language.sh fr_FR FR ueb1 fr-bfu-comp6.utb 'Français, UEB niveau 1' ueb2 fr-bfu-g2.ctb 'Français, UEB niveau 2'
-
 Uses babel translation library.  To extract a POT file from the source, use
 (from project root):
 
-pybabel extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
+    pybabel extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
 
-The eventual goal is to maintain PO files on Transifex (we have an account) but
-currently translations are done with `liblouis`, a little automation code, and
-possibly some small manual tweaks.
-
-To compile the resulting POT file into a set of useable MO files, use:
+The `update-language.sh` script aims to find changes and auto translate and
+transcribe them to braille.
 
     cd ui/locale
-    ./autotranslate.py
+    . ve/bin/activate
+    ./update-language.sh en_GB 'EN-GB' ueb1 en-ueb-g1.ctb 'English, UEB grade 1' ueb2 en-ueb-g2.ctb 'English, UEB grade 2'
+    ./update-language.sh de_DE DE ueb1 de-g1-detailed.ctb 'Deutsch, UEB grade 1' ueb2 de-g2.ctb 'Deutsch, UEB grade 2'
+    ./update-language.sh fr_FR FR ueb1 fr-bfu-comp6.utb 'Français, UEB niveau 1' ueb2 fr-bfu-g2.ctb 'Français, UEB niveau 2'
 
 (Note the `requirements-translate.txt` file can be used to create a locale
 virtual environment for this - refer to INSTALL.md.)

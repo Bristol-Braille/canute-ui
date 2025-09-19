@@ -33,7 +33,7 @@ for src_entry in valid_entries:
 
     dest_entry = dest.find(src_entry.msgid)
 
-    if should_translate(dest_entry):
+    if should_translate(dest_entry) or src_entry.msgid == MENU_MSGID:
         # we use double spaces (from \n + \n) as line break indicator
         if src_entry.msgid.find('  ') != -1:
             print('Warning: embedded double-space:\n' + str(src_entry.occurrences))

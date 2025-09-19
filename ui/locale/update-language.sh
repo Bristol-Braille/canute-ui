@@ -55,14 +55,14 @@ do
     fi
   else
     # update the file in case there are template changes
-    msgmerge --lang="${lang_code}" -U --backup=none "${transcribed_file}" "${template_file}"
+    msgmerge --lang="${lang_code}" -U --previous --backup=none "${transcribed_file}" "${template_file}"
   fi
 
   # find any non-braille strings and translate and add them to the translation
   python3 deepl-translate.py -i "${transcribed_file}" -o "${translation_file}" -l "${deepl_code}"
 
   # use liblouis to transcribe back into original file
-  python3 liblouis-transcribe.py -i "${translation_file}" -o "${transcribed_file}" -t "${tables[$ti]}" -n "${names[$i]}"
+  python3 liblouis-transcribe.py -i "${translation_file}" -o "${transcribed_file}" -t "${tables[$i]}" -n "${names[$i]}"
 
   # compile the .mo from the .po
   pybabel compile -f -D canute -d "${locale_dir}" -l "${locale}" -i "${transcribed_file}" -o "${compiled_file}"
