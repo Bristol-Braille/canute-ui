@@ -1,0 +1,276 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-09-19 15:34+0100\n"
+"PO-Revision-Date: 2025-09-22 13:59+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: mn_MN@mn-MN-g1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+#: ui/braille.py:144
+msgid "North American Braille ASCII"
+msgstr "Хойд Америкийн брайль ASCII"
+
+#: ui/braille.py:147
+msgid "Eurobraille"
+msgstr "Евробрайл"
+
+#. TRANSLATORS: This is the title/label used for this language in the
+#. language menu. It should always appear in the language it denotes so
+#. that it remains readable to those who speak only that language.
+#. Addition of a Braille grade marker is appropriate, if possible.
+#: ui/i18n.py:58
+msgid "Language Name, Braille grade"
+msgstr "Монгол, G2"
+
+#: ui/manual.py:34
+msgid ""
+"Canute 360 by Bristol Braille Technology\n"
+"\n"
+"Bristol Braille Technology is a not-for-profit organisation dedicated to serving the Braille reading community.\n"
+"\n"
+"Founded in 2011. Registered in the United Kingdom with the Regulator of Community Interest Companies. Company number 7518101.\n"
+msgstr ""
+"Bristol Braille технологийн Canute 360\n"
+"\n"
+"Bristol Braille Technology нь Брайл үсгийн уншигчдад үйлчлэх зорилготой ашгийн төлөө бус байгууллага юм.\n"
+"\n"
+"2011 онд үүсгэн байгуулагдсан. Нэгдсэн Вант Улс дахь Олон нийтийн ашиг сонирхлын компаниудын зохицуулагчдад бүртгэлтэй. Компанийн дугаар 7518101.\n"
+
+#. TRANSLATORS: The AsciiDoc markup is used to suggest a page break
+#. in this string.
+#: ui/book/help.py:23
+msgid ""
+"With Canute 360 you can read files in Braille. You can move within a file using the three large control buttons on the front panel of Canute. Press the large button to the right of centre on the front panel labelled \"forward\" to move forward one page within this help file.\n"
+"\n"
+"<<<\n"
+"\n"
+"Press the large button to the left of centre, labelled \"back\" to move back one page within a file, similar to turning the pages in a physical book. You can move forwards of backwards five pages at a time by holding down the \"forward\" or \"back\" button. You can access all other Canute features, including the library menu, bookmarks and system settings by pressing the large central button labelled \"menu\" to access the main menu. Press the circular help button (labelled \"H\") at the top left of the display to return to your book."
+msgstr ""
+"Canute 360-ийн тусламжтайгаар та файлуудыг брайл үсгээр унших боломжтой. Та Canute-н урд талын самбар дээрх гурван том хяналтын товчлуурыг ашиглан файл дотор шилжиж болно. Энэ тусламжийн файл дотор нэг хуудсыг урагшлуулахын тулд урд талын самбар дээрх \"урагшаа\" гэсэн шошготой төвийн баруун талд байрлах том товчлуурыг дарна уу.\n"
+"\n"
+"<<<\n"
+"\n"
+"Бодит номын хуудсыг эргүүлэхтэй адил файл доторх нэг хуудсыг буцаахын тулд голын зүүн талд байгаа \"буцах\" гэсэн шошготой том товчлуурыг дарна уу. Та \"урагш\" эсвэл \"буцах\" товчийг удаан дарснаар нэг удаад таван хуудасны урагш хөдөлж болно. Та үндсэн цэс рүү орохын тулд \"цэс\" гэсэн шошготой том төв товчлуурыг дарснаар номын сангийн цэс, хавчуурга, системийн тохиргоо зэрэг бусад бүх Canute функцэд хандах боломжтой. Ном руу буцахын тулд дэлгэцийн зүүн дээд хэсэгт байрлах дугуй хэлбэрийн тусламжийн товчлуурыг (\"H\" гэж тэмдэглэсэн) дарна уу."
+
+#: ui/book/help.py:46
+msgid ""
+"This is the main menu. From the main menu you can access the library, insert a bookmark, return to a bookmark that was previously placed within a file, or navigate to a page within a book. You can select an item from the main menu by pressing the triangular line select button to the left of the menu item on the display.\n"
+"\n"
+"You can choose a new book by pressing the line select button to the left of \"view library menu\" on the display to access the library menu. You can navigate to a page within a file by pressing the triangular line select button to the left of \"go to page\" and following the instructions on the display. You can insert a bookmark by pressing the line select button to the left of \"insert bookmark at current page\". You can retrieve a bookmark by pressing the line select button to the left of \"choose from existing bookmarks\". To make system wide changes, including changing the language or Braille code, press the line select button to the left of \"view system menu\" on the display."
+msgstr ""
+"Энэ бол үндсэн цэс юм. Үндсэн цэснээс та номын санд хандах, хавчуурга оруулах, өмнө нь файл дотор байрлуулсан хавчуурга руу буцах, номын доторх хуудас руу шилжих боломжтой. Дэлгэц дээрх цэсийн зүйлийн зүүн талд байрлах гурвалжин шугам сонгох товчийг дарж үндсэн цэснээс ямар нэг зүйлийг сонгож болно.\n"
+"\n"
+"Та номын сангийн цэс рүү орохын тулд дэлгэц дээрх \"номын сангийн цэсийг харах\"-ын зүүн талд байгаа мөр сонгох товчийг дарж шинэ ном сонгох боломжтой. Та \"хуудас руу очих\" хэсгийн зүүн талд байрлах гурвалжин шугам сонгох товчийг дарж, дэлгэцэн дээрх зааврыг дагаж файл доторх хуудас руу шилжих боломжтой. Та \"Одоогийн хуудсанд хавчуурга оруулах\" хэсгийн зүүн талд байгаа мөр сонгох товчийг дарж хавчуурга оруулах боломжтой. Та \"одоо байгаа хавчуургуудаас сонгох\"-ын зүүн талд байгаа мөр сонгох товчийг дарж хавчуургыг сэргээж болно. Хэл эсвэл брайл кодыг өөрчлөх зэрэг системийн хэмжээнд өөрчлөлт оруулахын тулд дэлгэц дээрх \"системийн цэсийг харах\" хэсгийн зүүн талд байгаа мөр сонгох товчийг дарна уу."
+
+#: ui/book/view.py:10
+msgid "go to page"
+msgstr "хуудас руу оч"
+
+#: ui/book/view.py:13
+msgid "insert bookmark at current page"
+msgstr "одоогийн хуудсан дээр хавчуурга оруулах"
+
+#: ui/book/view.py:14
+msgid "choose from existing bookmarks"
+msgstr "одоо байгаа хавчуургуудаас сонгоно уу"
+
+#: ui/book/view.py:16
+msgid "view system menu"
+msgstr "системийн цэсийг харах"
+
+#: ui/book/view.py:17
+msgid "view library menu"
+msgstr "номын сангийн цэсийг үзэх"
+
+#: ui/bookmarks_menu/help.py:7
+msgid ""
+"To navigate to a bookmark within a file press the line select button "
+"immediately to the left of your chosen bookmark. From the bookmark menu you "
+"can also navigate to the beginning of your book by selecting \"start of "
+"book\", or the end of a book by selecting \"end of book\", using the line "
+"select buttons. You can delete a bookmark by pressing and holding the line "
+"select button to the left of the bookmark you wish to delete for three "
+"seconds. You cannot delete the \"start of book\" or \"end of book\" "
+"bookmarks."
+msgstr ""
+"Файл доторх хавчуурга руу шилжихийн тулд сонгосон хавчуурганыхаа зүүн талд "
+"байгаа мөр сонгох товчийг дарна уу. Хавчуурга цэснээс та \"номын эхлэл\"-ийг"
+" сонгон номынхоо эхэнд эсвэл \"номын төгсгөл\"-ийг сонгон номын төгсгөлд мөр"
+" сонгох товчлуурыг ашиглан шилжиж болно. Та устгахыг хүссэн хавчуурганыхаа "
+"зүүн талд байрлах мөр сонгох товчийг гурван секундын турш удаан дарснаар "
+"хавчуургыг устгаж болно. Та \"номын эхлэл\" эсвэл \"номын төгсгөл\" "
+"хавчуургыг устгах боломжгүй."
+
+#. TRANSLATORS: Bookmarks menu title; gets followed by book name
+#: ui/bookmarks_menu/view.py:27
+msgid "bookmarks:"
+msgstr "хавчуурга:"
+
+#: ui/bookmarks_menu/view.py:35
+msgid "start of book"
+msgstr "номын эхлэл"
+
+#: ui/bookmarks_menu/view.py:37
+msgid "end of book"
+msgstr "номын төгсгөл"
+
+#: ui/encoding/view.py:5
+msgid ""
+"You can change the braille encoding by pressing the line select button to "
+"the left of your chosen encoding. The encoding will be used to display BRF "
+"files.\n"
+msgstr ""
+"Та өөрийн сонгосон кодчилолын зүүн талд байгаа мөр сонгох товчийг дарж брайл"
+" кодчилолыг өөрчилж болно. BRF файлуудыг харуулахын тулд кодчилолыг "
+"ашиглана."
+
+#. TRANSLATORS: A menu title, to which the encoding title is appended
+#: ui/encoding/view.py:41
+msgid "encoding:"
+msgstr "кодчилол:"
+
+#: ui/go_to_page/view.py:6
+msgid ""
+"You can navigate to a page within a file by entering the page number using the line select buttons on the left hand side the display. For example, for page 10 press button 1 followed by button 0. Press the forward button to confirm your selection. Line 3 will refresh to show your selected page. Press the large forward button on the front surface to navigate to your page.\n"
+"\n"
+"If you have entered the wrong page number you can reset your selection by pressing the large back button on the front surface."
+msgstr ""
+"Дэлгэцийн зүүн талд байрлах мөр сонгох товчлуурыг ашиглан хуудасны дугаарыг оруулснаар файл доторх хуудас руу шилжих боломжтой. Жишээлбэл, 10-р хуудасны хувьд 1 товчийг дараад 0 товчийг дарна уу. Сонголтоо баталгаажуулахын тулд урагшлах товчийг дарна уу. Таны сонгосон хуудсыг харуулахын тулд 3-р мөрөнд шинэчлэгдэнэ. Өөрийн хуудас руу шилжихийн тулд урд талын гадаргуу дээрх том урагшлах товчийг дарна уу.\n"
+"\n"
+"Хэрэв та хуудасны дугаарыг буруу оруулсан бол урд талын арын том товчлуур дээр дарж сонголтоо дахин тохируулж болно."
+
+#: ui/go_to_page/view.py:37
+msgid "enter page number using the side buttons"
+msgstr "хажуугийн товчлууруудыг ашиглан хуудасны дугаарыг оруулна уу"
+
+#: ui/go_to_page/view.py:62
+msgid "go to page number"
+msgstr "хуудасны дугаар руу оч"
+
+#: ui/go_to_page/view.py:66
+msgid "please confirm by pressing forward"
+msgstr "урагш дарж баталгаажуулна уу"
+
+#: ui/go_to_page/view.py:67
+msgid "undo by pressing back"
+msgstr "буцааж дарж буцаах"
+
+#: ui/go_to_page/view.py:68
+msgid "to go back to book press middle button"
+msgstr "Ном руу буцахын тулд дунд товчийг дарна уу"
+
+#: ui/language/view.py:6
+msgid ""
+"You can change the system language or Braille code by pressing the line "
+"select button to the left of your chosen language or code. The language or "
+"code in the contextual help, menus and system text will then change to your "
+"selected language."
+msgstr ""
+"Та өөрийн сонгосон хэл эсвэл кодын зүүн талд байгаа мөр сонгох товчийг дарж "
+"системийн хэл эсвэл Брайл кодыг өөрчлөх боломжтой. Контекст тусламж, цэс "
+"болон системийн текст дэх хэл эсвэл код таны сонгосон хэл рүү өөрчлөгдөнө."
+
+#. TRANSLATORS: A menu title, to which language title is appended
+#: ui/language/view.py:43
+msgid "languages:"
+msgstr "хэлүүд:"
+
+#: ui/library/view.py:12
+msgid ""
+"This is the library menu. From this menu you can view and select from the files on the memory stick or SD card. You can choose a file by pressing the line select button to the left of the file name. Canute 360 will then show your chosen file on the display. You can navigate forward and backwards within the library menu using the large buttons labelled \"forward\" and \"back\" on the front panel. You can return to the file you are currently reading by pressing the large central button labelled \"menu\".\n"
+"\n"
+"To load a new file onto your Canute, first turn it off by pressing and then quickly releasing the small button to the right of the power socket on the back panel. Once the \"please wait\" text disappears, remove the memory stick or SD card you are using to store your files. Copy and paste your files, in BRF or PEF format, onto the memory stick or SD card using a computer. Finally, insert the USB stick or SD card into the slot on the side of Canute. Turn your Canute on again using the small button to the right of the power socket on the back panel. Once Canute has started your files will appear in the library menu.\n"
+"\n"
+"For best results you should format your files with forty cells per line and nine lines of Braille per page. The latest version of Duxbury DBT and the free online robo-braille service both have a Canute 360 preset built in for formatting."
+msgstr ""
+"Энэ бол номын сангийн цэс юм. Энэ цэснээс та санах ойн зөөгч эсвэл SD карт дээрх файлуудыг үзэж, сонгох боломжтой. Та файлын нэрний зүүн талд байгаа мөр сонгох товчийг дарж файлыг сонгож болно. Canute 360 ​​дэлгэц дээр таны сонгосон файлыг харуулах болно. Та урд самбар дээрх \"урагш\" болон \"буцах\" гэсэн том товчлууруудыг ашиглан номын сангийн цэс дотор урагш, хойшоо шилжих боломжтой. Та \"цэс\" гэсэн шошготой том төв товчлуурыг дарж одоо уншиж байгаа файл руугаа буцаж болно.\n"
+"\n"
+"Canute дээрээ шинэ файл ачаалахын тулд эхлээд арын самбар дээрх цахилгааны залгуурын баруун талд байрлах жижиг товчлуурыг дараад хурдан суллаж унтраа. \"Хүлээж байгаарай\" гэсэн бичвэр алга болмогц файлуудаа хадгалахад ашиглаж буй санах ойн зөөгч эсвэл SD картыг салгана уу. BRF эсвэл PEF форматтай файлуудаа компьютер ашиглан санах ойн карт эсвэл SD карт руу хуулж буулгана уу. Эцэст нь USB зөөгч эсвэл SD картыг Canute-ийн хажуу талын үүрэнд оруулна уу. Арын самбар дээрх цахилгааны залгуурын баруун талд байгаа жижиг товчлуурыг ашиглан Canute-аа дахин асаана уу. Canute-г ажиллуулсны дараа таны файлууд номын сангийн цэсэнд гарч ирнэ.\n"
+"\n"
+"Хамгийн сайн үр дүнд хүрэхийн тулд та файлаа нэг мөрөнд дөчин нүд, хуудсанд есөн мөр Брайл үсгээр форматлах хэрэгтэй. Duxbury DBT-ийн хамгийн сүүлийн үеийн хувилбар болон үнэгүй онлайн робо-брайл үйлчилгээ нь хоёуланд нь форматлах зориулалттай Canute 360 ​​урьдчилан тохируулсан байдаг."
+
+#: ui/library/view.py:56
+msgid "go to book list"
+msgstr "номын жагсаалт руу оч"
+
+#: ui/library/view.py:74
+msgid "LIBRARY menu"
+msgstr "НОМЫН САН цэс"
+
+#: ui/library/view.py:84
+msgid "back to directory list"
+msgstr "лавлах жагсаалт руу буцах"
+
+#: ui/library/view.py:90
+msgid "more directories"
+msgstr "илүү олон лавлах"
+
+#: ui/system_menu/help.py:6
+msgid ""
+"This is the system menu. From the system menu you can make system wide changes to settings.\n"
+"\n"
+"You can change the language or Braille code by pressing the line select button to the left of select language. Please note this will only change the system language or Braille code, not the language or code of any files in the library."
+msgstr ""
+"Энэ бол системийн цэс юм. Системийн цэснээс та тохиргоонд системийн хэмжээнд өөрчлөлт хийх боломжтой.\n"
+"\n"
+"Сонгосон хэлний зүүн талд байгаа мөр сонгох товчийг дарж хэл эсвэл брайл кодыг өөрчлөх боломжтой. Энэ нь номын сангийн аль нэг файлын хэл эсвэл кодыг өөрчлөхгүй, зөвхөн системийн хэл эсвэл Брайл кодыг өөрчлөх болно гэдгийг анхаарна уу."
+
+#: ui/system_menu/system.py:6
+msgid "release:"
+msgstr "суллах:"
+
+#: ui/system_menu/system.py:7
+msgid "serial:"
+msgstr "цуврал:"
+
+#. TRANSLATORS: This message is first line of a two line
+#. message shown in place of the release and serial number
+#. when the Canute 360 is connected to the console
+#: ui/system_menu/system.py:13
+msgid "Unplug from Console for release"
+msgstr "Гарахын тулд консолоос салга"
+
+#. TRANSLATORS: This is the second line of the two line
+#. message shown when connected to the console
+#: ui/system_menu/system.py:16
+msgid "and serial numbers"
+msgstr "болон серийн дугаарууд"
+
+#: ui/system_menu/system.py:29
+msgid "emulated"
+msgstr "дуурайсан"
+
+#: ui/system_menu/view.py:17
+msgid "start console mode"
+msgstr "консол горимыг эхлүүлэх"
+
+#: ui/system_menu/view.py:18
+msgid "shutdown"
+msgstr "унтрах"
+
+#: ui/system_menu/view.py:19
+msgid "choose BRF encoding"
+msgstr "BRF кодчилолыг сонгоно уу"
+
+#: ui/system_menu/view.py:20
+msgid "select language and code"
+msgstr "хэл болон кодыг сонгоно уу"
+
+#: ui/system_menu/view.py:21
+msgid "backup log to USB stick"
+msgstr "логыг USB зөөгч рүү нөөцлөх"
+
+#: ui/system_menu/view.py:22
+msgid "install upgrade from "
+msgstr "-аас шинэчлэлтийг суулгах"
+
+#: ui/system_menu/view.py:32
+msgid "system menu"
+msgstr "системийн цэс"
