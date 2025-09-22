@@ -25,28 +25,33 @@ The `update-language.sh` script has the following parameters:
 
 For each locale the script will:
 
-   1. create or update the locale's LC_MESSAGES/canute.po with strings
-      from the common template canute.pot file
-   2. create or update the locale's LC_MESSAGES/canute_translated_<language-code>.po
-      with translations of any new/changed English strings in the canute.po
-      using the DeepL translation API
-   3. transcribe these new or changed translations back into the canute.po
+   1. create or update the locale's `LC_MESSAGES/canute.po` with strings
+      from the common template `canute.pot` file
+   2. create or update the locale's
+      `LC_MESSAGES/canute_translated_<language-code>.po` with translations of
+      any new/changed English strings in the canute.po using the DeepL
+      translation API
+   3. transcribe these new or changed translations back into the `canute.po`
       file as unicode Braille using the liblouis conversion table
-   4. compile these files into the canute.po which is used by the application
+   4. compile these files into the `canute.po` which is used by the application
 
 Note that this process only:
 
-   * adds translations when there is no braille transcription in the canute.po
-     or it is marked with a `#, fuzzy` tag
+   * adds translations when there is no braille transcription in the
+     `canute.po` or it is marked with a `#, fuzzy` tag
    * only transcribes the translation back when there is no braille in the
-     canute.po or it is marked with a `#, fuzzy tag`
+     `canute.po` or it is marked with a `#, fuzzy` tag
 
 The goal here is to allow manual tweaks to either the translation or the
 transcribed files - and for these not to be overwritten.
 
-Sometimes the autotranscribed PO needs manual tweaks, like adjusting inter-paragraph
-spacing so that paragraphs break across pages in sensible ways, and removing
-formatting hints like AsciiDoc '<<<'.
+If updating a translation manually in the `canute_translated` file, then make
+sure to delete the `msgstr` in the `canute.po` file to make sure it gets
+transcribed.
+
+Sometimes the autotranscribed PO needs manual tweaks, like adjusting
+inter-paragraph spacing so that paragraphs break across pages in sensible ways,
+and removing formatting hints like AsciiDoc '<<<'.
 
 If you make any such tweaks to an autotranslated PO, you must then separately
 remake the corresponding MO, by re-running the update script.

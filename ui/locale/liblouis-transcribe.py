@@ -13,14 +13,16 @@ parser.add_argument("-i", "--input", required=True, help="Path to the input lang
 parser.add_argument("-o", "--output", required=True, help="Path to the output braille .po file")
 parser.add_argument("-t", "--table", required=True, help="Target braille table")
 parser.add_argument("-n", "--name", required=True, help="Language and table name to use in menu")
+parser.add_argument("-f", "--force", action='store_true', help="Force transcription of all translations")
 args = parser.parse_args()
 
 MENU_MSGID = 'Language Name, Braille grade'
 
-# Only translate non braille translations - 0x2800-0x283F is 6-dot braille
-# or any that have been fuzzy matched by msgmerge
+# Only translate non-empty, non braille translations - 0x2800-0x283F is
+# 6-dot braille unicdoe - or any that have been fuzzy matched by msgmerge
 def should_translate(entry):
-    return 'fuzzy' in entry.flags or not all(0x2800 <= ord(c) <= 0x283f or c == '\n' for c in entry.msgstr)
+    return 'fuzzy' in entry.flags or len(entry.msgstr) == 0 or \
+        not all(0x2800 <= ord(c) <= 0x283f or c == '\n' for c in entry.msgstr)
 
 dest = polib.pofile(args.output)
 src = polib.pofile(args.input)
@@ -33,7 +35,7 @@ for src_entry in valid_entries:
 
     dest_entry = dest.find(src_entry.msgid)
 
-    if should_translate(dest_entry) or src_entry.msgid == MENU_MSGID:
+    if args.force or should_translate(dest_entry) or src_entry.msgid == MENU_MSGID:
         # we use double spaces (from \n + \n) as line break indicator
         if src_entry.msgid.find('  ') != -1:
             print('Warning: embedded double-space:\n' + str(src_entry.occurrences))
