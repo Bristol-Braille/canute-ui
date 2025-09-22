@@ -27,7 +27,7 @@ msgstr "⠠⠑⠥⠗⠕⠃⠗⠁⠊⠇⠇⠑"
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:58
-msgid "Language Name, UEB grade"
+msgid "Language Name, Braille grade"
 msgstr "⠠⠑⠝⠛⠇⠊⠎⠓⠂⠀⠠⠠⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠁"
 
 #: ui/manual.py:34

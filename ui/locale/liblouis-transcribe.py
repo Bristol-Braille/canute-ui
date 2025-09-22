@@ -15,7 +15,7 @@ parser.add_argument("-t", "--table", required=True, help="Target braille table")
 parser.add_argument("-n", "--name", required=True, help="Language and table name to use in menu")
 args = parser.parse_args()
 
-MENU_MSGID = 'Language Name, UEB grade'
+MENU_MSGID = 'Language Name, Braille grade'
 
 # Only translate non braille translations - 0x2800-0x283F is 6-dot braille
 # or any that have been fuzzy matched by msgmerge
@@ -70,15 +70,17 @@ for src_entry in valid_entries:
         # convert back to braille spaces
         wrapped = wrapped.replace(' ', '⠀')
         dest_entry.merge(src_entry)
+        transcription_changed = dest_entry.msgstr != wrapped
         dest_entry.msgstr = wrapped
 
         if 'fuzzy' in dest_entry.flags and 'fuzzy' not in src_entry.flags:
             dest_entry.flags.remove('fuzzy')
 
-        transcribed_count += 1
+        if transcription_changed:
+            transcribed_count += 1
 
 if transcribed_count > 0:
     now = datetime.now(timezone.utc).strftime('%F %H:%M%z')
     dest.metadata['PO-Revision-Date'] = now
-
-dest.save(args.output)
+    dest.save(args.output)
+    print('\nTranscription completed.')

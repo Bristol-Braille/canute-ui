@@ -55,7 +55,7 @@ def _(x): return x
 # language menu. It should always appear in the language it denotes so
 # that it remains readable to those who speak only that language.
 # Addition of a Braille grade marker is appropriate, if possible.
-TRANSLATION_LANGUAGE_TITLE = _('Language Name, UEB grade')
+TRANSLATION_LANGUAGE_TITLE = _('Language Name, Braille grade')
 
 # remove the dummy _ definition ready to install the real translator
 del _
