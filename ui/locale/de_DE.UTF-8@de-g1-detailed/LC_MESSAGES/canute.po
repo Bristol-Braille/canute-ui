@@ -327,8 +327,8 @@ msgid "backup log to USB stick"
 msgstr "⠏⠗⠕⠞⠕⠅⠕⠇⠇⠀⠡⠋⠀⠥⠎⠃⠤⠾⠊⠉⠅⠀⠎⠊⠹⠑⠗⠝"
 
 #: ui/system_menu/view.py:22
-msgid "install upgrade from "
-msgstr "⠊⠝⠾⠁⠇⠇⠬⠗⠑⠀⠩⠝⠀⠥⠏⠙⠁⠞⠑⠀⠧⠕⠝⠀"
+msgid "install upgrade from"
+msgstr "⠊⠝⠾⠁⠇⠇⠬⠗⠑⠀⠩⠝⠀⠥⠏⠙⠁⠞⠑⠀⠧⠕⠝"
 
 #: ui/system_menu/view.py:32
 msgid "system menu"

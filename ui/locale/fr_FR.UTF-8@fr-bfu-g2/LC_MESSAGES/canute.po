@@ -7,12 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-05 14:10+0000\n"
-"PO-Revision-Date: 2025-01-10 GMT\n"
-"Last-Translator: Ed Rogers via DeepL Pro <ed.rogers@bristolbraille.org>\n"
+"POT-Creation-Date: 2025-09-18 13:41+0100\n"
+"PO-Revision-Date: 2025-09-23 10:07+0000\n"
+"Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: fr_FR\n"
-"Braille-Code: unicode.dis,fr-bfu-g2.ctb via LibLouis\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,7 +32,7 @@ msgstr "⠨⠐⠗⠕⠆⠇"
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:58
 msgid "Language Name, Braille Grade"
-msgstr "⠨⠆⠇⠀⠒⠴⠁⠉⠞⠿⠀⠢⠀⠡⠂⠯⠌⠎"
+msgstr "⠨⠡⠂⠯⠌⠎⠂⠀⠰⠨⠛⠠⠣"
 
 #: ui/manual.py:34
 msgid ""
@@ -216,8 +215,7 @@ msgstr ""
 
 #: ui/go_to_page/view.py:37
 msgid "enter page number using the side buttons"
-msgstr "⠑⠝⠴⠦⠀⠇⠀⠝⠥⠍⠿⠗⠕⠀⠙⠀⠏⠁⠛⠑⠀⠷⠀⠇⠄⠌⠙⠑⠀⠙⠎⠀⠃⠳⠞⠬⠎
-⠇⠁⠞⠿⠗⠅⠭"
+msgstr "⠑⠝⠴⠦⠀⠇⠀⠝⠥⠍⠿⠗⠕⠀⠙⠀⠏⠁⠛⠑⠀⠷⠀⠇⠄⠌⠙⠑⠀⠙⠎⠀⠃⠳⠞⠬⠎⠀⠇⠁⠞⠿⠗⠅⠭"
 
 #: ui/go_to_page/view.py:62
 msgid "go to page number"
@@ -379,7 +377,7 @@ msgid "backup log to USB stick"
 msgstr "⠎⠅⠧⠑⠛⠙⠀⠦⠀⠚⠗⠇⠀⠓⠀⠥⠝⠀⠩⠿⠀⠨⠨⠥⠎⠃"
 
 #: ui/system_menu/view.py:22
-msgid "install upgrade from "
+msgid "install upgrade from"
 msgstr "⠔⠎⠞⠁⠸⠦⠀⠍⠴⠀⠷⠀⠝⠊⠧⠑⠅⠀⠷⠀⠏⠈⠞⠊⠗⠀⠙"
 
 #: ui/system_menu/view.py:32

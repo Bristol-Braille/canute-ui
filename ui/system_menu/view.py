@@ -19,7 +19,7 @@ async def render(width, height, state):
         _('choose BRF encoding'),
         _('select language and code'),
         _('backup log to USB stick'),
-        _('install upgrade from ') + alphas_to_unicodes(upgrade.source_name) if upgrade.available else '',
+        _('install upgrade from') + alphas_to_unicodes(' ' + upgrade.source_name) if upgrade.available else '',
         release,
         serial,
     )))

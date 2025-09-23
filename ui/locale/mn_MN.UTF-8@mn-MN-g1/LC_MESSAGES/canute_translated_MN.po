@@ -268,7 +268,7 @@ msgid "backup log to USB stick"
 msgstr "логыг USB зөөгч рүү нөөцлөх"
 
 #: ui/system_menu/view.py:22
-msgid "install upgrade from "
+msgid "install upgrade from"
 msgstr "-аас шинэчлэлтийг суулгах"
 
 #: ui/system_menu/view.py:32

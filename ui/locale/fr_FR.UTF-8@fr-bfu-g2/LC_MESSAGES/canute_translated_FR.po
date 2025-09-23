@@ -276,7 +276,7 @@ msgid "backup log to USB stick"
 msgstr "sauvegarde du journal sur une clé USB"
 
 #: ui/system_menu/view.py:22
-msgid "install upgrade from "
+msgid "install upgrade from"
 msgstr "installer mettre à niveau à partir de"
 
 #: ui/system_menu/view.py:32
