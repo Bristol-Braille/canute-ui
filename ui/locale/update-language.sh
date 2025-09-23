@@ -34,7 +34,8 @@ done
 i=0
 for table_code in "${tables[@]}"
 do
-  locale="${lang_code}.UTF-8@${table_code%.*}"
+  lower_table_noext=$(echo "${table_code%.*}" | tr '[:upper:]' '[:lower:]')
+  locale="${lang_code}.UTF-8@${lower_table_noext}"
 
   echo "Processing ${locale}"
 
