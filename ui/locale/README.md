@@ -140,7 +140,9 @@ ensure that all new translations are transcribed into Braille in the
 ./update-language.sh -f <locale name> <language code> <liblouis table> '<local name, grade 1>' <liblouis table> '<local name, grade 2>'
 ```
 
-Check the changes using `git diff` or similar and commit them.
+Check the changes using `git diff` or similar and commit them.  Watch for
+any tweaked Braille transcriptions (see below) as these may be overwritten
+when using the `-f` flag.
 
 
 ### Tweak a Braille Transcription
@@ -154,6 +156,8 @@ Run the `update-language.sh` script (without the `-f`) to compile a new
 As long as the new Braille content uses the unicode character set - including
 the Braille space character '⠀' - then it will not get updated in future runs
 unless the `-f` flag is used.
+
+Suggestion: add a comment to each transcription that has been tweaked.
 
 
 ### Make Translations for a Code Change
@@ -174,3 +178,14 @@ committing the changes.  In particular, it is important to watch out for
 fuzzy matched translations (which have changed only slightly) to ensure they
 are still accurate.  The `#, fuzzy` comments, along with the original 'before'
 msgid may be removed once checked and committed.
+
+## More Details
+
+The translation flow is:
+
+   * from gettext `_(...)` functions in the python code
+   * -> `canute.pot` - template (English)
+   * -> language specific `canute.po` (new items in English, old in Braille)
+   * -> `canute_translated_.po` (just new items in target language)
+   * -> language specific `canute.po` (new items updated with target language and Braille table)
+   * -> `canute.mo` (compiled translation pack)
