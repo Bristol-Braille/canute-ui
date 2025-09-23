@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-19 15:34+0100\n"
+"POT-Creation-Date: 2025-09-23 09:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:58
-msgid "Language Name, Braille grade"
+msgid "Language Name, Braille Grade"
 msgstr ""
 
 #: ui/manual.py:34

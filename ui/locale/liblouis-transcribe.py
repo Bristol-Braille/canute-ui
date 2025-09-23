@@ -16,7 +16,7 @@ parser.add_argument("-n", "--name", required=True, help="Language and table name
 parser.add_argument("-f", "--force", action='store_true', help="Force transcription of all translations")
 args = parser.parse_args()
 
-MENU_MSGID = 'Language Name, Braille grade'
+MENU_MSGID = 'Language Name, Braille Grade'
 
 # Only translate non-empty, non braille translations - 0x2800-0x283F is
 # 6-dot braille unicdoe - or any that have been fuzzy matched by msgmerge

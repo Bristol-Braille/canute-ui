@@ -31,7 +31,7 @@ msgstr "Eurobraille"
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:58
-msgid "Language Name, Braille grade"
+msgid "Language Name, Braille Grade"
 msgstr "Nom de la langue, grade UEB"
 
 #: ui/manual.py:34

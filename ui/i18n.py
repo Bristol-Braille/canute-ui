@@ -55,7 +55,9 @@ def _(x): return x
 # language menu. It should always appear in the language it denotes so
 # that it remains readable to those who speak only that language.
 # Addition of a Braille grade marker is appropriate, if possible.
-TRANSLATION_LANGUAGE_TITLE = _('Language Name, Braille grade')
+TRANSLATION_LANGUAGE_TITLE = _('Language Name, Braille Grade')
+# Kept for backwards compaitibility with external translations
+OLD_TRANSLATION_LANGUAGE_TITLE = 'Language Name, UEB grade'
 
 # remove the dummy _ definition ready to install the real translator
 del _
@@ -85,8 +87,10 @@ def available_languages():
         if translation:
             title = translation.gettext(TRANSLATION_LANGUAGE_TITLE)
             if title == TRANSLATION_LANGUAGE_TITLE:
-                title = brailleify(lang)
-                log.warning(f"language file for {lang} missing '{TRANSLATION_LANGUAGE_TITLE}' title string")
+                title = translation.gettext(OLD_TRANSLATION_LANGUAGE_TITLE)
+                if title == OLD_TRANSLATION_LANGUAGE_TITLE:
+                    title = brailleify(lang)
+                    log.warning(f"language file for {lang} missing '{TRANSLATION_LANGUAGE_TITLE}' title string")
             else:
                 log.info(f"found language {lang} entitled {title}")
             menu[lang] = title
