@@ -5,7 +5,7 @@ def render_help(width, height):
     para = _('''\
 You can change the braille encoding by pressing the \
 line select button to the left of your chosen encoding. \
-The encoding will be used to display BRF files. \
+The encoding will be used to display BRF files.
 ''')
 
     for line in para.split('\n'):
