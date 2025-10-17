@@ -8,7 +8,7 @@ install:
   - wget https://github.com/Bristol-Braille/canute-ui-rust/releases/latest/download/libbookindex.so
 
 script:
-  - LD_LIBRARY_PATH=. ./test
+  - LD_LIBRARY_PATH=lib:lib64 ./test
   - ./lint
   - mkdir ~/canute-media && cp -r books ~/canute-media/sd-card && cp config.rc.travis config.rc
-  - LD_LIBRARY_PATH=. ./canute_ui --fuzz 550
+  - LD_LIBRARY_PATH=lib:lib64 ./canute_ui --fuzz 550
