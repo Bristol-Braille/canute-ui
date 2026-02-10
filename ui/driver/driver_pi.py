@@ -80,6 +80,7 @@ class Pi(Driver):
                 # without setting dsrdtr and rtscts to True (but port is open)
                 log.warn('error opening serial port %s, ignoring', e)
             serial_port.flush()
+            serial_port.reset_input_buffer()
             self.HDLC = simple_hdlc.HDLC(serial_port)
             return serial_port
         except IOError as e:
