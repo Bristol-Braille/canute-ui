@@ -231,7 +231,7 @@ class Pi(Driver):
         if len(message) < 2:
             log.warning('unexpected rx data length %d' % len(message))
             raise IOError('Unexpected data length')
-        data = struct.unpack('3b', message)
+        data = struct.unpack('3B', message)
         if data[0] != expected_cmd:
             log.warning('unexpected rx command %d, expecting %d' %
                         (data[0], expected_cmd))
