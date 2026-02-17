@@ -108,16 +108,20 @@ class Library:
         """
         dirs = []
         files = []
-        for entry in os.scandir(os.path.join(self.media_dir, root.relpath)):
-            if entry.is_dir(follow_symlinks=False) and \
-                    entry.name[0] != '.' and \
-                    entry.name != 'RECYCLE' and \
-                    entry.name != '$Recycle':
-                dirs.append(entry.name)
-            elif entry.is_file():
-                ext = os.path.splitext(entry.name)[1].lower()
-                if entry.name[0] != '.' and ext[1:] in self.file_exts:
-                    files.append(entry.name)
+        try:
+            for entry in os.scandir(os.path.join(self.media_dir, root.relpath)):
+                if entry.is_dir(follow_symlinks=False) and \
+                        entry.name[0] != '.' and \
+                        entry.name != 'RECYCLE' and \
+                        entry.name != '$Recycle':
+                    dirs.append(entry.name)
+                elif entry.is_file():
+                    ext = os.path.splitext(entry.name)[1].lower()
+                    if entry.name[0] != '.' and ext[1:] in self.file_exts:
+                        files.append(entry.name)
+        except PermissionError:
+            # don't have permission to read this directory
+            pass
 
         dirs.sort(key=natural_keys)
         root.dirs = [Directory(dir, root) for dir in dirs]
