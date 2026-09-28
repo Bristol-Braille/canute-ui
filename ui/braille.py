@@ -135,29 +135,97 @@ def pin_num_to_unicode(pin_num):
     """
     return chr(pin_num + UNICODE_BRAILLE_BASE)
 
+
 # define _ as the identity function so that gettext picks up the msgids
 # but we won't actually translate until later (see encoding.view)
 def _(x): return x
+
+
 Encoding = namedtuple('BuiltinEnc', ['name', 'title', 'mapping'])
 encodings = [
     # mapping from http://en.wikipedia.org/wiki/Braille_ASCII#Braille_ASCII_values
     Encoding(name='braille-ascii', title=_('North American Braille ASCII'),
              mapping=' A1B\'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)='),
     # see http://www.braille.ch/brlchr-e.htm
-    Encoding(name='euro-braille', title=_('Eurobraille'),
+    Encoding(name='euro-braille', title=_('EuroBraille DE'),
              mapping=' A,B.K;L"CIF\\MSP!E:H*O+R>DJG@NTQ\'1?2-U:V$3960X^&<5/8)Z=[_4W7#Y]%')
 ]
 del _
-BUILTIN_ENCODINGS = OrderedDict([
+DEFAULT_ENCODING = 'braille-ascii'
+
+ENCODING_ALIASES = {
+    'eurobraille': 'euro-braille',
+    'eurobraille de': 'euro-braille',
+    'euro-braille-de': 'euro-braille',
+    'eurobraille-de': 'euro-braille',
+    'north american braille ascii': 'braille-ascii',
+    'north-american-braille-ascii': 'braille-ascii',
+}
+
+
+def resolve_encoding(encoding):
+    if not encoding or not isinstance(encoding, str):
+        return DEFAULT_ENCODING
+    for key in BUILTIN_ENCODINGS.keys():
+        if encoding == key:
+            return key
+    normalized = encoding.strip().lower()
+    for key in BUILTIN_ENCODINGS.keys():
+        if normalized == key:
+            return key
+    if normalized in ENCODING_ALIASES:
+        return ENCODING_ALIASES[normalized]
+    for key, enc in BUILTIN_ENCODINGS.items():
+        if enc.title.strip().lower() == normalized:
+            return key
+    return DEFAULT_ENCODING
+
+
+class EncodingsDict(OrderedDict):
+    def _resolve_key(self, key):
+        if super().__contains__(key):
+            return key
+        if isinstance(key, str):
+            normalized = key.strip().lower()
+            if super().__contains__(normalized):
+                return normalized
+            if normalized in ENCODING_ALIASES:
+                alias = ENCODING_ALIASES[normalized]
+                if super().__contains__(alias):
+                    return alias
+            for k, enc in self.items():
+                if enc.title.strip().lower() == normalized:
+                    return k
+        return None
+
+    def __contains__(self, key):
+        return self._resolve_key(key) is not None
+
+    def __getitem__(self, key):
+        resolved = self._resolve_key(key)
+        if resolved is not None:
+            return super().__getitem__(resolved)
+        return super().__getitem__(key)
+
+    def get(self, key, default=None):
+        resolved = self._resolve_key(key)
+        if resolved is not None:
+            return super().__getitem__(resolved)
+        return default
+
+
+BUILTIN_ENCODINGS = EncodingsDict([
     (enc.name, enc) for enc in encodings
 ])
-DEFAULT_ENCODING = 'braille-ascii'
 
 mapping = BUILTIN_ENCODINGS[DEFAULT_ENCODING].mapping
 
+
 def set_encoding(encoding):
     global mapping
-    mapping = BUILTIN_ENCODINGS[encoding].mapping
+    key = resolve_encoding(encoding)
+    mapping = BUILTIN_ENCODINGS[key].mapping
+    return key
 
 
 def pin_num_to_alpha(numeric):

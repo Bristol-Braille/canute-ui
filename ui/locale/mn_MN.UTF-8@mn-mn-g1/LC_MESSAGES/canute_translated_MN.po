@@ -18,8 +18,8 @@ msgid "North American Braille ASCII"
 msgstr "Хойд Америкийн брайль ASCII"
 
 #: ui/braille.py:147
-msgid "Eurobraille"
-msgstr "Евробрайл"
+msgid "EuroBraille DE"
+msgstr "Евробрайл DE"
 
 #. TRANSLATORS: This is the title/label used for this language in the
 #. language menu. It should always appear in the language it denotes so

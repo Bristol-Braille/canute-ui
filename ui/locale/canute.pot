@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2025 ORGANIZATION
+# Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-23 13:03+0100\n"
+"POT-Creation-Date: 2026-09-28 22:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
 
-#: ui/braille.py:144
+#: ui/braille.py:147
 msgid "North American Braille ASCII"
 msgstr ""
 
-#: ui/braille.py:147
-msgid "Eurobraille"
+#: ui/braille.py:150
+msgid "EuroBraille DE"
 msgstr ""
 
 #. TRANSLATORS: This is the title/label used for this language in the
@@ -130,7 +130,7 @@ msgstr ""
 msgid "end of book"
 msgstr ""
 
-#: ui/encoding/view.py:5
+#: ui/encoding/view.py:9
 msgid ""
 "You can change the braille encoding by pressing the line select button to"
 " the left of your chosen encoding. The encoding will be used to display "
@@ -138,7 +138,7 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: A menu title, to which the encoding title is appended
-#: ui/encoding/view.py:41
+#: ui/encoding/view.py:46
 msgid "encoding:"
 msgstr ""
 

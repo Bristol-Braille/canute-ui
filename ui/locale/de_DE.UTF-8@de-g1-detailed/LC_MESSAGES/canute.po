@@ -20,8 +20,8 @@ msgid "North American Braille ASCII"
 msgstr "⠝⠕⠗⠙⠁⠍⠑⠗⠊⠅⠁⠝⠊⠱⠑⠎⠀⠃⠗⠁⠊⠇⠇⠑⠀⠁⠎⠉⠊⠊"
 
 #: ui/braille.py:147
-msgid "Eurobraille"
-msgstr "⠣⠗⠕⠃⠗⠁⠊⠇⠇⠑"
+msgid "EuroBraille DE"
+msgstr "⠣⠗⠕⠃⠗⠁⠊⠇⠇⠑⠀⠙⠑"
 
 # "Deutsch, UEB grade 1"
 #. TRANSLATORS: This is the title/label used for this language in the

@@ -1,4 +1,8 @@
-from ..braille import from_ascii, format_title, to_ueb_number, from_unicode
+from ..braille import (
+    from_ascii, format_title, to_ueb_number, from_unicode,
+    resolve_encoding, DEFAULT_ENCODING
+)
+
 
 def render_help(width, height):
     data = []
@@ -28,9 +32,10 @@ async def render(width, height, state):
         page = all_lines[first_line:off_end]
         return page
 
-    enc = state.app.user.current_encoding
+    enc = resolve_encoding(state.app.user.current_encoding)
     encodings = state.app.encoding.available
-    current_enc = _(encodings.get(enc).title)
+    enc_obj = encodings.get(enc, encodings[DEFAULT_ENCODING])
+    current_enc = _(enc_obj.title)
 
     try:
         cur_index = list(encodings.keys()).index(enc)
