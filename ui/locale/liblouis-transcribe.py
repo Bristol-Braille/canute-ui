@@ -29,6 +29,8 @@ src = polib.pofile(args.input)
 valid_entries = [e for e in src if not e.obsolete]
 
 dest.metadata = src.metadata
+if dest.find(MENU_MSGID) and not src.find(MENU_MSGID):
+    valid_entries.append(dest.find(MENU_MSGID))
 
 transcribed_count = 0
 for src_entry in valid_entries:
@@ -72,6 +74,8 @@ for src_entry in valid_entries:
         # convert back to braille spaces
         wrapped = wrapped.replace(' ', '⠀')
         dest_entry.merge(src_entry)
+        if src_entry.msgid == MENU_MSGID:
+            dest_entry.tcomment = f'"{args.name}"'
         transcription_changed = dest_entry.msgstr != wrapped
         dest_entry.msgstr = wrapped
 

@@ -3,7 +3,11 @@
 locale_dir="$PWD/${BASH_SOURCE%/*}"
 
 cd "${locale_dir}/../.."
-pybabel extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
+if command -v pybabel >/dev/null 2>&1; then
+  pybabel extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
+else
+  python3 -m babel.messages.frontend extract --add-comments=TRANSLATORS -o ./ui/locale/canute.pot ./ui
+fi
 
 cd "${locale_dir}"
 ./update-language.sh en_GB 'EN-GB' en-ueb-g1.ctb 'English, UEB Grade 1' en-ueb-g2.ctb 'English, UEB Grade 2'

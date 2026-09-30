@@ -11,7 +11,10 @@ from datetime import datetime, timezone
 import os.path
 import argparse
 import polib
-import deepl
+try:
+    import deepl
+except ImportError:
+    deepl = None
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Translate .po files using DeepL")
@@ -23,8 +26,8 @@ args = parser.parse_args()
 lang = args.lang.upper()  # Convert to uppercase
 
 # DeepL API Key
-AUTH_KEY = os.environ.get('DEEPL_API_KEY') 
-translator = deepl.Translator(AUTH_KEY)
+AUTH_KEY = os.environ.get('DEEPL_API_KEY')
+translator = deepl.Translator(AUTH_KEY) if deepl and AUTH_KEY else None
 
 # Only translate non braille translations - 0x2800-0x283F is 6-dot braille
 # or any that have been fuzzy matched by msgmerge
@@ -42,7 +45,7 @@ else:
 
 total_entries = len([entry for entry in src if entry.msgid and should_translate(entry)])
 translated_count = 0
-autotranslate = True
+autotranslate = translator is not None
 
 # Translate entries with progress
 for i, entry in enumerate(src):

@@ -21,3 +21,26 @@ class TestBraille(unittest.TestCase):
         width = 9
         truncated = braille.truncate_middle(inp, width)
         self.assertEqual(len(truncated), width)
+
+
+class TestLanguageMenuLabels(unittest.TestCase):
+    def test_available_languages_loaded(self):
+        from ui.i18n import available_languages
+        languages = available_languages()
+        self.assertIn('de_DE.UTF-8@de-g1-detailed', languages)
+        self.assertIn('de_DE.UTF-8@de-g2', languages)
+
+    def test_german_braille_labels_no_ueb(self):
+        from ui.i18n import available_languages
+        languages = available_languages()
+        # Braille dots for 'ueb' (⠥⠑⠃) must not appear in German language labels
+        ueb_braille = '⠥⠑⠃'
+        g1_title = languages['de_DE.UTF-8@de-g1-detailed']
+        g2_title = languages['de_DE.UTF-8@de-g2']
+
+        self.assertNotIn(ueb_braille, g1_title)
+        self.assertNotIn(ueb_braille, g2_title)
+
+        # Expected Braille labels transcribed from 'Deutsch, G1' and 'Deutsch, G2'
+        self.assertEqual(g1_title, '⠨⠙⠣⠞⠱⠂⠀⠘⠛⠼⠁')
+        self.assertEqual(g2_title, '⠙⠱⠂⠀⠠⠛⠼⠃')

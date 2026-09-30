@@ -15,12 +15,12 @@ shift
 deepl_code=$1
 shift
 # find the braille tables and names such as:
-#   fr-bfu-comp6.utb 'Français, UEB niveau 1'
-#   fr-bfu-g2.ctb 'Français, UEB niveau 2'
+#   fr-bfu-comp6.utb 'Français, G1'
+#   fr-bfu-g2.ctb 'Français, G2'
 #   en-ueb-g1.ctb 'British English, UEB grade 1'
 #   en-ueb-g2.ctb 'British English, UEB grade 2'
-#   de-g1-detailed.ctb 'Deutsch, UEB grade 1'
-#   de-g2.ctb 'Deutsch, UEB grade 2'
+#   de-g1-detailed.ctb 'Deutsch, G1'
+#   de-g2.ctb 'Deutsch, G2'
 # note the name should be pre-translated and is shown in the languages menu
 declare -a tables
 declare -a names
@@ -51,10 +51,14 @@ do
 
   if [ ! -f "${transcribed_file}" ]; then
     # file doesn't exist yet, so create it from template
-    msginit -l "${locale}" --no-translator -i "${template_file}" -o "${transcribed_file}"
+    if command -v msginit >/dev/null 2>&1; then
+      msginit -l "${locale}" --no-translator -i "${template_file}" -o "${transcribed_file}"
+    fi
   else
     # update the file in case there are template changes
-    msgmerge --lang="${lang_code}" -U --previous --backup=none "${transcribed_file}" "${template_file}"
+    if command -v msgmerge >/dev/null 2>&1; then
+      msgmerge --lang="${lang_code}" -U --previous --backup=none "${transcribed_file}" "${template_file}"
+    fi
   fi
   if [ ! -f "${translation_file}" ] && [ ! -z "${last_translation}" ]; then
     # if we already have a language translation, resue that
@@ -69,7 +73,11 @@ do
   last_translation="${translation_file}"
 
   # compile the .mo from the .po
-  pybabel compile -f -D canute -d "${locale_dir}" -l "${locale}" -i "${transcribed_file}" -o "${compiled_file}"
+  if command -v pybabel >/dev/null 2>&1; then
+    pybabel compile -f -D canute -d "${locale_dir}" -l "${locale}" -i "${transcribed_file}" -o "${compiled_file}"
+  else
+    python3 -m babel.messages.frontend compile -f -D canute -d "${locale_dir}" -l "${locale}" -i "${transcribed_file}" -o "${compiled_file}"
+  fi
 
   i=$((i + 1))
 done

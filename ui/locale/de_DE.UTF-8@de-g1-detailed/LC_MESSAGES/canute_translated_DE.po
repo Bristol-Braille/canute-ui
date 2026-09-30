@@ -14,3 +14,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.6.0\n"
 "X-Generator: Poedit 3.4\n"
+
+# "Deutsch, G1"
+#. TRANSLATORS: This is the title/label used for this language in the
+#. language menu. It should always appear in the language it denotes so
+#. that it remains readable to those who speak only that language.
+#. Addition of a Braille grade marker is appropriate, if possible.
+#: ui/i18n.py:58
+msgid "Language Name, Braille Grade"
+msgstr "Deutsch, G1"
+

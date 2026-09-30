@@ -11,11 +11,15 @@ log = logging.getLogger(__name__)
 # search external media (sd/usb1/usb2) then built-in ui dir
 # for locale translation directories
 def locale_dirs():
-    config = config_loader.load()
-    files = config.get('files', {})
-    media_dir = files.get('media_dir')
-    library = files.get('library', [])
-    dirs = [os.path.join(media_dir, lib.get('path')) for lib in library]
+    dirs = []
+    try:
+        config = config_loader.load()
+        files = config.get('files', {})
+        media_dir = files.get('media_dir')
+        library = files.get('library', [])
+        dirs = [os.path.join(media_dir, lib.get('path')) for lib in library if lib.get('path')]
+    except Exception:
+        pass
     # add the default relative path for the ui installation
     dirs.append('ui')
     return dirs

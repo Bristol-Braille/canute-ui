@@ -23,14 +23,14 @@ msgstr "⠝⠢⠙⠁⠍⠻⠊⠅⠖⠊⠱⠿⠀⠃⠗⠁⠊⠟⠑⠀⠁⠎⠠⠉
 msgid "Eurobraille"
 msgstr "⠣⠗⠕⠃⠗⠁⠊⠟⠑"
 
-# "Deutsch, UEB grade 2"
+# "Deutsch, G2"
 #. TRANSLATORS: This is the title/label used for this language in the
 #. language menu. It should always appear in the language it denotes so
 #. that it remains readable to those who speak only that language.
 #. Addition of a Braille grade marker is appropriate, if possible.
 #: ui/i18n.py:58
 msgid "Language Name, Braille Grade"
-msgstr "⠙⠱⠂⠀⠥⠑⠃⠀⠛⠗⠁⠙⠑⠀⠼⠃"
+msgstr "⠙⠱⠂⠀⠠⠛⠼⠃"
 
 #: ui/manual.py:34
 msgid ""
